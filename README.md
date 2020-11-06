@@ -2,7 +2,7 @@
 
 ## ENDPOINTS
 
-POST /login
+**POST /login**
 - request body: {userId, password}
 
 
