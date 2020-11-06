@@ -4,7 +4,7 @@ import './App.css';
 
 import { Switch, Route } from 'react-router-dom'
 
-import { General } from './pages/General'
+import { Login } from './pages/Login'
 
 
 class App extends Component {
@@ -12,8 +12,8 @@ class App extends Component {
   render(){
   return <div className='App'>
       <Switch>
-        <Route path='/general' component={General}></Route>
-        <Route component={General}></Route>
+        <Route path='/login' component={Login}></Route>
+        <Route component={Login}></Route>
       </Switch>
     </div>
   }
