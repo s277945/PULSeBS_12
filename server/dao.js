@@ -75,3 +75,16 @@ exports.deleteSeat=function(userId, lectureId,date){
     });
 };
 
+exports.getLecturesByStudentId=function(studentId){
+    return new Promise((resolve, reject) => {
+       const sql='SELECT Course_Ref, Name, Date, Teacher FROM Course JOIN Lecture ON Course.CourseID=Lecture.Course_Ref WHERE User_Ref=? AND Date>datetime(now,localtime)';
+        db.all(sql, [studentId], async (err,rows)=>{
+            if(err){
+                reject(err);
+            }
+            else{
+                resolve(rows);
+            }
+        });
+    });
+}
