@@ -38,7 +38,7 @@ exports.addSeat=function(userId, lectureId,date){
             }
             else{
                 //waiting list
-                reject(false);
+                reject([{"error": "0 seats available"}]);
             }
 
             }
