@@ -75,16 +75,15 @@ exports.deleteSeat=function(userId, lectureId,date){
     });
 };
 
-exports.getLecturesByStudentId=function(studentId){
+exports.getLecturesByUserId=function(userId){
     return new Promise((resolve, reject) => {
         const sql='SELECT Course_Ref, Name, Date FROM  Lecture  WHERE Date>datetime(now,localtime) AND Course_Ref IN (' +
             'SELECT CourseID FROM Course WHERE User_Ref=?)';
-        db.all(sql, [studentId], async (err,rows)=>{
+        db.all(sql, [userId], (err,rows)=>{
             if(err){
                 reject(err);
             }
             else{
-
                 resolve(rows);
             }
         });
