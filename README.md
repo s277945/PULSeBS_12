@@ -38,9 +38,13 @@
 - response body: [{"lectureId": "0432SQ", "lectureName": "SE2", "date": "..."}, {...}]
 
 
-**GET /lectures/:lectureId?userId=...**
+**GET /lectures/:lectureId/listStudents?userId=...**
 - query parameters: lectureId, userId => teacher ID
-- response body: {"students": [{...}], "numberStudents" : 123, "numberMax": 200}
+- response body: {"students": [{...}]}
+
+**GET /lectures/:lectureId/bookedStudents?userId=...**
+- query parameters: lectureId, userId => teacher ID
+- response body: {"numberStudents" : 123, "numberMax": 200}
 
 
 
