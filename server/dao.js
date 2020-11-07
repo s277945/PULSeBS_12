@@ -42,7 +42,7 @@ exports.addSeat=function(userId, lectureId,date){
             }
 
             }
-            ).catch(throw err);
+            ).catch(err => reject(err));
 
 
 });
@@ -88,3 +88,32 @@ exports.getLecturesByStudentId=function(studentId){
         });
     });
 }
+
+exports.countStudent=function(courseId, date){
+    return new Promise((resolve, reject) => {
+        const sql='SELECT COUNT(*) FROM Booking WHERE Course_Ref=? AND Date_Ref=?';
+        db.get(sql, [courseId, date], (err,row)=>{
+            if(err)
+                reject(err);
+            else
+                resolve(row['COUNT(*)']);
+        })
+    });
+};
+
+exports.getStudentList=function(courseId, date){
+    let list=[];
+    return new Promise((resolve, reject) => {
+        const sql='SELECT Student_Ref FROM Booking WHERE Course_Ref=? AND Date_Ref=?';
+        db.all(sql,(err,rows)=>{
+            if(err)
+                reject(err);
+            else{
+                rows.forEach((row)=>{
+                    list.push(row)
+                });
+                resolve(list);
+            }
+        });
+    });
+};
