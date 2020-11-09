@@ -4,7 +4,7 @@
   "description": "Car Rent",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "mocha --timeout 5000",
     "start": "node server.js"
   },
   "author": "alberto-mr",
@@ -13,6 +13,7 @@
     "bcrypt": "^5.0.0",
     "cookie-parser": "^1.4.5",
     "cors": "^2.8.5",
+    "dateformat": "^3.0.3",
     "express": "^4.17.1",
     "express-jwt": "^6.0.0",
     "express-validator": "^6.5.0",
@@ -22,5 +23,8 @@
     "nodemon": "^2.0.6",
     "sqlite3": "^4.1.1"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "mocha": "^8.2.1"
+  }
 }
