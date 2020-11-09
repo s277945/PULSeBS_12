@@ -2,6 +2,8 @@
 
 ## ENDPOINTS
 
+**base path: /api** 
+
 **POST /login**
 - request body: {userId, password}
 

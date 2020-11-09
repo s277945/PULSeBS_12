@@ -12,6 +12,7 @@ const jwt = require ('express-jwt');
 const moment = require('moment');
 const cookieParser = require('cookie-parser');
 const nodemailer = require('nodemailer'); 
+const jsonwebtoken = require('jsonwebtoken');
 
 const authErrorObj = { errors: [{ 'param': 'Server', 'msg': 'Authorization error' }] };
 
@@ -41,13 +42,18 @@ app.use((err, req, res, next) => {
   }
 });
 
+// Enable cors
+app.use(cors());
+
 //login route
 app.post('/api/login', (req, res) => {
   dao.checkUserPwd(req.body.userName, req.body.password)
-      .then((userId) => {
-          const token = jsonwebtoken.sign({ user: userId }, jwtSecret, { expiresIn: expireTime });
+      .then((response) => {
+        console.log(response.userID + " aasdads");
+        console.log(response.userType + " aasdads");
+          const token = jsonwebtoken.sign({ user: response.userId, userType: response.userType }, jwtSecret, { expiresIn: expireTime });
           res.cookie('token', token, { httpOnly: true, sameSite: true, maxAge: 3000 * expireTime });
-          res.status(200).json(userId).end(); console.log(userId);
+          res.status(200).json(response).end(); 
       }).catch( // Delay response in case of wrong user/pass to prevent fast guessing attempts
           () => new Promise((resolve) => { setTimeout(resolve, 1000) }).then( // 1 second timeout
               () => {res.status(401).end()}
@@ -58,8 +64,11 @@ app.post('/api/login', (req, res) => {
 //cookie parsing setup
 app.use(cookieParser());
 
-// Enable cors
-app.use(cors());
+
+app.post('/api/logout', (req, res) => {
+  res.clearCookie('token').end();
+});
+
 
 //mail configuration
 
