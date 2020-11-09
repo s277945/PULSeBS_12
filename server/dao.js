@@ -35,51 +35,48 @@ exports.checkUserPwd = function (username, password) {
 
 exports.addSeat=function(userId, lectureId,date){
     return new Promise((resolve, reject) => {
-        findCourse(userId,lectureId).then(val=>{
-            this.countStudent(lectureId,date).then((count)=>{
-                    this.getCapacity(lectureId,date).then(capacity=>{
-                        console.log(capacity);
-                        if(count.Booked<capacity.Capacity){
+        findCourse(userId,lectureId).then(res=>{
+            console.log(res);
+            if(res){
+                getCapacity(lectureId,date).then((capacity)=>{
+                    this.countStudent(lectureId,date).then(count=>{
+                        if(count<capacity.Capacity){
                             const sql='INSERT INTO Booking VALUES(?,?,?)';
                             db.run(sql, [lectureId,date,userId], function(err){
                                 if(err){
-
                                     reject(err);
                                 }
-
                                 else{
-
                                     resolve(true);
                                 }
-
                             })
+
                         }
                         else{
-                            //waiting list
                             reject([{"error": "0 seats available"}]);
                         }
-                    }).catch(err => reject(err));
+                    }).catch(err=>reject(err));
+                }).catch(err=>reject(err));
+            }else reject([{"error": "Course unavailable"}]);
 
+        }).catch(err=>reject(err));
 
-                }
-            ).catch(err => reject(err));
-        }).catch();
-
-
-
-});
+    })
 }
+
 function findCourse(userId, courseId){
     return new Promise((resolve, reject) => {
-        const sql='SELECT * FROM Course WHERE User_Ref=? AND CourseID=?';
+        const sql='SELECT COUNT(*) FROM Course WHERE User_Ref=? AND CourseID=?';
         db.get(sql,[userId,courseId],(err,row)=>{
             if(err)
                 reject(err);
-            else
+            else if(row['COUNT(*)']>0)
                 resolve(true);
+            else resolve(false);
         })
     })
 }
+
 function getCapacity(courseID,date){
     return new Promise((resolve, reject) => {
         const sql='SELECT Capacity FROM Lecture WHERE Course_Ref=? AND Date=?';
@@ -87,7 +84,7 @@ function getCapacity(courseID,date){
             if(err)
                 reject(err);
             else{
-                console.log(row);
+                //console.log(row);
                 resolve(row);
             }
 
