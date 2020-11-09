@@ -13,16 +13,20 @@ const moment = require('moment');
 const cookieParser = require('cookie-parser');
 const nodemailer = require('nodemailer'); 
 
+const authErrorObj = { errors: [{ 'param': 'Server', 'msg': 'Authorization error' }] };
 
 //create application
 const app = express();
 const port = 3001;
 
-// Process body content
-app.use(express.json());
 
 // Set-up logging
 app.use(morgan('tiny'));
+
+// Process body content
+app.use(express.json());
+
+
 
 //setup private key
 const jwtSecret = 'aD6c3gT4Fh5gThVd4WwE5Er5gVjGhyT8iOLc2d7W5q1gTdC9vFs5N8ju6Kt7RhIq7Xz8Nt';
