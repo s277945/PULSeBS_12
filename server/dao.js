@@ -35,41 +35,64 @@ exports.checkUserPwd = function (username, password) {
 
 exports.addSeat=function(userId, lectureId,date){
     return new Promise((resolve, reject) => {
-        countBooking(lectureId,date).then((row)=>{
-            if(row.Booked<row.Capacity){
-                const sql='INSERT INTO Booking VALUES(?,?,?)';
-                db.run(sql, [lectureId,date,userId], function(err){
-                    if(err)
-                        reject(err);
-                    else
-                        resolve(true);
-                })
-            }
-            else{
-                //waiting list
-                reject([{"error": "0 seats available"}]);
-            }
+        findCourse(userId,lectureId).then(val=>{
+            this.countStudent(lectureId,date).then((count)=>{
+                    this.getCapacity(lectureId,date).then(capacity=>{
+                        console.log(capacity);
+                        if(count.Booked<capacity.Capacity){
+                            const sql='INSERT INTO Booking VALUES(?,?,?)';
+                            db.run(sql, [lectureId,date,userId], function(err){
+                                if(err){
 
-            }
+                                    reject(err);
+                                }
+
+                                else{
+
+                                    resolve(true);
+                                }
+
+                            })
+                        }
+                        else{
+                            //waiting list
+                            reject([{"error": "0 seats available"}]);
+                        }
+                    }).catch(err => reject(err));
+
+
+                }
             ).catch(err => reject(err));
+        }).catch();
+
 
 
 });
 }
-function countBooking(lectureId,date){
-
+function findCourse(userId, courseId){
     return new Promise((resolve, reject) => {
-        const sql='SELECT COUNT(*) AS Booked, Capacity FROM Booking JOIN Lecture ON Booking.Course_Ref=Lecture.Course_Ref AND Booking.Date_Ref=Lecture.Date WHERE Course_Ref=? AND Date_Ref=?';
-        db.get(sql, [lectureId,date], (err,row)=>{
+        const sql='SELECT * FROM Course WHERE User_Ref=? AND CourseID=?';
+        db.get(sql,[userId,courseId],(err,row)=>{
+            if(err)
+                reject(err);
+            else
+                resolve(true);
+        })
+    })
+}
+function getCapacity(courseID,date){
+    return new Promise((resolve, reject) => {
+        const sql='SELECT Capacity FROM Lecture WHERE Course_Ref=? AND Date=?';
+        db.get(sql,[courseID,date],(err,row)=>{
             if(err)
                 reject(err);
             else{
-
+                console.log(row);
                 resolve(row);
             }
 
         })
-    })
+    });
 }
 
 exports.deleteSeat=function(userId, lectureId,date){
