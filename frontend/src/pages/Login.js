@@ -62,7 +62,7 @@ export class Login extends Component {
                     this.context.setUserName(uName);//set user context data
                     this.context.setUserType(uType);
                     userIdentity.saveUserSession(uName, uType);//set user session data
-                    resolve();
+                    this.setRedirect(uType==='s' ? 2 : 1 );
                 })
                 .catch(err=>{reject(err)});                
             }
