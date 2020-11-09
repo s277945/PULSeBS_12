@@ -101,7 +101,17 @@ exports.countStudent=function(courseId, date){
         })
     });
 };
-
+exports.getRole=function(userId){
+    return new Promise((resolve, reject) => {
+        const sql='SELECT UserType FROM User WHERE userID=?'
+        db.get(sql, [userId], (err, row)=>{
+            if(err)
+                reject(err);
+            else
+                resolve(row);
+        })
+    })
+}
 exports.getStudentList=function(courseId, date){
     let list=[];
     return new Promise((resolve, reject) => {
