@@ -17,8 +17,14 @@ exports.checkUserPwd = function (username, password) {
                     if (err) reject(err);
                     else if (!res) reject(new Error('Password is incorrect'));
                     else {
-                        console.log(row.userID);
-                        resolve(row.userID) // if password is correct return user id
+                        this.getRole(row.userID)
+                            .then(row2 => {
+                                resolve({userID: row.userID, userType: row2.UserType});
+                            }) 
+                            .catch(err2 => {
+                                reject(err2);
+                            })
+                        
                     }
                 })
             }
@@ -104,17 +110,22 @@ exports.countStudent=function(courseId, date){
         })
     });
 };
+
 exports.getRole=function(userId){
     return new Promise((resolve, reject) => {
         const sql='SELECT UserType FROM User WHERE userID=?'
         db.get(sql, [userId], (err, row)=>{
             if(err)
                 reject(err);
-            else
+            else {
+                console.log(row);
                 resolve(row);
+            }
+                
         })
     })
 }
+
 exports.getStudentList=function(courseId, date){
     let list=[];
     return new Promise((resolve, reject) => {
