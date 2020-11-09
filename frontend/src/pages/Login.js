@@ -1,11 +1,11 @@
 import React, { Component } from 'react'
 import axios from 'axios';
 import Form from 'react-bootstrap/Form'
-import { MainContext } from './App.js';// import context hook from App.js
+import { MainContext } from '../App.js';// import context hook from App.js
 import { Redirect } from 'react-router-dom'
-
+import userIdentity from '../api/userIdentity.js'
 export class Login extends Component {    
-    context = useContext(MainContext);
+    context = useContext(MainContext);// set up context value
     state = {
         username: "",
         password: "",
@@ -15,20 +15,20 @@ export class Login extends Component {
 
     componentDidMount(){
         if (this.context.userName && this.context.userType) {
-            this.context.userType==='s' ? this.setRedirect(2) : this.setRedirect(1);
+            this.context.userType==='s' ? this.setRedirect(2) : this.setRedirect(1);//check context for login data and set redirect value accordingly
         }
     }
 
     setRedirect = (redir) => {
-        this.setState({ redirect: redir })
+        this.setState({ redirect: redir })//set redirect value (0 = no redirect, 1 = teacher redirect, 2 = student redirect)
     }
 
     renderRedirect = () => {
         if (this.state.redirect==2) {
-          return <Redirect to='/studentHome' />
+          return <Redirect to='/studentHome' />//redirect to student homepage if login was already done as student
         }
         else if(this.state.redirect==1) {
-            return <Redirect to='/teacherHome' />
+            return <Redirect to='/teacherHome' />//redirect to teacher homepage if login was already done as teacher
         }
       }
 
@@ -45,7 +45,8 @@ export class Login extends Component {
     } 
 
     handleLogin = () => {
-        fetch (`/api/login`, {// send get request boards
+        this.setState({ showErr : false});
+        fetch (`/api/login`, {// send post login request
             method: 'post',
             credentials: 'include',
             headers: {
@@ -53,8 +54,21 @@ export class Login extends Component {
             },
             body: JSON.stringify({ userName: username, password: password })
         })
-        .then()
-        .catch()
+        .then((res)=> {
+            if(typeof res != 'undefined' && res.status===200) {
+                res.json().then(data => {
+                    let uName = data.userName;
+                    let uType = data.userType;
+                    this.context.setUserName(uName);//set user context data
+                    this.context.setUserType(uType);
+                    userIdentity.saveUserSession(uName, uType);//set user session data
+                    resolve();
+                })
+                .catch(err=>{reject(err)});                
+            }
+            else reject(res.status);
+        })
+        .catch(err=>{ console.log(err); this.setState({ showErr : true}); });
     }
 
     render() {

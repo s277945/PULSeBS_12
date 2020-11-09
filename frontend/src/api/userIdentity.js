@@ -1,5 +1,11 @@
 import React, { Component } from 'react'
 
-exports.saveUserSession = function (useName, userType) {
-
+function saveUserSession(useName, userType) {
+    return new Promise((resolve, reject) => {
+        sessionStorage.setItem("userName", userName);
+        sessionStorage.setItem("userType", userType);
+        resolve("ok");
+    });
 }
+
+export default { saveUserSession };

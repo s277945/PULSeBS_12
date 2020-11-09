@@ -37,8 +37,8 @@ class App extends Component {
       <Router>
         <MainContext.Provider value={{userName: this.state.userName, setUserName: this.setUserName, userType: this.state.UserType, setUserType: this.setUserType}}>
           <Switch>
-            <Route path='/login' component={Login}></Route>
-            <Route component={Login}></Route>
+            <Route path='/login'><Login/></Route>
+            <Route><Login/></Route>
           </Switch>
         </MainContext.Provider>
       </Router>
