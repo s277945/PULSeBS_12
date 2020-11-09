@@ -5,7 +5,8 @@ import Form from 'react-bootstrap/Form'
 export class Login extends Component {
     state = {
         username: "",
-        password: ""
+        password: "",
+        showErr: false
     }
 
     componentDidMount(){
@@ -32,17 +33,21 @@ export class Login extends Component {
                     <Form.Group controlId="formBasicEmail">
                         <Form.Label>Username</Form.Label>
                         <Form.Control type="text" placeholder="Enter username" onChange={this.usernameChange} value={this.state.username}/>
-                        <Form.Text className="text-muted">
-                            Enter valid domain username
-                        </Form.Text>
+                        {   !this.state.showErr
+                            ? <><Form.Text className="text-muted">Enter valid domain username</Form.Text></>
+                            : null
+                        }                        
                     </Form.Group>
-
                     <Form.Group controlId="formBasicPassword">
                         <Form.Label>Password</Form.Label>
                         <Form.Control type="password" placeholder="Password" onChange={this.passwordChange} value={this.state.password}/>
                     </Form.Group>
+                    {   this.state.showErr
+                        ? <><Form.Text className="text-muted"  style={{color: "red"}}>Invalid credentials</Form.Text></>
+                        : null
+                    }
                     <Button variant="primary" type="submit">
-                        Submit
+                        Login
                     </Button>
                 </Form>
             </div>
