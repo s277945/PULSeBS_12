@@ -42,6 +42,9 @@ app.use((err, req, res, next) => {
   }
 });
 
+// Enable cors
+app.use(cors());
+
 //login route
 app.post('/api/login', (req, res) => {
   dao.checkUserPwd(req.body.userName, req.body.password)
@@ -61,8 +64,11 @@ app.post('/api/login', (req, res) => {
 //cookie parsing setup
 app.use(cookieParser());
 
-// Enable cors
-app.use(cors());
+
+app.post('/api/logout', (req, res) => {
+  res.clearCookie('token').end();
+});
+
 
 //mail configuration
 
