@@ -1,17 +1,36 @@
 import React, { Component } from 'react'
 import axios from 'axios';
 import Form from 'react-bootstrap/Form'
+import { MainContext } from './App.js';// import context hook from App.js
+import { Redirect } from 'react-router-dom'
 
-export class Login extends Component {
+export class Login extends Component {    
+    context = useContext(MainContext);
     state = {
         username: "",
         password: "",
-        showErr: false
+        showErr: false,
+        redirect: 0
     }
 
     componentDidMount(){
-    
+        if (this.context.userName && this.context.userType) {
+            this.context.userType==='s' ? this.setRedirect(2) : this.setRedirect(1);
+        }
     }
+
+    setRedirect = (redir) => {
+        this.setState({ redirect: redir })
+    }
+
+    renderRedirect = () => {
+        if (this.state.redirect==2) {
+          return <Redirect to='/studentHome' />
+        }
+        else if(this.state.redirect==1) {
+            return <Redirect to='/teacherHome' />
+        }
+      }
 
     usernameChange = (e) => {
         let lastchar=e.target.value.slice(-1);// extract last character
@@ -25,10 +44,24 @@ export class Login extends Component {
         else this.setState({ password : e.target.value.slice(0, -1)});// remove last character
     } 
 
+    handleLogin = () => {
+        fetch (`/api/login`, {// send get request boards
+            method: 'post',
+            credentials: 'include',
+            headers: {
+                "Content-type": "application/json; charset=UTF-8"
+            },
+            body: JSON.stringify({ userName: username, password: password })
+        })
+        .then()
+        .catch()
+    }
+
     render() {
 
         return (
             <div>
+                {this.renderRedirect()}
                 <Form>
                     <Form.Group controlId="formBasicEmail">
                         <Form.Label>Username</Form.Label>
@@ -52,5 +85,6 @@ export class Login extends Component {
                 </Form>
             </div>
         )
+    
     }
 }
