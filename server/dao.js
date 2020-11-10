@@ -145,7 +145,7 @@ exports.getLecturesByUserId=function(userId){
 /*
 * Input: userID (Teacher) 
 * Output: Name, NumberOfStudents
-* Description: 
+* Description: Get the number of students enrolled in the next lecture of one teacher
 */
 
 exports.getNextLectureNumber=function(userId){
