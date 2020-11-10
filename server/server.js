@@ -155,6 +155,25 @@ app.use((err, req, res, next) => {
       .catch((err) => res.status(500).json({ errors: [{ 'param': 'Server', 'msg': err }] }));
  });
 
+
+/**
+ * GET /lectures/listStudents?courseRef=...&date=2020-....
+ * 
+ * query parameters: lectureId
+ */
+
+ app.get('/api/lectures/listStudents', (req, res) => {
+    
+    const course_ref = req.query.courseRef;
+    const date = moment(req.query.date).format('YYYY-MM-DD HH:mm:ss');
+    dao.getStudentList(course_ref, date)
+      .then((list) => {
+        res.status(201).json(list);
+      })
+      .catch((err) => res.status(500).json({ errors: [{ 'param': 'Server', 'msg': err }] }));
+
+ });
+
 //mail configuration
 
 var transporter = nodemailer.createTransport({

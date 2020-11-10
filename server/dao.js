@@ -36,7 +36,6 @@ exports.checkUserPwd = function (username, password) {
 exports.addSeat=function(userId, lectureId,date){
     return new Promise((resolve, reject) => {
         findCourse(userId,lectureId).then(res=>{
-
             if(res){
                 getCapacity(lectureId,date).then((capacity)=>{
                     countStudent(lectureId,date).then(count=>{
@@ -168,7 +167,6 @@ exports.getRole=function(userId){
 
 exports.getStudentList=function(courseId, date){
     let list=[];
-
     return new Promise((resolve, reject) => {
         const sql='SELECT Student_Ref FROM Booking WHERE Course_Ref=? AND Date_Ref=?';
         db.all(sql,[courseId,date],(err,rows)=>{
@@ -176,12 +174,9 @@ exports.getStudentList=function(courseId, date){
             if(err){
                 reject(err);
             }
-
             else{
-
-                rows.forEach((row)=>{
-                    list.push(row)
-
+                rows.forEach((row)=>{ 
+                    list.push(row.Student_Ref);
                 });
                 resolve(list);
             }
