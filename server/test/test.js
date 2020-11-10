@@ -103,7 +103,7 @@ it('should not add  a new seat for an existing lecture with Course Unavailable e
     return dao.addSeat(userId,lectureId,date).then(result=>{
         expect(result).fail();
     }).catch(err=>{
-        expect(err).to.equal('Course unavailable');
+        expect(err.message).to.equal('Course unavailable');
     })
 });
 it('should fail insert booking with 0 seats available', function () {
@@ -114,7 +114,7 @@ it('should fail insert booking with 0 seats available', function () {
     return dao.addSeat(userId,lectureId,date).then(res=>{
         expect(res).fail();
     }).catch(err=>{
-        expect(err).to.equal('0 seats available');
+        expect(err.message).to.equal('0 seats available');
     });
 });
 it('should delete row', function () {

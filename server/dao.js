@@ -53,11 +53,11 @@ exports.addSeat=function(userId, lectureId,date){
 
                         }
                         else{
-                            reject([{"error": "0 seats available"}]);
+                            reject(new Error("0 seats available"));
                         }
                     }).catch(err=>reject(err));
                 }).catch(err=>reject(err));
-            }else reject([{"error": "Course unavailable"}]);
+            }else reject(new Error("Course unavailable"));
 
         }).catch(err=>reject(err));
 
