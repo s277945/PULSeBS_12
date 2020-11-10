@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 
-function saveUserSession(useName, userType) {
+function saveUserSession(userName, userType) {
     return new Promise((resolve, reject) => {
         sessionStorage.setItem("userName", userName);
         sessionStorage.setItem("userType", userType);
