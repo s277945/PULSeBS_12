@@ -33,15 +33,21 @@ exports.checkUserPwd = function (username, password) {
     });
 };
 
-exports.addSeat=function(userId, lectureId,date){
+/*
+* Input: Student_Ref, Course_Ref, Date_Ref 
+* Output: True or False
+* Description: Book a seat for a lecture if possible
+*/
+
+exports.addSeat=function(userId, courseId, date){
     return new Promise((resolve, reject) => {
-        findCourse(userId,lectureId).then(res=>{
+        findCourse(userId, courseId).then(res=>{
             if(res){
-                getCapacity(lectureId,date).then((capacity)=>{
-                    countStudent(lectureId,date).then(count=>{
+                getCapacity(courseId, date).then((capacity)=>{
+                    countStudent(courseId, date).then(count=>{
                         if(count<capacity.Capacity){
                             const sql='INSERT INTO Booking VALUES(?,?,?)';
-                            db.run(sql, [lectureId,date,userId], function(err){
+                            db.run(sql, [courseId, date, userId], function(err){
                                 if(err){
                                     reject(err);
                                 }
@@ -76,6 +82,12 @@ function findCourse(userId, courseId){
     })
 }
 
+/*
+* Input: Course_Ref, Date_Ref 
+* Output: Capacity
+* Description: Get the max capacity of the selected lecture
+*/
+
 function getCapacity(courseID,date){
     return new Promise((resolve, reject) => {
         const sql='SELECT Capacity FROM Lecture WHERE Course_Ref=? AND Date=?';
@@ -91,10 +103,16 @@ function getCapacity(courseID,date){
     });
 }
 
-exports.deleteSeat=function(userId, lectureId,date){
+/*
+* Input: Course_Ref, Date_Ref 
+* Output: True or False
+* Description: Delete the booking from a lecture
+*/
+
+exports.deleteSeat=function(userId, courseId, date){
     return new Promise((resolve, reject) => {
         const sql='DELETE FROM Booking WHERE Student_Ref=? AND Course_Ref=?AND Date_Ref=?';
-        db.run(sql, [userId, lectureId,date], (err) => {
+        db.run(sql, [userId, courseId, date], (err) => {
             if(err)
                 reject(err);
             else
@@ -102,6 +120,12 @@ exports.deleteSeat=function(userId, lectureId,date){
         })
     });
 };
+
+/*
+* Input: usedID 
+* Output: List of lectures (Course_ref, Name, Date)
+* Description: Retrieve the list of lectures from the courses in which the user is enrolled in
+*/
 
 exports.getLecturesByUserId=function(userId){
     return new Promise((resolve, reject) => {
@@ -117,6 +141,12 @@ exports.getLecturesByUserId=function(userId){
         });
     });
 }
+
+/*
+* Input: userID (Teacher) 
+* Output: Name, NumberOfStudents
+* Description: 
+*/
 
 exports.getNextLectureNumber=function(userId){
     
@@ -165,6 +195,11 @@ exports.getRole=function(userId){
     })
 }
 
+/*
+* Input: Course_Ref, Date 
+* Output: List of Student_Ref
+* Description: Retrieve the list of students booked to the selected lecture
+*/
 exports.getStudentList=function(courseId, date){
     let list=[];
     return new Promise((resolve, reject) => {
