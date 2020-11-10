@@ -6,14 +6,13 @@ const bcrypt = require('bcrypt');
 exports.checkUserPwd = function (username, password) {
     return new Promise((resolve, reject) => {
         var sql = 'SELECT userID, Password FROM User WHERE userID = ?'; // sql query to select user entry from database
-        console.log(username);
-        console.log(password);
+
         db.get(sql, [username], (err, row) => {
             if (err) reject(err); // error handling
             else if (typeof row === 'undefined') reject(new Error('User does not exist')); // no entry found
             else if (typeof row !== 'undefined') { // username found
                 bcrypt.compare(password, row.Password, (err,res) => { //check password hash
-                    console.log(res);
+
                     if (err) reject(err);
                     else if (!res) reject(new Error('Password is incorrect'));
                     else {
@@ -36,7 +35,7 @@ exports.checkUserPwd = function (username, password) {
 exports.addSeat=function(userId, lectureId,date){
     return new Promise((resolve, reject) => {
         findCourse(userId,lectureId).then(res=>{
-            console.log(res);
+
             if(res){
                 getCapacity(lectureId,date).then((capacity)=>{
                     this.countStudent(lectureId,date).then(count=>{
@@ -138,7 +137,7 @@ exports.getRole=function(userId){
             if(err)
                 reject(err);
             else {
-                console.log(row);
+
                 resolve(row);
             }
 
@@ -148,14 +147,20 @@ exports.getRole=function(userId){
 
 exports.getStudentList=function(courseId, date){
     let list=[];
+
     return new Promise((resolve, reject) => {
         const sql='SELECT Student_Ref FROM Booking WHERE Course_Ref=? AND Date_Ref=?';
-        db.all(sql,(err,rows)=>{
-            if(err)
+        db.all(sql,[courseId,date],(err,rows)=>{
+
+            if(err){
                 reject(err);
+            }
+
             else{
+
                 rows.forEach((row)=>{
                     list.push(row)
+
                 });
                 resolve(list);
             }
