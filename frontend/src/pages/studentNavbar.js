@@ -1,5 +1,7 @@
 import React, { Component } from 'react'
 import { browserHistory } from 'react-router';
+import Navbar from 'react-bootstrap/Navbar'
+import Nav from 'react-bootstrap/Nav'
 
 export class studentNavbar extends Component { 
     showLectures = (e) => {
@@ -9,10 +11,10 @@ export class studentNavbar extends Component {
 
     redirHome = (e) => {
         e.preventDefault();
-        browserHistory.push("/");
+        //browserHistory.push("/");
     }
 
-    redirCalendar = () => {
+    redirCalendar = (e) => {
         e.preventDefault();
     }
 
