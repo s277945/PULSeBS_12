@@ -1,18 +1,19 @@
 import React, { Component } from 'react'
-import { browserHistory } from 'react-router';
+import Nav from 'react-bootstrap/Nav'
+import Navbar from 'react-bootstrap/Navbar'
 
-export class studentNavbar extends Component { 
+export class StudentNavbar extends Component { 
     showLectures = (e) => {
         e.preventDefault();
-        this.props.setShowLectures(true);
+        this.props.setShow(0);
     }
 
     redirHome = (e) => {
         e.preventDefault();
-        browserHistory.push("/");
+        this.props.history.push("/");
     }
 
-    redirCalendar = () => {
+    redirCalendar = (e) => {
         e.preventDefault();
     }
 

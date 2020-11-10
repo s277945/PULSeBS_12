@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 import { Login } from './pages/Login'
-import { studentHome } from './pages/studentHome'
+import { StudentHome } from './pages/StudentHome'
+import { TeacherHome } from './pages/TeacherHome'
 
 // create a user context for accessing user data from all pages and components
 const MainContext = React.createContext();
@@ -41,8 +43,8 @@ class App extends Component {
               return (
                   <Switch>
                     <Route path='/login'><Login context={value}/></Route>
-                    <Route path='/studentHome'><studentHome context={value}/></Route>
-                    <Route path='/teacherHome'><teacherHome context={value}/></Route>
+                    <Route path='/studentHome'><StudentHome context={value}/></Route>
+                    <Route path='/teacherHome'><TeacherHome context={value}/></Route>
                     <Route><Login context={value}/></Route>
                   </Switch>
               )             

@@ -25,10 +25,10 @@ export class Login extends Component {
     }
 
     renderRedirect = () => {
-        if (this.state.redirect==2) {
+        if (this.state.redirect===2) {
           return <Redirect to='/studentHome' />//redirect to student homepage if login was already done as student
         }
-        else if(this.state.redirect==1) {
+        else if(this.state.redirect===1) {
             return <Redirect to='/teacherHome' />//redirect to teacher homepage if login was already done as teacher
         }
       }
