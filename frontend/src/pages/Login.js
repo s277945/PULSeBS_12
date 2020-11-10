@@ -64,10 +64,8 @@ export class Login extends Component {
             if(typeof res != 'undefined' && res.status===200) {
                 let data= res.data;
                     let uName = data.userID;
-                    let uType = data.userType;
-                    this.props.context.setUserName(uName);//set user context data
-                    this.props.context.setUserType(uType);
-                    userIdentity.saveUserSession(uName, uType);//set user session data
+                    let uType = data.userType;                    
+                    userIdentity.saveUserSession(this.props.context, uName, uType);//set user session data
                     this.setRedirect(uType==='s' ? 2 : 1 );     
             }
             else console.log(res.status);

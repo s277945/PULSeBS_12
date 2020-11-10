@@ -1,9 +1,20 @@
 import React, { Component } from 'react'
 
-function saveUserSession(userName, userType) {
+function saveUserSession(context, userName, userType) {
     return new Promise((resolve, reject) => {
+        context.setUserName(userName);//set user context data
+        context.setUserType(userType);
         sessionStorage.setItem("userName", userName);
         sessionStorage.setItem("userType", userType);
+        resolve("ok");
+    });
+}
+
+function removeUserSession(context, userName, userType) {
+    return new Promise((resolve, reject) => {
+        context.setUserName("");//set user context data
+        context.setUserType("");
+        sessionStorage.clear();
         resolve("ok");
     });
 }
