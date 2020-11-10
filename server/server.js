@@ -112,10 +112,6 @@ app.use((err, req, res, next) => {
 
  app.post('/api/lectures', (req, res) => {
     const user = req.user && req.user.user;
-    console.log(user);
-    console.log(req.body.date);
-    console.log(moment(req.body.date));
-    console.log(moment());
     const date=moment(req.body.date).format('YYYY-MM-DD HH:mm:ss');
     
     if (moment(date).isBefore(moment()))
@@ -130,11 +126,11 @@ app.use((err, req, res, next) => {
  });
 
  /**
- * DELETE api/lectures
+ * DELETE api/lectures/:lectureId?date=2020-12-13 19:00:00
  * 
  * Delete booked lecture for a given student
  * 
- * params: 
+ * params: lectureId, date
  */
 
  app.delete('/api/lectures/:lectureId', (req,res) => {
@@ -143,7 +139,20 @@ app.use((err, req, res, next) => {
     dao.deleteSeat(user, req.params.lectureId, date)
       .then(() => res.status(204).end())
       .catch((err) => res.status(500).json({ errors: [{ 'param': 'Server', 'msg': err }] }));
+ });
 
+/**
+ * GET /api/lectures/next
+ * 
+ */
+
+ app.get('/api/lectures/next', (req, res) => {
+    const user = req.user && req.user.user;
+    dao.getNextLectureNumber(user)
+      .then((response) => {
+        res.status(201).json(response);
+      })
+      .catch((err) => res.status(500).json({ errors: [{ 'param': 'Server', 'msg': err }] }));
  });
 
 //mail configuration

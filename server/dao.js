@@ -1,6 +1,7 @@
 'use strict';
 const db = require('./db');
 const bcrypt = require('bcrypt');
+const moment = require('moment');
 
 //check user data for login
 exports.checkUserPwd = function (username, password) {
@@ -38,7 +39,7 @@ exports.addSeat=function(userId, lectureId,date){
 
             if(res){
                 getCapacity(lectureId,date).then((capacity)=>{
-                    this.countStudent(lectureId,date).then(count=>{
+                    countStudent(lectureId,date).then(count=>{
                         if(count<capacity.Capacity){
                             const sql='INSERT INTO Booking VALUES(?,?,?)';
                             db.run(sql, [lectureId,date,userId], function(err){
@@ -94,7 +95,7 @@ function getCapacity(courseID,date){
 exports.deleteSeat=function(userId, lectureId,date){
     return new Promise((resolve, reject) => {
         const sql='DELETE FROM Booking WHERE Student_Ref=? AND Course_Ref=?AND Date_Ref=?';
-        db.run(sql, [userId, lectureId,date], function(err){
+        db.run(sql, [userId, lectureId,date], (err) => {
             if(err)
                 reject(err);
             else
@@ -118,7 +119,27 @@ exports.getLecturesByUserId=function(userId){
     });
 }
 
-exports.countStudent=function(courseId, date){
+exports.getNextLectureNumber=function(userId){
+    
+    return new Promise((resolve, reject) => {
+        const date=moment().format('YYYY-MM-DD HH:mm:ss');
+        const sql='SELECT Course_Ref, Name, MIN(Date) AS minDate FROM Lecture WHERE Date > ? AND Course_Ref IN (' +
+            'SELECT CourseID FROM Course WHERE User_Ref=?)';
+        db.get(sql, [date, userId], async (err,row) =>{
+            if(err){   
+                reject(err);
+            }
+            else{ 
+                await countStudent(row.Course_Ref, row.minDate).then(number =>{
+
+                        resolve({"lectureName": row.Name, "numberOfStudents": number});
+                }).catch(err => reject(err));
+            }
+        });
+    });
+}
+
+function countStudent(courseId, date){
     return new Promise((resolve, reject) => {
         const sql='SELECT COUNT(*) FROM Booking WHERE Course_Ref=? AND Date_Ref=?';
         db.get(sql, [courseId, date], (err,row)=>{

@@ -30,14 +30,9 @@
 - body response: status 204/404/500
 
 
-**GET /lectures/next?userId=...**
+**GET /lectures/next**
 - query parameters: userId => teacher ID
 - response body: {"lectureId": "0432SQ", "lectureName": "SE2", "date": "...", "teacher": "Torchiano", "numberStudents" : 123, "numberMax": 200}
-
-
-**GET /lectures?userId=...**
-- query parameters: userId => teacher ID
-- response body: [{"lectureId": "0432SQ", "lectureName": "SE2", "date": "..."}, {...}]
 
 
 **GET /lectures/:lectureId/listStudents**
