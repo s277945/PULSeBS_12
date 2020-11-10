@@ -1,11 +1,12 @@
 import React, { Component } from 'react'
 import axios from 'axios';
 import Form from 'react-bootstrap/Form'
-import { MainContext } from '../App.js';// import context hook from App.js
+import Button from 'react-bootstrap/Button'
 import { Redirect } from 'react-router-dom'
 import userIdentity from '../api/userIdentity.js'
-export class Login extends Component {    
-    context = useContext(MainContext);// set up context value
+
+export class Login extends Component {
+    context = this.props.context;    
     state = {
         username: "",
         password: "",
@@ -44,29 +45,32 @@ export class Login extends Component {
         else this.setState({ password : e.target.value.slice(0, -1)});// remove last character
     } 
 
-    handleLogin = () => {
+    handleLogin = (e) => {
+        e.preventDefault();
         this.setState({ showErr : false});
-        fetch (`/api/login`, {// send post login request
+        console.log(this.state.username + " " + this.state.password);
+        axios.post(`http://localhost:3001/api/login`, { userName: this.state.username, password: this.state.password })
+        /*fetch (`http://localhost:3001/api/login`, {// send post login request
             method: 'post',
+            mode: 'cors',
             credentials: 'include',
             headers: {
                 "Content-type": "application/json; charset=UTF-8"
             },
-            body: JSON.stringify({ userName: username, password: password })
-        })
+            body: JSON.stringify({ userName: this.state.username, password: this.state.password })
+        })*/
         .then((res)=> {
+            console.log(res);
             if(typeof res != 'undefined' && res.status===200) {
-                res.json().then(data => {
+                let data= res.data;
                     let uName = data.userName;
                     let uType = data.userType;
                     this.context.setUserName(uName);//set user context data
                     this.context.setUserType(uType);
                     userIdentity.saveUserSession(uName, uType);//set user session data
-                    this.setRedirect(uType==='s' ? 2 : 1 );
-                })
-                .catch(err=>{reject(err)});                
+                    this.setRedirect(uType==='s' ? 2 : 1 );     
             }
-            else reject(res.status);
+            else console.log(res.status);
         })
         .catch(err=>{ console.log(err); this.setState({ showErr : true}); });
     }
@@ -93,12 +97,12 @@ export class Login extends Component {
                         ? <><Form.Text className="text-muted"  style={{color: "red"}}>Invalid credentials</Form.Text></>
                         : null
                     }
-                    <Button variant="primary" type="submit">
+                    <Button variant="primary" type="submit" onClick={this.handleLogin}>
                         Login
                     </Button>
                 </Form>
             </div>
         )
     
-    }
+    }    
 }

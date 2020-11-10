@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
 
-import { Switch, Route } from 'react-router-dom'
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 
 import { Login } from './pages/Login'
 
@@ -36,12 +36,18 @@ class App extends Component {
   return <div className='App'>
       <Router>
         <MainContext.Provider value={{userName: this.state.userName, setUserName: this.setUserName, userType: this.state.UserType, setUserType: this.setUserType}}>
-          <Switch>
-            <Route path='/login'><Login/></Route>
-            <Route path='/studentHome'><studentHome/></Route>
-            <Route path='/teacherHome'><teacherHome/></Route>
-            <Route><Login/></Route>
-          </Switch>
+          <MainContext.Consumer>
+            {(value)=>{
+              return (
+                  <Switch context={value}>
+                    <Route path='/login'><Login/></Route>
+                    <Route path='/studentHome'><studentHome/></Route>
+                    <Route path='/teacherHome'><teacherHome/></Route>
+                    <Route><Login/></Route>
+                  </Switch>
+              )             
+            }}            
+          </MainContext.Consumer>
         </MainContext.Provider>
       </Router>
     </div>
@@ -49,4 +55,3 @@ class App extends Component {
 }
 
 export default App;
-export { MainContext } ;

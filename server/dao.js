@@ -20,11 +20,11 @@ exports.checkUserPwd = function (username, password) {
                         this.getRole(row.userID)
                             .then(row2 => {
                                 resolve({userID: row.userID, userType: row2.UserType});
-                            }) 
+                            })
                             .catch(err2 => {
                                 reject(err2);
                             })
-                        
+
                     }
                 })
             }
@@ -53,11 +53,11 @@ exports.addSeat=function(userId, lectureId,date){
 
                         }
                         else{
-                            reject([{"error": "0 seats available"}]);
+                            reject(new Error("0 seats available"));
                         }
                     }).catch(err=>reject(err));
                 }).catch(err=>reject(err));
-            }else reject([{"error": "Course unavailable"}]);
+            }else reject(new Error("Course unavailable"));
 
         }).catch(err=>reject(err));
 
@@ -106,7 +106,7 @@ exports.deleteSeat=function(userId, lectureId,date){
 
 exports.getLecturesByUserId=function(userId){
     return new Promise((resolve, reject) => {
-        const sql='SELECT Course_Ref, Name, Date FROM  Lecture  WHERE Date>datetime(now,localtime) AND Course_Ref IN (' +
+        const sql='SELECT Course_Ref, Name, Date FROM  Lecture  WHERE Course_Ref IN (' +
             'SELECT CourseID FROM Course WHERE User_Ref=?)';
         db.all(sql, [userId], (err,rows)=>{
             if(err){
@@ -141,7 +141,7 @@ exports.getRole=function(userId){
                 console.log(row);
                 resolve(row);
             }
-                
+
         })
     })
 }

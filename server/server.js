@@ -32,8 +32,6 @@ app.use(morgan('tiny'));
 // Process body content
 app.use(express.json());
 
-
-
 // Enable cors
 app.use(cors());
 
@@ -44,7 +42,7 @@ app.post('/api/login', (req, res) => {
         console.log(response.userID);
           const token = jsonwebtoken.sign({ user: response.userID, userType: response.userType }, jwtSecret, { expiresIn: expireTime });
           res.cookie('token', token, { httpOnly: true, sameSite: true, maxAge: 3000 * expireTime });
-          res.status(200).json(response).end(); 
+          res.status(200).json(response).end();
       }).catch( // Delay response in case of wrong user/pass to prevent fast guessing attempts
           () => new Promise((resolve) => { setTimeout(resolve, 1000) }).then( // 1 second timeout
               () => {res.status(401).end()}
