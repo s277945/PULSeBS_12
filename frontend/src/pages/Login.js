@@ -5,8 +5,7 @@ import Button from 'react-bootstrap/Button'
 import { Redirect } from 'react-router-dom'
 import userIdentity from '../api/userIdentity.js'
 
-export class Login extends Component {
-    context = this.props.context;    
+export class Login extends Component {    
     state = {
         username: "",
         password: "",
@@ -15,8 +14,9 @@ export class Login extends Component {
     }
 
     componentDidMount(){
-        if (this.context.userName && this.context.userType) {
-            this.context.userType==='s' ? this.setRedirect(2) : this.setRedirect(1);//check context for login data and set redirect value accordingly
+        console.log(this.props.context);
+        if (this.props.context.userName && this.props.context.userType) {
+            this.props.context.userType==='s' ? this.setRedirect(2) : this.setRedirect(1);//check context for login data and set redirect value accordingly
         }
     }
 
@@ -63,10 +63,10 @@ export class Login extends Component {
             console.log(res);
             if(typeof res != 'undefined' && res.status===200) {
                 let data= res.data;
-                    let uName = data.userName;
+                    let uName = data.userID;
                     let uType = data.userType;
-                    this.context.setUserName(uName);//set user context data
-                    this.context.setUserType(uType);
+                    this.props.context.setUserName(uName);//set user context data
+                    this.props.context.setUserType(uType);
                     userIdentity.saveUserSession(uName, uType);//set user session data
                     this.setRedirect(uType==='s' ? 2 : 1 );     
             }

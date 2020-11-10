@@ -38,12 +38,13 @@ class App extends Component {
         <MainContext.Provider value={{userName: this.state.userName, setUserName: this.setUserName, userType: this.state.UserType, setUserType: this.setUserType}}>
           <MainContext.Consumer>
             {(value)=>{
+              console.log(value);
               return (
-                  <Switch context={value}>
-                    <Route path='/login'><Login/></Route>
-                    <Route path='/studentHome'><studentHome/></Route>
-                    <Route path='/teacherHome'><teacherHome/></Route>
-                    <Route><Login/></Route>
+                  <Switch>
+                    <Route path='/login'><Login context={value}/></Route>
+                    <Route path='/studentHome'><studentHome context={value}/></Route>
+                    <Route path='/teacherHome'><teacherHome context={value}/></Route>
+                    <Route><Login context={value}/></Route>
                   </Switch>
               )             
             }}            
