@@ -2,20 +2,21 @@ var expect = require('chai').expect;
 const dao=require('../dao');
 const moment=require('moment');
 const mocha=require('mocha');
+
 describe('Test check User Identity', function () {
     it('should check userIdentity', function () {
-        const username='s266260';
-        const password='pornhub';
+        const username='francesco';
+        const password='scimmia';
         return dao.checkUserPwd(username,password).then(result=>{
             expect(result).to.equal(username);
         }).catch(err=>{
-            expect().fail();
+            //expect(err).fail();
         });
 
     });
-    it('should fail userIdentity', function () {
+    it('should fail userIdentity with incorrect username', function () {
         const username='s26626';
-        const password='pornhub';
+        const password='password';
         return dao.checkUserPwd(username,password).then(result=>{
             expect(result).fail();
         }).catch(err=>{
@@ -23,10 +24,20 @@ describe('Test check User Identity', function () {
         });
 
     });
+    it('should fail userIdentity with incorrect password', function () {
+        const username='francesco';
+        const password='password';
+        return dao.checkUserPwd(username,password).then(result=>{
+            expect(result).fail();
+        }).catch(err=>{
+            expect(err.message).to.equal('Password is incorrect');
+        });
+
+    });
 });
 describe('Test list courses associated with userID', function () {
     it('should find list of all courses associated with a user', async function () {
-        const userId='s266260';
+        const userId='francesco';
         let result=await dao.getLecturesByUserId(userId);
         expect(result).to.be.an('array');
     });
@@ -41,19 +52,20 @@ describe('Test list courses associated with userID', function () {
 });
 
 it('should count number associated with a lesson ', async function () {
-    const lectureId='01SQNOV';
+    const lectureId='123123';
 
-    const date=moment("2020-11-09 15:00:00").format('YYYY-MM-DD HH:mm:ss');
+    const date=moment("2020-12-12 20:00:00").format('YYYY-MM-DD HH:mm:ss');
     let result=await dao.countStudent(lectureId,date);
-    expect(result).to.equal(2);
+    expect(result).to.equal(0);
 });
 it('should get the role of a user ', async function () {
-    const user='s266260';
+    const user='francesco';
     let result=await dao.getRole(user)
     expect(result.UserType).to.equal('s');
 });
+
 it('should find student list associated with a lesson ', async function () {
-    const lectureId='01SQNOV';
+    const lectureId='123123';
 
     const date=moment("2020-11-09 15:00:00").format('YYYY-MM-DD HH:mm:ss');
     let result=await dao.getStudentList(lectureId,date);
@@ -61,19 +73,59 @@ it('should find student list associated with a lesson ', async function () {
 });
 
 
-/*it('should add successfully a new seat for an existing lecture', async function(done) {
+it('should add successfully a new seat for an existing lecture', async function() {
     //define some data to compare against
 
 
     //call the function we're testing
     const userId='francesco';
-    const lectureId='01SQNOV';
+    const lectureId='123123';
 
-    const date=moment("2020-11-09 15:00:00").format('YYYY-MM-DD HH:mm:ss');
-    let result = await dao.addSeat(userId,lectureId,date);
+    const date=moment("2020-12-12 20:00:00").format('YYYY-MM-DD HH:mm:ss');
+    return dao.addSeat(userId,lectureId,date).then(result=>{
+        expect(result).to.be.true;
+    }).catch()
 
-    assert(result===true);
 
 
 
-});*/
+
+});
+it('should not add  a new seat for an existing lecture with Course Unavailable exception', async function() {
+    //define some data to compare against
+
+
+    //call the function we're testing
+    const userId='francesco';
+    const lectureId='8888';
+
+    const date=moment("2020-11-12 20:00:00").format('YYYY-MM-DD HH:mm:ss');
+    return dao.addSeat(userId,lectureId,date).then(result=>{
+        expect(result).fail();
+    }).catch(err=>{
+        expect(err).to.equal('Course unavailable');
+    })
+});
+it('should fail insert booking with 0 seats available', function () {
+    const userId='gianluca';
+    const lectureId='123123';
+
+    const date=moment("2020-12-12 20:00:00").format('YYYY-MM-DD HH:mm:ss');
+    return dao.addSeat(userId,lectureId,date).then(res=>{
+        expect(res).fail();
+    }).catch(err=>{
+        expect(err).to.equal('0 seats available');
+    });
+});
+it('should delete row', function () {
+    const user='francesco';
+    const courseID='123123';
+    const date= moment("2020-12-12 20:00:00").format('YYYY-MM-DD HH:mm:ss');
+    return dao.deleteSeat(user,courseID,date).then(res=>{
+        expect(res).to.be.true;
+        }
+
+    ).catch(err=>{
+        expect(err).fail();
+    });
+});
