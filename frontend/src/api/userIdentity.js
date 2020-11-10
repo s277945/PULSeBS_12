@@ -10,7 +10,7 @@ function saveUserSession(context, userName, userType) {
     });
 }
 
-function removeUserSession(context, userName, userType) {
+function removeUserSession(context) {
     return new Promise((resolve, reject) => {
         context.setUserName("");//set user context data
         context.setUserType("");
