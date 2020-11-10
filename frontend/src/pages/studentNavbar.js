@@ -1,10 +1,10 @@
 import React, { Component } from 'react'
 import Nav from 'react-bootstrap/Nav'
 import Navbar from 'react-bootstrap/Navbar'
+import userIdentity from '../api/userIdentity.js'
 
 export class StudentNavbar extends Component { 
-    showLectures = (e) => {
-        e.preventDefault();
+    showLectures = () => {
         this.props.setShow(0);
     }
 
@@ -13,8 +13,12 @@ export class StudentNavbar extends Component {
         this.props.history.push("/");
     }
 
-    redirCalendar = (e) => {
-        e.preventDefault();
+    redirCalendar = () => {
+    }
+
+    handleLogout = () => {
+        userIdentity.removeUserSession(this.props.context);
+        this.props.history.push("/");
     }
 
     render() {
@@ -22,11 +26,12 @@ export class StudentNavbar extends Component {
         return (
             <>
                 <Navbar bg="dark" variant="dark">
-                    <Navbar.Brand href="#">PULSeBS</Navbar.Brand>
+                    <Navbar.Brand href="#" onClick={this.redirHome}>PULSeBS</Navbar.Brand>
                     <Nav className="mr-auto">
-                        <Nav.Link href="#lectures">Lectures</Nav.Link>
-                        <Nav.Link href="#calendar">Calendar</Nav.Link>
+                        <Nav.Link href="#lectures" onSelect={this.showLectures}>Lectures</Nav.Link>
+                        <Nav.Link href="#calendar">Calendar</Nav.Link>                        
                     </Nav>
+                    <Nav.Link href="#logout" onSelect={this.handleLogout}>Logout</Nav.Link>
                 </Navbar>
             </>
         )
