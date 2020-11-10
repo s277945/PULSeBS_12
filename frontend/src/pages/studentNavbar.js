@@ -22,7 +22,7 @@ export class StudentNavbar extends Component {
         return (
             <>
                 <Navbar bg="dark" variant="dark">
-                    <Navbar.Brand href="#home">PULSeBS</Navbar.Brand>
+                    <Navbar.Brand href="#">PULSeBS</Navbar.Brand>
                     <Nav className="mr-auto">
                         <Nav.Link href="#lectures">Lectures</Nav.Link>
                         <Nav.Link href="#calendar">Calendar</Nav.Link>
