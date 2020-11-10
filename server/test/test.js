@@ -52,11 +52,11 @@ describe('Test list courses associated with userID', function () {
 });
 
 it('should count number associated with a lesson ', async function () {
-    const lectureId='123123';
+    const user='torchiano';
 
     const date=moment("2020-12-12 20:00:00").format('YYYY-MM-DD HH:mm:ss');
-    let result=await dao.countStudent(lectureId,date);
-    expect(result).to.equal(0);
+    let result=await dao.getNextLectureNumber(user)
+    expect(result.numberOfStudents).to.equal(1);
 });
 it('should get the role of a user ', async function () {
     const user='francesco';
@@ -65,9 +65,9 @@ it('should get the role of a user ', async function () {
 });
 
 it('should find student list associated with a lesson ', async function () {
-    const lectureId='0506';
+    const lectureId='123123';
 
-    const date=moment("2020-12-13 19:00:00").format('YYYY-MM-DD HH:mm:ss');
+    const date=moment("2020-12-12 20:00:00").format('YYYY-MM-DD HH:mm:ss');
     let result=await dao.getStudentList(lectureId,date);
     expect(result[0]).to.have.a.property('Student_Ref');
 });
