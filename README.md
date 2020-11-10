@@ -5,7 +5,7 @@
 **base path: /api** 
 
 **POST /login**
-- request body: {userId, password}
+- request body: {userName, password}
 
 
 
@@ -15,18 +15,18 @@
 ///////
 
 
-**GET /lectures?userId=...**
-- query parameters: userId => student ID
+**GET /lectures**
+- query parameters: userId => student ID (taken from token)
 - response body: [{"lectureId": "0432SQ", "lectureName": "SE2", "date": "...", "teacher": "Torchiano"}, {...}]
 
 
 **POST /lectures**
-- body request: {"userId": "s269443", "lectureId": "0432SQ"} /////lecture ID should be unique in this case
+- body request: {"lectureId": "0432SQ", "date": "..."} /////lecture ID should be unique in this case
 - body response: status 201/404/500
 
 
-**DELETE /lectures/:lectureId?userId=...**
-- request parameters: lectureId, userId
+**DELETE /lectures/:lectureId?date=2020-12-13 19:00:00** => don't worry about spaces
+- request parameters: lectureId, date
 - body response: status 204/404/500
 
 
@@ -40,7 +40,7 @@
 - response body: [{"lectureId": "0432SQ", "lectureName": "SE2", "date": "..."}, {...}]
 
 
-**GET /lectures/:lectureId/listStudents?userId=...**
+**GET /lectures/:lectureId/listStudents**
 - query parameters: lectureId, userId => teacher ID
 - response body: {"students": [{...}]}
 

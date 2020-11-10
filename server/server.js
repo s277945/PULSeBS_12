@@ -82,7 +82,7 @@ app.use((err, req, res, next) => {
 });
 
 /**
- * GET api/lectures?userId=...
+ * GET api/lectures
  * 
  * Returns list of available lectures for a given student
  * 
@@ -105,7 +105,7 @@ app.use((err, req, res, next) => {
 /**
  * POST api/lectures
  * 
- * Book a lectures for a given student
+ * Book a lecture for a given student
  * 
  * body request: {"userId": "s269443", "lectureId": "0432SQ", date: ""}
  */
@@ -128,6 +128,24 @@ app.use((err, req, res, next) => {
         res.status(500).json({ errors: [{ 'param': 'Server', 'msg': err }] });
       });
  });
+
+ /**
+ * DELETE api/lectures
+ * 
+ * Delete booked lecture for a given student
+ * 
+ * params: 
+ */
+
+ app.delete('/api/lectures/:lectureId', (req,res) => {
+    let date = moment(req.query.date).format('YYYY-MM-DD HH:mm:ss');
+    const user = req.user && req.user.user;
+    dao.deleteSeat(user, req.params.lectureId, date)
+      .then(() => res.status(204).end())
+      .catch((err) => res.status(500).json({ errors: [{ 'param': 'Server', 'msg': err }] }));
+
+ });
+
 //mail configuration
 
 var transporter = nodemailer.createTransport({
