@@ -1,11 +1,30 @@
 import React, { Component } from 'react'
-import { studentNavbar } from './studentNavbar'
+import { StudentNavbar } from './StudentNavbar'
 
-export class studentHome extends Component {
+export class StudentHome extends Component {
+    state = {
+        show : 0
+    }
+
+    setShow = (val) => {
+        this.setState({show : val});
+    }
+
+    contentSelect = () => {
+        if (this.state.show === 0) return (
+            <div>
+
+            </div>
+        )
+    }
     render() {
-
         return (
-            <div></div>
+            <>
+                <StudentNavbar setShow={this.setShow} history={this.props.history}/>
+                <div>
+
+                </div>
+            </>
         )
     }
 }

@@ -19,4 +19,4 @@ function removeUserSession(context) {
     });
 }
 
-export default { saveUserSession };
+export default { saveUserSession, removeUserSession };
