@@ -11,8 +11,8 @@ const MainContext = React.createContext();
 
 class App extends Component {
   state = {
-      userName: "",
-      userType: ""
+      userName: null,
+      userType: null
   }
 
   componentDidMount(){
