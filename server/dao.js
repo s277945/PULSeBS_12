@@ -122,7 +122,7 @@ exports.deleteSeat=function(userId, courseId, date){
 };
 
 /*
-* Input: usedID 
+* Input: userID 
 * Output: List of lectures (Course_ref, Name, Date)
 * Description: Retrieve the list of lectures from the courses in which the user is enrolled in
 */
@@ -131,6 +131,26 @@ exports.getLecturesByUserId=function(userId){
     return new Promise((resolve, reject) => {
         const sql='SELECT Course_Ref, Name, Date FROM  Lecture  WHERE Course_Ref IN (' +
             'SELECT CourseID FROM Course WHERE User_Ref=?)';
+        db.all(sql, [userId], (err,rows)=>{
+            if(err){
+                reject(err);
+            }
+            else{
+                resolve(rows);
+            }
+        });
+    });
+}
+
+/*
+* Input: userID 
+* Output: List of lectures booked
+* Description: Retrieve the list of lectures already booked from a student
+*/
+
+exports.getLecturesBookedByUserId=function(userId){
+    return new Promise((resolve, reject) => {
+        const sql='SELECT Course_Ref, Date_Ref FROM Booking WHERE Student_ref = ?';
         db.all(sql, [userId], (err,rows)=>{
             if(err){
                 reject(err);
@@ -218,7 +238,6 @@ exports.getStudentList=function(courseId, date){
         });
     });
 };
-
 
 /**
  * Retrieve email of a given student
