@@ -4,6 +4,7 @@ import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 import { Redirect } from 'react-router-dom'
 import userIdentity from '../api/userIdentity.js'
+import Navbar from 'react-bootstrap/Navbar'
 
 export class Login extends Component {    
     state = {
@@ -18,6 +19,11 @@ export class Login extends Component {
         if (this.props.context.userName && this.props.context.userType) {
             this.props.context.userType==='s' ? this.setRedirect(2) : this.setRedirect(1);//check context for login data and set redirect value accordingly
         }
+    }
+
+    redirHome = (e) => { //function that redirects to the home page
+        e.preventDefault();
+        this.props.history.push("/");
     }
 
     setRedirect = (redir) => {
@@ -69,6 +75,9 @@ export class Login extends Component {
         return (
             <div>
                 {this.renderRedirect()}
+                <Navbar bg="dark" variant="dark">
+                    <Navbar.Brand href="#" onClick={this.redirHome}>PULSeBS</Navbar.Brand>
+                </Navbar>
                 <Form style={{display: "block", marginLeft: "auto", marginRight: "auto", paddingTop: "20vh", width: "300px"}}>
                     <Form.Group controlId="formBasicEmail">
                         <Form.Label>Username</Form.Label>
