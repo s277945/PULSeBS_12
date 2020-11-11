@@ -69,7 +69,7 @@ export class Login extends Component {
         return (
             <div>
                 {this.renderRedirect()}
-                <Form>
+                <Form style={{display: "block", marginLeft: "auto", marginRight: "auto", paddingTop: "20vh", width: "300px"}}>
                     <Form.Group controlId="formBasicEmail">
                         <Form.Label>Username</Form.Label>
                         <Form.Control type="text" placeholder="Enter username" onChange={this.usernameChange} value={this.state.username}/>
