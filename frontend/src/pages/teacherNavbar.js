@@ -5,6 +5,11 @@ import userIdentity from '../api/userIdentity.js'
 import axios from 'axios'
 
 export class TeacherNavbar extends Component { 
+
+    showNext = () => { //function called when Next Lecture link is selected
+        this.props.setShow(0);
+    }
+
     showLectures = () => { //function called when Lectures link is selected
         this.props.setShow(1);
     }
@@ -27,6 +32,7 @@ export class TeacherNavbar extends Component {
                 <Navbar bg="dark" variant="dark">
                     <Navbar.Brand href="#" onClick={this.redirHome}>PULSeBS</Navbar.Brand>
                     <Nav className="mr-auto">
+                        <Nav.Link href="#nextlecture" onSelect={this.showNext}>Next Lecture</Nav.Link>
                         <Nav.Link href="#lectures" onSelect={this.showLectures}>Lectures</Nav.Link>                     
                     </Nav>
                     <Nav.Link href="#logout" onSelect={this.handleLogout}>Logout</Nav.Link>

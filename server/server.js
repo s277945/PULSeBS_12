@@ -32,7 +32,7 @@ app.use(morgan('tiny'));
 app.use(express.json());
 
 // Enable cors
-app.use(cors());
+app.use(cors({ origin: true, credentials: true }));
 
 //login route
 app.post('/api/login', (req, res) => {

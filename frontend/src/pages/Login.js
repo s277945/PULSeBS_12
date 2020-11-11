@@ -11,13 +11,16 @@ export class Login extends Component {
         username: "",   //form values
         password: "",
         showErr: false, //form error state value
+        showInvalidU: false, //username form invalid state value
+        showInvalidP: false, //password form invalid state value
         redirect: 0     //redirect value
     }
 
-    componentDidMount(){
-        console.log(this.props.context);
-        if (this.props.context.userName && this.props.context.userType) {
-            this.props.context.userType==='s' ? this.setRedirect(2) : this.setRedirect(1);//check context for login data and set redirect value accordingly
+    componentDidMount(){    
+        console.log(this.props.context.userName!==null);    
+        if (this.props.context.userName!==null && this.props.context.userType!==null) {
+            console.log(this.props.context);
+            this.props.context.userType==="s" ? this.setRedirect(2) : this.setRedirect(1); //check context for login data and set redirect value accordingly
         }
     }
 
@@ -41,21 +44,30 @@ export class Login extends Component {
 
     usernameChange = (e) => {
         let lastchar=e.target.value.slice(-1);// extract last character
-        if (/[a-zA-Z0-9_]/.test(lastchar)) this.setState({ username : e.target.value });// allow only numbers, letters and underscore as username form input
+        if (/[a-zA-Z0-9_]/.test(lastchar)) { 
+            this.setState({ username : e.target.value });// allow only numbers, letters and underscore as username form input
+            this.setState({ showInvalidU: false });// reset invalid username form state
+        }
         else this.setState({ username : e.target.value.slice(0, -1)});// remove last character
     }
 
     passwordChange = (e) => {
         let lastchar=e.target.value.slice(-1);// extract last character
-        if (/[a-zA-Z0-9?!,]/.test(lastchar)) this.setState({ password : e.target.value });// allow only numbers and letters as password form input
+        if (/[a-zA-Z0-9?!,]/.test(lastchar)) { 
+            this.setState({ password : e.target.value });// allow only numbers and letters as password form input
+            this.setState({ showInvalidP: false });// reset invalid password form state
+        }
         else this.setState({ password : e.target.value.slice(0, -1)});// remove last character
     } 
 
     handleLogin = (e) => {
         e.preventDefault();
-        this.setState({ showErr : false});
         console.log(this.state.username + " " + this.state.password);
-        axios.post(`http://localhost:3001/api/login`, { userName: this.state.username, password: this.state.password })//send post login request
+        if (this.state.username==="" || this.state.password==="") {
+            if (this.state.username==="") this.setState({ showInvalidU: true });
+            if (this.state.password==="") this.setState({ showInvalidP: true });
+        }        
+        else axios.post(`http://localhost:3001/api/login`, { userName: this.state.username, password: this.state.password },{ withCredentials: true, credentials: 'include' })//send post login request
         .then((res)=> {
             console.log(res);
             if(typeof res != 'undefined' && res.status===200) {
@@ -70,6 +82,10 @@ export class Login extends Component {
         .catch(err=>{ console.log(err); this.setState({ showErr : true}); });
     }
 
+    handleReset = (e) => {
+        e.preventDefault();
+        this.setState({ username: "", password: "", showInvalidU: false, showInvalidP: false });// reset invalid form state, reset form content
+    }
     render() {
 
         return (
@@ -81,7 +97,7 @@ export class Login extends Component {
                 <Form style={{display: "block", marginLeft: "auto", marginRight: "auto", paddingTop: "20vh", width: "300px"}}>
                     <Form.Group controlId="formBasicEmail">
                         <Form.Label>Username</Form.Label>
-                        <Form.Control type="text" placeholder="Your domain username" onChange={this.usernameChange} value={this.state.username}/>
+                        <Form.Control type="text" placeholder="Your domain username" onChange={this.usernameChange} value={this.state.username} isInvalid={this.state.showInvalidU}/>
                         {   !this.state.showErr
                             ? <><Form.Text className="text-muted">Enter valid domain username</Form.Text></>
                             : null
@@ -89,14 +105,18 @@ export class Login extends Component {
                     </Form.Group>
                     <Form.Group controlId="formBasicPassword">
                         <Form.Label>Password</Form.Label>
-                        <Form.Control type="password" placeholder="Password" onChange={this.passwordChange} value={this.state.password}/>
+                        <Form.Control type="password" placeholder="Password" onChange={this.passwordChange} value={this.state.password} isInvalid={this.state.showInvalidP}/>
+                        {   this.state.showErr
+                            ? <><Form.Text style={{color: "red", paddingTop: "5px", paddingBottom: "5px"}}>Invalid credentials</Form.Text></>
+                            : null
+                        }
                     </Form.Group>
-                    {   this.state.showErr
-                        ? <><Form.Text className="text-muted"  style={{color: "red"}}>Invalid credentials</Form.Text></>
-                        : null
-                    }
-                    <Button variant="primary" type="submit" onClick={this.handleLogin}>
+                    
+                    <Button variant="primary" type="submit" onClick={this.handleLogin} style={{marginRight: "17px", marginRight: "17px", paddingRight: "17px", paddingLeft: "17px"}}>
                         Login
+                    </Button>
+                    <Button variant="secondary" type="submit" onClick={this.handleReset} >
+                        Reset
                     </Button>
                 </Form>
             </div>
