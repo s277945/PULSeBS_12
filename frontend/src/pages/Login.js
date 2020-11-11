@@ -4,13 +4,14 @@ import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 import { Redirect } from 'react-router-dom'
 import userIdentity from '../api/userIdentity.js'
+import Navbar from 'react-bootstrap/Navbar'
 
 export class Login extends Component {    
     state = {
-        username: "",
+        username: "",   //form values
         password: "",
-        showErr: false,
-        redirect: 0
+        showErr: false, //form error state value
+        redirect: 0     //redirect value
     }
 
     componentDidMount(){
@@ -18,6 +19,11 @@ export class Login extends Component {
         if (this.props.context.userName && this.props.context.userType) {
             this.props.context.userType==='s' ? this.setRedirect(2) : this.setRedirect(1);//check context for login data and set redirect value accordingly
         }
+    }
+
+    redirHome = (e) => { //function that redirects to the home page
+        e.preventDefault();
+        this.props.history.push("/");
     }
 
     setRedirect = (redir) => {
@@ -41,7 +47,7 @@ export class Login extends Component {
 
     passwordChange = (e) => {
         let lastchar=e.target.value.slice(-1);// extract last character
-        if (/[a-zA-Z0-9_]/.test(lastchar)) this.setState({ password : e.target.value });// allow only numbers, letters and underscore as username form input
+        if (/[a-zA-Z0-9?!,]/.test(lastchar)) this.setState({ password : e.target.value });// allow only numbers and letters as password form input
         else this.setState({ password : e.target.value.slice(0, -1)});// remove last character
     } 
 
@@ -49,15 +55,15 @@ export class Login extends Component {
         e.preventDefault();
         this.setState({ showErr : false});
         console.log(this.state.username + " " + this.state.password);
-        axios.post(`http://localhost:3001/api/login`, { userName: this.state.username, password: this.state.password })
+        axios.post(`http://localhost:3001/api/login`, { userName: this.state.username, password: this.state.password })//send post login request
         .then((res)=> {
             console.log(res);
             if(typeof res != 'undefined' && res.status===200) {
                 let data= res.data;
-                    let uName = data.userID;
-                    let uType = data.userType;                    
-                    userIdentity.saveUserSession(this.props.context, uName, uType);//set user session data
-                    this.setRedirect(uType==='s' ? 2 : 1 );     
+                let uName = data.userID;
+                let uType = data.userType;                    
+                userIdentity.saveUserSession(this.props.context, uName, uType);//set user session data
+                this.setRedirect(uType==='s' ? 2 : 1 );//set redirect value accordingly     
             }
             else console.log(res.status);
         })
@@ -69,10 +75,13 @@ export class Login extends Component {
         return (
             <div>
                 {this.renderRedirect()}
-                <Form>
+                <Navbar bg="dark" variant="dark">
+                    <Navbar.Brand href="#" onClick={this.redirHome}>PULSeBS</Navbar.Brand>
+                </Navbar>
+                <Form style={{display: "block", marginLeft: "auto", marginRight: "auto", paddingTop: "20vh", width: "300px"}}>
                     <Form.Group controlId="formBasicEmail">
                         <Form.Label>Username</Form.Label>
-                        <Form.Control type="text" placeholder="Enter username" onChange={this.usernameChange} value={this.state.username}/>
+                        <Form.Control type="text" placeholder="Your domain username" onChange={this.usernameChange} value={this.state.username}/>
                         {   !this.state.showErr
                             ? <><Form.Text className="text-muted">Enter valid domain username</Form.Text></>
                             : null
