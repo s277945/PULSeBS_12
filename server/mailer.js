@@ -1,11 +1,12 @@
 const nodemailer = require('nodemailer'); 
 
+const email = "noreplyprojectse@gmail.com"
 //mail configuration
 
-var transporter = nodemailer.createTransport({
+exports.transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
-      user: 'noreplyprojectse@gmail.com',
+      user: email,
       pass: 'scimmia,2020'
     }
   });
@@ -17,13 +18,8 @@ var transporter = nodemailer.createTransport({
     text: 'That was easy!'
   };
 
-transporter.sendMail(mailOptions, function(err, info){
-    if(err){
-        console.log(err);
-    } else {
-        console.log('Email sent: ' + info.response);
-    }
-});
+
+
 
 
 

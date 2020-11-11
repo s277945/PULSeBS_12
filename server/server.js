@@ -119,6 +119,24 @@ app.use((err, req, res, next) => {
     dao.addSeat(user, req.body.lectureId, date)
       .then((response) => {
           res.status(201).json({"inserted": response});
+          dao.getStudentEmail(user)
+            .then((email) => {
+              var mailOptions = {
+                from: mailer.email,
+                to: email,
+                subject: 'Booking Confirmation',
+                text: `Dear ${user}, you booked a seat for Course ${req.body.lectureId} for lecture on ${date}`
+              };
+
+              mailer.transporter.sendMail(mailOptions, function(err, info){
+                if(err){
+                    console.log(err);
+                } else {
+                    console.log('Email sent: ' + info.response);
+                }
+              });
+            })
+            .catch((err) => console.log(err))
       }).catch((err) => {
         res.status(500).json({ errors: [{ 'param': 'Server', 'msg': err }] });
       });

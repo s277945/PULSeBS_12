@@ -230,7 +230,7 @@ exports.getStudentEmail = function(userId){
         const sql = 'SELECT Email FROM User WHERE userID=?';
         db.get(sql, [userId], (err, row)=> {
             if(err) reject(err);
-            else resolve(row);
+            else resolve(row.Email);
         });
     })
 }
