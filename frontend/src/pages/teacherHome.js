@@ -5,7 +5,7 @@ export class TeacherHome extends Component {
 
 
     componentDidMount() {
-        // check if session is stared, otherwise return to login
+        if(!this.props.context.userName || !this.props.context.userType) this.props.history.push("/"); //open page only if a valid session has been started
 
     }
 

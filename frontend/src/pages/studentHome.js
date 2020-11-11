@@ -6,6 +6,11 @@ export class StudentHome extends Component {
         show : 0 //this state variable is used to choose the content to show
     }
 
+    componentDidMount() {
+        if(!this.props.context.userName || !this.props.context.userType) this.props.history.push("/"); //open page only if a valid session has been started
+
+    }
+
     setShow = (val) => { //function to set the show variable
         this.setState({show : val});
     }
