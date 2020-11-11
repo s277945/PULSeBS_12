@@ -81,7 +81,7 @@ export class Login extends Component {
                 <Form style={{display: "block", marginLeft: "auto", marginRight: "auto", paddingTop: "20vh", width: "300px"}}>
                     <Form.Group controlId="formBasicEmail">
                         <Form.Label>Username</Form.Label>
-                        <Form.Control type="text" placeholder="Enter username" onChange={this.usernameChange} value={this.state.username}/>
+                        <Form.Control type="text" placeholder="Your domain username" onChange={this.usernameChange} value={this.state.username}/>
                         {   !this.state.showErr
                             ? <><Form.Text className="text-muted">Enter valid domain username</Form.Text></>
                             : null
