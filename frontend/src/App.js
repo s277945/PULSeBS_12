@@ -11,24 +11,24 @@ const MainContext = React.createContext();
 
 class App extends Component {
   state = {
-      userName: null,
+      userName: null,   //user session context data
       userType: null
   }
 
   componentDidMount(){
-    let userN = sessionStorage.getItem("userName");
-    if (userN) {
-      this.setState({userName: userN});
+    let userN = sessionStorage.getItem("userName"); //check for stored user session data
+    if (userN) { //if there is user session data
+      this.setState({userName: userN}); //retrieve data and set state accordingly
       let userT = sessionStorage.getItem("userType");
       if (userT) this.setState({userType: userT});
     }
   }
 
-  setUserName = (userN) => {
+  setUserName = (userN) => {  //function to set user context data (user name)
     this.setState({userName: userN});
   } 
 
-  setUserType = (userT) => {
+  setUserType = (userT) => {  //function to set user context data (user type)
     this.setState({userType: userT});
   }
 
