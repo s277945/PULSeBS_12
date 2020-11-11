@@ -11,6 +11,8 @@ export class Login extends Component {
         username: "",   //form values
         password: "",
         showErr: false, //form error state value
+        showInvalidU: false, //username form invalid state value
+        showInvalidP: false, //password form invalid state value
         redirect: 0     //redirect value
     }
 
@@ -42,21 +44,30 @@ export class Login extends Component {
 
     usernameChange = (e) => {
         let lastchar=e.target.value.slice(-1);// extract last character
-        if (/[a-zA-Z0-9_]/.test(lastchar)) this.setState({ username : e.target.value });// allow only numbers, letters and underscore as username form input
+        if (/[a-zA-Z0-9_]/.test(lastchar)) { 
+            this.setState({ username : e.target.value });// allow only numbers, letters and underscore as username form input
+            this.setState({ showInvalidU: false });// reste invalid username form state
+        }
         else this.setState({ username : e.target.value.slice(0, -1)});// remove last character
     }
 
     passwordChange = (e) => {
         let lastchar=e.target.value.slice(-1);// extract last character
-        if (/[a-zA-Z0-9?!,]/.test(lastchar)) this.setState({ password : e.target.value });// allow only numbers and letters as password form input
+        if (/[a-zA-Z0-9?!,]/.test(lastchar)) { 
+            this.setState({ password : e.target.value });// allow only numbers and letters as password form input
+            this.setState({ showInvalidP: false });// reset invalid password form state
+        }
         else this.setState({ password : e.target.value.slice(0, -1)});// remove last character
     } 
 
     handleLogin = (e) => {
         e.preventDefault();
-        this.setState({ showErr : false});
         console.log(this.state.username + " " + this.state.password);
-        axios.post(`http://localhost:3001/api/login`, { userName: this.state.username, password: this.state.password })//send post login request
+        if (this.state.username==="" || this.state.password==="") {
+            if (this.state.username==="") this.setState({ showInvalidU: true });
+            if (this.state.password==="") this.setState({ showInvalidP: true });
+        }        
+        else axios.post(`http://localhost:3001/api/login`, { userName: this.state.username, password: this.state.password })//send post login request
         .then((res)=> {
             console.log(res);
             if(typeof res != 'undefined' && res.status===200) {
@@ -82,7 +93,7 @@ export class Login extends Component {
                 <Form style={{display: "block", marginLeft: "auto", marginRight: "auto", paddingTop: "20vh", width: "300px"}}>
                     <Form.Group controlId="formBasicEmail">
                         <Form.Label>Username</Form.Label>
-                        <Form.Control type="text" placeholder="Your domain username" onChange={this.usernameChange} value={this.state.username}/>
+                        <Form.Control type="text" placeholder="Your domain username" onChange={this.usernameChange} value={this.state.username} isInvalid={this.state.showInvalidU}/>
                         {   !this.state.showErr
                             ? <><Form.Text className="text-muted">Enter valid domain username</Form.Text></>
                             : null
@@ -90,7 +101,7 @@ export class Login extends Component {
                     </Form.Group>
                     <Form.Group controlId="formBasicPassword">
                         <Form.Label>Password</Form.Label>
-                        <Form.Control type="password" placeholder="Password" onChange={this.passwordChange} value={this.state.password}/>
+                        <Form.Control type="password" placeholder="Password" onChange={this.passwordChange} value={this.state.password} isInvalid={this.state.showInvalidP}/>
                         {   this.state.showErr
                             ? <><Form.Text style={{color: "red", paddingTop: "5px", paddingBottom: "5px"}}>Invalid credentials</Form.Text></>
                             : null
