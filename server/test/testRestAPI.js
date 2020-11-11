@@ -6,6 +6,20 @@ const expect=chai.expect;
 let cookie;
 describe('', function () {
     describe('POST/login', function () {
+        it('should return status 401', async function () {
+            let res=await chai.request('http://localhost:3001').post('/api/login').send({userName:'francesco',password:'prova'})
+
+            expect(res.status).to.equal(401);
+        });
+    });
+    describe('POST/login', function () {
+        it('should return status 401', async function () {
+            let res=await chai.request('http://localhost:3001').post('/api/login').send({userName:'fran',password:'prova'})
+
+            expect(res.status).to.equal(401);
+        });
+    });
+    describe('POST/login', function () {
         it('should return status 200', async function () {
             let res=await chai.request('http://localhost:3001').post('/api/login').send({userName:'francesco',password:'scimmia'})
             cookie=res.headers['set-cookie'];
@@ -31,9 +45,15 @@ describe('', function () {
             let res=await chai.request('http://localhost:3001').post('/api/lectures').set('Cookie',cookie).send({userId: "francesco", lectureId: "123123", date: "2020-12-12 20:00:00"})
             expect(res.status).to.equal(201);
         });
-        it('should return status 201 ', async function () {
+        it('should return status 500 ', async function () {
+            let res=await chai.request('http://localhost:3001').post('/api/lectures').set('Cookie',cookie).send({userId: "francesco", lectureId: "prova", date: "2020-12-12 20:00:00"})
+            expect(res.status).to.equal(500);
+
+        });
+        it('should return status 500 ', async function () {
             let res=await chai.request('http://localhost:3001').post('/api/lectures').set('Cookie',cookie).send({userId: "francesco", lectureId: "123123", date: "2020-12-12 20:00:00"})
             expect(res.status).to.equal(500);
+
         });
 
     });
@@ -62,5 +82,10 @@ describe('', function () {
             expect(res.headers['set-cookies']).to.be.undefined;
         });
     });
-
+    describe('Get lectures booked', function () {
+        it('should return status 201', async function () {
+            let res=await chai.request('http://localhost:3001').get('/api/lectures/booked').set('Cookie',cookie).send()
+            expect(res.status).to.equal(201);
+        });
+    });
 });

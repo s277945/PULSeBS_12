@@ -62,7 +62,7 @@ app.post('/api/logout', (req, res) => {
 
 /**
  * From this point, next endpoints need authentication to work
- * 
+ *
  * AUTHENTICATED REST API endopoints
  */
 
@@ -82,9 +82,9 @@ app.use((err, req, res, next) => {
 
 /**
  * GET api/lectures
- * 
+ *
  * Returns list of available lectures for a given student
- * 
+ *
  * userId => userId
  */
 
@@ -103,16 +103,16 @@ app.use((err, req, res, next) => {
 
 /**
  * POST api/lectures
- * 
+ *
  * Book a lecture for a given student
- * 
+ *
  * body request: {"lectureId": "0432SQ", date: ""}
  */
 
  app.post('/api/lectures', (req, res) => {
     const user = req.user && req.user.user;
     const date=moment(req.body.date).format('YYYY-MM-DD HH:mm:ss');
-    
+
     if (moment(date).isBefore(moment()))
       return res.status(422).json({ errors: 'Invalid end date' });
 
@@ -136,7 +136,7 @@ app.use((err, req, res, next) => {
                 }
               });
             })
-            .catch((err) => console.log(err))
+            .catch((err) => res.status(500).json({ errors: [{ 'param': 'Server', 'msg': err }] }))
       }).catch((err) => {
         res.status(500).json({ errors: [{ 'param': 'Server', 'msg': err }] });
       });
@@ -144,9 +144,9 @@ app.use((err, req, res, next) => {
 
  /**
  * DELETE api/lectures/:lectureId?date=2020-12-13 19:00:00
- * 
+ *
  * Delete booked lecture for a given student
- * 
+ *
  * params: lectureId, date
  */
 
@@ -160,7 +160,7 @@ app.use((err, req, res, next) => {
 
 /**
  * GET /api/lectures/next
- * 
+ *
  */
 
  app.get('/api/lectures/next', (req, res) => {
@@ -175,12 +175,12 @@ app.use((err, req, res, next) => {
 
 /**
  * GET /lectures/listStudents?courseRef=...&date=2020-....
- * 
+ *
  * query parameters: lectureId
  */
 
  app.get('/api/lectures/listStudents', (req, res) => {
-    
+
     const course_ref = req.query.courseRef;
     const date = moment(req.query.date).format('YYYY-MM-DD HH:mm:ss');
     dao.getStudentList(course_ref, date)
@@ -191,10 +191,10 @@ app.use((err, req, res, next) => {
 
  });
 
-  
+
 /**
  * GET /lectures/booked
- * 
+ *
  * query parameters: userId => retrieved from cookie
  */
 
