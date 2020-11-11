@@ -13,7 +13,8 @@ export class StudentNavbar extends Component {
         this.props.history.push("/");
     }
 
-    redirCalendar = () => {
+    showCalendar = () => {
+        this.props.setShow(1);
     }
 
     handleLogout = () => {
@@ -29,7 +30,7 @@ export class StudentNavbar extends Component {
                     <Navbar.Brand href="#" onClick={this.redirHome}>PULSeBS</Navbar.Brand>
                     <Nav className="mr-auto">
                         <Nav.Link href="#lectures" onSelect={this.showLectures}>Lectures</Nav.Link>
-                        <Nav.Link href="#calendar">Calendar</Nav.Link>                        
+                        <Nav.Link href="#calendar" onSelect={this.showCalendar}>Calendar</Nav.Link>                        
                     </Nav>
                     <Nav.Link href="#logout" onSelect={this.handleLogout}>Logout</Nav.Link>
                 </Navbar>
