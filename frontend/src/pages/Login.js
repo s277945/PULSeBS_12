@@ -14,10 +14,11 @@ export class Login extends Component {
         redirect: 0     //redirect value
     }
 
-    componentDidMount(){
-        console.log(this.props.context);
-        if (this.props.context.userName && this.props.context.userType) {
-            this.props.context.userType==='s' ? this.setRedirect(2) : this.setRedirect(1);//check context for login data and set redirect value accordingly
+    componentDidMount(){    
+        console.log(this.props.context.userName!==null);    
+        if (this.props.context.userName!==null && this.props.context.userType!==null) {
+            console.log(this.props.context);
+            this.props.context.userType==="s" ? this.setRedirect(2) : this.setRedirect(1); //check context for login data and set redirect value accordingly
         }
     }
 
@@ -90,11 +91,12 @@ export class Login extends Component {
                     <Form.Group controlId="formBasicPassword">
                         <Form.Label>Password</Form.Label>
                         <Form.Control type="password" placeholder="Password" onChange={this.passwordChange} value={this.state.password}/>
+                        {   this.state.showErr
+                            ? <><Form.Text style={{color: "red", paddingTop: "5px", paddingBottom: "5px"}}>Invalid credentials</Form.Text></>
+                            : null
+                        }
                     </Form.Group>
-                    {   this.state.showErr
-                        ? <><Form.Text className="text-muted"  style={{color: "red"}}>Invalid credentials</Form.Text></>
-                        : null
-                    }
+                    
                     <Button variant="primary" type="submit" onClick={this.handleLogin}>
                         Login
                     </Button>

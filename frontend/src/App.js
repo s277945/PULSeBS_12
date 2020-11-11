@@ -38,7 +38,6 @@ class App extends Component {
         <MainContext.Provider value={{userName: this.state.userName, userType: this.state.userType, setUserName: this.setUserName, setUserType: this.setUserType}}>
           <MainContext.Consumer>
             {(value)=>{
-              console.log(value);
               return (
                   <Switch>
                     <Route path='/login'  render={(props) => (<Login {...props} context={value}/>)}></Route>
