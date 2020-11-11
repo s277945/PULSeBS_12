@@ -24,7 +24,7 @@ export class TeacherHome extends Component {
         )
         else return (
             <div>
-
+                <TeacherTabSL></TeacherTabSL>
             </div>
         )
     }
@@ -34,7 +34,8 @@ export class TeacherHome extends Component {
         return (
             <div>
                 <TeacherNavbar setShow={this.setShow} history={this.props.history} context={this.props.context}/>
-                <TeacherTabSL></TeacherTabSL>
+                {this.contentSelect()}
+                
             </div>
         )
     }
