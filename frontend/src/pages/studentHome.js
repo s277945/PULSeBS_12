@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { StudentNavbar } from './StudentNavbar'
+import { StudentNavbar } from './studentNavbar'
 
 export class StudentHome extends Component {
     state = {

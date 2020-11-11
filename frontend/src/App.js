@@ -4,8 +4,8 @@ import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 import { Login } from './pages/Login'
-import { StudentHome } from './pages/StudentHome'
-import { TeacherHome } from './pages/TeacherHome'
+import { StudentHome } from './pages/studentHome'
+import { TeacherHome } from './pages/teacherHome'
 
 // create a user context for accessing user data from all pages and components
 const MainContext = React.createContext();
