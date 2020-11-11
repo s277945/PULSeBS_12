@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import Nav from 'react-bootstrap/Nav'
 import Navbar from 'react-bootstrap/Navbar'
 import userIdentity from '../api/userIdentity.js'
+import axios from 'axios'
 
 export class StudentNavbar extends Component { 
     showLectures = () => { //function called when Lectures link is selected
@@ -18,7 +19,8 @@ export class StudentNavbar extends Component {
     }
 
     handleLogout = () => { //function to logout the user
-        userIdentity.removeUserSession(this.props.context); //close user session
+        userIdentity.removeUserSession(this.props.context); //clear user session data
+        axios.post("http://localhost:3001/api/logout"); //close user session
         this.props.history.push("/"); //redirect to login page
     }
 
