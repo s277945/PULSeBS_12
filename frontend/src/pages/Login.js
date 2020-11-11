@@ -55,7 +55,7 @@ export class Login extends Component {
         e.preventDefault();
         this.setState({ showErr : false});
         console.log(this.state.username + " " + this.state.password);
-        axios.post(`http://localhost:3001/api/login`, { userName: this.state.username, password: this.state.password })//send post login request
+        axios.post(`http://localhost:3001/api/login`, { userName: this.state.username, password: this.state.password },{withCredentials: true, credentials: 'include'})//send post login request
         .then((res)=> {
             console.log(res);
             if(typeof res != 'undefined' && res.status===200) {

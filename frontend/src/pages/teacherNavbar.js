@@ -6,7 +6,7 @@ import axios from 'axios'
 
 export class TeacherNavbar extends Component { 
     showLectures = () => { //function called when Lectures link is selected
-        this.props.setShow(1);
+        this.props.setShow(0);
     }
 
     redirHome = (e) => { //function that redirects to the home page

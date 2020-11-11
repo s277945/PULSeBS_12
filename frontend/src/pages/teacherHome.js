@@ -19,12 +19,12 @@ export class TeacherHome extends Component {
     contentSelect = () => { //function that displays the correct content based on this.state.show
         if (this.state.show === 0) return (
             <div>
-                {/*lecture content displayed here*/}
+                <TeacherTabSL></TeacherTabSL>
             </div>
         )
         else return (
             <div>
-                <TeacherTabSL></TeacherTabSL>
+                
             </div>
         )
     }
