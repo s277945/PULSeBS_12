@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
@@ -12,8 +11,8 @@ const MainContext = React.createContext();
 
 class App extends Component {
   state = {
-      userName: null,
-      userType: null
+      userName: "",
+      userType: ""
   }
 
   componentDidMount(){
@@ -36,16 +35,16 @@ class App extends Component {
   render(){
   return <div className='App'>
       <Router>
-        <MainContext.Provider value={{userName: this.state.userName, setUserName: this.setUserName, userType: this.state.UserType, setUserType: this.setUserType}}>
+        <MainContext.Provider value={{userName: this.state.userName, userType: this.state.userType, setUserName: this.setUserName, setUserType: this.setUserType}}>
           <MainContext.Consumer>
             {(value)=>{
               console.log(value);
               return (
                   <Switch>
-                    <Route path='/login'><Login context={value}/></Route>
-                    <Route path='/studentHome'><StudentHome context={value}/></Route>
+                    <Route path='/login'  render={(props) => (<Login {...props} context={value}/>)}></Route>
+                    <Route path='/studentHome' render={(props) => (<StudentHome {...props} context={value}/>)}></Route>
                     <Route path='/teacherHome'><TeacherHome context={value}/></Route>
-                    <Route><Login context={value}/></Route>
+                    <Route render={(props) => (<Login {...props} context={value}/>)}></Route>
                   </Switch>
               )             
             }}            

@@ -1,4 +1,3 @@
-import React, { Component } from 'react'
 
 function saveUserSession(context, userName, userType) {
     return new Promise((resolve, reject) => {

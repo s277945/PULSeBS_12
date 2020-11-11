@@ -50,15 +50,6 @@ export class Login extends Component {
         this.setState({ showErr : false});
         console.log(this.state.username + " " + this.state.password);
         axios.post(`http://localhost:3001/api/login`, { userName: this.state.username, password: this.state.password })
-        /*fetch (`http://localhost:3001/api/login`, {// send post login request
-            method: 'post',
-            mode: 'cors',
-            credentials: 'include',
-            headers: {
-                "Content-type": "application/json; charset=UTF-8"
-            },
-            body: JSON.stringify({ userName: this.state.username, password: this.state.password })
-        })*/
         .then((res)=> {
             console.log(res);
             if(typeof res != 'undefined' && res.status===200) {
