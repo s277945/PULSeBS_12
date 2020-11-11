@@ -106,7 +106,7 @@ app.use((err, req, res, next) => {
  * 
  * Book a lecture for a given student
  * 
- * body request: {"userId": "s269443", "lectureId": "0432SQ", date: ""}
+ * body request: {"lectureId": "0432SQ", date: ""}
  */
 
  app.post('/api/lectures', (req, res) => {
@@ -192,10 +192,21 @@ app.use((err, req, res, next) => {
  });
 
   
+/**
+ * GET /lectures/booked
+ * 
+ * query parameters: userId => retrieved from cookie
+ */
 
-///////////////////////
-///REST API ENDPOINT///
-///////////////////////
+app.get('/api/lectures/booked', (req, res) => {
+  const user = req.user && req.user.user;
+  dao.getLecturesBookedByUserId(user)
+    .then((list) => {
+      res.status(201).json(list);
+    })
+    .catch((err) => res.status(500).json({ errors: [{ 'param': 'Server', 'msg': err }] }));
+
+});
 
 
 

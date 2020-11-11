@@ -40,11 +40,9 @@
 - response body: {francesco, gianluca}
 
 
-///not present
-**GET /lectures/:lectureId/bookedStudents?userId=...**
-- query parameters: lectureId, userId => teacher ID
-- response body: {"numberStudents" : 123, "numberMax": 200}
-
+**GET /lectures/booked**
+- query parameters: userId => retrieve from token
+- response body: {"Course_Ref" : "123123", "Date_Ref": "2020-10-11"}
 
 
 
