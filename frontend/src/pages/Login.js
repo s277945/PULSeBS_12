@@ -46,7 +46,7 @@ export class Login extends Component {
         let lastchar=e.target.value.slice(-1);// extract last character
         if (/[a-zA-Z0-9_]/.test(lastchar)) { 
             this.setState({ username : e.target.value });// allow only numbers, letters and underscore as username form input
-            this.setState({ showInvalidU: false });// reste invalid username form state
+            this.setState({ showInvalidU: false });// reset invalid username form state
         }
         else this.setState({ username : e.target.value.slice(0, -1)});// remove last character
     }
@@ -82,6 +82,10 @@ export class Login extends Component {
         .catch(err=>{ console.log(err); this.setState({ showErr : true}); });
     }
 
+    handleReset = (e) => {
+        e.preventDefault();
+        this.setState({ username: "", password: "", showInvalidU: false, showInvalidP: false });// reset invalid form state, reset form content
+    }
     render() {
 
         return (
@@ -108,8 +112,11 @@ export class Login extends Component {
                         }
                     </Form.Group>
                     
-                    <Button variant="primary" type="submit" onClick={this.handleLogin}>
+                    <Button variant="primary" type="submit" onClick={this.handleLogin} style={{marginRight: "5px"}}>
                         Login
+                    </Button>
+                    <Button variant="secondary" type="submit" onClick={this.handleReset} style={{marginLeft: "5px"}}>
+                        Reset
                     </Button>
                 </Form>
             </div>
