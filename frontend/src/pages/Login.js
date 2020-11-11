@@ -8,10 +8,10 @@ import Navbar from 'react-bootstrap/Navbar'
 
 export class Login extends Component {    
     state = {
-        username: "",
+        username: "",   //form values
         password: "",
-        showErr: false,
-        redirect: 0
+        showErr: false, //form error state value
+        redirect: 0     //redirect value
     }
 
     componentDidMount(){
@@ -55,15 +55,15 @@ export class Login extends Component {
         e.preventDefault();
         this.setState({ showErr : false});
         console.log(this.state.username + " " + this.state.password);
-        axios.post(`http://localhost:3001/api/login`, { userName: this.state.username, password: this.state.password })
+        axios.post(`http://localhost:3001/api/login`, { userName: this.state.username, password: this.state.password })//send post login request
         .then((res)=> {
             console.log(res);
             if(typeof res != 'undefined' && res.status===200) {
                 let data= res.data;
-                    let uName = data.userID;
-                    let uType = data.userType;                    
-                    userIdentity.saveUserSession(this.props.context, uName, uType);//set user session data
-                    this.setRedirect(uType==='s' ? 2 : 1 );     
+                let uName = data.userID;
+                let uType = data.userType;                    
+                userIdentity.saveUserSession(this.props.context, uName, uType);//set user session data
+                this.setRedirect(uType==='s' ? 2 : 1 );//set redirect value accordingly     
             }
             else console.log(res.status);
         })
