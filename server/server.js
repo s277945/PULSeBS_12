@@ -5,13 +5,13 @@
 //import express
 const express = require('express');
 const dao = require('./dao');
+const mailer = require('./mailer');
 const morgan = require('morgan'); // logging middleware
 const cors = require('cors');
 const { check, validationResult } = require('express-validator');
 const jwt = require ('express-jwt');
 const moment = require('moment');
 const cookieParser = require('cookie-parser');
-const nodemailer = require('nodemailer'); 
 const jsonwebtoken = require('jsonwebtoken');
 
 const authErrorObj = { errors: [{ 'param': 'Server', 'msg': 'Authorization error' }] };
@@ -24,7 +24,6 @@ const expireTime = 600; // 10 minutes
 //create application
 const app = express();
 const port = 3001;
-
 
 // Set-up logging
 app.use(morgan('tiny'));
@@ -174,22 +173,6 @@ app.use((err, req, res, next) => {
 
  });
 
-//mail configuration
-
-var transporter = nodemailer.createTransport({
-    service: 'gmail',
-    auth: {
-      user: 'youremail@gmail.com',
-      pass: 'yourpassword'
-    }
-  });
-  
-  var mailOptions = {
-    from: 'youremail@gmail.com',
-    to: 'myfriend@yahoo.com',
-    subject: 'Sending Email using Node.js',
-    text: 'That was easy!'
-  };
   
 
 ///////////////////////

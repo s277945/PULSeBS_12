@@ -218,3 +218,19 @@ exports.getStudentList=function(courseId, date){
         });
     });
 };
+
+
+/**
+ * Retrieve email of a given student
+ * @param {} userId 
+ */
+
+exports.getStudentEmail = function(userId){
+    return new Promise((resolve, reject) => {
+        const sql = 'SELECT Email FROM User WHERE userID=?';
+        db.get(sql, [userId], (err, row)=> {
+            if(err) reject(err);
+            else resolve(row);
+        });
+    })
+}
