@@ -43,7 +43,7 @@ class App extends Component {
                   <Switch>
                     <Route path='/login'  render={(props) => (<Login {...props} context={value}/>)}></Route>
                     <Route path='/studentHome' render={(props) => (<StudentHome {...props} context={value}/>)}></Route>
-                    <Route path='/teacherHome'><TeacherHome context={value}/></Route>
+                    <Route path='/teacherHome' render={(props) => (<TeacherHome {...props} context={value}/>)}></Route>
                     <Route render={(props) => (<Login {...props} context={value}/>)}></Route>
                   </Switch>
               )             

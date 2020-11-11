@@ -93,7 +93,7 @@ app.use((err, req, res, next) => {
   console.log("User: " + user);
     dao.getLecturesByUserId(user)
       .then((lectures) => {
-        res.json(lectures);
+        res.status(200).json(lectures);
       })
       .catch((err) => {
         res.status(500).json({errors: [{'msg': err}]});
