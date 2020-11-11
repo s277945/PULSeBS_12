@@ -17,7 +17,7 @@
 
 **GET /lectures**
 - query parameters: userId => student ID (taken from token)
-- response body: [{"lectureId": "0432SQ", "lectureName": "SE2", "date": "...", "teacher": "Torchiano"}, {...}]
+- response body: [{"Course_Ref": 123123, "Name": "SE2", "date": "..."}]
 
 
 **POST /lectures**
@@ -32,12 +32,12 @@
 
 **GET /lectures/next**
 - query parameters: userId => teacher ID
-- response body: {"lectureId": "0432SQ", "lectureName": "SE2", "date": "...", "teacher": "Torchiano", "numberStudents" : 123, "numberMax": 200}
+- response body: {"lectureName": 123123, "numberOfStudents": 123}
 
 
 **GET /lectures/:lectureId/listStudents**
 - query parameters: lectureId, userId => teacher ID
-- response body: {"students": [{...}]}
+- response body: {francesco, gianluca}
 
 **GET /lectures/:lectureId/bookedStudents?userId=...**
 - query parameters: lectureId, userId => teacher ID
