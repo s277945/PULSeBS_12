@@ -112,10 +112,10 @@ export class Login extends Component {
                         }
                     </Form.Group>
                     
-                    <Button variant="primary" type="submit" onClick={this.handleLogin} style={{marginRight: "5px"}}>
+                    <Button variant="primary" type="submit" onClick={this.handleLogin} style={{marginRight: "17px", marginRight: "17px", paddingRight: "17px", paddingLeft: "17px"}}>
                         Login
                     </Button>
-                    <Button variant="secondary" type="submit" onClick={this.handleReset} style={{marginLeft: "5px"}}>
+                    <Button variant="secondary" type="submit" onClick={this.handleReset} >
                         Reset
                     </Button>
                 </Form>
