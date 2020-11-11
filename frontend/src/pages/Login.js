@@ -47,7 +47,7 @@ export class Login extends Component {
 
     passwordChange = (e) => {
         let lastchar=e.target.value.slice(-1);// extract last character
-        if (/[a-zA-Z0-9_]/.test(lastchar)) this.setState({ password : e.target.value });// allow only numbers, letters and underscore as username form input
+        if (/[a-zA-Z0-9?!,]/.test(lastchar)) this.setState({ password : e.target.value });// allow only numbers and letters as password form input
         else this.setState({ password : e.target.value.slice(0, -1)});// remove last character
     } 
 
