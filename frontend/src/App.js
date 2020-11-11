@@ -42,10 +42,10 @@ class App extends Component {
               console.log(value);
               return (
                   <Switch>
-                    <Route path='/login'><Login context={value}/></Route>
-                    <Route path='/studentHome'><StudentHome context={value}/></Route>
+                    <Route path='/login'  render={(props) => (<Login {...props} context={value}/>)}></Route>
+                    <Route path='/studentHome' render={(props) => (<StudentHome {...props} context={value}/>)}></Route>
                     <Route path='/teacherHome'><TeacherHome context={value}/></Route>
-                    <Route><Login context={value}/></Route>
+                    <Route render={(props) => (<Login {...props} context={value}/>)}></Route>
                   </Switch>
               )             
             }}            

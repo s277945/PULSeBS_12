@@ -20,7 +20,7 @@ export class StudentHome extends Component {
     render() {
         return (
             <>
-                <StudentNavbar setShow={this.setShow} history={this.props.history}/>
+                <StudentNavbar setShow={this.setShow} history={this.props.history} context={this.props.context}/>
                 <div>
 
                 </div>
