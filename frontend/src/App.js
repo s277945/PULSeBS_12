@@ -12,8 +12,8 @@ const MainContext = React.createContext();
 
 class App extends Component {
   state = {
-      userName: null,
-      userType: null
+      userName: "",
+      userType: ""
   }
 
   componentDidMount(){
@@ -36,7 +36,7 @@ class App extends Component {
   render(){
   return <div className='App'>
       <Router>
-        <MainContext.Provider value={{userName: this.state.userName, setUserName: this.setUserName, userType: this.state.UserType, setUserType: this.setUserType}}>
+        <MainContext.Provider value={{userName: this.state.userName, userType: this.state.userType, setUserName: this.setUserName, setUserType: this.setUserType}}>
           <MainContext.Consumer>
             {(value)=>{
               console.log(value);
