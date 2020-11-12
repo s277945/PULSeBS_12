@@ -8,7 +8,7 @@ export class TeacherHome extends Component {
     }
 
     componentDidMount() {
-        if(!this.props.context.userName || !this.props.context.userType) this.props.history.push("/"); //open page only if a valid session has been started
+        if(!this.props.context.userName || !this.props.context.userType || !this.props.context.userType!=='t') this.props.history.push("/"); //open page only if a valid session has been started
 
     }
 
