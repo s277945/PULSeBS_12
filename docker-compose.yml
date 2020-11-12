@@ -2,7 +2,6 @@ server:
   build: ./server
 frontend:
   build: ./frontend
-  ports:
-    - 5000:3000
   links:
     - server
+  stdin_open: true
