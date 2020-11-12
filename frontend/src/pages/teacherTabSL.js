@@ -83,7 +83,7 @@ export class TeacherTabSL extends Component {
 
 
         return (
-            <div><p>Students List tab</p>
+            <div>
                 <Table striped bordered hover>
                     <thead>
                         <tr>

@@ -89,12 +89,12 @@ export class Login extends Component {
     render() {
 
         return (
-            <div>
+            <div style={{backgroundColor: "#efefef", height: "100vh"}}>
                 {this.renderRedirect()}
                 <Navbar bg="dark" variant="dark">
                     <Navbar.Brand href="#" onClick={this.redirHome}>PULSeBS</Navbar.Brand>
                 </Navbar>
-                <Form style={{display: "block", marginLeft: "auto", marginRight: "auto", paddingTop: "20vh", width: "300px"}}>
+                <Form style={{display: "block", marginLeft: "auto", marginRight: "auto", paddingTop: "20vh", width: "300px",boxShadow: "2px 2px #c7c7c7", borderStyle: "solid", borderWidth: "2px", borderRadius: "15px", borderColor: "#a4a4a4", backgroundColor: "#fafafa", padding: "40px", marginTop: "23vh"}}>
                     <Form.Group controlId="formBasicEmail">
                         <Form.Label>Username</Form.Label>
                         <Form.Control type="text" placeholder="Your domain username" onChange={this.usernameChange} value={this.state.username} isInvalid={this.state.showInvalidU}/>
@@ -112,7 +112,7 @@ export class Login extends Component {
                         }
                     </Form.Group>
                     
-                    <Button variant="primary" type="submit" onClick={this.handleLogin} style={{marginRight: "17px", marginRight: "17px", paddingRight: "17px", paddingLeft: "17px"}}>
+                    <Button variant="primary" type="submit" onClick={this.handleLogin} style={{marginRight: "25px", paddingRight: "17px", paddingLeft: "17px"}}>
                         Login
                     </Button>
                     <Button variant="secondary" type="submit" onClick={this.handleReset} >
