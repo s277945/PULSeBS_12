@@ -1,9 +1,9 @@
 server:
-  build: ./server
+  image : alebottisio/pulsebs_12/server:latest
   ports: 
     - 3001:3001
 frontend:
-  build: ./frontend
+  image : alebottisio/pulsebs_12/frontend:latest
   ports:
     - 3000:3000
   links:
