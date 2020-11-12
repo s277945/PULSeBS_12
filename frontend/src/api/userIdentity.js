@@ -18,4 +18,15 @@ function removeUserSession(context) {
     });
 }
 
-export default { saveUserSession, removeUserSession };
+function getUserSession() {
+    const user = {
+        user: sessionStorage.getItem("userName"),
+        userType: sessionStorage.getItem("userType")
+    }
+    if(!user.user || !user.userType){
+        console.error("ERROR getUserSession");
+    }
+    return user
+}
+
+export default { saveUserSession, removeUserSession, getUserSession};
