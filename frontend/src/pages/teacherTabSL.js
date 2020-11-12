@@ -24,7 +24,11 @@ export class TeacherTabSL extends Component {
                 console.log(lecList)
                 this.setState({ tableData: lecList })
 
-            }).catch(err=>{ userIdentity.removeUserSession(this.props.context);console.log(err) });
+            }).catch(err=>{ 
+                userIdentity.removeUserSession(this.props.context);
+                this.props.history.push("/");
+                console.log(err);
+             });
 
     }
 
@@ -38,7 +42,11 @@ export class TeacherTabSL extends Component {
                 //res.data.map((obj) => reqList.push(obj.RequestType))
                 console.log(res)
                 this.setState({ modalTableData: res.data })
-            }).catch(err=>{ userIdentity.removeUserSession(this.props.context);console.log(err) });
+            }).catch(err=>{ 
+                userIdentity.removeUserSession(this.props.context);
+                this.props.history.push("/");
+                console.log(err);
+             });
         this.handleShow()
     }
 
