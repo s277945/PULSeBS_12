@@ -12,7 +12,7 @@ export class StudentHome extends Component {
     }
 
     componentDidMount() {
-        if(!this.props.context.userName || !this.props.context.userType || !this.props.context.userType!=='s') this.props.history.push("/"); //open page only if a valid session has been started
+        if(!this.props.context.userName || !this.props.context.userType || this.props.context.userType!=='s') this.props.history.push("/"); //open page only if a valid session has been started
         
 
     }
