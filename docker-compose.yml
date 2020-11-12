@@ -1,9 +1,9 @@
 server:
-  image : alebottisio/pulsebs_12/server:latest
+  image : alebottisio/pulsebs_12:server_latest
   ports: 
     - 3001:3001
 frontend:
-  image : alebottisio/pulsebs_12/frontend:latest
+  image : alebottisio/pulsebs_12:frontend_latest
   ports:
     - 3000:3000
   links:
