@@ -59,6 +59,17 @@ export class StudentHome extends Component {
             })
     }
 
+    cancelSeat(lectureId, date, index){
+        const user = userIdentity.getUserSession();
+        axios.delete(`http://localhost:3001/api/lectures/${lectureId}?date=${date}`, {user: user, withCredentials: true})
+            .then(response => {
+                console.log(response)
+                const newLectures = this.state.lectures.slice();
+                newLectures[index].alreadyBooked = false
+                this.setState({lectures: newLectures})
+            })
+    }
+
     renderBookASeatButton(lecture, index){
         return(
             <>
@@ -67,6 +78,19 @@ export class StudentHome extends Component {
             }
             {!lecture.alreadyBooked &&
                 <Button onClick={() => this.bookASeat(lecture.Course_Ref, lecture.Date, index)}>Book Seat</Button>
+            }
+            </>
+        )
+    }
+
+    renderCancelButton(lecture, index){
+        return (
+            <>
+            {lecture.alreadyBooked && 
+                <Button onClick={() => this.cancelSeat(lecture.Course_Ref, lecture.Date, index)} variant="danger">Cancel</Button>
+            }
+            {!lecture.alreadyBooked && 
+                <Button variant="danger" disabled>Cancel</Button>
             }
             </>
         )
@@ -89,7 +113,7 @@ export class StudentHome extends Component {
                         <td>{lecture.Name}</td>
                         <td>{lecture.Date}</td>
                         <td>{this.renderBookASeatButton(lecture, index)}</td>
-                        <td><Button variant="danger">Cancel</Button></td>
+                        <td>{this.renderCancelButton(lecture, index)}</td>
                     </tr>
                 )}
                 </tbody>
