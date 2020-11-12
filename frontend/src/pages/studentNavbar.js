@@ -29,7 +29,7 @@ export class StudentNavbar extends Component {
                 console.log("Logout successful " + r.status);
             }
             else console.log("Logout error " + r.status);
-        })
+        }).catch(err=>{console.log(err)});
         this.props.history.push("/"); //redirect to login page
     }
 

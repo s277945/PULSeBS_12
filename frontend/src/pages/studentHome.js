@@ -18,7 +18,7 @@ export class StudentHome extends Component {
             // console.log(reponse.data)
             this.setState({lectures: reponse.data})
             this.getBookedLectures();
-        })
+        }).catch(err=>{console.log(err)});
 
     }
 
@@ -64,7 +64,7 @@ export class StudentHome extends Component {
                 const newLectures = this.state.lectures.slice();
                 newLectures[index].alreadyBooked = false
                 this.setState({lectures: newLectures})
-            })
+            }).catch(err=>{console.log(err)});
     }
 
     renderBookASeatButton(lecture, index){
