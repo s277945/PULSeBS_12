@@ -2,3 +2,5 @@ server/node_modules/
 frontend/node_modules/
 server/.nyc_output/
 server/coverage/
+frontend/package-lock.json
+server/package-lock.json
