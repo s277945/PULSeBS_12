@@ -13,7 +13,12 @@ export class StudentHome extends Component {
 
     componentDidMount() {
         if(!this.props.context.userName || !this.props.context.userType || this.props.context.userType!=='s') this.props.history.push("/"); //open page only if a valid session has been started
-        
+                const user = userIdentity.getUserSession();
+        axios.get(`http://localhost:3001/api/lectures`, { user : user, withCredentials: true}).then((reponse) => {
+            // console.log(reponse.data)
+            this.setState({lectures: reponse.data})
+            this.getBookedLectures();
+        })
 
     }
 
@@ -36,15 +41,6 @@ export class StudentHome extends Component {
         }).catch(err=>{console.log(err)});
     }
 
-    componentDidMount(){
-        const user = userIdentity.getUserSession();
-        axios.get(`http://localhost:3001/api/lectures`, { user : user, withCredentials: true}).then((reponse) => {
-            // console.log(reponse.data)
-            this.setState({lectures: reponse.data})
-
-            this.getBookedLectures();
-        })
-    }
 
     bookASeat(lectureId, date, index){
         const user = userIdentity.getUserSession();
