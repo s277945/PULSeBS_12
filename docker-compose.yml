@@ -1,7 +1,11 @@
 server:
   build: ./server
+  ports: 
+    - 3001:3001
 frontend:
   build: ./frontend
+  ports:
+    - 3000:3000
   links:
     - server
   stdin_open: true
