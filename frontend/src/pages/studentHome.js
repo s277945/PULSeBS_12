@@ -18,7 +18,7 @@ export class StudentHome extends Component {
             // console.log(reponse.data)
             this.setState({lectures: reponse.data})
             this.getBookedLectures();
-        }).catch(err=>{console.log(err)});
+        }).catch(err=>{ userIdentity.removeUserSession(this.props.context); console.log(err) });
 
     }
 
@@ -38,7 +38,7 @@ export class StudentHome extends Component {
                 newLectureArray[index].alreadyBooked = true;
             })
             this.setState({lectures: newLectureArray})
-        }).catch(err=>{console.log(err)});
+        }).catch(err=>{ userIdentity.removeUserSession(this.props.context);console.log(err) });
     }
 
 
@@ -53,7 +53,7 @@ export class StudentHome extends Component {
                 const newLectures = this.state.lectures.slice();
                 newLectures[index].alreadyBooked = true
                 this.setState({lectures: newLectures})
-            })
+            }).catch(err=>{ userIdentity.removeUserSession(this.props.context);console.log(err) });
     }
 
     cancelSeat(lectureId, date, index){
@@ -64,7 +64,7 @@ export class StudentHome extends Component {
                 const newLectures = this.state.lectures.slice();
                 newLectures[index].alreadyBooked = false
                 this.setState({lectures: newLectures})
-            }).catch(err=>{console.log(err)});
+            }).catch(err=>{ userIdentity.removeUserSession(this.props.context);console.log(err) });
     }
 
     renderBookASeatButton(lecture, index){

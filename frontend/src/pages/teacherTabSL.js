@@ -3,6 +3,7 @@ import Table from 'react-bootstrap/Table'
 import Button from 'react-bootstrap/Button'
 import Modal from 'react-bootstrap/Modal'
 import axios from 'axios';
+import userIdentity from '../api/userIdentity.js'
 
 export class TeacherTabSL extends Component {
 
@@ -23,7 +24,7 @@ export class TeacherTabSL extends Component {
                 console.log(lecList)
                 this.setState({ tableData: lecList })
 
-            })
+            }).catch(err=>{ userIdentity.removeUserSession(this.props.context);console.log(err) });
 
     }
 
@@ -37,7 +38,7 @@ export class TeacherTabSL extends Component {
                 //res.data.map((obj) => reqList.push(obj.RequestType))
                 console.log(res)
                 this.setState({ modalTableData: res.data })
-            })
+            }).catch(err=>{ userIdentity.removeUserSession(this.props.context);console.log(err) });
         this.handleShow()
     }
 
