@@ -9,7 +9,8 @@ services:
     - 3001:3001
   mail:
     build:
-      context: ./server/mail_module
+      context: ./server
+      dockerfile: ./server/mail_module/Dockerfile
     image : alebottisio/pulsebs_12:mail_latest
     ports: 
     - 3002:3002
