@@ -1,6 +1,6 @@
 const nodemailer = require('nodemailer'); 
 
-const email = "noreplyprojectse@gmail.com"
+const email;
 //mail configuration
 
 exports.transporter = nodemailer.createTransport({
