@@ -5,4 +5,4 @@ EXPOSE 3002
 COPY . /pulsebs_12
 WORKDIR /pulsebs_12/PULSeBS_12/server
 RUN npm install
-CMD ["npm", "start_mail"]
+CMD ["npm", "run", "mail_start"]
