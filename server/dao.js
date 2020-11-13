@@ -278,7 +278,7 @@ exports.getStudentEmail = function(userId){
     })
 }
 
-exports.getTeacherEmail = function(courseId){
+function getTeacherEmail(courseId){
     return new Promise((resolve, reject) => {
         const sql = 'SELECT Email FROM User WHERE UserType="t" AND userID IN (' +
                 'SELECT User_Ref FROM Course WHERE Course_Ref=?'

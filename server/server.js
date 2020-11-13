@@ -34,6 +34,22 @@ app.use(express.json());
 // Enable cors
 app.use(cors({ origin: true, credentials: true }));
 
+/**
+ * FAKE ENDPOINT TO CHECK DEADLINE DAO
+ * 
+ */
+
+ app.get('/api/checkEmails', (req, res) => {
+   let date = moment().format('YYYY-MM-DD HH:mm:ss');
+   dao.checkDeadline(date)
+    .then((list) => {
+      res.status(200).json(list);
+    })
+    .catch((err) => {
+      res.status(500).json({"errors": err});
+    })
+ })
+
 //login route
 app.post('/api/login', (req, res) => {
   dao.checkUserPwd(req.body.userName, req.body.password)
