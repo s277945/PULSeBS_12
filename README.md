@@ -3,11 +3,12 @@
 ## DOCKER INSTALL INSTRUCTIONS
 
   command line commands:
-  > git clone https://github.com/s277945/PULSeBS_12.git
-  > cd PULSeBS_12
-  > docker pull alebottisio/pulsebs_12 -a
-  > docker-compose up
-
+  ```
+  git clone https://github.com/s277945/PULSeBS_12.git
+  cd PULSeBS_12
+  docker pull alebottisio/pulsebs_12 -a
+  docker-compose up
+  ```
 
 
 
