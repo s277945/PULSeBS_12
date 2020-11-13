@@ -37,4 +37,4 @@ cron.schedule('1 * * * * *', function() {
         .catch((err) => console.log(err));
 });
 
-app.listen(3002);
+app.listen(3002, () => console.log(`Server ready at port: ${3002}`));

@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import Nav from 'react-bootstrap/Nav'
 import Navbar from 'react-bootstrap/Navbar'
 import userIdentity from '../api/userIdentity.js'
-import axios from 'axios'
 
 export class TeacherNavbar extends Component {
 

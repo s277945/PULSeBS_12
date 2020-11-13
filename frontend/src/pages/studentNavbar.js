@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import Nav from 'react-bootstrap/Nav'
 import Navbar from 'react-bootstrap/Navbar'
 import userIdentity from '../api/userIdentity.js'
-import axios from 'axios'
 
 export class StudentNavbar extends Component { 
     showLectures = () => { //function called when Lectures link is selected
