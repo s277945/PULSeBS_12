@@ -95,7 +95,7 @@ function getCapacity(courseID,date){
             if(err)
                 reject(err);
             else{
-                //console.log(row);
+    
                 resolve(row);
             }
 
@@ -251,7 +251,7 @@ exports.checkDeadline=function(dateD){
                 for(let row of rows){
                     await countStudent(row.Course_Ref, row.Date).then(async(n) => {
                         await getTeacherEmail(row.Course_Ref).then((email) => {
-                            list.push({"email":email, "nBooked": n, "nameLecture": row.Name, "dateLecture": row.Date})
+                            list.push({"email":email, "nBooked": n, "nameLecture": row.Name, "dateLecture": row.Date, "Course_Ref": row.Course_Ref})
                         }).catch(err => reject(err));
                     }).catch(err => reject(err));
                 }
@@ -281,12 +281,28 @@ exports.getStudentEmail = function(userId){
 function getTeacherEmail(courseId){
     return new Promise((resolve, reject) => {
         const sql = 'SELECT Email FROM User WHERE UserType="t" AND userID IN (' +
-                'SELECT User_Ref FROM Course WHERE Course_Ref=?'
+                'SELECT User_Ref FROM Course WHERE CourseID=?)';
         db.get(sql, [courseId], (err, row)=> {
             if(err) 
                 reject(err);
-            else 
+            else {
                 resolve(row.Email);
+            }
+        });
+    })
+}
+
+/**
+ * Function to update Lecture table in order to not sent too many emails
+ */
+exports.emailSentUpdate = function(courseId, date){
+    return new Promise((resolve, reject) => {
+        const sql = 'UPDATE Lecture SET EmailSent=1 WHERE Course_Ref=? AND Date=?';
+        db.run(sql, [courseId, date], function (err) {
+            if(err) 
+                reject(err);
+            else 
+                resolve(true);
         });
     })
 }
