@@ -5,14 +5,10 @@ services:
     build:
       context: ./server
     image : alebottisio/pulsebs_12:server_latest
-    ports: 
-    - 3001:3001
   frontend:
     build:
       context: ./frontend      
     image : alebottisio/pulsebs_12:frontend_latest
-    ports:
-    - 3000:3000
     links:
     - server
     stdin_open: true
