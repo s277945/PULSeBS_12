@@ -7,7 +7,7 @@ exports.transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
       user: email,
-      pass: 'scimmia,2020'
+      pass: 
     }
   });
   
