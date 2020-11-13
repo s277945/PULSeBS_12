@@ -239,6 +239,28 @@ exports.getStudentList=function(courseId, date){
     });
 };
 
+exports.checkDeadline=function(dateD){
+    let list = [];
+    return new Promise((resolve, reject) => {
+        const sql='SELECT Course_Ref, Name, Date FROM Lecture WHERE dateDeadline <=? AND emailSent=0';
+        db.all(sql, [dateD], async (err,rows)=>{
+            if(err){
+                reject(err);
+            }
+            else{
+                for(let row of rows){
+                    await countStudent(row.Course_Ref, row.Date).then(async(n) => {
+                        await getTeacherEmail(row.Course_Ref).then((email) => {
+                            list.push({"email":email, "nBooked": n, "nameLecture": row.Name, "dateLecture": row.Date})
+                        }).catch(err => reject(err));
+                    }).catch(err => reject(err));
+                }
+                resolve(list);
+            }
+        });
+    });
+}
+
 /**
  * Retrieve email of a given student
  * @param {} userId 
@@ -248,8 +270,23 @@ exports.getStudentEmail = function(userId){
     return new Promise((resolve, reject) => {
         const sql = 'SELECT Email FROM User WHERE userID=?';
         db.get(sql, [userId], (err, row)=> {
-            if(err) reject(err);
-            else resolve(row.Email);
+            if(err) 
+                reject(err);
+            else 
+                resolve(row.Email);
+        });
+    })
+}
+
+exports.getTeacherEmail = function(courseId){
+    return new Promise((resolve, reject) => {
+        const sql = 'SELECT Email FROM User WHERE UserType="t" AND userID IN (' +
+                'SELECT User_Ref FROM Course WHERE Course_Ref=?'
+        db.get(sql, [courseId], (err, row)=> {
+            if(err) 
+                reject(err);
+            else 
+                resolve(row.Email);
         });
     })
 }
