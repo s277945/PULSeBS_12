@@ -2,7 +2,7 @@
 
 ## DOCKER INSTALL INSTRUCTIONS
 
-  command line commands:
+  From a command line run:
   ```
   git clone https://github.com/s277945/PULSeBS_12.git
   cd PULSeBS_12
