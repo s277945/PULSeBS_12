@@ -92,7 +92,7 @@ export class TeacherTabLec extends Component {
                     <Modal.Header closeButton>
                         <Modal.Title>{this.state.selectedLec.Name}<p style={{fontWeight:'normal'}}>{this.state.selectedLec.Date}</p></Modal.Title>
                     </Modal.Header>
-                    <Modal.Body><Table striped bordered hover>
+                    <Modal.Body class="app-element-background"><Table striped bordered hover>
                     <Button variant="danger" style={{margin: "20px"}} onClick={(e) => { e.preventDefault();  }}>CANCEL LECTURE</Button>
                     <Button style={{margin: "10px"}} onClick={(e) => { e.preventDefault();  }}>TURN INTO DISTANCE LECTURE</Button>
                     </Table>

@@ -98,7 +98,7 @@ export class TeacherTabSL extends Component {
                     <Modal.Header closeButton>
                         <Modal.Title>Students</Modal.Title>
                     </Modal.Header>
-                    <Modal.Body>{<Table striped bordered hover>
+                    <Modal.Body class="app-element-background">{<Table striped bordered hover>
                     <thead>
                         <tr>
                             <th>No</th>

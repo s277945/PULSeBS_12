@@ -41,3 +41,11 @@
   background-color: rgb(241, 241, 241);
   height: 100vh;
 }
+
+.app-element-background {
+  background-color:  rgb(249, 249, 249);
+}
+
+.modal-header {
+  background-color:  rgb(249, 249, 249);
+}
