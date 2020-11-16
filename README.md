@@ -2,7 +2,7 @@
 
 ## DOCKER INSTALL INSTRUCTIONS
 
-  command line commands:
+  From a command line run:
   ```
   git clone https://github.com/s277945/PULSeBS_12.git
   cd PULSeBS_12
@@ -10,8 +10,12 @@
   sudo docker-compose up
   ```
 
-
-
+## SONARSCANNER INSTRUCTIONS
+  Just run the following command from the project's root folder
+  ```
+  sonar-scanner.bat
+  ```
+  wich will automatically use the preconfigured **sonar-project.properties** file
 
 ## ENDPOINTS
 
