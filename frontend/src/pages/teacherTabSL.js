@@ -79,8 +79,8 @@ export class TeacherTabSL extends Component {
 
 
         return (
-            <div>Student List
-                <Table striped bordered hover>
+            <div  class="app-background"><br/>
+                <Table striped bordered hover style={{backgroundColor: "#fff"}}>
                     <thead>
                         <tr>
                             <th>Lecture</th>

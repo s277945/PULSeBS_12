@@ -73,8 +73,8 @@ export class TeacherTabLec extends Component {
 
 
         return (
-            <div>Lectures
-                <Table striped bordered hover>
+            <div><br/>
+                <Table striped bordered hover style={{backgroundColor: "#fff"}}>
                     <thead>
                         <tr>
                             <th>Lecture</th>
