@@ -10,8 +10,12 @@
   sudo docker-compose up
   ```
 
-
-
+## SONARSCANNER INSTRUCTIONS
+  Just run the following command from the project's root folder
+  ```
+  sonar-scanner.bat
+  ```
+  wich will automatically use the preconfigured **sonar-project.properties** file
 
 ## ENDPOINTS
 
