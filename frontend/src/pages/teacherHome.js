@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { TeacherTabSL } from './teacherTabSL'
+import { TeacherTabLec } from './teacherTabLec'
 import { TeacherNavbar } from './teacherNavbar'
 
 export class TeacherHome extends Component {
@@ -21,9 +22,16 @@ export class TeacherHome extends Component {
             <div>
                 <br></br>
                 <p>next lecture info</p>
+                <TeacherTabLec></TeacherTabLec>
+            </div>
+        )
+        
+        if (this.state.show === 1) return (
+            <div>
                 <TeacherTabSL></TeacherTabSL>
             </div>
         )
+
         else return (
             <div>
                 
