@@ -3,6 +3,7 @@
 ## DOCKER INSTALL INSTRUCTIONS
 
   From a command line run:
+  
   Linux:
   ```
   git clone https://github.com/s277945/PULSeBS_12.git
@@ -20,6 +21,7 @@
 
 ## SONARSCANNER INSTRUCTIONS
   Just run the following command from the project's root folder
+  
   Linux:
   ```
   sonar-scanner
