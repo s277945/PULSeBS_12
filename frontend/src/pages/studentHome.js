@@ -7,12 +7,13 @@ import userIdentity from '../api/userIdentity.js'
 
 export class StudentHome extends Component {
     state = {
-        show : 0, //this state variable is used to choose the content to show
+        show : 0, //This state variable is used to choose the content to show
         lectures: null,
     }
 
     componentDidMount() {
-        if(!this.props.context.userName || this.props.context.userType!=='s') this.props.history.push("/"); //open page only if a valid session has been started
+        //Open page only if a valid session has been started, otherwise redirect to the unathorized page
+        if(!this.props.context.userName || this.props.context.userType!=='s') this.props.history.push("/"); 
         else{
             const user = userIdentity.getUserSession();
             axios.get(`http://localhost:3001/api/lectures`, { user: user, withCredentials: true }).then((reponse) => {
@@ -28,7 +29,7 @@ export class StudentHome extends Component {
 
     }
 
-    setShow = (val) => { //function to set the show variable
+    setShow = (val) => { //Function to set the show variable
         this.setState({show : val});
     }
 
@@ -51,7 +52,11 @@ export class StudentHome extends Component {
          });
     }
 
-
+    /*
+    * Query parameters: userID(from session), lectureId, date
+    * Body response: status 201/404/500
+    * Button that POST a request to book a seat for the session user
+    */
     bookASeat(lectureId, date, index){
         const user = userIdentity.getUserSession();
         const body = {

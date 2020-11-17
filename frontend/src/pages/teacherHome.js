@@ -5,7 +5,7 @@ import { TeacherNavbar } from './teacherNavbar'
 
 export class TeacherHome extends Component {
     state = {
-        show : 0 //this state variable is used to choose the content to show
+        show : 0 //This state variable is used to choose the content to show
     }
 
     componentDidMount() {
@@ -13,11 +13,13 @@ export class TeacherHome extends Component {
 
     }
 
-    setShow = (val) => { //function to set the show variable
+    //Function to set the show variable
+    setShow = (val) => { 
         this.setState({show : val});
     }
-
-    contentSelect = () => { //function that displays the correct content based on this.state.show
+    
+    //Function that displays the correct content based on this.state.show
+    contentSelect = () => { 
         if (this.state.show === 0) return (
             <div class="app-background">
                 <br></br>

@@ -4,16 +4,16 @@ import Navbar from 'react-bootstrap/Navbar'
 import handleLogout from './handleLogout.js'
 
 export class StudentNavbar extends Component { 
-    showLectures = () => { //function called when Lectures link is selected
+    showLectures = () => { //Function called when Lectures link is selected
         this.props.setShow(0);
     }
 
-    redirHome = (e) => { //function that redirects to the home page
+    redirHome = (e) => { //Function that redirects to the home page
         e.preventDefault();
         this.props.history.push("/");
     }
 
-    showCalendar = () => { //function called when Calendar link is selected
+    showCalendar = () => { //Function called when Calendar link is selected
         this.props.setShow(1);
     }
 
