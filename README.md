@@ -8,7 +8,9 @@
   ```
   git clone https://github.com/s277945/PULSeBS_12.git
   cd PULSeBS_12
-  sudo docker pull alebottisio/pulsebs_12 -a
+  sudo docker pull alebottisio/pulsebs_12:frontend_stable
+  sudo docker pull alebottisio/pulsebs_12:mail_stable
+  sudo docker pull alebottisio/pulsebs_12:server_stable
   sudo docker-compose up
   ```
   Windows:
