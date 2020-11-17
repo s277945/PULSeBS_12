@@ -125,7 +125,7 @@ exports.deleteSeat=function(userId, courseId, date){
                 resolve(true);
         })
     });
-};
+}
 
 /*
 * Input: userID 
@@ -257,7 +257,7 @@ exports.getStudentList=function(courseId, date){
             }
         });
     });
-};
+}
 
 /*
 * Input: dateDeadline

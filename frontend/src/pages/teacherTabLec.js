@@ -2,9 +2,7 @@ import React, { Component } from 'react'
 import Table from 'react-bootstrap/Table'
 import Button from 'react-bootstrap/Button'
 import Modal from 'react-bootstrap/Modal'
-import axios from 'axios';
-import userIdentity from '../api/userIdentity.js'
-import update from './teacherTabFun.js'
+import update from './update.js'
 
 export class TeacherTabLec extends Component {
 
