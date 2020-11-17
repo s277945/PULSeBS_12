@@ -69,6 +69,12 @@ exports.addSeat=function(userId, courseId, date){
     })
 }
 
+/*
+* Input: userID, CourseID 
+* Output: True or False
+* Description: Check if the student is enrolled in the course specified on the lecture
+*/
+
 function findCourse(userId, courseId){
     return new Promise((resolve, reject) => {
         const sql='SELECT COUNT(*) FROM Course WHERE User_Ref=? AND CourseID=?';
@@ -188,6 +194,12 @@ exports.getNextLectureNumber=function(userId){
     });
 }
 
+/*
+* Input: Course_Ref, Date_Ref 
+* Output: NumberOfStudents
+* Description: Retrieve the number of students that booked a specific lecture
+*/
+
 function countStudent(courseId, date){
     return new Promise((resolve, reject) => {
         const sql='SELECT COUNT(*) FROM Booking WHERE Course_Ref=? AND Date_Ref=?';
@@ -199,6 +211,12 @@ function countStudent(courseId, date){
         })
     });
 }
+
+/*
+* Input: userID
+* Output: UserType of the user
+* Description: Retrieve the role of a specific user
+*/
 
 exports.getRole=function(userId){
     return new Promise((resolve, reject) => {
@@ -220,6 +238,7 @@ exports.getRole=function(userId){
 * Output: List of Student_Ref
 * Description: Retrieve the list of students booked to the selected lecture
 */
+
 exports.getStudentList=function(courseId, date){
     let list=[];
     return new Promise((resolve, reject) => {
@@ -238,6 +257,12 @@ exports.getStudentList=function(courseId, date){
         });
     });
 };
+
+/*
+* Input: dateDeadline
+* Output: List of Course_Ref, Name, Date
+* Description: Send automatically an email to the teacher when a constraint of the deadline is triggered
+*/
 
 exports.checkDeadline=function(dateD){
     let list = [];
@@ -261,6 +286,50 @@ exports.checkDeadline=function(dateD){
     });
 }
 
+/*
+* Input: Course_Ref, Date_Ref 
+* Output: True or False
+* Description: Delete the lecture and the bookings
+*/
+
+exports.deleteLecture=function(courseId, date){
+    return new Promise((resolve, reject) => {
+        getStudentEmails(courseId, date).then(emails =>{
+            const sql='DELETE FROM Lecture WHERE Course_Ref=? AND Date=?';
+            db.run(sql, [courseId, date], (err) => {
+                if(err)
+                    reject(err);
+                else
+                    resolve(emails);
+            });
+        });
+    });
+};
+
+/*
+* Input: Course_Ref, Date_Ref 
+* Output: List of emails
+* Description: Retrieve the list of emails of the students booked for the deleted lecture
+*/
+
+function getStudentEmails(courseId, date){
+    return new Promise((resolve, reject) => {
+        const sql='SELECT Email FROM User WHERE userID IN ('+
+        'SELECT Student_Ref FROM Booking WHERE Course_Ref=? AND Date_Ref=? )';
+        db.all(sql, [courseId, date], (err, rows) => {
+            if(err)
+                reject(err);
+            else{
+                for(let row of rows){
+                    list.push(row.Email);
+                }
+                resolve(list);
+            }
+        })
+    });
+};
+
+// EMAIL FUNCTIONS
 /**
  * Retrieve email of a given student
  * @param {} userId 
