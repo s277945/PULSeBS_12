@@ -62,14 +62,14 @@ export class TeacherTabLec extends Component {
             </tr>)
         });
 
-        let modalTableBody = []
+/*        let modalTableBody = []
 
         this.state.modalTableData.forEach((element, i) => {
             modalTableBody.push(<tr>
                 <td>{i + 1}</td>
                 <td>{element}</td>
             </tr>)
-        });
+        });*/
 
 
         return (

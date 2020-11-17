@@ -33,7 +33,7 @@ export class TeacherTabSL extends Component {
     }
 
     showList = (element) => {
-        let lecList = []
+    //    let lecList = []
         axios.get(`http://localhost:3001/api/lectures/listStudents?courseRef=${element.Course_Ref}&date=${element.Date}`,{ withCredentials: true, credentials: 'include' })
             .then(res => {
                 console.log(res)
