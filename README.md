@@ -17,7 +17,9 @@
   ```
   git clone https://github.com/s277945/PULSeBS_12.git
   cd PULSeBS_12
-  docker pull alebottisio/pulsebs_12 -a
+  docker pull alebottisio/pulsebs_12:frontend_stable
+  docker pull alebottisio/pulsebs_12:mail_stable
+  docker pull alebottisio/pulsebs_12:server_stable
   docker-compose up
   ```
 
