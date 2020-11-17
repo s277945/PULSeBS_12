@@ -82,3 +82,7 @@
 
 
 
+
+ **DELETE /api/courseLectures/:courseId?date=...** 
+ - query parameters: courseId, date
+ 
