@@ -80,5 +80,7 @@
 - query parameters: userId => retrieve from token
 - response body: {"Course_Ref" : "123123", "Date_Ref": "2020-10-11"}
 
-
+**DELETE /courseLectures/:courseId?date=2020-12-12 20:00:00** =>
+- query parameters: courseId, date
+- response body: {email1@gmail.com, email2@gmail.com}
 

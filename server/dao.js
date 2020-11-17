@@ -335,6 +335,12 @@ function getStudentEmails(courseId, date){
     });
 };
 
+/*
+* Input: Course_Ref, Date_Ref 
+* Output: True or False
+* Description: Delete all the booking related to a lecture canceled.
+*/
+
 function deleteBookings(courseId, date){
     return new Promise((resolve, reject) => {
         const sql='DELETE FROM Booking WHERE Course_Ref = ? AND Date_Ref = ?';
