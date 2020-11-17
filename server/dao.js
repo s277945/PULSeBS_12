@@ -333,7 +333,7 @@ function getStudentEmails(courseId, date){
             }
         })
     });
-};
+}
 
 /*
 * Input: Course_Ref, Date_Ref 
@@ -350,7 +350,7 @@ function deleteBookings(courseId, date){
             else resolve(true);
         })
     });
-};
+}
 
 // EMAIL FUNCTIONS
 /**
