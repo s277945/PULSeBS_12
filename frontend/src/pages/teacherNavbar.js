@@ -9,6 +9,10 @@ export class TeacherNavbar extends Component {
         this.props.setShow(0);
     }
 
+    showStudentList = () =>{
+        this.props.setShow(1)
+    }
+
     redirHome = (e) => { //function that redirects to the home page
         e.preventDefault();
         this.props.history.push("/");
@@ -36,7 +40,8 @@ export class TeacherNavbar extends Component {
                 <Navbar bg="dark" variant="dark">
                     <Navbar.Brand href="#" onClick={this.redirHome}>PULSeBS</Navbar.Brand>
                     <Nav className="mr-auto">
-                        <Nav.Link href="#lectures" onSelect={this.showLectures}>Lectures</Nav.Link>                     
+                        <Nav.Link href="#lectures" onSelect={this.showLectures}>Lectures</Nav.Link> 
+                        <Nav.Link href="#studentList" onSelect={this.showStudentList}>Student List</Nav.Link>                     
                     </Nav>
                     <Nav.Link href="#logout" onSelect={this.handleLogout}>Logout</Nav.Link>
                 </Navbar>

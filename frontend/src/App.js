@@ -8,7 +8,7 @@ import { TeacherHome } from './pages/teacherHome'
 
 // create a user context for accessing user data from all pages and components
 const MainContext = React.createContext();
-
+const TITLE = "PULSeBS"
 class App extends Component {
   state = {
       userName: null,   //user session context data
@@ -16,6 +16,7 @@ class App extends Component {
   }
 
   componentDidMount(){
+    document.title = TITLE;
     let userN = sessionStorage.getItem("userName"); //check for stored user session data
     if (userN) { //if there is user session data
       this.setState({userName: userN}); //retrieve data and set state accordingly

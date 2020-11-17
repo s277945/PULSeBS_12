@@ -2,16 +2,35 @@
 
 ## DOCKER INSTALL INSTRUCTIONS
 
-  command line commands:
+  From a command line run:
+  
+  Linux:
   ```
   git clone https://github.com/s277945/PULSeBS_12.git
   cd PULSeBS_12
   sudo docker pull alebottisio/pulsebs_12 -a
   sudo docker-compose up
   ```
+  Windows:
+  ```
+  git clone https://github.com/s277945/PULSeBS_12.git
+  cd PULSeBS_12
+  docker pull alebottisio/pulsebs_12 -a
+  docker-compose up
+  ```
 
-
-
+## SONARSCANNER INSTRUCTIONS
+  Just run the following command from the project's root folder
+  
+  Linux:
+  ```
+  sonar-scanner
+  ```
+  Windows:
+  ```
+  sonar-scanner.bat
+  ```
+  wich will automatically use the preconfigured **sonar-project.properties** file
 
 ## ENDPOINTS
 

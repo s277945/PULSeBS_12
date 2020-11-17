@@ -111,26 +111,29 @@ export class StudentHome extends Component {
 
     renderLectureTables(){
         return (
-            <Table striped bordered hover>
-                <thead>
-                <tr>
-                    <th>Lecture</th>
-                    <th>Time and date</th>
-                    <th>Lecture Booking</th>
-                    <th>Cancel booking</th>
-                </tr>
-                </thead>
-                <tbody>
-                {this.state.lectures.map((lecture,index) => 
-                    <tr key={index}>
-                        <td>{lecture.Name}</td>
-                        <td>{lecture.Date}</td>
-                        <td>{this.renderBookASeatButton(lecture, index)}</td>
-                        <td>{this.renderCancelButton(lecture, index)}</td>
+            <div class="app-background">
+                <br></br>
+                <Table striped bordered hover style={{backgroundColor: "#fff"}}>
+                    <thead>
+                    <tr>
+                        <th>Lecture</th>
+                        <th>Time and date</th>
+                        <th>Lecture Booking</th>
+                        <th>Cancel booking</th>
                     </tr>
-                )}
-                </tbody>
-            </Table>
+                    </thead>
+                    <tbody>
+                    {this.state.lectures.map((lecture,index) => 
+                        <tr key={index}>
+                            <td>{lecture.Name}</td>
+                            <td>{lecture.Date}</td>
+                            <td>{this.renderBookASeatButton(lecture, index)}</td>
+                            <td>{this.renderCancelButton(lecture, index)}</td>
+                        </tr>
+                    )}
+                    </tbody>
+                </Table>
+            </div>
         )
     }
 
