@@ -225,6 +225,39 @@ app.get('/api/lectures/booked', (req, res) => {
 
 });
 
+/**
+ * DELETE /api/courseLectures/:courseId?date=...
+ * 
+ * parameters: courseId, date
+ */
+
+ app.delete('/api/courseLectures/:courseId', (req, res)=>{
+    const courseId = req.params.courseId;
+    const date = req.query.date;
+    dao.deleteLecture(courseId, date)
+      .then((emails) => {
+        for(let email of emails){
+          var mailOptions = {
+            from: mailer.email,
+            to: email,
+            subject: 'Lecture canceled',
+            text: `Dear student, the lecture of Course ${courseId} for lecture on ${date} has been canceled`
+          };
+
+          mailer.transporter.sendMail(mailOptions, function(err, info){
+            if(err){
+                console.log(err);
+            } else {
+                console.log('Email sent: ' + info.response);
+            }
+          });
+        }
+        res.status(204).json({"lecture": "canceled"});
+      })
+      .catch((err) => {
+        res.status(500).json(err);
+      })
+ })
 
 
 //activate server

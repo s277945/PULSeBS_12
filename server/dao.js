@@ -314,6 +314,7 @@ exports.deleteLecture=function(courseId, date){
 */
 
 function getStudentEmails(courseId, date){
+    let list = [];
     return new Promise((resolve, reject) => {
         const sql='SELECT Email FROM User WHERE userID IN ('+
         'SELECT Student_Ref FROM Booking WHERE Course_Ref=? AND Date_Ref=? )';
