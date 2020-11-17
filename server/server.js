@@ -234,6 +234,13 @@ app.get('/api/lectures/booked', (req, res) => {
  app.delete('/api/courseLectures/:courseId', (req, res)=>{
     const courseId = req.params.courseId;
     const date = req.query.date;
+
+    //const now = moment().format('YYYY-MM-DD HH:mm:ss');
+
+    if(moment().isAfter(moment(date).subtract(1, 'hours'))){
+      return res.status(500).json({error: "Delete lecture deadline expired"});
+    }
+
     dao.deleteLecture(courseId, date)
       .then((emails) => {
         for(let email of emails){

@@ -84,3 +84,7 @@
 - query parameters: courseId, date
 - response body: {email1@gmail.com, email2@gmail.com}
 
+
+ **DELETE /api/courseLectures/:courseId?date=...** 
+ - query parameters: courseId, date
+ 
