@@ -4,33 +4,15 @@ import Button from 'react-bootstrap/Button'
 import Modal from 'react-bootstrap/Modal'
 import axios from 'axios';
 import userIdentity from '../api/userIdentity.js'
+import update from './teacherTabFun.js'
 
 export class TeacherTabLec extends Component {
 
 
-    state = { tableData: [], modalTableData: [], modalShow: 0, selectedLec: {} }
+    state = { tableData: [], modalShow: 0, selectedLec: {} }
 
     componentDidMount() {
-        this.update()
-    }
-
-    update = () => {
-
-        let lecList = []
-        axios.get(`http://localhost:3001/api/lectures`, { withCredentials: true, credentials: 'include' })
-            .then(res => {
-                //response in the form {Course_Ref: "123", Date "...", Name: {...}}
-                console.log(res.data)
-                lecList = res.data
-                console.log(lecList)
-                this.setState({ tableData: lecList })
-
-            }).catch(err => {
-                userIdentity.removeUserSession(this.props.context);
-                this.props.history.push("/");
-                console.log(err);
-            });
-
+        update(this)
     }
 
     showModifications = (element) => {
@@ -46,7 +28,6 @@ export class TeacherTabLec extends Component {
 
     handleShow = () => {
         this.setState({ modalShow: 1 })
-        console.log(this.state.modalShow)
     }
 
     render() {
@@ -61,16 +42,6 @@ export class TeacherTabLec extends Component {
                 <td><Button onClick={(e) => { e.preventDefault(); this.showModifications(element) }}>SELECT</Button></td>
             </tr>)
         });
-
-/*        let modalTableBody = []
-
-        this.state.modalTableData.forEach((element, i) => {
-            modalTableBody.push(<tr>
-                <td>{i + 1}</td>
-                <td>{element}</td>
-            </tr>)
-        });*/
-
 
         return (
             <div><br/>

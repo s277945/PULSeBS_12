@@ -4,36 +4,19 @@ import Button from 'react-bootstrap/Button'
 import Modal from 'react-bootstrap/Modal'
 import axios from 'axios';
 import userIdentity from '../api/userIdentity.js'
+import update from './teacherTabFun.js'
 
 export class TeacherTabSL extends Component {
 
 
-    state = { tableData: [],modalTableData: [], modalShow: 0 }
+    state = { tableData: [],modalTableData: [], modal: 0 }
 
     componentDidMount() {
-        this.update()
+        update(this)
     }
 
-    update = () => {
-
-        let lecList = []
-        axios.get(`http://localhost:3001/api/lectures`, { withCredentials: true, credentials: 'include' })
-            .then(res => {
-                console.log(res.data)
-                lecList = res.data
-                console.log(lecList)
-                this.setState({ tableData: lecList })
-
-            }).catch(err=>{ 
-                userIdentity.removeUserSession(this.props.context);
-                this.props.history.push("/");
-                console.log(err);
-             });
-
-    }
 
     showList = (element) => {
-    //    let lecList = []
         axios.get(`http://localhost:3001/api/lectures/listStudents?courseRef=${element.Course_Ref}&date=${element.Date}`,{ withCredentials: true, credentials: 'include' })
             .then(res => {
                 console.log(res)
@@ -47,24 +30,23 @@ export class TeacherTabSL extends Component {
     }
 
     handleClose = () => {
-        this.setState({ modalShow: 0 })
+        this.setState({ modal: 0 })
     }
 
     handleShow = () => {
-        this.setState({ modalShow: 1 })
-        console.log(this.state.modalShow)
+        this.setState({ modal: 1 })
     }
 
     render() {
 
-        let tableBody = []
+        let body = []
 
-        this.state.tableData.forEach(element => {
-            tableBody.push(<tr>
-                <td>{element.Course_Ref}</td>
-                <td>{element.Name}</td>
-                <td>{element.Date}</td>
-                <td><Button onClick={(e) => { e.preventDefault(); this.showList(element) }}>SHOW LIST</Button></td>
+        this.state.tableData.forEach(row => {
+            body.push(<tr>
+                <td>{row.Course_Ref}</td>
+                <td>{row.Name}</td>
+                <td>{row.Date}</td>
+                <td><Button onClick={(e) => { e.preventDefault(); this.showList(row) }}>SHOW LIST</Button></td>
             </tr>)
         });
 
@@ -90,11 +72,11 @@ export class TeacherTabSL extends Component {
                         </tr>
                     </thead>
                     <tbody>
-                        {tableBody}
+                        {body}
                     </tbody>
                 </Table>
 
-                <Modal show={this.state.modalShow} onHide={this.handleClose}>
+                <Modal show={this.state.modal} onHide={this.handleClose}>
                     <Modal.Header closeButton>
                         <Modal.Title>Students</Modal.Title>
                     </Modal.Header>
