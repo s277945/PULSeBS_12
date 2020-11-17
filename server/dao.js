@@ -296,12 +296,16 @@ exports.checkDeadline=function(dateD){
 exports.deleteLecture=function(courseId, date){
     return new Promise((resolve, reject) => {
         getStudentEmails(courseId, date).then(emails =>{
-            const sql='DELETE FROM Lecture WHERE Course_Ref=? AND Date=?';
-            db.run(sql, [courseId, date], (err) => {
-                if(err)
-                    reject(err);
-                else
-                    resolve(emails);
+            deleteBookings(courseId, date).then(n =>{
+                if(n){
+                    const sql='DELETE FROM Lecture WHERE Course_Ref=? AND Date=?';
+                    db.run(sql, [courseId, date], (err) => {
+                        if(err)
+                            reject(err);
+                        else
+                            resolve(emails);
+                    });
+                }
             });
         });
     });
@@ -327,6 +331,17 @@ function getStudentEmails(courseId, date){
                 }
                 resolve(list);
             }
+        })
+    });
+};
+
+function deleteBookings(courseId, date){
+    return new Promise((resolve, reject) => {
+        const sql='DELETE FROM Booking WHERE Course_Ref = ? AND Date_Ref = ?';
+        db.run(sql, [courseId, date], (err) => {
+            if(err)
+                reject(err);
+            else resolve(true);
         })
     });
 };
