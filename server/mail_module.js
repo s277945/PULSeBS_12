@@ -5,7 +5,7 @@ const dao = require('./dao');
 const moment = require('moment');
 
 const app = express();
-
+app.disable("x-powered-by");
 
 cron.schedule('1 * * * * *', function() {
     const date=moment().format('YYYY-MM-DD HH:mm:ss');
