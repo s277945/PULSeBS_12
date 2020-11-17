@@ -135,9 +135,10 @@ exports.deleteSeat=function(userId, courseId, date){
 
 exports.getLecturesByUserId=function(userId){
     return new Promise((resolve, reject) => {
-        const sql='SELECT Course_Ref, Name, Date FROM  Lecture  WHERE Course_Ref IN (' +
+        const date=moment().format('YYYY-MM-DD HH:mm:ss');
+        const sql='SELECT Course_Ref, Name, Date FROM  Lecture  WHERE DateDeadline > ? AND Course_Ref IN (' +
             'SELECT CourseID FROM Course WHERE User_Ref=?)';
-        db.all(sql, [userId], (err,rows)=>{
+        db.all(sql, [date, userId], (err,rows)=>{
             if(err){
                 reject(err);
             }
