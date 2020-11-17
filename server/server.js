@@ -23,6 +23,7 @@ const expireTime = 600; // 10 minutes
 
 //create application
 const app = express();
+app.disable("x-powered-by");
 const port = 3001;
 
 // Set-up logging
