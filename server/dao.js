@@ -12,17 +12,17 @@ exports.checkUserPwd = function (username, password) {
             if (err) reject(err); // error handling
             else if (typeof row === 'undefined') reject(new Error('User does not exist')); // no entry found
             else if (typeof row !== 'undefined') { // username found
-                bcrypt.compare(password, row.Password, (err,res) => { //check password hash
+                bcrypt.compare(password, row.Password, (err2,res) => { //check password hash
 
-                    if (err) reject(err);
+                    if (err2) reject(err2);
                     else if (!res) reject(new Error('Password is incorrect'));
                     else {
                         this.getRole(row.userID)
                             .then(row2 => {
                                 resolve({userID: row.userID, userType: row2.UserType});
                             })
-                            .catch(err2 => {
-                                reject(err2);
+                            .catch(err3 => {
+                                reject(err3);
                             })
 
                     }
@@ -182,7 +182,7 @@ exports.getNextLectureNumber=function(userId){
                 await countStudent(row.Course_Ref, row.minDate).then(number =>{
 
                         resolve({"lectureName": row.Name, "numberOfStudents": number});
-                }).catch(err => reject(err));
+                }).catch(err2 => reject(err2));
             }
         });
     });
@@ -198,7 +198,7 @@ function countStudent(courseId, date){
                 resolve(row['COUNT(*)']);
         })
     });
-};
+}
 
 exports.getRole=function(userId){
     return new Promise((resolve, reject) => {
@@ -252,8 +252,8 @@ exports.checkDeadline=function(dateD){
                     await countStudent(row.Course_Ref, row.Date).then(async(n) => {
                         await getTeacherEmail(row.Course_Ref).then((email) => {
                             list.push({"email":email, "nBooked": n, "nameLecture": row.Name, "dateLecture": row.Date, "Course_Ref": row.Course_Ref})
-                        }).catch(err => reject(err));
-                    }).catch(err => reject(err));
+                        }).catch(err2 => reject(err2));
+                    }).catch(err3 => reject(err3));
                 }
                 resolve(list);
             }

@@ -4,7 +4,7 @@ const mailer = require('./mailer');
 const dao = require('./dao');
 const moment = require('moment');
 
-app = express();
+const app = express();
 
 
 cron.schedule('1 * * * * *', function() {
