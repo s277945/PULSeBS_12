@@ -9,7 +9,7 @@ export class TeacherHome extends Component {
     }
 
     componentDidMount() {
-        if(!this.props.context.userName || !this.props.context.userType || this.props.context.userType!=='t') this.props.history.push("/"); //open page only if a valid session has been started
+        if(!this.props.context.userName || this.props.context.userType!=='t') this.props.history.push("/"); //open page only if a valid session has been started
 
     }
 
@@ -22,13 +22,13 @@ export class TeacherHome extends Component {
             <div class="app-background">
                 <br></br>
                 <p>next lecture info</p>
-                <TeacherTabLec></TeacherTabLec>
+                <TeacherTabLec history={this.props.history} context={this.props.context}></TeacherTabLec>
             </div>
         )
         
         if (this.state.show === 1) return (
             <div class="app-background">
-                <TeacherTabSL></TeacherTabSL>
+                <TeacherTabSL history={this.props.history} context={this.props.context}></TeacherTabSL>
             </div>
         )
 

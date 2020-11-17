@@ -17,13 +17,21 @@ export class Login extends Component {
     }
 
     componentDidMount(){    
-        console.log(this.props.context.userName!==null);    
+        console.log(this.props.context.userName!==null && this.props.context.userType!==null);    
         if (this.props.context.userName!==null && this.props.context.userType!==null) {
             console.log(this.props.context);
             this.props.context.userType==="s" ? this.setRedirect(2) : this.setRedirect(1); //check context for login data and set redirect value accordingly
         }
     }
 
+    componentDidUpdate(){    
+        console.log(this.props.context.userName!==null && this.props.context.userType!==null);    
+        if (this.props.context.userName!==null && this.props.context.userType!==null) {
+            console.log(this.props.context);
+            this.props.context.userType==="s" ? this.setRedirect(2) : this.setRedirect(1); //check context for login data and set redirect value accordingly
+        }
+    }
+    
     redirHome = (e) => { //function that redirects to the home page
         e.preventDefault();
         this.props.history.push("/");
@@ -77,7 +85,7 @@ export class Login extends Component {
                 userIdentity.saveUserSession(this.props.context, uName, uType);//set user session data
                 this.setRedirect(uType==='s' ? 2 : 1 );//set redirect value accordingly     
             }
-            else console.log(res.status);
+            if(res) console.log(res.status);
         })
         .catch(err=>{ console.log(err); this.setState({ showErr : true}); });
     }

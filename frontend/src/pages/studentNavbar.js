@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import Nav from 'react-bootstrap/Nav'
 import Navbar from 'react-bootstrap/Navbar'
-import userIdentity from '../api/userIdentity.js'
+import handleLogout from './handleLogout.js'
 
 export class StudentNavbar extends Component { 
     showLectures = () => { //function called when Lectures link is selected
@@ -17,21 +17,9 @@ export class StudentNavbar extends Component {
         this.props.setShow(1);
     }
 
-    handleLogout = () => { //function to logout the user
-        userIdentity.removeUserSession(this.props.context); //clear user session data
-        //axios.post("http://localhost:3001/api/logout"); //close user session
-        fetch ('http://localhost:3001/api/logout', {// send post request, will delete cookie jwt token
-            method: 'post',
-            credentials: 'include'
-        }).then((r) => {
-            if (r.status === 200) {// check response status
-                console.log("Logout successful " + r.status);
-            }
-            else console.log("Logout error " + r.status);
-        }).catch(err=>{console.log(err)});
-        this.props.history.push("/"); //redirect to login page
+    handleLogout = () => {
+        handleLogout.handleLogout(this.props.context, this.props.history)
     }
-
     render() {
 
         return (
