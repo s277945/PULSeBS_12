@@ -59,6 +59,7 @@ export class Login extends Component{
 
                 if(location.state  && location.state.from){
                     history.replace(location.state.from)
+                    return;
                 }
 
                 switch(user.userType){
