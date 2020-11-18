@@ -7,7 +7,7 @@ let cookie;
 describe('', function () {
     describe('POST/login', function () {
         it('should return status 401', async function () {
-            let res=await chai.request('http://localhost:3001').post('/api/login').send({userName:'francesco',password:'prova'})
+            let res=await chai.request('http://localhost:3001').post('/api/login').send({userName:'s269422',password:'prova'})
 
             expect(res.status).to.equal(401);
         });
@@ -21,7 +21,7 @@ describe('', function () {
     });
     describe('POST/login', function () {
         it('should return status 200', async function () {
-            let res=await chai.request('http://localhost:3001').post('/api/login').send({userName:'francesco',password:'scimmia'})
+            let res=await chai.request('http://localhost:3001').post('/api/login').send({userName:'s269422',password:'scimmia'})
             cookie=res.headers['set-cookie'];
             expect(res.status).to.equal(200);
         });
@@ -34,32 +34,32 @@ describe('', function () {
     });
     describe('POST/Lectures', function () {
         it('should return 401', async function () {
-            let res=await chai.request('http://localhost:3001').post('/api/lectures').send({userId: "francesco", lectureId: "123123", date: "2019-11-1 18:00:00"})
+            let res=await chai.request('http://localhost:3001').post('/api/lectures').send({userId: "s269422", lectureId: "C0123", date: "2019-11-1 18:00:00"})
             expect(res.status).to.equal(401);
         });
         it('should return status 422 ', async function () {
-            let res=await chai.request('http://localhost:3001').post('/api/lectures').set('Cookie',cookie).send({userId: "francesco", lectureId: "123123", date: "2019-11-1 18:00:00"})
+            let res=await chai.request('http://localhost:3001').post('/api/lectures').set('Cookie',cookie).send({userId: "s269422", lectureId: "C0123", date: "2019-11-1 18:00:00"})
             expect(res.status).to.equal(422);
         });
         it('should return status 201 ', async function () {
-            let res=await chai.request('http://localhost:3001').post('/api/lectures').set('Cookie',cookie).send({userId: "francesco", lectureId: "123123", date: "2020-12-12 20:00:00"})
+            let res=await chai.request('http://localhost:3001').post('/api/lectures').set('Cookie',cookie).send({userId: "s269422", lectureId: "C0123", date: "2020-12-10 12:00:00"})
             expect(res.status).to.equal(201);
         });
         it('should return status 500 ', async function () {
-            let res=await chai.request('http://localhost:3001').post('/api/lectures').set('Cookie',cookie).send({userId: "francesco", lectureId: "prova", date: "2020-12-12 20:00:00"})
+            let res=await chai.request('http://localhost:3001').post('/api/lectures').set('Cookie',cookie).send({userId: "s269422", lectureId: "prova", date: "2020-12-12 20:00:00"})
             expect(res.status).to.equal(500);
 
         });
-        it('should return status 500 ', async function () {
-            let res=await chai.request('http://localhost:3001').post('/api/lectures').set('Cookie',cookie).send({userId: "francesco", lectureId: "123123", date: "2020-12-12 20:00:00"})
+      /*  it('should return status 500 ', async function () {
+            let res=await chai.request('http://localhost:3001').post('/api/lectures').set('Cookie',cookie).send({userId: "s269422", lectureId: "C0123", date: "2020-12-10 12:00:00"})
             expect(res.status).to.equal(500);
 
-        });
+        });*/
 
     });
     describe('DELETE', function () {
         it('should delete status 204',async function () {
-            let res=await chai.request('http://localhost:3001').delete('/api/lectures/123123?date=2020-12-12 20:00:00').set('Cookie',cookie).send()
+            let res=await chai.request('http://localhost:3001').delete('/api/lectures/C0123?date=2020-12-10 12:00:00').set('Cookie',cookie).send()
             expect(res.status).to.equal(204);
         });
 
@@ -72,7 +72,7 @@ describe('', function () {
     });
     describe('List Student', function () {
         it('should get response state 201',async function () {
-            let res=await chai.request('http://localhost:3001').get('/api/lectures/listStudents').set('Cookie',cookie).send({courseRef: "123123", date: "2020-12-12 20:00:00"})
+            let res=await chai.request('http://localhost:3001').get('/api/lectures/listStudents').set('Cookie',cookie).send({courseRef: "C0123", date: "2020-12-10 12:00:00"})
             expect(res.status).to.equal(201);
         });
     });

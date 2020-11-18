@@ -1,32 +1,25 @@
 import React, { Component } from 'react'
 import axios from 'axios'
-import { StudentNavbar } from './studentNavbar'
+import StudentNavbar from './studentNavbar'
 import Table from 'react-bootstrap/Table'
 import Button from 'react-bootstrap/Button'
-import userIdentity from '../api/userIdentity.js'
+import {authContext} from '../components/Authsystem'
 
 export class StudentHome extends Component {
+    static contextType = authContext
+
     state = {
         show : 0, //This state variable is used to choose the content to show
         lectures: null,
     }
 
     componentDidMount() {
-        //Open page only if a valid session has been started, otherwise redirect to the unathorized page
-        if(!this.props.context.userName || this.props.context.userType!=='s') this.props.history.push("/"); 
-        else{
-            //const user = userIdentity.getUserSession();
-            axios.get(`http://localhost:3001/api/lectures`, { user: this.props.context.userName, withCredentials: true }).then((reponse) => {
-                // console.log(reponse.data)
-                this.setState({ lectures: reponse.data })
-                this.getBookedLectures();
-            }).catch(err => {
-                userIdentity.removeUserSession(this.props.context);
-                this.props.history.push("/");
-                console.log(err);
-            });
-        }        
-
+        axios.get(`http://localhost:3001/api/lectures`, { withCredentials: true }).then((reponse) => {
+            this.setState({ lectures: reponse.data })
+            this.getBookedLectures();
+        }).catch(err=>{ 
+            console.log(err);
+         });
     }
 
     setShow = (val) => { //Function to set the show variable
@@ -34,9 +27,8 @@ export class StudentHome extends Component {
     }
 
     getBookedLectures(){
-        const user = userIdentity.getUserSession();
 
-        axios.get(`http://localhost:3001/api/lectures/booked`, { user : user, withCredentials: true}).then((reponse) => {
+        axios.get(`http://localhost:3001/api/lectures/booked`, { withCredentials: true}).then((reponse) => {
             const newLectureArray = this.state.lectures.slice()
             reponse.data.map(bookedLecture => {
                 const index = this.state.lectures.findIndex(lecture =>
@@ -46,8 +38,6 @@ export class StudentHome extends Component {
             })
             this.setState({lectures: newLectureArray})
         }).catch(err=>{ 
-            userIdentity.removeUserSession(this.props.context);
-            this.props.history.push("/");
             console.log(err);
          });
     }
@@ -58,34 +48,28 @@ export class StudentHome extends Component {
     * Button that POST a request to book a seat for the session user
     */
     bookASeat(lectureId, date, index){
-        const user = userIdentity.getUserSession();
         const body = {
             lectureId: lectureId,
             date: date
         }
-        axios.post(`http://localhost:3001/api/lectures`, body, {user: user, withCredentials: true})
+        axios.post(`http://localhost:3001/api/lectures`, body, { withCredentials: true})
             .then(response => {
                 const newLectures = this.state.lectures.slice();
                 newLectures[index].alreadyBooked = true
                 this.setState({lectures: newLectures})
             }).catch(err=>{ 
-                userIdentity.removeUserSession(this.props.context);
-                this.props.history.push("/");
                 console.log(err);
              });
     }
 
     cancelSeat(lectureId, date, index){
-        const user = userIdentity.getUserSession();
-        axios.delete(`http://localhost:3001/api/lectures/${lectureId}?date=${date}`, {user: user, withCredentials: true})
+        axios.delete(`http://localhost:3001/api/lectures/${lectureId}?date=${date}`, { withCredentials: true})
             .then(response => {
                 console.log(response)
                 const newLectures = this.state.lectures.slice();
                 newLectures[index].alreadyBooked = false
                 this.setState({lectures: newLectures})
             }).catch(err=>{ 
-                userIdentity.removeUserSession(this.props.context);
-                this.props.history.push("/");
                 console.log(err);
              });
     }
@@ -148,7 +132,7 @@ export class StudentHome extends Component {
     render() {
         return (
             <>
-                <StudentNavbar setShow={this.setShow} history={this.props.history} context={this.props.context}/>
+                <StudentNavbar setShow={this.setShow} />
                 {this.state.show === 0 && this.state.lectures != null &&
                     this.renderLectureTables()
                 }
