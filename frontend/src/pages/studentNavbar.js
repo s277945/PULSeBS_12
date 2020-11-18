@@ -1,9 +1,12 @@
 import React, { Component } from 'react'
 import Nav from 'react-bootstrap/Nav'
 import Navbar from 'react-bootstrap/Navbar'
-import handleLogout from './handleLogout.js'
+import {authContext} from '../components/Authsystem'
+import { withRouter } from 'react-router-dom';
 
-export class StudentNavbar extends Component { 
+class StudentNavbar extends Component { 
+    static contextType = authContext
+
     showLectures = () => { //Function called when Lectures link is selected
         this.props.setShow(0);
     }
@@ -18,7 +21,9 @@ export class StudentNavbar extends Component {
     }
 
     handleLogout = () => {
-        handleLogout.handleLogout(this.props.context, this.props.history)
+        this.context.signout().then(() => {
+            this.props.history.replace("/")
+        })
     }
     render() {
 
@@ -36,3 +41,5 @@ export class StudentNavbar extends Component {
         )
     }
 }
+
+export default withRouter(StudentNavbar)

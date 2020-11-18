@@ -1,32 +1,24 @@
 import React, { Component } from 'react'
 import axios from 'axios'
-import { StudentNavbar } from './studentNavbar'
+import StudentNavbar from './studentNavbar'
 import Table from 'react-bootstrap/Table'
 import Button from 'react-bootstrap/Button'
-import userIdentity from '../api/userIdentity.js'
+import {authContext} from '../components/Authsystem'
 
 export class StudentHome extends Component {
+    static contextType = authContext
+
     state = {
         show : 0, //This state variable is used to choose the content to show
         lectures: null,
     }
 
     componentDidMount() {
-        //Open page only if a valid session has been started, otherwise redirect to the unathorized page
-        if(!this.props.context.userName || this.props.context.userType!=='s') this.props.history.push("/"); 
-        else{
-            const user = userIdentity.getUserSession();
-            axios.get(`http://localhost:3001/api/lectures`, { user: user, withCredentials: true }).then((reponse) => {
-                // console.log(reponse.data)
-                this.setState({ lectures: reponse.data })
-                this.getBookedLectures();
-            }).catch(err => {
-                userIdentity.removeUserSession(this.props.context);
-                this.props.history.push("/");
-                console.log(err);
-            });
-        }        
-
+        const user = this.context.user;
+        axios.get(`http://localhost:3001/api/lectures`, { user: user, withCredentials: true }).then((reponse) => {
+            this.setState({ lectures: reponse.data })
+            this.getBookedLectures();
+        })
     }
 
     setShow = (val) => { //Function to set the show variable
@@ -34,7 +26,7 @@ export class StudentHome extends Component {
     }
 
     getBookedLectures(){
-        const user = userIdentity.getUserSession();
+        const user = this.context.user;
 
         axios.get(`http://localhost:3001/api/lectures/booked`, { user : user, withCredentials: true}).then((reponse) => {
             const newLectureArray = this.state.lectures.slice()
@@ -45,11 +37,7 @@ export class StudentHome extends Component {
                 newLectureArray[index].alreadyBooked = true;
             })
             this.setState({lectures: newLectureArray})
-        }).catch(err=>{ 
-            userIdentity.removeUserSession(this.props.context);
-            this.props.history.push("/");
-            console.log(err);
-         });
+        })
     }
 
     /*
@@ -58,7 +46,7 @@ export class StudentHome extends Component {
     * Button that POST a request to book a seat for the session user
     */
     bookASeat(lectureId, date, index){
-        const user = userIdentity.getUserSession();
+        const user = this.context.user;
         const body = {
             lectureId: lectureId,
             date: date
@@ -68,26 +56,18 @@ export class StudentHome extends Component {
                 const newLectures = this.state.lectures.slice();
                 newLectures[index].alreadyBooked = true
                 this.setState({lectures: newLectures})
-            }).catch(err=>{ 
-                userIdentity.removeUserSession(this.props.context);
-                this.props.history.push("/");
-                console.log(err);
-             });
+            })
     }
 
     cancelSeat(lectureId, date, index){
-        const user = userIdentity.getUserSession();
+        const user = this.context.user;
         axios.delete(`http://localhost:3001/api/lectures/${lectureId}?date=${date}`, {user: user, withCredentials: true})
             .then(response => {
                 console.log(response)
                 const newLectures = this.state.lectures.slice();
                 newLectures[index].alreadyBooked = false
                 this.setState({lectures: newLectures})
-            }).catch(err=>{ 
-                userIdentity.removeUserSession(this.props.context);
-                this.props.history.push("/");
-                console.log(err);
-             });
+            })
     }
 
     renderBookASeatButton(lecture, index){
