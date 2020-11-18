@@ -22,7 +22,6 @@ export class TeacherHome extends Component {
         if (this.state.show === 0) return (
             <div class="app-background">
                 <br></br>
-                <p>next lecture info</p>
                 <TeacherTabLec history={this.props.history}></TeacherTabLec>
             </div>
         )

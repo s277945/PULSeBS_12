@@ -6,7 +6,7 @@ import Login from './pages/Login'
 import { StudentHome } from './pages/studentHome'
 import { TeacherHome } from './pages/teacherHome'
 import {PrivateRoute, ProvideAuth} from './components/Authsystem';
-import Button from 'react-bootstrap/Button'
+
 
 class App extends Component {
   componentDidMount(){

@@ -68,6 +68,9 @@ class Login extends Component{
                     case 't':
                         history.replace('/teacherHome')
                         break;
+                    default:
+                        history.replace('/')
+                        break;
                 }
             })
             .catch(err => {

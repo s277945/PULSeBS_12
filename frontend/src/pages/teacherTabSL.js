@@ -11,12 +11,12 @@
      state = { tableData: [],modalTableData: [], modal: 0 }
 
      componentDidMount() {
-         update(this)
+         update(this);
      }
 
 
      showList = (element) => {
-         axios.get(`http:localhost:3001/api/lectures/listStudents?courseRef=${element.Course_Ref}&date=${element.Date}`,{ withCredentials: true })
+         axios.get(`http://localhost:3001/api/lectures/listStudents?courseRef=${element.Course_Ref}&date=${element.Date}`,{ withCredentials: true })
              .then(res => {
                  console.log(res)
                  this.setState({ modalTableData: res.data })

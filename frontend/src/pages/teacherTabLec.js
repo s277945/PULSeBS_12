@@ -4,13 +4,14 @@ import Button from 'react-bootstrap/Button'
 import Modal from 'react-bootstrap/Modal'
 import update from './update.js'
 
+
 export class TeacherTabLec extends Component {
 
 
     state = { tableData: [], modalShow: 0, selectedLec: {} }
 
     componentDidMount() {
-        update(this)
+        update(this);
     }
 
     showModifications = (element) => {
