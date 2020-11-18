@@ -15,8 +15,8 @@ export class StudentHome extends Component {
         //Open page only if a valid session has been started, otherwise redirect to the unathorized page
         if(!this.props.context.userName || this.props.context.userType!=='s') this.props.history.push("/"); 
         else{
-            const user = userIdentity.getUserSession();
-            axios.get(`http://localhost:3001/api/lectures`, { user: user, withCredentials: true }).then((reponse) => {
+            //const user = userIdentity.getUserSession();
+            axios.get(`http://localhost:3001/api/lectures`, { user: this.props.context.userName, withCredentials: true }).then((reponse) => {
                 // console.log(reponse.data)
                 this.setState({ lectures: reponse.data })
                 this.getBookedLectures();
