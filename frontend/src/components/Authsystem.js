@@ -34,10 +34,10 @@ function useProvideAuth() {
 
 
     const signin = (userName, password, cb) => {
-    return login(userName, password).then((user) => {
-        saveUserSession(user)
-        setUser(user)
-        return user
+    return login(userName, password).then((userr) => {
+        saveUserSession(userr)
+        setUser(userr)
+        return userr 
     })
   };
 
