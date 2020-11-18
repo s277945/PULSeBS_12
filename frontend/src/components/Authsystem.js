@@ -39,11 +39,6 @@ function useProvideAuth() {
         setUser(user)
         return user
     })
-
-    // return fakeAuth.signin(() => {
-    //   setUser("user");
-    //   cb();
-    // });
   };
 
   const signout = () => {
@@ -59,13 +54,13 @@ function useProvideAuth() {
   };
 }
 
-export function PrivateRoute({ children, ...rest }) {
+export function PrivateRoute({ children, userType, ...rest }) {
   let auth = useAuth();
   return (
     <Route
       {...rest}
       render={({ location }) =>
-        auth.user ? (
+        (auth.user && auth.user.userType === userType) ? (
           children
         ) : (
           <Redirect
