@@ -6,7 +6,7 @@ import {authContext} from '../components/Authsystem'
 import { withRouter } from 'react-router-dom';
 import PropTypes from "prop-types";
 
-class Login extends Component{
+export class Login extends Component{
     static contextType = authContext
     static propTypes = {
         match: PropTypes.object.isRequired,
@@ -25,7 +25,7 @@ class Login extends Component{
 
     usernameChange = (e) => {
         let lastchar=e.target.value.slice(-1);// extract last character
-        if (/[a-zA-Z0-9_]/.test(lastchar)) { 
+        if (/[a-zA-Z0-9_]/.test(lastchar)) {
             this.setState({ username : e.target.value });// allow only numbers, letters and underscore as username form input
             this.setState({ showInvalidU: false });// reset invalid username form state
         }
@@ -34,12 +34,12 @@ class Login extends Component{
 
     passwordChange = (e) => {
         let lastchar=e.target.value.slice(-1);// extract last character
-        if (/[a-zA-Z0-9?!,]/.test(lastchar)) { 
+        if (/[a-zA-Z0-9?!,]/.test(lastchar)) {
             this.setState({ password : e.target.value });// allow only numbers and letters as password form input
             this.setState({ showInvalidP: false });// reset invalid password form state
         }
         else this.setState({ password : e.target.value.slice(0, -1)});// remove last character
-    } 
+    }
 
     handleLogin = (e) => {
         e.preventDefault()
@@ -74,7 +74,7 @@ class Login extends Component{
                 }
             })
             .catch(err => {
-                console.log(err); this.setState({ showErr : true}); 
+                console.log(err); this.setState({ showErr : true});
             })
 
         // axios.post(`http://localhost:3001/api/login`, { userName: this.state.username, password: this.state.password },{ withCredentials: true, credentials: 'include' })//send post login request
@@ -83,9 +83,9 @@ class Login extends Component{
         //     if(typeof res != 'undefined' && res.status===200) {
         //         let data= res.data;
         //         let uName = data.userID;
-        //         let uType = data.userType;                    
+        //         let uType = data.userType;
         //         userIdentity.saveUserSession(this.props.context, uName, uType);//set user session data
-        //         this.setRedirect(uType==='s' ? 2 : 1 );//set redirect value accordingly     
+        //         this.setRedirect(uType==='s' ? 2 : 1 );//set redirect value accordingly
         //     }
         //     if(res) console.log(res.status);
         // })
@@ -96,7 +96,7 @@ class Login extends Component{
         e.preventDefault();
         this.setState({ username: "", password: "", showInvalidU: false, showInvalidP: false });// reset invalid form state, reset form content
     }
-    
+
     render() {
         return (
             <div style={{backgroundColor: "#efefef", height: "100vh"}}>
@@ -106,32 +106,32 @@ class Login extends Component{
                 <Form style={{display: "block", marginLeft: "auto", marginRight: "auto", paddingTop: "20vh", width: "300px",boxShadow: "2px 2px #c7c7c7", borderStyle: "solid", borderWidth: "1px", borderRadius: "15px", borderColor: "#a4a4a4", backgroundColor: "#fafafa", padding: "40px", marginTop: "23vh"}}>
                     <Form.Group controlId="formBasicEmail">
                         <Form.Label style={{display: "block", textAlign: "center"}}>Username</Form.Label>
-                        <Form.Control type="text" placeholder="Your domain username" onChange={this.usernameChange} value={this.state.username} isInvalid={this.state.showInvalidU}/>
+                        <Form.Control data-testid={"username"} type="text" placeholder="Your domain username" onChange={this.usernameChange} value={this.state.username} isInvalid={this.state.showInvalidU}/>
                         {   !this.state.showErr
                             ? <><Form.Text className="text-muted">Enter valid domain username</Form.Text></>
                             : null
-                        }                        
+                        }
                     </Form.Group>
                     <Form.Group controlId="formBasicPassword">
                         <Form.Label style={{display: "block", textAlign: "center"}}>Password</Form.Label>
-                        <Form.Control type="password" placeholder="Password" onChange={this.passwordChange} value={this.state.password} isInvalid={this.state.showInvalidP}/>
+                        <Form.Control data-testid={"password"} type="password" placeholder="Password" onChange={this.passwordChange} value={this.state.password} isInvalid={this.state.showInvalidP}/>
                         {   this.state.showErr
                             ? <><Form.Text style={{color: "red", paddingTop: "5px", paddingBottom: "5px"}}>Invalid credentials</Form.Text></>
                             : null
                         }
                     </Form.Group>
-                    
-                    <Button variant="primary" type="submit" onClick={this.handleLogin} style={{marginRight: "25px", paddingRight: "17px", paddingLeft: "17px"}}>
+
+                    <Button data-testid={"submit"} variant="primary" type="submit" onClick={this.handleLogin} style={{marginRight: "25px", paddingRight: "17px", paddingLeft: "17px"}}>
                         Login
                     </Button>
-                    <Button variant="secondary" type="submit" onClick={this.handleReset} >
+                    <Button data-testid={"reset"} variant="secondary" type="submit" onClick={this.handleReset} >
                         Reset
                     </Button>
                 </Form>
             </div>
         )
-    
-    }    
+
+    }
 }
 
 export default withRouter(Login);
