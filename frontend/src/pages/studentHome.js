@@ -14,11 +14,12 @@ export class StudentHome extends Component {
     }
 
     componentDidMount() {
-        const user = this.context.user;
-        axios.get(`http://localhost:3001/api/lectures`, { user: user, withCredentials: true }).then((reponse) => {
+        axios.get(`http://localhost:3001/api/lectures`, { withCredentials: true }).then((reponse) => {
             this.setState({ lectures: reponse.data })
             this.getBookedLectures();
-        })
+        }).catch(err=>{ 
+            console.log(err);
+         });
     }
 
     setShow = (val) => { //Function to set the show variable
@@ -26,9 +27,8 @@ export class StudentHome extends Component {
     }
 
     getBookedLectures(){
-        const user = this.context.user;
 
-        axios.get(`http://localhost:3001/api/lectures/booked`, { user : user, withCredentials: true}).then((reponse) => {
+        axios.get(`http://localhost:3001/api/lectures/booked`, { withCredentials: true}).then((reponse) => {
             const newLectureArray = this.state.lectures.slice()
             reponse.data.map(bookedLecture => {
                 const index = this.state.lectures.findIndex(lecture =>
@@ -37,7 +37,9 @@ export class StudentHome extends Component {
                 newLectureArray[index].alreadyBooked = true;
             })
             this.setState({lectures: newLectureArray})
-        })
+        }).catch(err=>{ 
+            console.log(err);
+         });
     }
 
     /*
@@ -46,28 +48,30 @@ export class StudentHome extends Component {
     * Button that POST a request to book a seat for the session user
     */
     bookASeat(lectureId, date, index){
-        const user = this.context.user;
         const body = {
             lectureId: lectureId,
             date: date
         }
-        axios.post(`http://localhost:3001/api/lectures`, body, {user: user, withCredentials: true})
+        axios.post(`http://localhost:3001/api/lectures`, body, { withCredentials: true})
             .then(response => {
                 const newLectures = this.state.lectures.slice();
                 newLectures[index].alreadyBooked = true
                 this.setState({lectures: newLectures})
-            })
+            }).catch(err=>{ 
+                console.log(err);
+             });
     }
 
     cancelSeat(lectureId, date, index){
-        const user = this.context.user;
-        axios.delete(`http://localhost:3001/api/lectures/${lectureId}?date=${date}`, {user: user, withCredentials: true})
+        axios.delete(`http://localhost:3001/api/lectures/${lectureId}?date=${date}`, { withCredentials: true})
             .then(response => {
                 console.log(response)
                 const newLectures = this.state.lectures.slice();
                 newLectures[index].alreadyBooked = false
                 this.setState({lectures: newLectures})
-            })
+            }).catch(err=>{ 
+                console.log(err);
+             });
     }
 
     renderBookASeatButton(lecture, index){
@@ -128,7 +132,7 @@ export class StudentHome extends Component {
     render() {
         return (
             <>
-                <StudentNavbar setShow={this.setShow} history={this.props.history} context={this.props.context}/>
+                <StudentNavbar setShow={this.setShow} />
                 {this.state.show === 0 && this.state.lectures != null &&
                     this.renderLectureTables()
                 }

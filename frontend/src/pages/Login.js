@@ -102,7 +102,7 @@ class Login extends Component{
                 </Navbar>
                 <Form style={{display: "block", marginLeft: "auto", marginRight: "auto", paddingTop: "20vh", width: "300px",boxShadow: "2px 2px #c7c7c7", borderStyle: "solid", borderWidth: "1px", borderRadius: "15px", borderColor: "#a4a4a4", backgroundColor: "#fafafa", padding: "40px", marginTop: "23vh"}}>
                     <Form.Group controlId="formBasicEmail">
-                        <Form.Label>Username</Form.Label>
+                        <Form.Label style={{display: "block", textAlign: "center"}}>Username</Form.Label>
                         <Form.Control type="text" placeholder="Your domain username" onChange={this.usernameChange} value={this.state.username} isInvalid={this.state.showInvalidU}/>
                         {   !this.state.showErr
                             ? <><Form.Text className="text-muted">Enter valid domain username</Form.Text></>
@@ -110,7 +110,7 @@ class Login extends Component{
                         }                        
                     </Form.Group>
                     <Form.Group controlId="formBasicPassword">
-                        <Form.Label>Password</Form.Label>
+                        <Form.Label style={{display: "block", textAlign: "center"}}>Password</Form.Label>
                         <Form.Control type="password" placeholder="Password" onChange={this.passwordChange} value={this.state.password} isInvalid={this.state.showInvalidP}/>
                         {   this.state.showErr
                             ? <><Form.Text style={{color: "red", paddingTop: "5px", paddingBottom: "5px"}}>Invalid credentials</Form.Text></>

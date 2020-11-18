@@ -13,7 +13,7 @@ class StudentNavbar extends Component {
 
     redirHome = (e) => { //Function that redirects to the home page
         e.preventDefault();
-        this.props.history.push("/");
+        this.props.history.push("/studentHome");
     }
 
     showCalendar = () => { //Function called when Calendar link is selected

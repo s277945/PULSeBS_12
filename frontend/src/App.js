@@ -25,7 +25,7 @@ class App extends Component {
               <StudentHome />
             </PrivateRoute>
             <PrivateRoute path='/teacherHome' userType='t'>
-              {/* <TeacherHome /> */}
+              <TeacherHome />
             </PrivateRoute>
           </Switch>
         </Router>
