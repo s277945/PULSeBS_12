@@ -1,5 +1,6 @@
 import React, { useContext, createContext, useState } from "react";
 import {login, logout} from '../api/api';
+import axios from 'axios';
 
 import {
   Route,
@@ -15,8 +16,10 @@ import {
 
 export const authContext = createContext();
 
+
 export function ProvideAuth({ children }) {
     const auth = useProvideAuth();
+    
     return (
       <authContext.Provider value={auth}>
         {children}
@@ -56,10 +59,23 @@ function useProvideAuth() {
     return logout()
   };
 
+  const axiosInst = axios.create(); // create axios instance to manage interceptors
+
+  axiosInst.interceptors.response.use(// create response interceptor
+    (response) => {return response},
+    async function (error) {
+      if (error.response.status === 403 || error.response.status === 401) {// in case of expired jwt token
+        signout();// perform signout from useProvideAuth() instance method
+      }
+      return Promise.reject(error);
+    }
+  );
+
   return {
     user,
     signin,
-    signout
+    signout,
+    axiosInst
   };
 }
 

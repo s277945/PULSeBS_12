@@ -3,7 +3,7 @@
 
  function update(component) {
    let lecList = [];
-         axios.get(`http://localhost:3001/api/lectures`, { withCredentials: true })
+        component.context.axiosInst.get(`http://localhost:3001/api/lectures`, { withCredentials: true })
              .then(res => {
                  console.log(res.data);
                  lecList = res.data;

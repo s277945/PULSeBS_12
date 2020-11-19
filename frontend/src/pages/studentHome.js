@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import axios from 'axios'
 import StudentNavbar from './studentNavbar'
 import Table from 'react-bootstrap/Table'
 import Button from 'react-bootstrap/Button'
@@ -15,7 +14,7 @@ export class StudentHome extends Component {
     componentDidMount() {
         
         // Get students lectures
-        axios.get(`http://localhost:3001/api/lectures`, { withCredentials: true }).then((reponse) => {
+        this.context.axiosInst.get(`http://localhost:3001/api/lectures`, { withCredentials: true }).then((reponse) => {
             this.setState({ lectures: reponse.data })
             
             // Then get his booked lectures
@@ -31,7 +30,7 @@ export class StudentHome extends Component {
 
     getBookedLectures(){
         // Go through all lectures, if its a booked one, put alreadyBooked to true
-        axios.get(`http://localhost:3001/api/lectures/booked`, { withCredentials: true}).then((reponse) => {
+        this.context.axiosInst.get(`http://localhost:3001/api/lectures/booked`, { withCredentials: true}).then((reponse) => {
             const newLectureArray = this.state.lectures.slice()
             reponse.data.map(bookedLecture => {
                 const index = this.state.lectures.findIndex(lecture =>
@@ -56,7 +55,7 @@ export class StudentHome extends Component {
             lectureId: lectureId,
             date: date
         }
-        axios.post(`http://localhost:3001/api/lectures`, body, { withCredentials: true})
+        this.context.axiosInst.post(`http://localhost:3001/api/lectures`, body, { withCredentials: true})
             .then(response => {
                 const newLectures = this.state.lectures.slice();
                 newLectures[index].alreadyBooked = true
@@ -67,7 +66,7 @@ export class StudentHome extends Component {
     }
 
     cancelSeat(lectureId, date, index){
-        axios.delete(`http://localhost:3001/api/lectures/${lectureId}?date=${date}`, { withCredentials: true})
+        this.context.axiosInst.delete(`http://localhost:3001/api/lectures/${lectureId}?date=${date}`, { withCredentials: true})
             .then(response => {
                 console.log(response)
                 const newLectures = this.state.lectures.slice();
