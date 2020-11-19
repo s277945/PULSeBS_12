@@ -7,6 +7,12 @@ import {
   useHistory
 } from "react-router-dom";
 
+
+/**
+ * Here is all the FN neede to handle the authentification of the user.
+ * His information a both saved in a context called "authContext" and in the browser memory with the sessionStorage system
+ */
+
 export const authContext = createContext();
 
 export function ProvideAuth({ children }) {
@@ -22,6 +28,9 @@ export function useAuth() {
   return useContext(authContext);
 }
 
+/**
+ * Internal FN !
+ */
 function useProvideAuth() {
     const [user, setUser] = useState(getUserSession());
     let history = useHistory();
@@ -54,6 +63,9 @@ function useProvideAuth() {
   };
 }
 
+/**
+ * PrivateRoute : user must be logged and be the correct userType to access this
+ */
 export function PrivateRoute({ children, userType, ...rest }) {
   let auth = useAuth();
   return (

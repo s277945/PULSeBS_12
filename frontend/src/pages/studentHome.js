@@ -12,10 +12,13 @@ export class StudentHome extends Component {
         show : 0, //This state variable is used to choose the content to show
         lectures: null,
     }
-
     componentDidMount() {
+        
+        // Get students lectures
         axios.get(`http://localhost:3001/api/lectures`, { withCredentials: true }).then((reponse) => {
             this.setState({ lectures: reponse.data })
+            
+            // Then get his booked lectures
             this.getBookedLectures();
         }).catch(err=>{ 
             console.log(err);
@@ -27,7 +30,7 @@ export class StudentHome extends Component {
     }
 
     getBookedLectures(){
-
+        // Go through all lectures, if its a booked one, put alreadyBooked to true
         axios.get(`http://localhost:3001/api/lectures/booked`, { withCredentials: true}).then((reponse) => {
             const newLectureArray = this.state.lectures.slice()
             reponse.data.map(bookedLecture => {
