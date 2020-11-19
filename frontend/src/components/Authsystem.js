@@ -52,12 +52,13 @@ function useProvideAuth() {
     })
   };
 
-  const clearSession = () => {
-    sessionStorage.clear();
-    setUser(null);
+  const clearSession = () => {console.log(user);
+    localStorage.clear();// remove only username and user type session storage entries, keep redir
+    setUser(null);    
   };
 
   const signout = () => {
+    localStorage.clear();
     sessionStorage.clear();
     setUser(null);
     return logout()
@@ -101,8 +102,8 @@ export function PrivateRoute({ children, userType, ...rest }) {
  */
 function getUserSession() {
     const user = {
-        user: sessionStorage.getItem("userName"),
-        userType: sessionStorage.getItem("userType")
+        user: localStorage.getItem("userName"),
+        userType: localStorage.getItem("userType")
     }
     if(!user.user || !user.userType) return null;
 
@@ -110,7 +111,7 @@ function getUserSession() {
 }
 
 function saveUserSession(user) {
-    sessionStorage.setItem("userName", user.user);// set session storage data (user name, user type)
-    sessionStorage.setItem("userType", user.userType);
+    localStorage.setItem("userName", user.userName);// set session storage data (user name, user type)
+    localStorage.setItem("userType", user.userType);
 
 }

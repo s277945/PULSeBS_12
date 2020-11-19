@@ -43,20 +43,25 @@ export class Login extends Component{
 
     handleLogin = (e) => {
         e.preventDefault()
-
         // Entries check
         if (this.state.username==="" || this.state.password==="") {
             if (this.state.username==="") this.setState({ showInvalidU: true });
             if (this.state.password==="") this.setState({ showInvalidP: true });
             return;
         }
-
         // Use auth system to login the user                    
-        
-        let history = this.props.history;
         this.context.signin(this.state.username, this.state.password)
             .then((user) => {
+                let history = this.props.history;
+                let location = this.props.location;
 
+                // If user was redirect here, direct him back to the url he was coming  from
+                if(location.state  && location.state.from && sessionStorage.getItem("redir")===this.context.user.userName){
+                    history.replace(location.state.from)
+                    return;
+                }
+                sessionStorage.removeItem("redir");// delete previous redir value
+                sessionStorage.setItem("redir", user.userName);//set new redir value
                 // If he wen to /login directly, check his type and redirect him to the correct homepage
                 switch(user.userType){
                     case 's':
@@ -80,20 +85,9 @@ export class Login extends Component{
         this.setState({ username: "", password: "", showInvalidU: false, showInvalidP: false });// reset invalid form state, reset form content
     }
 
-    handleRedirect = () => {
-        let history = this.props.history;
-        let location = this.props.location;
-        // If user was redirect here, direct him back to the url he was coming  from
-        if(this.context.user){
-            if(location.state  && location.state.from) history.replace(location.state.from);
-            else if(this.context.user.userType === "s") history.replace("/studentHome");
-            else if(this.context.user.userType === "t") history.replace("/teacherHome");
-            else return;
-        }
-    }
+    
 
     render() { 
-        {this.handleRedirect()}
         return (
             <div style={{backgroundColor: "#efefef", height: "100vh"}}>
                 <Navbar bg="dark" variant="dark">
