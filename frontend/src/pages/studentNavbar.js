@@ -13,6 +13,7 @@ class StudentNavbar extends Component {
 
     redirHome = (e) => { //Function that redirects to the home page
         e.preventDefault();
+        this.props.setShow(0);
         this.props.history.push("/studentHome");
     }
 

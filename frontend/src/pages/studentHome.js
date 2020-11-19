@@ -102,7 +102,7 @@ export class StudentHome extends Component {
 
     renderLectureTables(){
         return (
-            <div class="app-background">
+            <div className="app-background">
                 <br></br>
                 <Table striped bordered hover style={{backgroundColor: "#fff"}}>
                     <thead>
@@ -128,14 +128,16 @@ export class StudentHome extends Component {
         )
     }
 
+    renderContent = () => {
+        if (this.state.show === 0 && this.state.lectures != null) return (this.renderLectureTables());
+        else return(<div></div>);
+    }
 
     render() {
         return (
             <>
-                <StudentNavbar setShow={this.setShow} />
-                {this.state.show === 0 && this.state.lectures != null &&
-                    this.renderLectureTables()
-                }
+                <StudentNavbar setShow={this.setShow}/>
+                {this.renderContent()}
             </>
         )
     }

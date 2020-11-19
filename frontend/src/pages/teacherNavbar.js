@@ -18,7 +18,8 @@ class TeacherNavbar extends Component {
 
      redirHome = (e) => { //function that redirects to the home page
          e.preventDefault();
-         this.props.history.push("/");
+         this.props.setShow(0);
+         this.props.history.push("/teacherHome");
      }
 
      handleLogout = () => {
