@@ -33,7 +33,7 @@ class StudentNavbar extends Component {
         })
     }
     render() {
-        console.log(this.state.lectureslink ? "nav-link active" : "nav-link");
+        
         return (
             <>
                 <Navbar bg="dark" variant="dark">
