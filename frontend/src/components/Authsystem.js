@@ -1,6 +1,5 @@
 import React, { useContext, createContext, useState } from "react";
-import {login, logout} from '../api/api';
-import axios from 'axios';
+import {login, logout, useResponseInterceptor} from '../api/api';
 
 import {
   Route,
@@ -19,7 +18,7 @@ export const authContext = createContext();
 
 export function ProvideAuth({ children }) {
     const auth = useProvideAuth();
-    
+    useResponseInterceptor(auth);// set up interceptor with auth data
     return (
       <authContext.Provider value={auth}>
         {children}

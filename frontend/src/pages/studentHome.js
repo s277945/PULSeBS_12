@@ -2,8 +2,8 @@ import React, { Component } from 'react'
 import StudentNavbar from './studentNavbar'
 import Table from 'react-bootstrap/Table'
 import Button from 'react-bootstrap/Button'
-import {authContext} from '../components/Authsystem'
-import {getLectures} from '../api/api'
+import { authContext } from '../components/Authsystem'
+import { getLectures, getStudentBookedLectures, postStudentBookedLecture, deleteStudentBookedLecture } from '../api/api'
 
 export class StudentHome extends Component {
     static contextType = authContext
@@ -16,6 +16,7 @@ export class StudentHome extends Component {
         // Get students lectures
         getLectures().then(response => {
             this.setState({ lectures: response.data })
+            this.setBookedLectures();
         })
         .catch(err => {
             console.log(err);
@@ -26,10 +27,11 @@ export class StudentHome extends Component {
         this.setState({show : val});
     }
 
-    getBookedLectures(){
+    setBookedLectures(){
         // Go through all lectures, if its a booked one, put alreadyBooked to true
-        this.context.axiosInst.get(`http://localhost:3001/api/lectures/booked`, { withCredentials: true}).then((reponse) => {
-            const newLectureArray = this.state.lectures.slice()
+        let newLectureArray;
+        getStudentBookedLectures().then((reponse) => {
+            newLectureArray = this.state.lectures.slice()
             reponse.data.map(bookedLecture => {
                 const index = this.state.lectures.findIndex(lecture =>
                     lecture.Course_Ref === bookedLecture.Course_Ref && lecture.Date === bookedLecture.Date_Ref
@@ -41,6 +43,7 @@ export class StudentHome extends Component {
         }).catch(err=>{ 
             console.log(err);
          });
+                
     }
 
     /*
@@ -53,7 +56,7 @@ export class StudentHome extends Component {
             lectureId: lectureId,
             date: date
         }
-        this.context.axiosInst.post(`http://localhost:3001/api/lectures`, body, { withCredentials: true})
+        postStudentBookedLecture(body)
             .then(response => {
                 const newLectures = this.state.lectures.slice();
                 newLectures[index].alreadyBooked = true
@@ -64,7 +67,7 @@ export class StudentHome extends Component {
     }
 
     cancelSeat(lectureId, date, index){
-        this.context.axiosInst.delete(`http://localhost:3001/api/lectures/${lectureId}?date=${date}`, { withCredentials: true})
+        deleteStudentBookedLecture(lectureId, date)
             .then(response => {
                 console.log(response)
                 const newLectures = this.state.lectures.slice();

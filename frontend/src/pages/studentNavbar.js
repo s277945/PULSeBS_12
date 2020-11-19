@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import Nav from 'react-bootstrap/Nav'
 import Navbar from 'react-bootstrap/Navbar'
-import {authContext} from '../components/Authsystem'
+import { authContext } from '../components/Authsystem'
 import { withRouter } from 'react-router-dom';
 
 class StudentNavbar extends Component { 
