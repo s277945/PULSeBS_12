@@ -109,13 +109,14 @@ export class Login extends Component{
                             : null
                         }
                     </Form.Group>
-
-                    <Button data-testid={"submit"} variant="primary" type="submit" onClick={this.handleLogin} style={{marginRight: "25px", paddingRight: "17px", paddingLeft: "17px"}}>
-                        Login
-                    </Button>
-                    <Button data-testid={"reset"} variant="secondary" type="submit" onClick={this.handleReset} >
-                        Reset
-                    </Button>
+                    <div style={{display: "flex", flexWrap: "nowrap",  justifyContent: "center"}}>
+                        <Button data-testid={"submit"} variant="primary" type="submit" onClick={this.handleLogin} style={{marginRight: "25px", paddingRight: "17px", paddingLeft: "17px"}}>
+                            Login
+                        </Button>
+                        <Button data-testid={"reset"} variant="secondary" type="submit" onClick={this.handleReset} >
+                            Reset
+                        </Button>
+                    </div>
                 </Form>
             </div>
         )
