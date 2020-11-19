@@ -8,7 +8,7 @@ import update from './update.js'
 export class TeacherTabLec extends Component {
 
 
-    state = { tableData: [], modalShow: 0, selectedLec: {} }
+    state = { tableData: [], modalShow: false, selectedLec: {} }
 
     componentDidMount() {
         update(this);
@@ -22,19 +22,19 @@ export class TeacherTabLec extends Component {
     }
 
     handleClose = () => {
-        this.setState({ modalShow: 0 })
+        this.setState({ modalShow: false })
     }
 
     handleShow = () => {
-        this.setState({ modalShow: 1 })
+        this.setState({ modalShow: true })
     }
 
     render() {
 
         let tableBody = []
-
+        let k=0;
         this.state.tableData.forEach(element => {
-            tableBody.push(<tr>
+            tableBody.push(<tr key={k++}>
                 <td>{element.Course_Ref}</td>
                 <td>{element.Name}</td>
                 <td>{element.Date}</td>

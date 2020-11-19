@@ -35,6 +35,7 @@ export class StudentHome extends Component {
                     lecture.Course_Ref === bookedLecture.Course_Ref && lecture.Date === bookedLecture.Date_Ref
                 )
                 newLectureArray[index].alreadyBooked = true;
+                return index;
             })
             this.setState({lectures: newLectureArray})
         }).catch(err=>{ 
