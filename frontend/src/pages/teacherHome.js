@@ -20,14 +20,14 @@ export class TeacherHome extends Component {
     //Function that displays the correct content based on this.state.show
     contentSelect = () => { 
         if (this.state.show === 0) return (
-            <div class="app-background">
+            <div className="app-background">
                 <br></br>
                 <TeacherTabLec history={this.props.history}></TeacherTabLec>
             </div>
         )
         
         if (this.state.show === 1) return (
-            <div class="app-background">
+            <div className="app-background">
                 <TeacherTabSL history={this.props.history}></TeacherTabSL>
             </div>
         )

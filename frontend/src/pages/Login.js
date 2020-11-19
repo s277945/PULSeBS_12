@@ -43,7 +43,6 @@ export class Login extends Component{
 
     handleLogin = (e) => {
         e.preventDefault()
-        console.log(this.state.username + " " + this.state.password);
 
         // Entries check
         if (this.state.username==="" || this.state.password==="") {
@@ -52,16 +51,19 @@ export class Login extends Component{
             return;
         }
 
+        // Use auth system to login the user
         this.context.signin(this.state.username, this.state.password)
             .then((user) => {
                 let history = this.props.history;
                 let location = this.props.location;
 
+                // If user was redirect here, direct him back to the url he was coming  from
                 if(location.state  && location.state.from){
                     history.replace(location.state.from)
                     return;
                 }
 
+                // If he wen to /login directly, check his type and redirect him to the correct homepage
                 switch(user.userType){
                     case 's':
                         history.replace('/studentHome')
@@ -77,20 +79,6 @@ export class Login extends Component{
             .catch(err => {
                 console.log(err); this.setState({ showErr : true});
             })
-
-        // axios.post(`http://localhost:3001/api/login`, { userName: this.state.username, password: this.state.password },{ withCredentials: true, credentials: 'include' })//send post login request
-        // .then((res)=> {
-        //     console.log(res);
-        //     if(typeof res != 'undefined' && res.status===200) {
-        //         let data= res.data;
-        //         let uName = data.userID;
-        //         let uType = data.userType;
-        //         userIdentity.saveUserSession(this.props.context, uName, uType);//set user session data
-        //         this.setRedirect(uType==='s' ? 2 : 1 );//set redirect value accordingly
-        //     }
-        //     if(res) console.log(res.status);
-        // })
-        // .catch(err=>{ });
     }
 
     handleReset = (e) => {

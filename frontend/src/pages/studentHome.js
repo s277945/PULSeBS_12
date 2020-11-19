@@ -12,10 +12,13 @@ export class StudentHome extends Component {
         show : 0, //This state variable is used to choose the content to show
         lectures: null,
     }
-
     componentDidMount() {
+        
+        // Get students lectures
         axios.get(`http://localhost:3001/api/lectures`, { withCredentials: true }).then((reponse) => {
             this.setState({ lectures: reponse.data })
+            
+            // Then get his booked lectures
             this.getBookedLectures();
         }).catch(err=>{ 
             console.log(err);
@@ -27,7 +30,7 @@ export class StudentHome extends Component {
     }
 
     getBookedLectures(){
-
+        // Go through all lectures, if its a booked one, put alreadyBooked to true
         axios.get(`http://localhost:3001/api/lectures/booked`, { withCredentials: true}).then((reponse) => {
             const newLectureArray = this.state.lectures.slice()
             reponse.data.map(bookedLecture => {
@@ -35,6 +38,7 @@ export class StudentHome extends Component {
                     lecture.Course_Ref === bookedLecture.Course_Ref && lecture.Date === bookedLecture.Date_Ref
                 )
                 newLectureArray[index].alreadyBooked = true;
+                return index;
             })
             this.setState({lectures: newLectureArray})
         }).catch(err=>{ 
@@ -102,7 +106,7 @@ export class StudentHome extends Component {
 
     renderLectureTables(){
         return (
-            <div class="app-background">
+            <div className="app-background">
                 <br></br>
                 <Table striped bordered hover style={{backgroundColor: "#fff"}}>
                     <thead>
@@ -128,14 +132,16 @@ export class StudentHome extends Component {
         )
     }
 
+    renderContent = () => {
+        if (this.state.show === 0 && this.state.lectures != null) return (this.renderLectureTables());
+        else return(<div></div>);
+    }
 
     render() {
         return (
             <>
-                <StudentNavbar setShow={this.setShow} />
-                {this.state.show === 0 && this.state.lectures != null &&
-                    this.renderLectureTables()
-                }
+                <StudentNavbar setShow={this.setShow}/>
+                {this.renderContent()}
             </>
         )
     }

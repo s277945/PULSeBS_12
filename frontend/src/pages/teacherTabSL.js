@@ -37,9 +37,9 @@
      render() {
 
          let body = []
-
+         let k=0;
          this.state.tableData.forEach(row => {
-             body.push(<tr>
+             body.push(<tr key={k++}>
                  <td>{row.Course_Ref}</td>
                  <td>{row.Name}</td>
                  <td>{row.Date}</td>
