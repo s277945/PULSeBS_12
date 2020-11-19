@@ -44,12 +44,17 @@ function useProvideAuth() {
     }
 
 
-    const signin = (userName, password, cb) => {
+  const signin = (userName, password, cb) => {
     return login(userName, password).then((userr) => {
         saveUserSession(userr)
         setUser(userr)
         return userr 
     })
+  };
+
+  const clearSession = () => {
+    sessionStorage.clear();
+    setUser(null);
   };
 
   const signout = () => {
@@ -63,6 +68,7 @@ function useProvideAuth() {
     user,
     signin,
     signout,
+    clearSession
   };
 }
 

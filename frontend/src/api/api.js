@@ -18,7 +18,7 @@ export function useResponseInterceptor(auth) { // function to set up response in
             }
 
             if (error.response.status === 403 || error.response.status === 401) {// in case of expired jwt token
-                auth.signout();// perform signout from useProvideAuth() instance method
+                auth.clearSession(); // clear session data from useProvideAuth() instance method
             }
             return Promise.reject(error);
         }
