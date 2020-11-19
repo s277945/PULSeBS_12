@@ -3,6 +3,7 @@ import StudentNavbar from './studentNavbar'
 import Table from 'react-bootstrap/Table'
 import Button from 'react-bootstrap/Button'
 import {authContext} from '../components/Authsystem'
+import {getLectures} from '../api/api'
 
 export class StudentHome extends Component {
     static contextType = authContext
@@ -12,16 +13,13 @@ export class StudentHome extends Component {
         lectures: null,
     }
     componentDidMount() {
-        
         // Get students lectures
-        this.context.axiosInst.get(`http://localhost:3001/api/lectures`, { withCredentials: true }).then((reponse) => {
-            this.setState({ lectures: reponse.data })
-            
-            // Then get his booked lectures
-            this.getBookedLectures();
-        }).catch(err=>{ 
+        getLectures().then(response => {
+            this.setState({ lectures: response.data })
+        })
+        .catch(err => {
             console.log(err);
-         });
+        })
     }
 
     setShow = (val) => { //Function to set the show variable
