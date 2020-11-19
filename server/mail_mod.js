@@ -7,7 +7,8 @@ const moment = require('moment');
 const app = express();
 app.disable("x-powered-by");
 
-cron.schedule('1 * * * * *', function() {
+const job=cron.schedule('1 * * * * *', function() {
+    console.log('sto per essere eseguito');
     const date=moment().format('YYYY-MM-DD HH:mm:ss');
     dao.checkDeadline(date)
         .then((list) => {
@@ -38,3 +39,4 @@ cron.schedule('1 * * * * *', function() {
 });
 
 app.listen(3002, () => console.log(`Server ready at port: ${3002}`));
+module.exports={job};
