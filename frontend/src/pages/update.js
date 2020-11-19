@@ -1,9 +1,8 @@
- import axios from 'axios';
-
+ import { getLectures } from '../api/api'
 
  function update(component) {
    let lecList = [];
-        component.context.axiosInst.get(`http://localhost:3001/api/lectures`, { withCredentials: true })
+        getLectures()
              .then(res => {
                  console.log(res.data);
                  lecList = res.data;

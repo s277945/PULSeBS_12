@@ -3,11 +3,9 @@ import Table from 'react-bootstrap/Table'
 import Button from 'react-bootstrap/Button'
 import Modal from 'react-bootstrap/Modal'
 import update from './update.js'
-import {authContext} from '../components/Authsystem'
 
 
 export class TeacherTabLec extends Component {
-    static contextType = authContext
 
 
     state = { tableData: [], modalShow: false, selectedLec: {} }

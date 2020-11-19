@@ -3,7 +3,7 @@ import StudentNavbar from './studentNavbar'
 import Table from 'react-bootstrap/Table'
 import Button from 'react-bootstrap/Button'
 import { authContext } from '../components/Authsystem'
-import { getStudentLectures, getStudentBookedLectures, postStudentBookedLecture, deleteStudentBookedLecture } from '../api/api'
+import { getLectures, getStudentBookedLectures, postStudentBookedLecture, deleteStudentBookedLecture } from '../api/api'
 
 export class StudentHome extends Component {
     static contextType = authContext
@@ -14,7 +14,7 @@ export class StudentHome extends Component {
     }
     componentDidMount() {
         // Get students lectures
-        getStudentLectures().then(response => {
+        getLectures().then(response => {
             this.setState({ lectures: response.data })
             this.setBookedLectures();
         })
