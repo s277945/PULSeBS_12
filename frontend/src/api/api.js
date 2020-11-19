@@ -26,8 +26,24 @@ axiosInst.interceptors.response.use(// create response interceptor
     }
 );
 
-export function getLectures(){
+export function getStudentLectures(){
+    // get list of lectures for student from server
     return axiosInst.get(`http://localhost:3001/api/lectures`, { withCredentials: true });
+}
+
+export function getStudentBookedLectures(){
+    // get list of student booked lectures for student from server
+    return axiosInst.get(`http://localhost:3001/api/lectures/booked`, { withCredentials: true});
+}
+
+export function postStudentBookedLecture(body){
+    // add booking for a lecture to server
+    return axiosInst.post(`http://localhost:3001/api/lectures`, body, { withCredentials: true})
+}
+
+export function deleteStudentBookedLecture(lectureId, date){
+    // tell server to cancel booking for a lecture
+    return axiosInst.delete(`http://localhost:3001/api/lectures/${lectureId}?date=${date}`, { withCredentials: true})
 }
 
 export async function login (userName, password){
