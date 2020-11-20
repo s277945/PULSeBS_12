@@ -47,8 +47,8 @@ class StudentNavbar extends Component {
                 <Navbar bg="dark" variant="dark">
                     <Navbar.Brand href="#" onClick={this.redirHome}>PULSeBS</Navbar.Brand>
                     <Nav className="mr-auto">
-                        <Nav.Link href="#lectures" active={this.state.lectureslink} onSelect={this.showLectures}>Lectures</Nav.Link>
-                        <Nav.Link href="#calendar" active={this.state.calendarlink} onSelect={this.showCalendar}>Calendar</Nav.Link>
+                        <Nav.Link data-testid={"studentLectures"} href="#lectures" active={this.state.lectureslink} onSelect={this.showLectures}>Lectures</Nav.Link>
+                        <Nav.Link data-testid={"calendar"} href="#calendar" active={this.state.calendarlink} onSelect={this.showCalendar}>Calendar</Nav.Link>
                     </Nav>
                     <Nav.Link data-testid="logout" href="#logout" onSelect={this.handleLogout}>Logout</Nav.Link>
                 </Navbar>
