@@ -43,7 +43,7 @@
                  <td>{row.Course_Ref}</td>
                  <td>{row.Name}</td>
                  <td>{row.Date}</td>
-                 <td><Button onClick={(e) => { e.preventDefault(); this.showList(row) }}>SHOW LIST</Button></td>
+                 <td><Button data-testid={"showList_"+k++} onClick={(e) => { e.preventDefault(); this.showList(row) }}>SHOW LIST</Button></td>
              </tr>)
          });
 
@@ -68,13 +68,13 @@
                              <th>List of students</th>
                          </tr>
                      </thead>
-                     <tbody>
+                     <tbody data-testid={"listTabSL"}>
                          {body}
                      </tbody>
                  </Table>
 
                  <Modal show={this.state.modal} onHide={this.handleClose}>
-                     <Modal.Header closeButton>
+                     <Modal.Header data-testid={"close"}  closeButton>
                          <Modal.Title>Students</Modal.Title>
                      </Modal.Header>
                      <Modal.Body class="app-element-background">{<Table striped bordered hover>
@@ -84,7 +84,7 @@
                              <th>Student Name</th>
                          </tr>
                      </thead>
-                     <tbody>
+                     <tbody data-testid={"studentsList"}>
                          {modalTableBody}
                      </tbody>
                  </Table>}</Modal.Body>

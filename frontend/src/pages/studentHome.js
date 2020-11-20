@@ -45,10 +45,10 @@ export class StudentHome extends Component {
                 return index;
             })
             this.setState({lectures: newLectureArray})
-        }).catch(err=>{ 
+        }).catch(err=>{
             console.log(err);
          });
-                
+
     }
 
     /*
@@ -66,7 +66,7 @@ export class StudentHome extends Component {
                 const newLectures = this.state.lectures.slice();
                 newLectures[index].alreadyBooked = true
                 this.setState({lectures: newLectures})
-            }).catch(err=>{ 
+            }).catch(err=>{
                 console.log(err);
              });
     }
@@ -78,7 +78,7 @@ export class StudentHome extends Component {
                 const newLectures = this.state.lectures.slice();
                 newLectures[index].alreadyBooked = false
                 this.setState({lectures: newLectures})
-            }).catch(err=>{ 
+            }).catch(err=>{
                 console.log(err);
              });
     }
@@ -99,10 +99,10 @@ export class StudentHome extends Component {
     renderCancelButton(lecture, index){
         return (
             <>
-            {lecture.alreadyBooked && 
+            {lecture.alreadyBooked &&
                 <Button onClick={() => this.cancelSeat(lecture.Course_Ref, lecture.Date, index)} variant="danger">Cancel</Button>
             }
-            {!lecture.alreadyBooked && 
+            {!lecture.alreadyBooked &&
                 <Button variant="danger" disabled>Cancel</Button>
             }
             </>
@@ -113,7 +113,7 @@ export class StudentHome extends Component {
         return (
             <div className="app-background">
                 <br></br>
-                <Table striped bordered hover style={{backgroundColor: "#fff"}}>
+                <Table data-testid={'lectures'} striped bordered hover style={{backgroundColor: "#fff"}}>
                     <thead>
                     <tr>
                         <th>Lecture</th>
@@ -123,7 +123,7 @@ export class StudentHome extends Component {
                     </tr>
                     </thead>
                     <tbody>
-                    {this.state.lectures.map((lecture,index) => 
+                    {this.state.lectures.map((lecture,index) =>
                         <tr key={index}>
                             <td>{lecture.Name}</td>
                             <td>{lecture.Date}</td>

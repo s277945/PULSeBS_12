@@ -29,7 +29,7 @@ describe('TEST LOGIN PAGE:', function () {
     it('should render app without crash', function () {
         ReactDOM.render(<App/>,container);
     });
-    it('should do login teacher',  function (done) {
+    it('should do login teacher',  async function () {
         const history=createMemoryHistory();
         history.push("/login");
         act(()=>{
@@ -43,7 +43,46 @@ describe('TEST LOGIN PAGE:', function () {
 
         fireEvent.change(username,{target: {value:'t987654' }});
         fireEvent.change(password,{target: {value:'scimmia' }});
-        act((doneFn)=>{
+        fireEvent.click(submit);
+        await waitForElement(()=>screen.getByTestId('teacherStudent'));
+        const list=screen.getByTestId('teacherStudent');
+        expect(list).toBeInTheDocument();
+        fireEvent.click(list);
+        await waitForElement(()=>screen.getByTestId('showList_1'));
+        const showList=screen.getByTestId('showList_1');
+        expect(screen.getByTestId('listTabSL')).toBeInTheDocument();
+        fireEvent.click(showList);
+        await waitForElement(()=>screen.getByText('s267348'));
+        //expect(screen.getByTestId('studentsList')).toHaveLenght(1);
+        expect(screen.getByTestId('studentsList')).toBeInTheDocument();
+        const close=screen.getByTestId('close');
+        expect(close).toBeInTheDocument();
+        fireEvent.click(close);
+        await waitForElement(()=>screen.getByTestId('showList_1'));
+        const log=screen.getByTestId('logout');
+        const homeRedirect=screen.getByTestId('homeRedirect');
+        const lecturesPage=screen.getByTestId('lecturesPage');
+        fireEvent.click(homeRedirect);
+        fireEvent.click(lecturesPage);
+        await waitForElement(()=>screen.getByTestId('showCourse_1'));
+        const showCourse=screen.getByTestId('showCourse_1');
+        fireEvent.click(showCourse);
+        await waitForElement(()=>screen.getByText('CANCEL LECTURE'));
+        //expect(screen.getByText('PDS Les:1')).toBeInTheDocument();
+        //***********this part will be modified when we create other functionalities
+        const modal1=screen.getByText('CANCEL LECTURE');
+        const modal2=screen.getByText('TURN INTO DISTANCE LECTURE');
+        fireEvent.click(modal1);
+        fireEvent.click(modal2);
+        //****************************************************
+        fireEvent.click(screen.getByTestId('close'));
+        fireEvent.click(log);
+        await waitForElement(()=>screen.getByTestId('username'));
+        expect(screen.getByTestId('username')).toBeInTheDocument();
+
+
+
+        /*act((doneFn)=>{
             fireEvent.click(submit);
             setTimeout(function () {
                 const list=screen.getByTestId('teacherStudent');
@@ -63,7 +102,7 @@ describe('TEST LOGIN PAGE:', function () {
                     }
                 );
             },3000);
-        });
+        });*/
 
     });
     it('should render login page correctly', function () {
