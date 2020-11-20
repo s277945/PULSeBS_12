@@ -62,7 +62,7 @@
                  <Table striped bordered hover style={{backgroundColor: "#fff"}}>
                      <thead>
                          <tr>
-                             <th>Lecture</th>
+                             <th>Course</th>
                              <th>Lecture name</th>
                              <th>Time and date</th>
                              <th>List of students</th>
