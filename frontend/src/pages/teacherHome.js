@@ -27,7 +27,6 @@ export class TeacherHome extends Component {
     contentSelect = () => { 
         if (this.state.show === 0) return (
             <div className="app-background">
-                <br></br>
                 <TeacherTabLec history={this.props.history}></TeacherTabLec>
             </div>
         )

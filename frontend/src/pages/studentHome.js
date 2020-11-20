@@ -113,7 +113,7 @@ export class StudentHome extends Component {
         return (
             <div className="app-background">
                 <br></br>
-                <Table data-testid={'lectures'} striped bordered hover style={{backgroundColor: "#fff"}}>
+                <Table striped bordered hover style={{backgroundColor: "#fff"}}>
                     <thead>
                     <tr>
                         <th>Lecture</th>
