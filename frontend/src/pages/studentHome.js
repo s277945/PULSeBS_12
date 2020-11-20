@@ -28,7 +28,7 @@ export class StudentHome extends Component {
         let redir = sessionStorage.getItem("redir");//get saved redir value
         if(pagestate!==null) this.setState({ show : parseInt(pagestate, 10) });
         else sessionStorage.setItem("pagestate", 0);//if none is present, save show state value
-        if(modal!==null) this.setState({ modal: JSON.parse(modal) });
+        if(modal!==null && pagestate==="0") this.setState({ modal: JSON.parse(modal) });
         else sessionStorage.setItem("modal", JSON.stringify(this.state.modal));//if none is present, save modal state value
         if(redir===null) sessionStorage.setItem("redir", this.context.user.userName);//if none is present, set new redir value
     }
