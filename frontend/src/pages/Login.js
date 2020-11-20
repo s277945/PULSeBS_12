@@ -60,8 +60,7 @@ export class Login extends Component{
                     history.replace(location.state.from)
                     return;
                 }
-                sessionStorage.removeItem("redir");// delete previous redir value
-                sessionStorage.removeItem("pagestate");// delete previous pagestate value
+                sessionStorage.clear();// delete previous session data
                 // If he wen to /login directly, check his type and redirect him to the correct homepage
                 switch(user.userType){
                     case 's':

@@ -23,10 +23,13 @@ export class StudentHome extends Component {
         .catch(err => {
             console.log(err);
         })
-        let pagestate = sessionStorage.getItem("pagestate");//get saved state value
+        let pagestate = sessionStorage.getItem("pagestate");//get saved show state value
+        let modal = sessionStorage.getItem("modal");//get saved modal state value
         let redir = sessionStorage.getItem("redir");//get saved redir value
-        if(pagestate!==null) this.setState({show : parseInt(pagestate, 10)});
-        else sessionStorage.setItem("pagestate", 0);//if none is present, save state value
+        if(pagestate!==null) this.setState({ show : parseInt(pagestate, 10) });
+        else sessionStorage.setItem("pagestate", 0);//if none is present, save show state value
+        if(modal!==null) this.setState({ modal: JSON.parse(modal) });
+        else sessionStorage.setItem("modal", JSON.stringify(this.state.modal));//if none is present, save modal state value
         if(redir===null) sessionStorage.setItem("redir", this.context.user.userName);//if none is present, set new redir value
     }
 
@@ -126,6 +129,7 @@ export class StudentHome extends Component {
     setModal(lecture, index, message) {// set modal state variables to passed values and show modal
         let newmodal = {show: 1, lecture: lecture, index: index, message: message};
         this.setState({ modal: newmodal });
+        sessionStorage.setItem("modal", JSON.stringify(newmodal));
     }
 
     renderModal() {
