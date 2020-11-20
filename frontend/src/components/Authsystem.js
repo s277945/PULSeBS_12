@@ -102,10 +102,10 @@ export function PrivateRoute({ children, userType, ...rest }) {
  */
 function getUserSession() {
     const user = {
-        user: localStorage.getItem("userName"),
+        userName: localStorage.getItem("userName"),
         userType: localStorage.getItem("userType")
     }
-    if(!user.user || !user.userType) return null;
+    if(!user.userName || !user.userType) return null;
 
     return user
 }

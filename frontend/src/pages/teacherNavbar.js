@@ -8,23 +8,30 @@
 class TeacherNavbar extends Component {
     static contextType = authContext
     state = { 
-        lectureslink: false,
+        lectureslink: true,
         studentslink: false
+    }
+    componentDidMount() {
+        let pagestate = parseInt(sessionStorage.getItem("pagestate"), 10);//get saved state value
+        if(pagestate===1) this.setState({ lectureslink: false,studentslink: true });
     }
      showLectures = () => { //function called when Lectures link is selected
          this.props.setShow(0);
+         sessionStorage.setItem("pagestate", 0);//save state value
          this.setState({ lectureslink: true,studentslink: false});
      }
 
      showStudentList = () =>{
          this.props.setShow(1)
+         sessionStorage.setItem("pagestate", 1);//save state value
          this.setState({ lectureslink: false,studentslink: true});
      }
 
      redirHome = (e) => { //function that redirects to the home page
          e.preventDefault();
          this.props.setShow(0);
-         this.setState({ lectureslink: false,studentslink: false});
+         sessionStorage.setItem("pagestate", 0);//save state value
+         this.setState({ lectureslink: true,studentslink: false});
          this.props.history.push("/teacherHome");
      }
 

@@ -61,7 +61,7 @@ export class Login extends Component{
                     return;
                 }
                 sessionStorage.removeItem("redir");// delete previous redir value
-                sessionStorage.setItem("redir", user.userName);//set new redir value
+                sessionStorage.removeItem("pagestate");// delete previous pagestate value
                 // If he wen to /login directly, check his type and redirect him to the correct homepage
                 switch(user.userType){
                     case 's':

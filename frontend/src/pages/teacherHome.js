@@ -11,7 +11,13 @@ export class TeacherHome extends Component {
         show : 0 //This state variable is used to choose the content to show
     }
 
-    
+    componentDidMount() {        
+        let pagestate = sessionStorage.getItem("pagestate");//get saved state value
+        let redir = sessionStorage.getItem("redir");//get saved redir value
+        if(pagestate!==null) this.setState({show : parseInt(pagestate, 10)});
+        else sessionStorage.setItem("pagestate", 0);//if none is present, save state value
+        if(redir===null) sessionStorage.setItem("redir", this.context.user.userName);//if none is present, set new redir value
+    }
     //Function to set the show variable
     setShow = (val) => { 
         this.setState({show : val});
