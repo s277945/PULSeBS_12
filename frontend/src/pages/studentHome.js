@@ -104,7 +104,7 @@ export class StudentHome extends Component {
                 <Button disabled>Book Seat</Button>
             }
             {!lecture.alreadyBooked &&
-                <Button onClick={() => this.setModal(lecture, index, "book")}>Book Seat</Button>
+                <Button onClick={() => this.setModal(lecture, index, "book a seat")}>Book Seat</Button>
             }
             </>
         )
@@ -114,7 +114,7 @@ export class StudentHome extends Component {
         return (
             <>
             {lecture.alreadyBooked && 
-                <Button onClick={() => this.setModal(lecture, index, "cancel")} variant="danger">Cancel</Button>
+                <Button onClick={() => this.setModal(lecture, index, "cancel your booking")} variant="danger">Cancel</Button>
             }
             {!lecture.alreadyBooked && 
                 <Button variant="danger" disabled>Cancel</Button>
@@ -130,7 +130,7 @@ export class StudentHome extends Component {
 
     renderModal() {
         let confirm = () => {// function called when "yes button is pressed"
-            if(this.state.modal.message==="cancel") this.cancelSeat(this.state.modal.lecture.Course_Ref, this.state.modal.lecture.Date, this.state.modal.index);// depending on operation, call cancel or book function
+            if(this.state.modal.message==="cancel your booking") this.cancelSeat(this.state.modal.lecture.Course_Ref, this.state.modal.lecture.Date, this.state.modal.index);// depending on operation, call cancel or book function
             else this.bookASeat(this.state.modal.lecture.Course_Ref, this.state.modal.lecture.Date, this.state.modal.index);
             this.modalClose();// then close modal
         }
@@ -138,10 +138,10 @@ export class StudentHome extends Component {
             <Modal show={this.state.modal.show} onHide={this.modalClose} style={{marginTop: "25vh"}}>                
                 <Modal.Header class="app-element-background" closeButton style={{minWidth: "498px"}}>
                     <div  style={{flexWrap: "wrap", justifyContent: "center", minWidth: "432px"}}>
-                        <p style={{paddingTop: "15px", paddingBottom: "30px", fontSize: "25px", textAlign: "center"}}>Do you want to {this.state.modal.message} this lecture?</p>
+                        <p style={{paddingTop: "15px", paddingBottom: "30px", fontSize: "25px", textAlign: "center"}}>Do you want to {this.state.modal.message} for this lecture?</p>
                         <div style={{display: "flex", flexWrap: "nowrap",  justifyContent: "space-around", paddingTop: "7px", paddingBottom: "7px"}}>
                             <div style={{marginLeft: "37px"}}>
-                                <Button onClick={() => confirm()} variant={this.state.modal.message==="cancel" ? "danger" : "primary"} style={{ marginRight: "27px", paddingRight: "17px", paddingLeft: "17px"}}>Yes</Button>
+                                <Button onClick={() => confirm()} variant={this.state.modal.message==="cancel your booking" ? "danger" : "primary"} style={{ marginRight: "27px", paddingRight: "17px", paddingLeft: "17px"}}>Yes</Button>
                                 <Button onClick={this.modalClose} variant="secondary" style={{ paddingRight: "17px", paddingLeft: "17px"}}>No</Button>
                             </div>
                         </div>
