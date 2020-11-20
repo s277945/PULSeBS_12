@@ -12,7 +12,7 @@ export class StudentHome extends Component {
     state = {
         show : 0, //This state variable is used to choose the content to show
         lectures: null,
-        modal: {show: 0, lecture: null, index: null, message: null}
+        modal: {show: 0, lecture: null, index: null, message: null} //this object contains all modal state variables
     }
     componentDidMount() {
         // Get students lectures
@@ -123,16 +123,16 @@ export class StudentHome extends Component {
         )
     }
 
-    setModal(lecture, index, message) {
+    setModal(lecture, index, message) {// set modal state variables to passed values and show modal
         let newmodal = {show: 1, lecture: lecture, index: index, message: message};
         this.setState({ modal: newmodal });
     }
 
     renderModal() {
-        let confirm = () => {
-            if(this.state.modal.message==="cancel") this.cancelSeat(this.state.modal.lecture.Course_Ref, this.state.modal.lecture.Date, this.state.modal.index);
+        let confirm = () => {// function called when "yes button is pressed"
+            if(this.state.modal.message==="cancel") this.cancelSeat(this.state.modal.lecture.Course_Ref, this.state.modal.lecture.Date, this.state.modal.index);// depending on operation, call cancel or book function
             else this.bookASeat(this.state.modal.lecture.Course_Ref, this.state.modal.lecture.Date, this.state.modal.index);
-            this.modalClose();
+            this.modalClose();// then close modal
         }
         return (
             <Modal show={this.state.modal.show} onHide={this.modalClose} style={{marginTop: "25vh"}}>                
