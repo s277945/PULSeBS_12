@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import StudentNavbar from './studentNavbar'
 import Table from 'react-bootstrap/Table'
 import Button from 'react-bootstrap/Button'
+import Modal from 'react-bootstrap/Modal'
 import { authContext } from '../components/Authsystem'
 import { getLectures, getStudentBookedLectures, postStudentBookedLecture, deleteStudentBookedLecture } from '../api/api'
 
@@ -11,6 +12,7 @@ export class StudentHome extends Component {
     state = {
         show : 0, //This state variable is used to choose the content to show
         lectures: null,
+        modal: {show: 0, lecture: null, index: null, message: null}
     }
     componentDidMount() {
         // Get students lectures
@@ -30,6 +32,18 @@ export class StudentHome extends Component {
 
     setShow = (val) => { //Function to set the show variable
         this.setState({show : val});
+    }
+
+    modalClose = () => {
+        let newmodal = this.state.modal;
+        newmodal.show=0;
+        this.setState({ modal: newmodal });
+    }
+
+    modalShow = () => {
+        let newmodal = this.state.modal;
+        newmodal.show=1;
+        this.setState({ modal: newmodal });
     }
 
     setBookedLectures(){
@@ -90,7 +104,7 @@ export class StudentHome extends Component {
                 <Button disabled>Book Seat</Button>
             }
             {!lecture.alreadyBooked &&
-                <Button onClick={() => this.bookASeat(lecture.Course_Ref, lecture.Date, index)}>Book Seat</Button>
+                <Button onClick={() => this.setModal(lecture, index, "book")}>Book Seat</Button>
             }
             </>
         )
@@ -100,7 +114,7 @@ export class StudentHome extends Component {
         return (
             <>
             {lecture.alreadyBooked && 
-                <Button onClick={() => this.cancelSeat(lecture.Course_Ref, lecture.Date, index)} variant="danger">Cancel</Button>
+                <Button onClick={() => this.setModal(lecture, index, "cancel")} variant="danger">Cancel</Button>
             }
             {!lecture.alreadyBooked && 
                 <Button variant="danger" disabled>Cancel</Button>
@@ -109,10 +123,40 @@ export class StudentHome extends Component {
         )
     }
 
+    setModal(lecture, index, message) {
+        let newmodal = {show: 1, lecture: lecture, index: index, message: message};
+        this.setState({ modal: newmodal });
+    }
+
+    renderModal() {
+        let confirm = () => {
+            if(this.state.modal.message==="cancel") this.cancelSeat(this.state.modal.lecture.Course_Ref, this.state.modal.lecture.Date, this.state.modal.index);
+            else this.bookASeat(this.state.modal.lecture.Course_Ref, this.state.modal.lecture.Date, this.state.modal.index);
+            this.modalClose();
+        }
+        return (
+            <Modal show={this.state.modal.show} onHide={this.modalClose} style={{marginTop: "25vh"}}>                
+                <Modal.Header class="app-element-background" closeButton style={{minWidth: "498px"}}>
+                    <div  style={{flexWrap: "wrap", justifyContent: "center", minWidth: "432px"}}>
+                        <p style={{paddingTop: "15px", paddingBottom: "30px", fontSize: "25px", textAlign: "center"}}>Do you want to {this.state.modal.message} this lecture?</p>
+                        <div style={{display: "flex", flexWrap: "nowrap",  justifyContent: "space-around", paddingTop: "7px", paddingBottom: "7px"}}>
+                            <div style={{marginLeft: "37px"}}>
+                                <Button onClick={() => confirm()} variant={this.state.modal.message==="cancel" ? "danger" : "primary"} style={{ marginRight: "27px", paddingRight: "17px", paddingLeft: "17px"}}>Yes</Button>
+                                <Button onClick={this.modalClose} variant="secondary" style={{ paddingRight: "17px", paddingLeft: "17px"}}>No</Button>
+                            </div>
+                        </div>
+                    </div>
+                </Modal.Header>                
+            </Modal>
+        )
+    }
+
     renderLectureTables(){
         return (
             <div className="app-background">
-                <br></br>
+                <br/>
+                <h1 className="page-title">Lectures</h1>
+                <br/>
                 <Table striped bordered hover style={{backgroundColor: "#fff"}}>
                     <thead>
                     <tr>
@@ -147,6 +191,7 @@ export class StudentHome extends Component {
             <>
                 <StudentNavbar setShow={this.setShow}/>
                 {this.renderContent()}
+                {this.renderModal()}
             </>
         )
     }

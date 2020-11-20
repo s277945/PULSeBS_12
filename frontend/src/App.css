@@ -49,3 +49,7 @@
 .modal-header {
   background-color:  rgb(249, 249, 249);
 }
+
+.page-title {
+  text-align: center
+}
