@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import StudentNavbar from './studentNavbar'
 import Table from 'react-bootstrap/Table'
 import Button from 'react-bootstrap/Button'
-import Modal from 'react-bootstrap/Modal'
 import { authContext } from '../components/Authsystem'
 import { getLectures, getStudentBookedLectures, postStudentBookedLecture, deleteStudentBookedLecture } from '../api/api'
 
@@ -34,18 +33,6 @@ export class StudentHome extends Component {
         this.setState({show : val});
     }
 
-    modalClose = () => {
-        let newmodal = this.state.modal;
-        newmodal.show=0;
-        this.setState({ modal: newmodal });
-    }
-
-    modalShow = () => {
-        let newmodal = this.state.modal;
-        newmodal.show=1;
-        this.setState({ modal: newmodal });
-    }
-
     setBookedLectures(){
         // Go through all lectures, if its a booked one, put alreadyBooked to true
         let newLectureArray;
@@ -59,10 +46,10 @@ export class StudentHome extends Component {
                 return index;
             })
             this.setState({lectures: newLectureArray})
-        }).catch(err=>{ 
+        }).catch(err=>{
             console.log(err);
          });
-                
+
     }
 
     /*
@@ -80,7 +67,7 @@ export class StudentHome extends Component {
                 const newLectures = this.state.lectures.slice();
                 newLectures[index].alreadyBooked = true
                 this.setState({lectures: newLectures})
-            }).catch(err=>{ 
+            }).catch(err=>{
                 console.log(err);
              });
     }
@@ -92,7 +79,7 @@ export class StudentHome extends Component {
                 const newLectures = this.state.lectures.slice();
                 newLectures[index].alreadyBooked = false
                 this.setState({lectures: newLectures})
-            }).catch(err=>{ 
+            }).catch(err=>{
                 console.log(err);
              });
     }
@@ -104,7 +91,7 @@ export class StudentHome extends Component {
                 <Button disabled>Book Seat</Button>
             }
             {!lecture.alreadyBooked &&
-                <Button onClick={() => this.setModal(lecture, index, "book")}>Book Seat</Button>
+                <Button onClick={() => this.bookASeat(lecture.Course_Ref, lecture.Date, index)}>Book Seat</Button>
             }
             </>
         )
@@ -113,10 +100,10 @@ export class StudentHome extends Component {
     renderCancelButton(lecture, index){
         return (
             <>
-            {lecture.alreadyBooked && 
-                <Button onClick={() => this.setModal(lecture, index, "cancel")} variant="danger">Cancel</Button>
+            {lecture.alreadyBooked &&
+                <Button onClick={() => this.cancelSeat(lecture.Course_Ref, lecture.Date, index)} variant="danger">Cancel</Button>
             }
-            {!lecture.alreadyBooked && 
+            {!lecture.alreadyBooked &&
                 <Button variant="danger" disabled>Cancel</Button>
             }
             </>
@@ -154,10 +141,8 @@ export class StudentHome extends Component {
     renderLectureTables(){
         return (
             <div className="app-background">
-                <br/>
-                <h1 className="page-title">Lectures</h1>
-                <br/>
-                <Table striped bordered hover style={{backgroundColor: "#fff"}}>
+                <br></br>
+                <Table data-testid={'lectures'} striped bordered hover style={{backgroundColor: "#fff"}}>
                     <thead>
                     <tr>
                         <th>Lecture</th>
@@ -167,7 +152,7 @@ export class StudentHome extends Component {
                     </tr>
                     </thead>
                     <tbody>
-                    {this.state.lectures.map((lecture,index) => 
+                    {this.state.lectures.map((lecture,index) =>
                         <tr key={index}>
                             <td>{lecture.Name}</td>
                             <td>{lecture.Date}</td>
@@ -191,7 +176,6 @@ export class StudentHome extends Component {
             <>
                 <StudentNavbar setShow={this.setShow}/>
                 {this.renderContent()}
-                {this.renderModal()}
             </>
         )
     }

@@ -46,9 +46,9 @@ class TeacherNavbar extends Component {
          return (
              <>
                  <Navbar bg="dark" variant="dark">
-                     <Navbar.Brand href="#" onClick={this.redirHome}>PULSeBS</Navbar.Brand>
+                     <Navbar.Brand data-testid={"homeRedirect"} href="#" onClick={this.redirHome}>PULSeBS</Navbar.Brand>
                      <Nav className="mr-auto">
-                         <Nav.Link href="#lectures" active={this.state.lectureslink} onSelect={this.showLectures}>Lectures</Nav.Link>
+                         <Nav.Link data-testid={"lecturesPage"} href="#lectures" active={this.state.lectureslink} onSelect={this.showLectures}>Lectures</Nav.Link>
                          <Nav.Link data-testid="teacherStudent" href="#studentList" active={this.state.studentslink} onSelect={this.showStudentList}>Student List</Nav.Link>
                      </Nav>
                      <Nav.Link data-testid="logout" href="#logout" onSelect={this.handleLogout}>Logout</Nav.Link>

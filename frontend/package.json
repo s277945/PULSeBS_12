@@ -7,7 +7,6 @@
     "-": "0.0.1",
     "@reduxjs/toolkit": "^1.4.0",
     "@testing-library/jest-dom": "^4.2.4",
-    "@testing-library/react": "^9.5.0",
     "@testing-library/user-event": "^7.2.1",
     "axios": "^0.20.0",
     "bootstrap": "^4.5.3",
@@ -47,6 +46,7 @@
   },
   "devDependencies": {
     "@testing-library/dom": "^7.27.1",
+    "@testing-library/react": "^9.5.0",
     "history": "^5.0.0"
   }
 }

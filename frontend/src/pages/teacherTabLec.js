@@ -38,7 +38,7 @@ export class TeacherTabLec extends Component {
                 <td>{element.Course_Ref}</td>
                 <td>{element.Name}</td>
                 <td>{element.Date}</td>
-                <td><Button onClick={(e) => { e.preventDefault(); this.showModifications(element) }}>SELECT</Button></td>
+                <td><Button data-testid={"showCourse_"+k++} onClick={(e) => { e.preventDefault(); this.showModifications(element) }}>SELECT</Button></td>
             </tr>)
         });
 
@@ -62,7 +62,7 @@ export class TeacherTabLec extends Component {
                 </Table>
 
                 <Modal show={this.state.modalShow} onHide={this.handleClose}>
-                    <Modal.Header closeButton>
+                    <Modal.Header data-testid={"close"} closeButton>
                         <Modal.Title>{this.state.selectedLec.Name}<p style={{fontWeight:'normal'}}>{this.state.selectedLec.Date}</p></Modal.Title>
                     </Modal.Header>
                     <Modal.Body class="app-element-background"><Table striped bordered hover>
