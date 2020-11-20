@@ -43,7 +43,7 @@
                  <td>{row.Course_Ref}</td>
                  <td>{row.Name}</td>
                  <td>{row.Date}</td>
-                 <td><Button data-testid={"showList_"+k++} onClick={(e) => { e.preventDefault(); this.showList(row) }}>SHOW LIST</Button></td>
+                 <td style={{display: "flex", justifyContent: "flex-start"}}><Button style={{marginLeft: "5px"}} data-testid={"showList_"+k++} onClick={(e) => { e.preventDefault(); this.showList(row) }}>SHOW LIST</Button></td>
              </tr>)
          });
 

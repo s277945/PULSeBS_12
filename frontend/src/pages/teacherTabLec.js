@@ -38,7 +38,7 @@ export class TeacherTabLec extends Component {
                 <td>{element.Course_Ref}</td>
                 <td>{element.Name}</td>
                 <td>{element.Date}</td>
-                <td><Button data-testid={"showCourse_"+k++} onClick={(e) => { e.preventDefault(); this.showModifications(element) }}>SELECT</Button></td>
+                <td style={{display: "flex", justifyContent: "flex-start"}}><Button style={{marginLeft: "15px"}} data-testid={"showCourse_"+k++} onClick={(e) => { e.preventDefault(); this.showModifications(element) }}>SELECT</Button></td>
             </tr>)
         });
 
