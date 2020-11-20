@@ -3,11 +3,11 @@
  import Navbar from 'react-bootstrap/Navbar'
  import { authContext } from '../components/Authsystem'
  import { withRouter } from 'react-router-dom';
- 
+
 
 class TeacherNavbar extends Component {
     static contextType = authContext
-    state = { 
+    state = {
         lectureslink: true,
         studentslink: false
     }
@@ -48,10 +48,10 @@ class TeacherNavbar extends Component {
                  <Navbar bg="dark" variant="dark">
                      <Navbar.Brand href="#" onClick={this.redirHome}>PULSeBS</Navbar.Brand>
                      <Nav className="mr-auto">
-                         <Nav.Link href="#lectures" active={this.state.lectureslink} onSelect={this.showLectures}>Lectures</Nav.Link> 
-                         <Nav.Link href="#studentList" active={this.state.studentslink} onSelect={this.showStudentList}>Student List</Nav.Link>                     
+                         <Nav.Link href="#lectures" active={this.state.lectureslink} onSelect={this.showLectures}>Lectures</Nav.Link>
+                         <Nav.Link data-testid="teacherStudent" href="#studentList" active={this.state.studentslink} onSelect={this.showStudentList}>Student List</Nav.Link>
                      </Nav>
-                     <Nav.Link href="#logout" onSelect={this.handleLogout}>Logout</Nav.Link>
+                     <Nav.Link data-testid="logout" href="#logout" onSelect={this.handleLogout}>Logout</Nav.Link>
                  </Navbar>
              </>
          )
