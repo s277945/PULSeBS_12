@@ -62,10 +62,10 @@ export class StudentHome extends Component {
                 return index;
             })
             this.setState({lectures: newLectureArray})
-        }).catch(err=>{ 
+        }).catch(err=>{
             console.log(err);
          });
-                
+
     }
 
     /*
@@ -83,7 +83,7 @@ export class StudentHome extends Component {
                 const newLectures = this.state.lectures.slice();
                 newLectures[index].alreadyBooked = true
                 this.setState({lectures: newLectures})
-            }).catch(err=>{ 
+            }).catch(err=>{
                 console.log(err);
              });
     }
@@ -95,7 +95,7 @@ export class StudentHome extends Component {
                 const newLectures = this.state.lectures.slice();
                 newLectures[index].alreadyBooked = false
                 this.setState({lectures: newLectures})
-            }).catch(err=>{ 
+            }).catch(err=>{
                 console.log(err);
              });
     }
@@ -107,7 +107,7 @@ export class StudentHome extends Component {
                 <Button disabled>Book Seat</Button>
             }
             {!lecture.alreadyBooked &&
-                <Button onClick={() => this.setModal(lecture, index, "book a seat")}>Book Seat</Button>
+                <Button data-testid={'bookButton_'+index} onClick={() => this.setModal(lecture, index, "book a seat")}>Book Seat</Button>
             }
             </>
         )
@@ -116,10 +116,10 @@ export class StudentHome extends Component {
     renderCancelButton(lecture, index){
         return (
             <>
-            {lecture.alreadyBooked && 
-                <Button onClick={() => this.setModal(lecture, index, "cancel your booking")} variant="danger">Cancel</Button>
+            {lecture.alreadyBooked &&
+                <Button data-testid={'cancelButton_'+index} onClick={() => this.setModal(lecture, index, "cancel your booking")} variant="danger">Cancel</Button>
             }
-            {!lecture.alreadyBooked && 
+            {!lecture.alreadyBooked &&
                 <Button variant="danger" disabled>Cancel</Button>
             }
             </>
@@ -139,7 +139,7 @@ export class StudentHome extends Component {
             this.modalClose();// then close modal
         }
         return (
-            <Modal show={this.state.modal.show} onHide={this.modalClose} style={{marginTop: "25vh"}}>                
+            <Modal show={this.state.modal.show} onHide={this.modalClose} style={{marginTop: "25vh"}}>
                 <Modal.Header class="app-element-background" closeButton style={{minWidth: "498px"}}>
                     <div  style={{flexWrap: "wrap", justifyContent: "center", minWidth: "432px"}}>
                         <p style={{paddingTop: "15px", paddingBottom: "30px", fontSize: "25px", textAlign: "center"}}>Do you want to {this.state.modal.message} for this lecture?</p>
@@ -150,7 +150,7 @@ export class StudentHome extends Component {
                             </div>
                         </div>
                     </div>
-                </Modal.Header>                
+                </Modal.Header>
             </Modal>
         )
     }
