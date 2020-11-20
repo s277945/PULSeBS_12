@@ -4,14 +4,14 @@ import Navbar from 'react-bootstrap/Navbar'
 import { authContext } from '../components/Authsystem'
 import { withRouter } from 'react-router-dom';
 
-class StudentNavbar extends Component { 
+class StudentNavbar extends Component {
     static contextType = authContext
-    state = { 
+    state = {
                 lectureslink: true,
                 calendarlink: false
             }
 
-    componentDidMount() {        
+    componentDidMount() {
         let pagestate = parseInt(sessionStorage.getItem("pagestate"), 10);//get saved state value
         if(pagestate===1) this.setState({ lectureslink: false,calendarlink: true });
     }
@@ -41,16 +41,16 @@ class StudentNavbar extends Component {
         })
     }
     render() {
-        
+
         return (
             <>
                 <Navbar bg="dark" variant="dark">
                     <Navbar.Brand href="#" onClick={this.redirHome}>PULSeBS</Navbar.Brand>
                     <Nav className="mr-auto">
                         <Nav.Link href="#lectures" active={this.state.lectureslink} onSelect={this.showLectures}>Lectures</Nav.Link>
-                        <Nav.Link href="#calendar" active={this.state.calendarlink} onSelect={this.showCalendar}>Calendar</Nav.Link>                        
+                        <Nav.Link href="#calendar" active={this.state.calendarlink} onSelect={this.showCalendar}>Calendar</Nav.Link>
                     </Nav>
-                    <Nav.Link href="#logout" onSelect={this.handleLogout}>Logout</Nav.Link>
+                    <Nav.Link data-testid="logout" href="#logout" onSelect={this.handleLogout}>Logout</Nav.Link>
                 </Navbar>
             </>
         )
