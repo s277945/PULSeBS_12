@@ -47,7 +47,7 @@ describe('TEST LOGIN PAGE:', function () {
             fireEvent.click(submit);
             setTimeout(function () {
                 const list=screen.getByTestId('teacherStudent');
-                const log=screen.getByTestId('teacherLogout');
+                const log=screen.getByTestId('logout');
                 act(()=>{
                     fireEvent.click(list);
                     setTimeout(function () {

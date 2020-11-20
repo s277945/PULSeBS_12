@@ -4,27 +4,20 @@ import Navbar from 'react-bootstrap/Navbar'
 import { authContext } from '../components/Authsystem'
 import { withRouter } from 'react-router-dom';
 
-class StudentNavbar extends Component { 
+class StudentNavbar extends Component {
     static contextType = authContext
-    state = { 
-                lectureslink: false,
-                calendarlink: false
-            }
+
     showLectures = () => { //Function called when Lectures link is selected
         this.props.setShow(0);
-        this.setState({lectureslink: true,calendarlink: false});
     }
 
     redirHome = (e) => { //Function that redirects to the home page
         e.preventDefault();
-        this.props.setShow(0);
-        this.setState({lectureslink: false,calendarlink: false});
         this.props.history.push("/studentHome");
     }
 
     showCalendar = () => { //Function called when Calendar link is selected
         this.props.setShow(1);
-        this.setState({lectureslink: false,calendarlink: true});
     }
 
     handleLogout = () => {
@@ -33,16 +26,16 @@ class StudentNavbar extends Component {
         })
     }
     render() {
-        
+
         return (
             <>
                 <Navbar bg="dark" variant="dark">
                     <Navbar.Brand href="#" onClick={this.redirHome}>PULSeBS</Navbar.Brand>
                     <Nav className="mr-auto">
-                        <Nav.Link href="#lectures" active={this.state.lectureslink} onSelect={this.showLectures}>Lectures</Nav.Link>
-                        <Nav.Link href="#calendar" active={this.state.calendarlink} onSelect={this.showCalendar}>Calendar</Nav.Link>                        
+                        <Nav.Link href="#lectures" onSelect={this.showLectures}>Lectures</Nav.Link>
+                        <Nav.Link href="#calendar" onSelect={this.showCalendar}>Calendar</Nav.Link>
                     </Nav>
-                    <Nav.Link href="#logout" onSelect={this.handleLogout}>Logout</Nav.Link>
+                    <Nav.Link data-testid="logout" href="#logout" onSelect={this.handleLogout}>Logout</Nav.Link>
                 </Navbar>
             </>
         )
