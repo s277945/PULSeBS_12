@@ -34,7 +34,7 @@
   ```
   sonar-scanner.bat
   ```
-  wich will automatically use the preconfigured **sonar-project.properties** file
+  which will automatically use the preconfigured **sonar-project.properties** file
 
 ## ENDPOINTS
 
@@ -85,6 +85,10 @@
 - response body: {email1@gmail.com, email2@gmail.com}
 
 
- **DELETE /api/courseLectures/:courseId?date=...** 
+**DELETE /api/courseLectures/:courseId?date=...** 
  - query parameters: courseId, date
+ 
+ **PUT /api/lectures**
+ - body parameters: courseId, date, type
+ - body example: {"courseId": "C4567", "date": "2020-12-22 09:00:00", "type": "d"}
  

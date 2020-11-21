@@ -398,3 +398,15 @@ exports.emailSentUpdate = function(courseId, date){
         });
     })
 }
+
+/**
+ * Function to update type of lecture
+ *
+ * Receives as parameters: courseId, date, type
+ * */
+
+exports.changeTypeOfLecture = function(courseId, date, type){
+    return new Promise((resolve, reject)=>{
+        resolve(true);
+    })
+}
