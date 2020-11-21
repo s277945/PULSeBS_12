@@ -242,7 +242,7 @@ exports.getRole=function(userId){
 
 exports.getStudentList=function(courseId, date){
     let list=[];
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => { //Da aggiungere una query
         const sql='SELECT Student_Ref FROM Booking WHERE Course_Ref=? AND Date_Ref=?';
         db.all(sql,[courseId,date],(err,rows)=>{
 
@@ -406,7 +406,16 @@ exports.emailSentUpdate = function(courseId, date){
  * */
 
 exports.changeTypeOfLecture = function(courseId, date, type){
+    let lecture;
     return new Promise((resolve, reject)=>{
-        resolve(true);
+        if(type=='p') lecture='r';
+        else lecture='p';
+        const sql = 'UPDATE Lecture SET Type=? WHERE Course_Ref=? AND Date=?';
+        db.run(sql, [lecture, courseId, date], function (err) {
+            if(err) 
+                reject(err);
+            else 
+                resolve(true);
+        });
     })
 }
