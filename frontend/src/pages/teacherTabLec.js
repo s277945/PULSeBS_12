@@ -75,12 +75,19 @@ export class TeacherTabLec extends Component {
                 </Table>
 
                 <Modal show={this.state.modalShow} onHide={this.handleClose} style={{marginTop: "17vh"}}>
-                    <Modal.Header style={{flexWrap: "no-wrap"}} data-testid={"close"} closeButton>
+                    <Modal.Header style={{flexWrap: "no-wrap", minWidth: "507px"}} data-testid={"close"} closeButton>
                         <div>
-                            <Modal.Title style={{marginLeft: "43px", marginTop: "17px"}}><div><p style={{fontWeight:'bold', display: "inline"}}>Lecture:  </p><p style={{display: "inline", marginLeft: "10px"}}>{this.state.selectedLec.Name}</p></div><div><p style={{fontWeight:'bold', display: "inline"}}>Date: </p><p style={{display: "inline", marginLeft: "10px"}}>{this.state.selectedLec.Date}</p></div></Modal.Title>
+                            <Modal.Title style={{marginLeft: "43px", marginTop: "17px"}}>
+                                <div><p style={{fontWeight:'bold', display: "inline"}}>Lecture:  </p><p style={{display: "inline", marginLeft: "10px"}}>{this.state.selectedLec.Name}</p></div>
+                                <div><p style={{fontWeight:'bold', display: "inline"}}>Date: </p><p style={{display: "inline", marginLeft: "10px"}}>{this.state.selectedLec.Date}</p></div>
+                                <br></br>
+                                {}
+                                <div><p style={{fontSize: "small", color: "#e00d0d"}}>Lectures cannot be cancelled if there is less than 1 hour left to their scheduled time</p></div>
+                                <div><p style={{fontSize: "small", color: "#e00d0d"}}>Lectures cannot be changed to distance lectures if there are less than 30 minutes left to their scheduled time</p></div>
+                            </Modal.Title>
                             <div style={{display: "flex", flexWrap: "no-wrap", justifyContent: "flex-end", marginTop: "27px"}}>
-                                <Button variant="danger" style={{marginLeft: "27px", marginTop: "17px", marginBottom: "17px", paddingLeft: "9px", paddingRight: "9px" }} onClick={(e) => { this.handleCancel(e)  }}>CANCEL LECTURE</Button>
-                                <Button variant="info" style={{marginLeft: "17px", marginTop: "17px", marginBottom: "17px", paddingLeft: "9px", paddingRight: "9px" }} onClick={(e) => { e.preventDefault();  }}>TURN INTO DISTANCE LECTURE</Button>
+                                <Button variant="danger" style={{marginLeft: "27px", marginTop: "17px", marginBottom: "17px", paddingLeft: "11px", paddingRight: "11px" }} onClick={(e) => { this.handleCancel(e)  }}>CANCEL LECTURE</Button>
+                                <Button variant="info" style={{marginLeft: "17px", marginTop: "17px", marginBottom: "17px", paddingLeft: "11px", paddingRight: "11px" }} onClick={(e) => { e.preventDefault();  }}>TURN INTO DISTANCE LECTURE</Button>
                             </div>
                         </div>
                     </Modal.Header>
