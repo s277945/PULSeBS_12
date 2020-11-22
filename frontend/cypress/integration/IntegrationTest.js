@@ -48,11 +48,10 @@ describe('LOGIN PAGE', function () {
             .should('have.value','')
     });
     it('should submit with error show', function () {
-        cy.get('input:first').type('prova')
-            .should('have.value','prova')
         cy.get('.btn.btn-primary')
             .click()
         cy.get('input:last').should('have.class', 'is-invalid')
+        cy.get('input:first').should('have.class','is-invalid')
     });
     it('should reset form fields ', function () {
         const username=cy.get('input:first').type('prova').should('have.value','prova');
@@ -195,9 +194,11 @@ describe('STUDENT PAGE', function () {
         cy.location('pathname').should('include','/')
         cy.get('[data-testid="calendar"]').should('be.visible')
             .click()
+        cy.wait(100)
         cy.location('pathname').should('include','/studentHome')
     });
     it('should open correctly modal to cancel a seat and press nothing', function () {
+        cy.wait(200)
         cy.get('[data-testid="studentLectures"]')
             .click()
         cy.get('tbody>tr').eq(0).within(()=>{
@@ -275,22 +276,31 @@ describe('STUDENT PAGE', function () {
     });
 });
 describe('TEST AXIOS INTERCEPTOR', function () {
-    it('should generate error 401', function () {
+    beforeEach(() => {
+        cy.clearCookies()
+        Cypress.Cookies.debug(true)
+    })
+    it('should setup next test', function () {
         cy.visit('http://localhost:3000/')
         cy.get('input:first').type('t987654').should('have.value','t987654')
         cy.get('input:last').type('scimmia').should('have.value','scimmia')
         cy.get('.btn.btn-primary')
             .click()
-        cy.location('pathname').should('include','teacherHome')
-        cy.wait(1000)
-        cy.clearCookies()
+        cy.location('pathname').should('include','/teacherHome')
+        cy.get('[data-testid="teacherStudent"]').should('have.text', 'Student List')
+            .should('have.attr', 'href', '#studentList')
+            .click()
         //cy.clearCookies()
         cy.wait(100)
-        cy.visit('http://localhost:3000/teacherHome')
-        cy.server().should((server)=>{
-            expect(server.status).to.eq(404)
+        cy.location('pathname').should('include','/teacherHome')
+    });
+    it('should return 401', function () {
+        cy.get('tbody>tr').eq(0).within(()=>{
+            cy.get('.btn.btn-primary')
+                .click()
         })
-
+        cy.wait(200)
+        cy.location('pathname').should('include','/')
     });
 });
 
