@@ -151,6 +151,7 @@ describe(' TESTING PAGE STUDENT AND TEACHER', function () {
         fireEvent.click(confirmButton);
         await waitForElement(()=>screen.getByText('Do you want to book a seat for this lecture?'));
         const yes=screen.getByText('Yes');
+
         fireEvent.click(yes)
         await waitForElement(()=>screen.getByTestId('cancelButton_2'))
         const cancelButton=screen.getByTestId('cancelButton_2');

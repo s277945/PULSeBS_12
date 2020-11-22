@@ -27,7 +27,9 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "test:coverage": "npm test -- --coverage --watchAll=false",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "cypress": "react-scripts -r @cypress/instrument-cra start",
+    "test:cypress": "npx cypress open"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -45,8 +47,11 @@
     ]
   },
   "devDependencies": {
+    "@cypress/code-coverage": "^3.8.4",
+    "@cypress/instrument-cra": "^1.4.0",
     "@testing-library/dom": "^7.27.1",
     "@testing-library/react": "^9.5.0",
+    "babel-plugin-istanbul": "^6.0.0",
     "history": "^5.0.0"
   }
 }
