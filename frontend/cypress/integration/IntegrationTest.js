@@ -46,6 +46,9 @@ describe('LOGIN PAGE', function () {
         cy.get('input:first')
             .type('&')
             .should('have.value','')
+        cy.get('input:last')
+            .type('&')
+            .should('have.value','')
     });
     it('should submit with error show', function () {
         cy.get('.btn.btn-primary')
@@ -103,9 +106,10 @@ describe('TEACHER PAGE', function () {
         cy.get('.page-title').should('have.text','Student list')
         cy.get('tbody>tr').should('have.length',4)
     });
-    it('should render modal teacher page', function () {
+    it('should render modal student list page', function () {
         cy.get('tbody>tr').eq(0).find('.btn.btn-primary').should('have.text','SHOW LIST')
             .click()
+        cy.wait(100)
         cy.get('[data-testid="studentsList"]').should('have.length', 1)
             .within(()=>{
                 cy.get('tr').eq(0).should('contain','s267348')
@@ -114,7 +118,7 @@ describe('TEACHER PAGE', function () {
             .click({ force: true });
 
     });
-    it('should render modal student list page', function () {
+    it('should render modal lectures page', function () {
         cy.get('[data-testid="lecturesPage"]')
             .click()
         cy.get('tbody>tr').should('have.length',4)
@@ -126,7 +130,7 @@ describe('TEACHER PAGE', function () {
             .within(()=>{
                 cy.get('.btn.btn-danger')
                     .should('have.text', 'CANCEL LECTURE')
-                cy.get('.btn.btn-primary')
+                cy.get('.btn.btn-info')
                     .should('have.text', 'TURN INTO DISTANCE LECTURE')
             })
             .click({ force: true })
@@ -134,6 +138,39 @@ describe('TEACHER PAGE', function () {
             .should('be.visible')
             .click()
         cy.location('pathname').should('include','/')
+    });
+    /*it('should not cancel a lecture', function () {
+        cy.get('tbody>tr').should('have.length',4)
+            .eq(0).find('.btn.btn-primary')
+            .should('have.text', 'SELECT')
+            .should('be.visible')
+            .click();
+        cy.get('.modal').should('be.visible')
+            .within(()=>{
+                cy.get('.btn.btn-info')
+                    .should('have.text', 'TURN INTO DISTANCE LECTURE')
+                    .click()
+            })
+            .click({force:true})
+        cy.wait(100)
+        cy.get('.modal').should('not.be.visible')
+    });*/
+    it('should cancel a lecture', function () {
+        cy.get('tbody>tr').should('have.length',4)
+            .eq(0).find('.btn.btn-primary')
+            .should('have.text', 'SELECT')
+            .should('be.visible')
+            .click();
+        cy.get('.modal').should('be.visible')
+            .within(()=>{
+                cy.get('.btn.btn-danger')
+                    .should('have.text', 'CANCEL LECTURE')
+                    .click()
+            })
+            .click({force:true})
+        cy.wait(100)
+        cy.get('tbody>tr').should('have.length',3)
+
     });
     it('should logout', function () {
         cy.location('pathname').should('include','/teacherHome')
@@ -236,7 +273,6 @@ describe('STUDENT PAGE', function () {
                     .click()
 
             })
-            .click({force:true})
         cy.get('tbody>tr').eq(0).within(()=>{
             cy.get('.btn.btn-danger')
                 .should('not.be.enabled')
