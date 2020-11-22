@@ -115,11 +115,11 @@ describe('********TEST SERVER******', function () {
                 password: 'scimmia'
             })
             cookie = res.headers['set-cookie'];
-            res=await chai.request(url).delete('/api/courseLectures/C4568?date=2020-11-15 09:00:00').set('Cookie',cookie).send()
+            res=await chai.request(url).delete('/api/courseLectures/C4567?date=2020-11-15 09:00:00').set('Cookie',cookie).send()
             expect(res.status).to.equal(500);
         });
         it('should return 204 ', async function () {
-            let res=await chai.request(url).delete('/api/courseLectures/C4568?date=2020-12-22 09:00:00').set('Cookie',cookie).send();
+            let res=await chai.request(url).delete('/api/courseLectures/C4567?date=2020-12-11 14:00:00').set('Cookie',cookie).send();
             expect(res.status).to.equal(204);
         });
     });
