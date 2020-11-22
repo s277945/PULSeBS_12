@@ -50,15 +50,17 @@
          let modalTableBody = []
 
          this.state.modalTableData.forEach((element,i) => {
-             modalTableBody.push(<tr>
-                 <td>{i+1}</td>
-                 <td>{element}</td>
+             modalTableBody.push(<tr key={i}>
+                    <td>{i+1}</td>
+                    <td>{element.userId}</td>
+                    <td>{element.name}</td>
+                    <td>{element.surname}</td>
              </tr>)
          });
 
 
          return (
-             <div  class="app-background">
+             <div  className="app-background">
                 <br/>
                 <h1 className="page-title">Student list</h1>
                 <br/>
@@ -76,15 +78,17 @@
                      </tbody>
                  </Table>
 
-                 <Modal show={this.state.modal} onHide={this.handleClose}>
+                 <Modal show={this.state.modal===1?true:false} onHide={this.handleClose}>
                      <Modal.Header data-testid={"close"}  closeButton>
                          <Modal.Title>Students</Modal.Title>
                      </Modal.Header>
-                     <Modal.Body class="app-element-background">{<Table striped bordered hover>
+                     <Modal.Body className="app-element-background">{<Table striped bordered hover>
                      <thead>
                          <tr>
                              <th>No</th>
-                             <th>Student Name</th>
+                             <th>Student ID</th>
+                             <th>Name</th>
+                             <th>Surname</th>
                          </tr>
                      </thead>
                      <tbody data-testid={"studentsList"}>

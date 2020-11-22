@@ -243,15 +243,15 @@ exports.getRole=function(userId){
 exports.getStudentList=function(courseId, date){
     let list=[];
     return new Promise((resolve, reject) => { //Da aggiungere una query
-        const sql='SELECT Student_Ref FROM Booking WHERE Course_Ref=? AND Date_Ref=?';
+        const sql='SELECT userID, Name, Surname FROM User WHERE userID IN ('+
+        'SELECT Student_Ref FROM Booking WHERE Course_Ref=? AND Date_Ref=?)';
         db.all(sql,[courseId,date],(err,rows)=>{
-
             if(err){
                 reject(err);
             }
             else{
                 rows.forEach((row)=>{ 
-                    list.push(row.Student_Ref);
+                    list.push({"userId":row.userID, "name":row.Name, "surname": row.Surname})
                 });
                 resolve(list);
             }
