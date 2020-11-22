@@ -3,6 +3,7 @@ import Table from 'react-bootstrap/Table'
 import Button from 'react-bootstrap/Button'
 import Modal from 'react-bootstrap/Modal'
 import update from './update.js'
+import { cancelLecture } from '../api/api'
 
 
 export class TeacherTabLec extends Component {
@@ -29,6 +30,18 @@ export class TeacherTabLec extends Component {
         this.setState({ modalShow: true })
     }
 
+    handleCancel = (e) => {
+        e.preventDefault();
+        cancelLecture(this.state.selectedLec.Course_Ref, this.state.selectedLec.Date)
+            .then(response=> {
+                this.setState({ modalShow: false })
+            })
+            .catch(err => {
+                console.log(err);
+            });
+        let newTable = this.state.tableData.filter(element=>{return element.Course_Ref!==this.state.selectedLec.Course_Ref || (element.Course_Ref===this.state.selectedLec.Course_Ref&&element.Date!==this.state.selectedLec.Date)});
+        this.setState({ tableData: newTable});
+    }
     render() {
 
         let tableBody = []
@@ -66,7 +79,7 @@ export class TeacherTabLec extends Component {
                         <Modal.Title>{this.state.selectedLec.Name}<p style={{fontWeight:'normal'}}>{this.state.selectedLec.Date}</p></Modal.Title>
                     </Modal.Header>
                     <Modal.Body className="app-element-background">
-                    <Button variant="danger" style={{margin: "20px"}} onClick={(e) => { e.preventDefault();  }}>CANCEL LECTURE</Button>
+                    <Button variant="danger" style={{margin: "20px"}} onClick={(e) => { this.handleCancel(e)  }}>CANCEL LECTURE</Button>
                     <Button style={{margin: "10px"}} onClick={(e) => { e.preventDefault();  }}>TURN INTO DISTANCE LECTURE</Button>
                     </Modal.Body>
                 </Modal>

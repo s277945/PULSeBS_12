@@ -59,6 +59,10 @@ export function getStudentList(element){
     return axiosInst.get(`http://localhost:3001/api/lectures/listStudents?courseRef=${element.Course_Ref}&date=${element.Date}`,{ withCredentials: true })
 }
 
+export function cancelLecture(courseId, date){
+    // cancel teacher Lecture
+    return axiosInst.delete(`http://localhost:3001/api/courseLectures/${courseId}?date=${date}`, { withCredentials: true });
+}
 
 export async function login (userName, password){
     return axios.post(`http://localhost:3001/api/login`, { userName: userName, password: password}, {withCredentials: true})
