@@ -74,14 +74,16 @@ export class TeacherTabLec extends Component {
                     </tbody>
                 </Table>
 
-                <Modal show={this.state.modalShow} onHide={this.handleClose}>
-                    <Modal.Header data-testid={"close"} closeButton>
-                        <Modal.Title>{this.state.selectedLec.Name}<p style={{fontWeight:'normal'}}>{this.state.selectedLec.Date}</p></Modal.Title>
+                <Modal show={this.state.modalShow} onHide={this.handleClose} style={{marginTop: "17vh"}}>
+                    <Modal.Header style={{flexWrap: "no-wrap"}} data-testid={"close"} closeButton>
+                        <div>
+                            <Modal.Title><div><p style={{fontWeight:'bold', display: "inline"}}>Lecture:  </p><p style={{display: "inline", marginLeft: "10px"}}>{this.state.selectedLec.Name}</p></div><div><p style={{fontWeight:'bold', display: "inline"}}>Date: </p><p style={{display: "inline", marginLeft: "10px"}}>{this.state.selectedLec.Date}</p></div></Modal.Title>
+                            <div style={{display: "flex", flexWrap: "no-wrap", justifyContent: "flex-end", marginTop: "17px"}}>
+                                <Button variant="danger" style={{marginLeft: "27px", marginTop: "17px", marginBottom: "17px", paddingLeft: "9px", paddingRight: "9px" }} onClick={(e) => { this.handleCancel(e)  }}>CANCEL LECTURE</Button>
+                                <Button variant="info" style={{marginLeft: "17px", marginTop: "17px", marginBottom: "17px", paddingLeft: "9px", paddingRight: "9px" }} onClick={(e) => { e.preventDefault();  }}>TURN INTO DISTANCE LECTURE</Button>
+                            </div>
+                        </div>
                     </Modal.Header>
-                    <Modal.Body className="app-element-background">
-                    <Button variant="danger" style={{margin: "20px"}} onClick={(e) => { this.handleCancel(e)  }}>CANCEL LECTURE</Button>
-                    <Button style={{margin: "10px"}} onClick={(e) => { e.preventDefault();  }}>TURN INTO DISTANCE LECTURE</Button>
-                    </Modal.Body>
                 </Modal>
             </div>
         )
