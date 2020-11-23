@@ -92,7 +92,7 @@
  - body parameters: courseId, date, type
  - body example: {"courseId": "C4567", "date": "2020-12-22 09:00:00", "type": "d"}
  
- ##STATS ENDPOINTS (Need authentication)
+ ## STATS ENDPOINTS (Need authentication)
  **GET /api/coursesStats**
  - no query parameters
  - body response: to be defined. Should be [{"courseId": "C1234Q", "n_students": 123}, ...]
