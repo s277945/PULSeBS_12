@@ -160,7 +160,7 @@ export class StudentHome extends Component {
 
     renderLectureTables(){
         return (
-            <div className="app-background">
+            <div>
                 <br/>
                 <h1 className="page-title">Lectures</h1>
                 <br/>
@@ -191,7 +191,9 @@ export class StudentHome extends Component {
     renderCalendar(){
         return(
             <Container className="mt-5">
-                <Calendar lectures={this.state.lectures}></Calendar>
+                <div style={{borderStyle: "solid", borderRadius: "11px", borderWidth: "1px", borderColor: "rgb(235, 235, 235)", padding: "17px", backgroundColor: "white"}}>
+                    <Calendar lectures={this.state.lectures}></Calendar>
+                </div>
             </Container>
         )
     }
@@ -209,11 +211,11 @@ export class StudentHome extends Component {
 
     render() {
         return (
-            <>
+            <div className="app-element-background">
                 <StudentNavbar setShow={this.setShow}/>
                 {this.renderContent()}
                 {this.renderModal()}
-            </>
+            </div>
         )
     }
 }

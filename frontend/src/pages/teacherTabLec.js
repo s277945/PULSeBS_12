@@ -42,6 +42,10 @@ export class TeacherTabLec extends Component {
         let newTable = this.state.tableData.filter(element=>{return element.Course_Ref!==this.state.selectedLec.Course_Ref || (element.Course_Ref===this.state.selectedLec.Course_Ref&&element.Date!==this.state.selectedLec.Date)});
         this.setState({ tableData: newTable});
     }
+
+    enableAction = (type) => {// function that checks if certain action is avaiable
+
+    }
     render() {
 
         let tableBody = []
