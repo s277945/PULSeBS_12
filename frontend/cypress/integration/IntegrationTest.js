@@ -1,3 +1,4 @@
+
 describe('LOGIN PAGE', function () {
     beforeEach(() => {
         cy.visit('http://localhost:3000/')
@@ -82,15 +83,12 @@ describe('LOGIN PAGE', function () {
 
 });
 describe('TEACHER PAGE', function () {
-    before(()=>{
+    beforeEach(() => {
         cy.visit('http://localhost:3000/')
         cy.get('input:first').type('t987654').should('have.value','t987654')
         cy.get('input:last').type('scimmia').should('have.value','scimmia')
         cy.get('.btn.btn-primary')
             .click()
-        console.log(cy.getCookies())
-    });
-    beforeEach(() => {
         Cypress.Cookies.preserveOnce('token', 'value')
         Cypress.Cookies.debug(true)
     })
@@ -99,6 +97,11 @@ describe('TEACHER PAGE', function () {
         cy.get('.page-title').should('have.text','Lectures')
         cy.get('tbody>tr').should('have.length',4)
     });
+    it('should reload teacher page', function () {
+        cy.location('pathname').should('include','/teacherHome')
+        cy.reload()
+        cy.location('pathname').should('include','/teacherHome')
+    });
     it('should render correctly student list page', function () {
         cy.get('[data-testid="teacherStudent"]').should('have.text', 'Student List')
                 .should('have.attr', 'href', '#studentList')
@@ -106,13 +109,24 @@ describe('TEACHER PAGE', function () {
         cy.get('.page-title').should('have.text','Student list')
         cy.get('tbody>tr').should('have.length',4)
     });
+    it('should reload teacher student page', function () {
+        cy.get('[data-testid="teacherStudent"]').should('have.text', 'Student List')
+            .should('have.attr', 'href', '#studentList')
+            .click()
+        cy.hash().should('include', '#studentList')
+        cy.reload()
+        cy.location('pathname').should('include','/')
+    });
     it('should render modal student list page', function () {
+        cy.get('[data-testid="teacherStudent"]').should('have.text', 'Student List')
+            .should('have.attr', 'href', '#studentList')
+            .click()
         cy.get('tbody>tr').eq(0).find('.btn.btn-primary').should('have.text','SHOW LIST')
             .click()
         cy.wait(100)
         cy.get('[data-testid="studentsList"]').should('have.length', 1)
             .within(()=>{
-                cy.get('tr').eq(0).should('contain','s267348')
+                cy.get('tr').eq(0).should('contain','s269422')
             })
         cy.get('.modal').should('be.visible')
             .click({ force: true });
@@ -139,7 +153,7 @@ describe('TEACHER PAGE', function () {
             .click()
         cy.location('pathname').should('include','/')
     });
-    /*it('should not cancel a lecture', function () {
+    it('should not cancel a lecture', function () {
         cy.get('tbody>tr').should('have.length',4)
             .eq(0).find('.btn.btn-primary')
             .should('have.text', 'SELECT')
@@ -154,8 +168,8 @@ describe('TEACHER PAGE', function () {
             .click({force:true})
         cy.wait(100)
         cy.get('.modal').should('not.be.visible')
-    });*/
-    it('should cancel a lecture', function () {
+    });
+    /*it('should cancel a lecture', function () {
         cy.get('tbody>tr').should('have.length',4)
             .eq(0).find('.btn.btn-primary')
             .should('have.text', 'SELECT')
@@ -171,7 +185,7 @@ describe('TEACHER PAGE', function () {
         cy.wait(100)
         cy.get('tbody>tr').should('have.length',3)
 
-    });
+    });*/
     it('should logout', function () {
         cy.location('pathname').should('include','/teacherHome')
         cy.get('[data-testid="logout"]')
@@ -180,26 +194,23 @@ describe('TEACHER PAGE', function () {
         cy.wait(1000)
         cy.getCookies().should('be.empty')
     });
-    /*it('should redirect if i am using an expired cookie', function () {
+    it('should redirect if i am using an expired cookie', function () {
         cy.clearCookies()
         cy.location('pathname').should('include','teacherHome')
 
         cy.reload({force: true})
         cy.location('pathname').should('include', '/')
-    });*/
+    });
 
 
 });
 describe('STUDENT PAGE', function () {
-    before(()=>{
+    beforeEach(() => {
         cy.visit('http://localhost:3000/')
         cy.get('input:first').type('s269422').should('have.value','s269422')
         cy.get('input:last').type('scimmia').should('have.value','scimmia')
         cy.get('.btn.btn-primary')
             .click()
-        console.log(cy.getCookies())
-    });
-    beforeEach(() => {
         Cypress.Cookies.preserveOnce('token', 'value')
         Cypress.Cookies.debug(true)
     })
@@ -209,7 +220,7 @@ describe('STUDENT PAGE', function () {
             .should('be.visible')
             .should('have.text','Lectures')
         cy.get('tbody>tr')
-            .should('have.length',4)
+            .should('have.length',8)
             .eq(0)
             .within(()=>{
                 cy.get('td').eq(0).should('have.text','SE2 Les:1')
@@ -219,6 +230,28 @@ describe('STUDENT PAGE', function () {
                 cy.get('.btn.btn-danger').should('not.be.disabled')
                     .should('have.text', 'Cancel')
             })
+    });
+
+    it('should reload correctly the same page', function () {
+        cy.wait(100)
+        cy.location('pathname').should('include', '/studentHome')
+        cy.reload()
+        cy.location('pathname').should('include','/studentHome')
+    });
+    it('should not redirect to login page', function () {
+        cy.wait(200)
+        cy.location('pathname').should('include','/studentHome')
+        cy.visit('http://localhost:3000')
+        cy.wait(200)
+        cy.location('pathname').should('include','/studentHome')
+    });
+    it('should reload calendar page', function () {
+        cy.get('[data-testid="calendar"]')
+            .should('be.visible')
+            .click()
+        cy.hash().should('include','#calendar')
+        cy.reload()
+        cy.location('pathname').should('include','/')
     });
     it('should redirect to calendar and home', function () {
 
@@ -262,6 +295,7 @@ describe('STUDENT PAGE', function () {
 
     });
     it('should open correctly modal to cancel a seat ', function () {
+        cy.wait(200)
         cy.get('tbody>tr').eq(0).within(()=>{
             cy.get('.btn.btn-danger')
                 .click()
@@ -279,6 +313,7 @@ describe('STUDENT PAGE', function () {
         })
     });
     it('should open correctly modal to book a seat', function () {
+        cy.wait(200)
         cy.get('tbody>tr').eq(0).within(()=>{
             cy.get('.btn.btn-primary')
                 .should('be.enabled')
@@ -339,4 +374,5 @@ describe('TEST AXIOS INTERCEPTOR', function () {
         cy.location('pathname').should('include','/')
     });
 });
+
 
