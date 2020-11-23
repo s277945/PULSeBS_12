@@ -53,3 +53,38 @@
 .page-title {
   text-align: center
 }
+
+.fc .fc-button-primary:disabled {
+  background-color: #525c66 !important;
+  border-color: #525c66 !important;
+}
+
+.fc .fc-button-primary:disabled:hover {
+  background-color: #525c66 !important;
+  border-color: #525c66 !important;
+}
+
+.fc .fc-button-primary:hover {
+  background-color:#23272c !important;
+  border-color: #23272c !important;
+}
+
+.fc .fc-button-primary {
+  background-color:#343a40 !important;
+ border-color:#343a40 !important;
+}
+
+.fc .fc-button-primary:focus {
+  box-shadow:0 0 0 .2rem rgba(38, 143, 255, 0) !important
+}
+
+.btn-primary:focus {
+  color:#fff;
+  background-color:#0069d9;
+  border-color:#0062cc;
+  box-shadow:0 0 0 .2rem rgba(38, 143, 255, 0) !important
+ }
+
+ .fc .fc-col-header-cell-cushion {
+  color: #23272c;
+ }

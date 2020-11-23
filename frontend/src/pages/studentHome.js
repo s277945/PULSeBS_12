@@ -191,7 +191,7 @@ export class StudentHome extends Component {
     renderCalendar(){
         return(
             <Container className="mt-5">
-                <div style={{borderStyle: "solid", borderRadius: "11px", borderWidth: "1px", borderColor: "rgb(235, 235, 235)", padding: "17px", backgroundColor: "white"}}>
+                <div style={{borderStyle: "solid", borderRadius: "6px", borderWidth: "1px", borderColor: "rgb(235, 235, 235)", padding: "17px", backgroundColor: "white"}}>
                     <Calendar lectures={this.state.lectures}></Calendar>
                 </div>
             </Container>
