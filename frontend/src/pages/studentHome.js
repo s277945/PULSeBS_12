@@ -5,12 +5,14 @@ import Button from 'react-bootstrap/Button'
 import Modal from 'react-bootstrap/Modal'
 import { authContext } from '../components/Authsystem'
 import { getLectures, getStudentBookedLectures, postStudentBookedLecture, deleteStudentBookedLecture } from '../api/api'
+import Calendar from '../components/Calendar';
+import Container from 'react-bootstrap/Container'
 
 export class StudentHome extends Component {
     static contextType = authContext
 
     state = {
-        show : 0, //This state variable is used to choose the content to show
+        show : 0, //This state variable is used to choose the content to show. (0 : table, 1: calendar)
         lectures: null,
         modal: {show: 0, lecture: null, index: null, message: null} //this object contains all modal state variables
     }
@@ -18,6 +20,7 @@ export class StudentHome extends Component {
         // Get students lectures
         getLectures().then(response => {
             this.setState({ lectures: response.data })
+            console.log(response.data)
             this.setBookedLectures();
         })
         .catch(err => {
@@ -185,9 +188,23 @@ export class StudentHome extends Component {
         )
     }
 
+    renderCalendar(){
+        return(
+            <Container className="mt-5">
+                <Calendar lectures={this.state.lectures}></Calendar>
+            </Container>
+        )
+    }
+
     renderContent = () => {
-        if (this.state.show === 0 && this.state.lectures != null) return (this.renderLectureTables());
-        else return(<div></div>);
+        if(!this.state.lectures){
+            return(
+                <p>Loading.....</p>
+            )
+        }
+
+        if (this.state.show === 0) return (this.renderLectureTables());
+        if(this.state.show === 1) return(this.renderCalendar())
     }
 
     render() {
