@@ -136,7 +136,7 @@ exports.deleteSeat=function(userId, courseId, date){
 exports.getLecturesByUserId=function(userId){
     return new Promise((resolve, reject) => {
         const date=moment().format('YYYY-MM-DD HH:mm:ss');
-        const sql='SELECT Course_Ref, Name, Date FROM  Lecture  WHERE DateDeadline > ? AND Course_Ref IN (' +
+        const sql='SELECT Course_Ref, Name, Date FROM  Lecture  WHERE DateDeadline > ? AND Type = "p" AND Course_Ref IN (' +
             'SELECT CourseID FROM Course WHERE User_Ref=?)';
         db.all(sql, [date, userId], (err,rows)=>{
             if(err){
@@ -405,17 +405,58 @@ exports.emailSentUpdate = function(courseId, date){
  * Receives as parameters: courseId, date, type
  * */
 
-exports.changeTypeOfLecture = function(courseId, date, type){
-    let lecture;
+exports.changeTypeOfLecture = function(courseId, date){
+
     return new Promise((resolve, reject)=>{
-        if(type=='p') lecture='r';
-        else lecture='p';
-        const sql = 'UPDATE Lecture SET Type=? WHERE Course_Ref=? AND Date=?';
-        db.run(sql, [lecture, courseId, date], function (err) {
+        const sql = 'UPDATE Lecture SET Type="d" WHERE Course_Ref=? AND Date=?';
+        db.run(sql, [courseId, date], function (err) {
             if(err) 
                 reject(err);
             else 
                 resolve(true);
         });
+    })
+}
+
+/**
+ * Function to retrieve stats for the courses associated to a specific teacher
+ *
+ * Receive as a parameter the userId
+ * */
+
+exports.getCoursesStats = function (userId){
+    let list = [];
+    return new Promise((resolve, reject) => {
+        //db.all...
+        resolve(true);
+    })
+}
+
+
+/**
+ * Function to retrieve stats for the courses associated to a specific teacher grouped by week
+ *
+ * Receive as a parameter the userId
+ * */
+
+exports.getWeekStats = function (userId){
+    let list = [];
+    return new Promise((resolve, reject) => {
+        //db.all...
+        resolve(true);
+    })
+}
+
+/**
+ * Function to retrieve stats for the courses associated to a specific teacher grouped by month
+ *
+ * Receive as a parameter the userId
+ * */
+
+exports.getMonthStats = function (userId){
+    let list = [];
+    return new Promise((resolve, reject) => {
+        //db.all...
+        resolve(true);
     })
 }
