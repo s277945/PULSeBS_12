@@ -57,7 +57,7 @@
 
 
 **POST /lectures**
-- body request: {"lectureId": "0432SQ", "date": "..."} /////lecture ID should be unique in this case
+- body request: {"lectureId": "0432SQ", "date": "..."} 
 - body response: status 201/404/500
 
 
@@ -80,7 +80,7 @@
 - query parameters: userId => retrieve from token
 - response body: {"Course_Ref" : "123123", "Date_Ref": "2020-10-11"}
 
-**DELETE /courseLectures/:courseId?date=2020-12-12 20:00:00** =>
+**DELETE /courseLectures/:courseId?date=2020-12-12 20:00:00** 
 - query parameters: courseId, date
 - response body: {email1@gmail.com, email2@gmail.com}
 
@@ -92,3 +92,15 @@
  - body parameters: courseId, date, type
  - body example: {"courseId": "C4567", "date": "2020-12-22 09:00:00", "type": "d"}
  
+ ##STATS ENDPOINTS (Need authentication)
+ **GET /api/coursesStats**
+ - no query parameters
+ - body response: to be defined. Should be [{"courseId": "C1234Q", "n_students": 123}, ...]
+ 
+ **GET /api/weekStats**
+  - no query parameters
+  - body response: to be defined. Should be [{"courseId": "C1234Q", "n_students": 123}, ...]
+  
+  **GET /api/monthStats**
+    - no query parameters
+    - body response: to be defined. Should be [{"courseId": "C1234Q", "n_students": 123}, ...]

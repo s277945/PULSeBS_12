@@ -269,7 +269,7 @@ app.get('/api/lectures/booked', (req, res) => {
 /**
  * PUT /api/lectures
  *
- * body parameters: {"courseId": C4567, "date": "2020-12-22 09:00:00", "type": "d"}
+ * body parameters: {"courseId": C4567, "date": "2020-12-22 09:00:00"}
  * */
 
 app.put('/api/lectures', (req, res) => {
@@ -280,7 +280,7 @@ app.put('/api/lectures', (req, res) => {
             {error: "Cannot modify type of lecture after 30 minutes before scheduled time"});
     }
 
-    dao.changeTypeOfLecture(courseId, req.body.date, req.body.type)
+    dao.changeTypeOfLecture(courseId, req.body.date)
         .then((response) => {
             res.status(200).json({response: response});
         })
@@ -289,6 +289,63 @@ app.put('/api/lectures', (req, res) => {
         })
 
 })
+
+
+/**
+ * GET /api/coursesStats
+ * Retrieves overall stats for every course for a given teacher
+ *
+ * body response: overall courses stats (to be defined)
+ */
+
+app.get('/api/coursesStats', (req, res) => {
+    const user = req.user && req.user.user;
+    dao.getCoursesStats(user)
+        .then((response) => {
+            res.status(200).json(response);
+        })
+        .catch((err) => {
+            res.status(500).json(err);
+        })
+
+})
+
+/**
+ * GET /api/weekStats
+ * Retrieves stats of the courses of a given teacher grouped by week (and course)
+ *
+ *  body response: stats grouped by week. Format to be defined
+ */
+
+app.get('/api/weekStats', (req, res) => {
+    const user = req.user && req.user.user;
+    dao.getWeekStats(user)
+        .then((response) => {
+            res.status(200).json(response);
+        })
+        .catch((err) => {
+            res.status(500).json(err);
+        })
+})
+
+/**
+ * GET /api/monthStats
+ * Retrieves stats of the courses of a given teacher grouped by month (and course)
+ *
+ *  body response: stats grouped by month. Format to be defined
+ */
+
+app.get('/api/monthStats', (req, res) => {
+    const user = req.user && req.user.user;
+    dao.getMonthStats(user)
+        .then((response) => {
+            res.status(200).json(response);
+        })
+        .catch((err) => {
+            res.status(500).json(err);
+        })
+})
+
 
 //activate server
 app.listen(port, () => console.log(`Server ready at port: ${port}`));
