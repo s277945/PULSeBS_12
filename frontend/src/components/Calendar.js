@@ -12,8 +12,14 @@ export default function Calendar({lectures}){
 
     return(
             <FullCalendar
+
                 plugins={[ dayGridPlugin ]}
-                initialView="dayGridMonth"
+                initialView="dayGridWeek"
+                headerToolbar={{
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'dayGridMonth,dayGridWeek'
+                }}
                 events={events}
                 locale="it"
             />
