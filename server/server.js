@@ -117,6 +117,25 @@ app.use((err, req, res, next) => {
       });
  });
 
+/**
+ * GET api/courses
+ *
+ * Returns list of available courses for a given user
+ *
+ * userId => userId
+ */
+
+app.get('/api/courses', (req, res) => {
+  const user = req.user && req.user.user;
+    dao.getCoursesByUserId(user)
+      .then((courses) => {
+        res.status(200).json(courses);
+      })
+      .catch((err) => {
+        res.status(500).json({errors: [{'msg': err}]});
+      });
+ });
+
 
 /**
  * POST api/lectures
@@ -298,9 +317,10 @@ app.put('/api/lectures', (req, res) => {
  * body response: overall courses stats (to be defined)
  */
 
-app.get('/api/coursesStats', (req, res) => {
+app.get('/api/courseStats/:courseId', (req, res) => {
     const user = req.user && req.user.user;
-    dao.getCoursesStats(user)
+    const courseId = req.params(courseId);
+    dao.getCourseStats(user, courseId)
         .then((response) => {
             res.status(200).json(response);
         })
@@ -317,9 +337,9 @@ app.get('/api/coursesStats', (req, res) => {
  *  body response: stats grouped by week. Format to be defined
  */
 
-app.get('/api/weekStats', (req, res) => {
+app.get('/api/historicalStats', (req, res) => {
     const user = req.user && req.user.user;
-    dao.getWeekStats(user)
+    dao.getHistoricalStats(user)
         .then((response) => {
             res.status(200).json(response);
         })
@@ -334,7 +354,7 @@ app.get('/api/weekStats', (req, res) => {
  *
  *  body response: stats grouped by month. Format to be defined
  */
-
+/*
 app.get('/api/monthStats', (req, res) => {
     const user = req.user && req.user.user;
     dao.getMonthStats(user)
@@ -345,7 +365,7 @@ app.get('/api/monthStats', (req, res) => {
             res.status(500).json(err);
         })
 })
-
+*/
 
 //activate server
 app.listen(port, () => console.log(`Server ready at port: ${port}`));

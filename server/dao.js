@@ -43,29 +43,25 @@ exports.addSeat=function(userId, courseId, date){
     return new Promise((resolve, reject) => {
         findCourse(userId, courseId).then(res=>{
             if(res){
-                getCapacity(courseId, date).then((capacity)=>{
-                    countStudent(courseId, date).then(count=>{
-                        if(count<capacity.Capacity){
-                            const sql='INSERT INTO Booking VALUES(?,?,?)';
-                            db.run(sql, [courseId, date, userId], function(err){
-                                if(err){
-                                    reject(err);
-                                }
-                                else{
-                                    resolve(true);
-                                }
-                            })
-
-                        }
-                        else{
-                            reject(new Error("0 seats available"));
-                        }
-                    }).catch(err=>reject(err));
-                }).catch(err=>reject(err));
+                controlCapacity(courseId, date).then((check)=>{
+                    if(check){
+                        const sql='INSERT INTO Booking VALUES(?,?,?)';
+                        db.run(sql, [courseId, date, userId], function(err){
+                            if(err) reject(err);
+                            else{ 
+                                const sql='UPDATE Lecture SET BookedSeats=BookedSeats+1 WHERE Course_Ref=? AND Date=?'
+                                db.run(sql, [courseId, date], function(err){
+                                    if(err) reject(err);
+                                    else resolve(true);
+                                });
+                            }
+                        
+                        })
+                    }
+                    else reject(new Error("0 seats available"));
+                }).catch(err=>reject(err));    
             }else reject(new Error("Course unavailable"));
-
         }).catch(err=>reject(err));
-
     })
 }
 
@@ -94,15 +90,15 @@ function findCourse(userId, courseId){
 * Description: Get the max capacity of the selected lecture
 */
 
-function getCapacity(courseID,date){
+function controlCapacity(courseID,date){
     return new Promise((resolve, reject) => {
-        const sql='SELECT Capacity FROM Lecture WHERE Course_Ref=? AND Date=?';
+        const sql='SELECT Capacity, BookedSeats FROM Lecture WHERE Course_Ref=? AND Date=?';
         db.get(sql,[courseID,date],(err,row)=>{
             if(err)
                 reject(err);
             else{
-    
-                resolve(row);
+                if(row.Capacity > row.BookedSeats) resolve(true);
+                else resolve(false);
             }
 
         })
@@ -121,8 +117,15 @@ exports.deleteSeat=function(userId, courseId, date){
         db.run(sql, [userId, courseId, date], (err) => {
             if(err)
                 reject(err);
-            else
-                resolve(true);
+            else{
+                const sql='UPDATE Lecture SET BookedSeats = BookedSeats - 1 WHERE Course_Ref=? AND Date=?';
+                db.run(sql, [courseId, date], (err) => {
+                    if(err)reject(err);
+                    else{
+                        resolve(true);    
+                    }
+                });
+            }
         })
     });
 }
@@ -170,11 +173,31 @@ exports.getLecturesBookedByUserId=function(userId){
 }
 
 /*
+* Input: userID 
+* Output: List of courses of the user
+* Description: Retrieve the list of courses in which the user is enrolled
+*/
+
+exports.getCoursesByUserId=function(userId){
+    return new Promise((resolve, reject) => {
+        const sql='SELECT Name FROM Course WHERE User_Ref=?';
+        db.all(sql, [userId], (err,rows)=>{
+            if(err){
+                reject(err);
+            }
+            else{
+                resolve(rows);
+            }
+        });
+    });
+}
+
+/*
 * Input: userID (Teacher) 
 * Output: Name, NumberOfStudents
 * Description: Get the number of students enrolled in the next lecture of one teacher
 */
-
+/* CANCELLABILE
 exports.getNextLectureNumber=function(userId){
     
     return new Promise((resolve, reject) => {
@@ -194,6 +217,7 @@ exports.getNextLectureNumber=function(userId){
         });
     });
 }
+*/
 
 /*
 * Input: Course_Ref, Date_Ref 
@@ -203,12 +227,12 @@ exports.getNextLectureNumber=function(userId){
 
 function countStudent(courseId, date){
     return new Promise((resolve, reject) => {
-        const sql='SELECT COUNT(*) FROM Booking WHERE Course_Ref=? AND Date_Ref=?';
+        const sql='SELECT BookedSeats FROM Lecture WHERE Course_Ref=? AND Date=?';
         db.get(sql, [courseId, date], (err,row)=>{
             if(err)
                 reject(err);
             else
-                resolve(row['COUNT(*)']);
+                resolve(row.BookedSeats);
         })
     });
 }
@@ -242,7 +266,7 @@ exports.getRole=function(userId){
 
 exports.getStudentList=function(courseId, date){
     let list=[];
-    return new Promise((resolve, reject) => { //Da aggiungere una query
+    return new Promise((resolve, reject) => {
         const sql='SELECT userID, Name, Surname FROM User WHERE userID IN ('+
         'SELECT Student_Ref FROM Booking WHERE Course_Ref=? AND Date_Ref=?)';
         db.all(sql,[courseId,date],(err,rows)=>{
@@ -352,6 +376,85 @@ function deleteBookings(courseId, date){
     });
 }
 
+/**
+ * Function to update type of lecture
+ *
+ * Receives as parameters: courseId, date, type
+ * */
+
+exports.changeTypeOfLecture = function(courseId, date){
+
+    return new Promise((resolve, reject)=>{
+        const sql = 'UPDATE Lecture SET Type="d" WHERE Course_Ref=? AND Date=?';
+        db.run(sql, [courseId, date], function (err) {
+            if(err) 
+                reject(err);
+            else 
+                resolve(true);
+        });
+    })
+}
+
+/*
+ * Input: Course_Ref
+ * Output: List of lectures associated to the course selected
+ * Descrtiption: Retrieve the data for the lectures of the course selected and the number of bookings
+ */
+
+exports.getCourseStats = function (courseId){
+    let list = [];
+    return new Promise((resolve, reject) => {
+        const sql='SELECT Name, Date, BookedSeats FROM Lecture WHERE Course_Ref=? AND Type="p"';
+        db.all(sql,[courseId], (err,rows)=>{
+            if(err) reject(err);
+            else{
+                rows.forEach((row)=>{ 
+                    list.push({"lectureName":row.Name, "date":row.Date, "nBooked": row.BookedSeats})
+                });
+                resolve(list);
+            }
+        })
+    })
+}
+
+
+/*
+ * Input: Course_Ref, Date(start), Date(end)
+ * Output: Average value of the information in the date range
+ * Descrtiption: Function to retrieve the average for the course selected in the date range
+ */
+
+exports.getHistoricalStats = function (courseId, dateStart, dateEnd){
+    return new Promise((resolve, reject) => {
+        const sql='SELECT AVG(BookedSeats) AS average FROM Lecture WHERE Course_Ref=? AND Date>=? AND Date<=?'
+        db.get(sql,[courseId, dateStart, dateEnd], (err,row)=>{
+            if(err) reject(err);
+            else{
+                resolve(row.average);
+            }
+        })
+    })
+}
+
+/**
+ * Function to retrieve stats for the courses associated to a specific teacher grouped by month
+ *
+ * Receive as a parameter the userId
+ * */
+/*
+exports.getMonthStats = function (userId){
+    let list = [];
+    return new Promise((resolve, reject) => {
+        const sql='SELECT AVG(BookedSeats) AS average FROM Lecture WHERE Course_Ref=? AND Date>=? AND Date<=?'
+        db.get(sql,[courseId, dateStart, dateEnd], (err,row)=>{
+            if(err) reject(err);
+            else{
+                resolve(row.average);
+            }
+        })
+    })
+}*/
+
 // EMAIL FUNCTIONS
 /**
  * Retrieve email of a given student
@@ -399,64 +502,3 @@ exports.emailSentUpdate = function(courseId, date){
     })
 }
 
-/**
- * Function to update type of lecture
- *
- * Receives as parameters: courseId, date, type
- * */
-
-exports.changeTypeOfLecture = function(courseId, date){
-
-    return new Promise((resolve, reject)=>{
-        const sql = 'UPDATE Lecture SET Type="d" WHERE Course_Ref=? AND Date=?';
-        db.run(sql, [courseId, date], function (err) {
-            if(err) 
-                reject(err);
-            else 
-                resolve(true);
-        });
-    })
-}
-
-/**
- * Function to retrieve stats for the courses associated to a specific teacher
- *
- * Receive as a parameter the userId
- * */
-
-exports.getCoursesStats = function (userId){
-    let list = [];
-    return new Promise((resolve, reject) => {
-        //db.all...
-        resolve(true);
-    })
-}
-
-
-/**
- * Function to retrieve stats for the courses associated to a specific teacher grouped by week
- *
- * Receive as a parameter the userId
- * */
-
-exports.getWeekStats = function (userId){
-    let list = [];
-    return new Promise((resolve, reject) => {
-        //db.all...
-        resolve(true);
-    })
-}
-
-/**
- * Function to retrieve stats for the courses associated to a specific teacher grouped by month
- *
- * Receive as a parameter the userId
- * */
-
-exports.getMonthStats = function (userId){
-    let list = [];
-    return new Promise((resolve, reject) => {
-        //db.all...
-        resolve(true);
-    })
-}
