@@ -172,9 +172,10 @@ app.get('/api/courses', (req, res) => {
                 }
               });
             })
-            .catch((err) => res.status(500).json({ errors: [{ 'param': 'Server', 'msg': err }] }))
+            .catch((err) => res.status(500).json({ errors: [{ 'param': 'Server', 'msg': err.message }] }))
       }).catch((err) => {
-        res.status(500).json({ errors: [{ 'param': 'Server', 'msg': err }] });
+        console.log(err.message);
+        res.status(500).json({ errors: [{ 'param': 'Server', 'msg': err.message }] });
       });
  });
 
@@ -191,7 +192,7 @@ app.get('/api/courses', (req, res) => {
     const user = req.user && req.user.user;
     dao.deleteSeat(user, req.params.lectureId, date)
       .then(() => res.status(204).end())
-      .catch((err) => res.status(500).json({ errors: [{ 'param': 'Server', 'msg': err }] }));
+      .catch((err) => res.status(500).json({ errors: [{ 'param': 'Server', 'msg': err.message }] }));
  });
 
 /**
@@ -205,7 +206,7 @@ app.get('/api/courses', (req, res) => {
       .then((response) => {
         res.status(201).json(response);
       })
-      .catch((err) => res.status(500).json({ errors: [{ 'param': 'Server', 'msg': err }] }));
+      .catch((err) => res.status(500).json({ errors: [{ 'param': 'Server', 'msg': err.message }] }));
  });
 
 
@@ -223,7 +224,7 @@ app.get('/api/courses', (req, res) => {
       .then((list) => {
         res.status(201).json(list);
       })
-      .catch((err) => res.status(500).json({ errors: [{ 'param': 'Server', 'msg': err }] }));
+      .catch((err) => res.status(500).json({ errors: [{ 'param': 'Server', 'msg': err.message }] }));
 
  });
 
@@ -240,7 +241,7 @@ app.get('/api/lectures/booked', (req, res) => {
     .then((list) => {
       res.status(201).json(list);
     })
-    .catch((err) => res.status(500).json({ errors: [{ 'param': 'Server', 'msg': err }] }));
+    .catch((err) => res.status(500).json({ errors: [{ 'param': 'Server', 'msg': err.message }] }));
 
 });
 
