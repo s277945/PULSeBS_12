@@ -32,13 +32,14 @@ export class TeacherTabLec extends Component {
     showModifications = (element) => {
 
         this.setState({ selectedLec: element })
-
+        sessionStorage.setItem("selectedLec", JSON.stringify(element));
         this.handleShow()
     }
 
     handleClose = () => {
         this.setState({ modalShow: false })        
         sessionStorage.removeItem("modalShow");
+        sessionStorage.removeItem("selectedLec");
     }
 
     handleShow = () => {
@@ -83,7 +84,7 @@ export class TeacherTabLec extends Component {
             
         }
         return (
-            <Modal show={this.state.popup.show===1? true:false} onHide={this.popupClose} style={{marginTop: "25vh"}}>
+            <Modal show={this.state.popup.show===1? true:false} onHide={this.popupClose} style={{marginTop: "25vh", marginLeft: "5px"}}>
                 <Modal.Header class="app-element-background" closeButton style={{minWidth: "498px"}}>
                     <div  style={{flexWrap: "wrap", justifyContent: "center", minWidth: "432px"}}>
                         <p style={{paddingTop: "15px", paddingBottom: "30px", fontSize: "25px", textAlign: "center"}}>Do you want to {this.state.popup.message} ?</p>
@@ -135,7 +136,7 @@ export class TeacherTabLec extends Component {
                 </Table>
 
                 <Modal show={this.state.modalShow} onHide={this.handleClose} style={{marginTop: "17vh"}}>
-                    <Modal.Header style={{flexWrap: "no-wrap", minWidth: "507px"}} data-testid={"close"} closeButton>
+                    <Modal.Header style={{flexWrap: "no-wrap", minWidth: "508px"}} data-testid={"close"} closeButton>
                         <div>
                             <Modal.Title style={{marginLeft: "43px", marginTop: "17px"}}>
                                 <div><p style={{fontWeight:'bold', display: "inline"}}>Lecture:  </p><p style={{display: "inline", marginLeft: "10px"}}>{this.state.selectedLec.Name}</p></div>
