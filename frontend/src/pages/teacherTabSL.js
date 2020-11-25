@@ -16,11 +16,11 @@
          let element = sessionStorage.getItem("element");//get saved element state value
          if(modal!==null) this.setState({ modal: parseInt(modal, 10) });
          else sessionStorage.setItem("modal", this.state.modal);//if none is present, save modal state value        
-         if(element!==null) {
+         if(JSON.parse(element)!==null) {
              this.setState({ element: JSON.parse(element) });
              this.showList(JSON.parse(element));
         }
-         else sessionStorage.setItem("element", JSON.stringify(this.state.element));//if none is present, save element state value
+         else sessionStorage.setItem("element", null);//if none is present, save element state value
      }
 
 
