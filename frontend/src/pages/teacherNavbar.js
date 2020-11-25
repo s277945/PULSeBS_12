@@ -17,12 +17,14 @@ class TeacherNavbar extends Component {
     }
      showLectures = () => { //function called when Lectures link is selected
          this.props.setShow(0);
+         sessionStorage.clear();
          sessionStorage.setItem("pagestate", 0);//save state value
          this.setState({ lectureslink: true,studentslink: false});
      }
 
      showStudentList = () =>{
          this.props.setShow(1)
+         sessionStorage.clear();
          sessionStorage.setItem("pagestate", 1);//save state value
          this.setState({ lectureslink: false,studentslink: true});
      }

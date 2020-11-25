@@ -8,7 +8,7 @@
  export class TeacherTabSL extends Component {
 
 
-     state = { tableData: [],modalTableData: [], modal: 0 }
+     state = { tableData: [],modalTableData: [], modal: 0, element: null }
 
      componentDidMount() {
          update(this);
@@ -16,7 +16,10 @@
          let element = sessionStorage.getItem("element");//get saved element state value
          if(modal!==null) this.setState({ modal: parseInt(modal, 10) });
          else sessionStorage.setItem("modal", this.state.modal);//if none is present, save modal state value        
-         if(element!==null) this.setState({ element: JSON.parse(element) });
+         if(element!==null) {
+             this.setState({ element: JSON.parse(element) });
+             this.showList(JSON.parse(element));
+        }
          else sessionStorage.setItem("element", JSON.stringify(this.state.element));//if none is present, save element state value
      }
 
@@ -29,17 +32,19 @@
              }).catch(err=>{
                  console.log(err);
               });
-        sessionStorage.setItem("element", JSON.stringify(this.state.element)); // update session data
+        sessionStorage.setItem("element", JSON.stringify(element)); // update session data
          this.handleShow()
      }
 
      handleClose = () => {
+         sessionStorage.removeItem("modal");         
+         sessionStorage.removeItem("element");
          this.setState({ modal: 0 })
      }
 
      handleShow = () => {
          this.setState({ modal: 1 });
-         sessionStorage.setItem("modal", this.state.modal);// update session data
+         sessionStorage.setItem("modal", 1);// update session data
      }
 
      render() {
