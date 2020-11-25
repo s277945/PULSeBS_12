@@ -93,14 +93,13 @@
  - body example: {"courseId": "C4567", "date": "2020-12-22 09:00:00", "type": "d"}
  
  ## STATS ENDPOINTS (Need authentication)
- **GET /api/coursesStats**
- - no query parameters
- - body response: to be defined. Should be [{"courseId": "C1234Q", "n_students": 123}, ...]
+ **GET /api/courseStats/:courseId**
+ - url example: /api/courseStats/C0123
+ - request parameters: courseId
+ - body response:  [{"lectureName": "SE2 Les:1", "date": "2020-12-10 12:00:00","nBooked": 1}, ...]
  
- **GET /api/weekStats**
-  - no query parameters
-  - body response: to be defined. Should be [{"courseId": "C1234Q", "n_students": 123}, ...]
-  
-  **GET /api/monthStats**
-    - no query parameters
-    - body response: to be defined. Should be [{"courseId": "C1234Q", "n_students": 123}, ...]
+  **GET /api/historicalStats/:courseId**
+  - url example: /api/historicalStats/C0123?dateStart=2020-12-10 12:00:00&dateEnd=2020-12-17 12:00:00
+  - request parameters: courseId 
+  - query parameters: dateStart, dateEnd
+  - body response: it's a number, the average. For istance: 0.3333333333333333

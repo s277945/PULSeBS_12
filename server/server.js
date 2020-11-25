@@ -312,16 +312,15 @@ app.put('/api/lectures', (req, res) => {
 
 
 /**
- * GET /api/coursesStats
+ * GET /api/courseStats/:courseId
  * Retrieves overall stats for every course for a given teacher
  *
  * body response: overall courses stats (to be defined)
  */
 
 app.get('/api/courseStats/:courseId', (req, res) => {
-    const user = req.user && req.user.user;
-    const courseId = req.params(courseId);
-    dao.getCourseStats(user, courseId)
+    const courseId = req.params.courseId;
+    dao.getCourseStats(courseId)
         .then((response) => {
             res.status(200).json(response);
         })
@@ -332,15 +331,17 @@ app.get('/api/courseStats/:courseId', (req, res) => {
 })
 
 /**
- * GET /api/weekStats
+ * GET /api/historicalStats/:courseId
  * Retrieves stats of the courses of a given teacher grouped by week (and course)
  *
  *  body response: stats grouped by week. Format to be defined
  */
 
-app.get('/api/historicalStats', (req, res) => {
-    const user = req.user && req.user.user;
-    dao.getHistoricalStats(user)
+app.get('/api/historicalStats/:courseId', (req, res) => {
+    const courseId = req.params.courseId;
+    const dateStart = req.query.dateStart;
+    const dateEnd = req.query.dateEnd;
+    dao.getHistoricalStats(courseId, dateStart, dateEnd)
         .then((response) => {
             res.status(200).json(response);
         })
