@@ -12,6 +12,12 @@
 
      componentDidMount() {
          update(this);
+         let modal = sessionStorage.getItem("modal");//get saved modal state value
+         let element = sessionStorage.getItem("element");//get saved element state value
+         if(modal!==null) this.setState({ modal: parseInt(modal, 10) });
+         else sessionStorage.setItem("modal", this.state.modal);//if none is present, save modal state value        
+         if(element!==null) this.setState({ element: JSON.parse(element) });
+         else sessionStorage.setItem("element", JSON.stringify(this.state.element));//if none is present, save element state value
      }
 
 
@@ -23,6 +29,7 @@
              }).catch(err=>{
                  console.log(err);
               });
+        sessionStorage.setItem("element", JSON.stringify(this.state.element)); // update session data
          this.handleShow()
      }
 
@@ -31,7 +38,8 @@
      }
 
      handleShow = () => {
-         this.setState({ modal: 1 })
+         this.setState({ modal: 1 });
+         sessionStorage.setItem("modal", this.state.modal);// update session data
      }
 
      render() {

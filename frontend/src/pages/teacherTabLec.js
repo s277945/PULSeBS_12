@@ -9,10 +9,24 @@ import { cancelLecture } from '../api/api'
 export class TeacherTabLec extends Component {
 
 
-    state = { tableData: [], modalShow: false, selectedLec: {} }
+    state = {   
+                tableData: [],
+                modalShow: false,
+                selectedLec: {},
+                popup: {show: false, message: ""} 
+            }
 
     componentDidMount() {
         update(this);
+        let modalShow = sessionStorage.getItem("modalShow");//get saved modalShow state value
+        let popup = sessionStorage.getItem("popup");//get saved popup state value
+        let selectedLec = sessionStorage.getItem("selectedLec");//get saved selectedLec value
+        if(modalShow!==null) this.setState({ modalShow: modalShow });
+        else sessionStorage.setItem("modalShow", this.state.modalShow);//if none is present, save modalShow state value
+        if(popup!==null) this.setState({ popup: JSON.parse(popup) });
+        else sessionStorage.setItem("popup", JSON.stringify(this.state.popup));//if none is present, save popup state value
+        if(selectedLec!==null) this.setState({ selectedLec: JSON.parse(selectedLec) });
+        else sessionStorage.setItem("selectedLec", JSON.stringify(this.state.selectedLec));//if none is present, save selectedLec state value
     }
 
     showModifications = (element) => {
@@ -23,11 +37,13 @@ export class TeacherTabLec extends Component {
     }
 
     handleClose = () => {
-        this.setState({ modalShow: false })
+        this.setState({ modalShow: false })        
+        sessionStorage.removeItem("modalShow");
     }
 
     handleShow = () => {
         this.setState({ modalShow: true })
+        sessionStorage.setItem("modalShow", true);
     }
 
     handleCancel = (e) => {
@@ -41,6 +57,46 @@ export class TeacherTabLec extends Component {
             });
         let newTable = this.state.tableData.filter(element=>{return element.Course_Ref!==this.state.selectedLec.Course_Ref || (element.Course_Ref===this.state.selectedLec.Course_Ref&&element.Date!==this.state.selectedLec.Date)});
         this.setState({ tableData: newTable});
+    }
+
+    popupClose = () => {
+        this.setState({ popup: {show: 0, message: ""} });
+        sessionStorage.removeItem("popup");
+    }
+
+    setPopup(message) {// set popup state variables to passed values and show popup
+        let newpopup = {show: 1, message: message};
+        this.setState({ popup: newpopup });
+        sessionStorage.setItem("popup", JSON.stringify(newpopup));        
+    }
+
+    renderPopup() {
+        let confirm = (e) => {// function called when lecture action button is pressed
+            if(this.state.popup.message==="cancel this lecture")  {
+                this.handleCancel(e);// depending on operation, call cancel or turn to distance function
+                this.handleClose();// close modal
+                this.popupClose();// then close popup
+            }
+            else {
+                this.popupClose();// then close popup
+            }
+            
+        }
+        return (
+            <Modal show={this.state.popup.show===1? true:false} onHide={this.popupClose} style={{marginTop: "25vh"}}>
+                <Modal.Header class="app-element-background" closeButton style={{minWidth: "498px"}}>
+                    <div  style={{flexWrap: "wrap", justifyContent: "center", minWidth: "432px"}}>
+                        <p style={{paddingTop: "15px", paddingBottom: "30px", fontSize: "25px", textAlign: "center"}}>Do you want to {this.state.popup.message} ?</p>
+                        <div style={{display: "flex", flexWrap: "nowrap",  justifyContent: "space-around", paddingTop: "7px", paddingBottom: "7px"}}>
+                            <div style={{marginLeft: "37px"}}>
+                                <Button onClick={(e) => confirm(e)} variant={this.state.popup.message==="cancel this lecture" ? "danger" : "info"} style={{ marginRight: "27px", paddingRight: "17px", paddingLeft: "17px"}}>Yes</Button>
+                                <Button onClick={this.popupClose} variant="secondary" style={{ paddingRight: "17px", paddingLeft: "17px"}}>No</Button>
+                            </div>
+                        </div>
+                    </div>
+                </Modal.Header>
+            </Modal>
+        )
     }
 
     enableAction = (type) => {// function that checks if certain action is avaiable
@@ -90,12 +146,13 @@ export class TeacherTabLec extends Component {
                                 <div><p style={{fontSize: "small", color: "#e00d0d"}}>Lectures cannot be changed to distance lectures if there are less than 30 minutes left to their scheduled time</p></div>
                             </Modal.Title>
                             <div style={{display: "flex", flexWrap: "no-wrap", justifyContent: "flex-end", marginTop: "27px"}}>
-                                <Button variant="danger" style={{marginLeft: "27px", marginTop: "17px", marginBottom: "17px", paddingLeft: "11px", paddingRight: "11px" }} onClick={(e) => { this.handleCancel(e)  }}>CANCEL LECTURE</Button>
-                                <Button variant="info" style={{marginLeft: "17px", marginTop: "17px", marginBottom: "17px", paddingLeft: "11px", paddingRight: "11px" }} onClick={(e) => { e.preventDefault();  }}>TURN INTO DISTANCE LECTURE</Button>
+                                <Button variant="danger" style={{marginLeft: "27px", marginTop: "17px", marginBottom: "17px", paddingLeft: "11px", paddingRight: "11px" }} onClick={(e) => { e.preventDefault(); this.setPopup("cancel this lecture"); }}>CANCEL LECTURE</Button>
+                                <Button variant="info" style={{marginLeft: "17px", marginTop: "17px", marginBottom: "17px", paddingLeft: "11px", paddingRight: "11px" }} onClick={(e) => { e.preventDefault(); this.setPopup("turn this lecture into a distance lecture"); }}>TURN INTO DISTANCE LECTURE</Button>
                             </div>
                         </div>
                     </Modal.Header>
                 </Modal>
+                {this.renderPopup()}
             </div>
         )
     }
