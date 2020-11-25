@@ -21,8 +21,8 @@ export class TeacherTabLec extends Component {
         let modalShow = sessionStorage.getItem("modalShow");//get saved modalShow state value
         let popup = sessionStorage.getItem("popup");//get saved popup state value
         let selectedLec = sessionStorage.getItem("selectedLec");//get saved selectedLec value
-        if(modalShow!==null) this.setState({ modalShow: modalShow });
-        else sessionStorage.setItem("modalShow", this.state.modalShow);//if none is present, save modalShow state value
+        if(modalShow!==null) this.setState({ modalShow: JSON.parse(modalShow) });
+        else sessionStorage.setItem("modalShow", JSON.stringify(this.state.modalShow));//if none is present, save modalShow state value
         if(popup!==null) this.setState({ popup: JSON.parse(popup) });
         else sessionStorage.setItem("popup", JSON.stringify(this.state.popup));//if none is present, save popup state value
         if(selectedLec!==null) this.setState({ selectedLec: JSON.parse(selectedLec) });
@@ -44,7 +44,7 @@ export class TeacherTabLec extends Component {
 
     handleShow = () => {
         this.setState({ modalShow: true })
-        sessionStorage.setItem("modalShow", true);
+        sessionStorage.setItem("modalShow", JSON.stringify(true));
     }
 
     handleCancel = (e) => {
