@@ -57,6 +57,6 @@
     "@testing-library/dom": "^7.27.1",
     "@testing-library/react": "^9.5.0",
     "babel-plugin-istanbul": "^6.0.0",
-    "history": "^5.0.0"
+    "history": "^ 4.10.1"
   }
 }

@@ -3,6 +3,7 @@ import { TeacherTabSL } from './teacherTabSL'
 import { TeacherTabLec } from './teacherTabLec'
 import  TeacherNavbar  from './teacherNavbar'
 import {authContext} from '../components/Authsystem'
+import { TeacherTabHist } from './teacherTabHist'
 
 export class TeacherHome extends Component {
     static contextType = authContext
@@ -34,6 +35,12 @@ export class TeacherHome extends Component {
         if (this.state.show === 1) return (
             <div className="app-background">
                 <TeacherTabSL history={this.props.history}></TeacherTabSL>
+            </div>
+        )
+
+        if (this.state.show === 2) return (
+            <div className="app-background">
+                <TeacherTabHist history={this.props.history}></TeacherTabHist>
             </div>
         )
 
