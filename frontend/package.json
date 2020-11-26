@@ -16,6 +16,7 @@
     "bootstrap": "^4.5.3",
     "fontsource-roboto": "^3.0.3",
     "jquery": "^1.9.1",
+    "moment": "^2.29.1",
     "popper.js": "^1.16.1",
     "react": "^16.14.0",
     "react-bootstrap": "^1.4.0",

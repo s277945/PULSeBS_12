@@ -4,10 +4,14 @@ import Button from 'react-bootstrap/Button'
 import Modal from 'react-bootstrap/Modal'
 import update from './update.js'
 import { cancelLecture } from '../api/api'
+import moment from 'moment';
+moment().format();
+
+
 
 
 export class TeacherTabLec extends Component {
-
+    
 
     state = {   
                 tableData: [],
@@ -65,7 +69,7 @@ export class TeacherTabLec extends Component {
         sessionStorage.removeItem("popup");
     }
 
-    setPopup(message) {// set popup state variables to passed values and show popup
+    setPopup = (message) => {// set popup state variables to passed values and show popup
         let newpopup = {show: 1, message: message};
         this.setState({ popup: newpopup });
         sessionStorage.setItem("popup", JSON.stringify(newpopup));        
@@ -83,6 +87,9 @@ export class TeacherTabLec extends Component {
             }
             
         }
+        if(this.state.popup.message==="cancel this lecture"&&moment(this.state.selectedLec.Date).diff(moment(), 'minutes', true)<=30.00) { sessionStorage.removeItem("popup"); return;} // check if popup can open
+        if(this.state.popup.message!=="cancel this lecture"&&moment(this.state.selectedLec.Date).diff(moment(), 'minutes', true)<=60.00) { sessionStorage.removeItem("popup"); return;}
+
         return (
             <Modal show={this.state.popup.show===1? true:false} onHide={this.popupClose} style={{marginTop: "25vh", marginLeft: "5px"}}>
                 <Modal.Header class="app-element-background" closeButton style={{minWidth: "498px"}}>
@@ -115,7 +122,6 @@ export class TeacherTabLec extends Component {
                 <td style={{display: "flex", justifyContent: "flex-start"}}><Button style={{marginLeft: "15px"}} data-testid={"showCourse_"+k++} onClick={(e) => { e.preventDefault(); this.showModifications(element) }}>SELECT</Button></td>
             </tr>)
         });
-
         return (
             <div>
                 <br/>
@@ -147,8 +153,8 @@ export class TeacherTabLec extends Component {
                                 <div><p style={{fontSize: "small", color: "#e00d0d"}}>Lectures cannot be changed to distance lectures if there are less than 30 minutes left to their scheduled time</p></div>
                             </Modal.Title>
                             <div style={{display: "flex", flexWrap: "no-wrap", justifyContent: "flex-end", marginTop: "27px"}}>
-                                <Button variant="danger" style={{marginLeft: "27px", marginTop: "17px", marginBottom: "17px", paddingLeft: "11px", paddingRight: "11px" }} onClick={(e) => { e.preventDefault(); this.setPopup("cancel this lecture"); }}>CANCEL LECTURE</Button>
-                                <Button variant="info" style={{marginLeft: "17px", marginTop: "17px", marginBottom: "17px", paddingLeft: "11px", paddingRight: "11px" }} onClick={(e) => { e.preventDefault(); this.setPopup("turn this lecture into a distance lecture"); }}>TURN INTO DISTANCE LECTURE</Button>
+                                <Button disabled={moment(this.state.selectedLec.Date).diff(moment(), 'minutes', true)<=30.00?true:false} variant="danger" style={{marginLeft: "27px", marginTop: "17px", marginBottom: "17px", paddingLeft: "11px", paddingRight: "11px" }} onClick={(e) => { e.preventDefault(); this.setPopup("cancel this lecture"); }}>CANCEL LECTURE</Button>
+                                <Button disabled={moment(this.state.selectedLec.Date).diff(moment(), 'minutes', true)<=60.00?true:false} variant="info" style={{marginLeft: "17px", marginTop: "17px", marginBottom: "17px", paddingLeft: "11px", paddingRight: "11px" }} onClick={(e) => { e.preventDefault(); this.setPopup("turn this lecture into a distance lecture"); }}>TURN INTO DISTANCE LECTURE</Button>
                             </div>
                         </div>
                     </Modal.Header>
