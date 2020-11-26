@@ -150,12 +150,12 @@ export class TeacherTabLec extends Component {
                                 <br></br>
                                 {}
                                 {moment(this.state.selectedLec.Date).diff(moment(), 'minutes', true)<=60.00 ? 
-                                <div><p style={{fontSize: "small", color: "#e00d0d"}}>Lectures cannot be cancelled if there is less than 1 hour left to their scheduled time</p></div>
-                                : <div></div>
+                                <div><p style={{fontWeight:'bold', fontSize: "small", color: "#e00d0d"}}>Lectures cannot be cancelled if there is less than 1 hour left to their scheduled time</p></div>
+                                : <div><p style={{fontSize: "small"}}>Lectures cannot be cancelled if there is less than 1 hour left to their scheduled time</p></div>
                                 }
                                 {moment(this.state.selectedLec.Date).diff(moment(), 'minutes', true)<=30.00 ? 
-                                    <div><p style={{fontSize: "small", color: "#e00d0d"}}>Lectures cannot be changed to distance lectures if there are less than 30 minutes left to their scheduled time</p></div> 
-                                    : <div></div>
+                                    <div><p style={{fontWeight:'bold', fontSize: "small", color: "#e00d0d"}}>Lectures cannot be changed to distance lectures if there are less than 30 minutes left to their scheduled time</p></div> 
+                                    : <div><p style={{fontSize: "small"}}>Lectures cannot be changed to distance lectures if there are less than 30 minutes left to their scheduled time</p></div>
                                 }
                             </Modal.Title>
                             <div style={{display: "flex", flexWrap: "no-wrap", justifyContent: "flex-end", marginTop: "27px"}}>
