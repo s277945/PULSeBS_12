@@ -87,8 +87,8 @@ export class TeacherTabLec extends Component {
             }
             
         }
-        if(this.state.popup.message==="cancel this lecture"&&moment(this.state.selectedLec.Date).diff(moment(), 'minutes', true)<=60.00&&this.state.popup.show===1) { this.popupClose(); return;} // check if popup can open
-        if(this.state.popup.message!=="cancel this lecture"&&moment(this.state.selectedLec.Date).diff(moment(), 'minutes', true)<=30.00&&this.state.popup.show===1) { this.popupClose(); return;}
+        if(this.state.popup.message==="cancel this lecture"&&moment(this.state.selectedLec.Date).diff(moment(), 'minutes', true)<=60.00&&this.state.popup.show==1) { this.popupClose(); return;} // check if popup can open
+        if(this.state.popup.message!=="cancel this lecture"&&moment(this.state.selectedLec.Date).diff(moment(), 'minutes', true)<=30.00&&this.state.popup.show==1) { this.popupClose(); return;}
 
         return (
             <Modal show={this.state.popup.show} onHide={this.popupClose} style={{marginTop: "25vh", marginLeft: "5px"}}>
