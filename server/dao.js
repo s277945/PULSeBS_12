@@ -49,9 +49,9 @@ exports.addSeat=function(userId, courseId, date){
                         db.run(sql, [courseId, date, userId], function(err){
                             if(err) reject(err);
                             else{ 
-                                const sql='UPDATE Lecture SET BookedSeats=BookedSeats+1 WHERE Course_Ref=? AND Date=?'
-                                db.run(sql, [courseId, date], function(err){
-                                    if(err) reject(err);
+                                const sql2 ='UPDATE Lecture SET BookedSeats=BookedSeats+1 WHERE Course_Ref=? AND Date=?'
+                                db.run(sql2, [courseId, date], function(err2){
+                                    if(err2) reject(err2);
                                     else resolve(true);
                                 });
                             }
@@ -118,9 +118,9 @@ exports.deleteSeat=function(userId, courseId, date){
             if(err)
                 reject(err);
             else{
-                const sql='UPDATE Lecture SET BookedSeats = BookedSeats - 1 WHERE Course_Ref=? AND Date=?';
-                db.run(sql, [courseId, date], (err) => {
-                    if(err)reject(err);
+                const sql2='UPDATE Lecture SET BookedSeats = BookedSeats - 1 WHERE Course_Ref=? AND Date=?';
+                db.run(sql2, [courseId, date], (err2) => {
+                    if(err2) reject(err2);
                     else{
                         resolve(true);    
                     }
