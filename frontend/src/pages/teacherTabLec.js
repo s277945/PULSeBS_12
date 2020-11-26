@@ -87,8 +87,8 @@ export class TeacherTabLec extends Component {
             }
             
         }
-        if(this.state.popup.message==="cancel this lecture"&&moment(this.state.selectedLec.Date).diff(moment(), 'minutes', true)<=30.00) { sessionStorage.removeItem("popup"); return;} // check if popup can open
-        if(this.state.popup.message!=="cancel this lecture"&&moment(this.state.selectedLec.Date).diff(moment(), 'minutes', true)<=60.00) { sessionStorage.removeItem("popup"); return;}
+        if(this.state.popup.message==="cancel this lecture"&&moment(this.state.selectedLec.Date).diff(moment(), 'minutes', true)<=60.00) { sessionStorage.removeItem("popup"); return;} // check if popup can open
+        if(this.state.popup.message!=="cancel this lecture"&&moment(this.state.selectedLec.Date).diff(moment(), 'minutes', true)<=30.00) { sessionStorage.removeItem("popup"); return;}
 
         return (
             <Modal show={this.state.popup.show===1? true:false} onHide={this.popupClose} style={{marginTop: "25vh", marginLeft: "5px"}}>
@@ -149,12 +149,18 @@ export class TeacherTabLec extends Component {
                                 <div><p style={{fontWeight:'bold', display: "inline"}}>Date: </p><p style={{display: "inline", marginLeft: "10px"}}>{this.state.selectedLec.Date}</p></div>
                                 <br></br>
                                 {}
+                                {moment(this.state.selectedLec.Date).diff(moment(), 'minutes', true)<=60.00 ? 
                                 <div><p style={{fontSize: "small", color: "#e00d0d"}}>Lectures cannot be cancelled if there is less than 1 hour left to their scheduled time</p></div>
-                                <div><p style={{fontSize: "small", color: "#e00d0d"}}>Lectures cannot be changed to distance lectures if there are less than 30 minutes left to their scheduled time</p></div>
+                                : <div></div>
+                                }
+                                {moment(this.state.selectedLec.Date).diff(moment(), 'minutes', true)<=30.00 ? 
+                                    <div><p style={{fontSize: "small", color: "#e00d0d"}}>Lectures cannot be changed to distance lectures if there are less than 30 minutes left to their scheduled time</p></div> 
+                                    : <div></div>
+                                }
                             </Modal.Title>
                             <div style={{display: "flex", flexWrap: "no-wrap", justifyContent: "flex-end", marginTop: "27px"}}>
-                                <Button disabled={moment(this.state.selectedLec.Date).diff(moment(), 'minutes', true)<=30.00?true:false} variant="danger" style={{marginLeft: "27px", marginTop: "17px", marginBottom: "17px", paddingLeft: "11px", paddingRight: "11px" }} onClick={(e) => { e.preventDefault(); this.setPopup("cancel this lecture"); }}>CANCEL LECTURE</Button>
-                                <Button disabled={moment(this.state.selectedLec.Date).diff(moment(), 'minutes', true)<=60.00?true:false} variant="info" style={{marginLeft: "17px", marginTop: "17px", marginBottom: "17px", paddingLeft: "11px", paddingRight: "11px" }} onClick={(e) => { e.preventDefault(); this.setPopup("turn this lecture into a distance lecture"); }}>TURN INTO DISTANCE LECTURE</Button>
+                                <Button disabled={moment(this.state.selectedLec.Date).diff(moment(), 'minutes', true)<=60.00?true:false} variant="danger" style={{marginLeft: "27px", marginTop: "17px", marginBottom: "17px", paddingLeft: "11px", paddingRight: "11px" }} onClick={(e) => { e.preventDefault(); this.setPopup("cancel this lecture"); }}>CANCEL LECTURE</Button>
+                                <Button disabled={moment(this.state.selectedLec.Date).diff(moment(), 'minutes', true)<=30.00?true:false} variant="info" style={{marginLeft: "17px", marginTop: "17px", marginBottom: "17px", paddingLeft: "11px", paddingRight: "11px" }} onClick={(e) => { e.preventDefault(); this.setPopup("turn this lecture into a distance lecture"); }}>TURN INTO DISTANCE LECTURE</Button>
                             </div>
                         </div>
                     </Modal.Header>
