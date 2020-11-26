@@ -87,11 +87,11 @@ export class TeacherTabLec extends Component {
             }
             
         }
-        if(this.state.popup.message==="cancel this lecture"&&moment(this.state.selectedLec.Date).diff(moment(), 'minutes', true)<=60.00) { sessionStorage.removeItem("popup"); return;} // check if popup can open
-        if(this.state.popup.message!=="cancel this lecture"&&moment(this.state.selectedLec.Date).diff(moment(), 'minutes', true)<=30.00) { sessionStorage.removeItem("popup"); return;}
+        if(this.state.popup.message==="cancel this lecture"&&moment(this.state.selectedLec.Date).diff(moment(), 'minutes', true)<=60.00&&this.state.popup.show===1) { this.popupClose(); return;} // check if popup can open
+        if(this.state.popup.message!=="cancel this lecture"&&moment(this.state.selectedLec.Date).diff(moment(), 'minutes', true)<=30.00&&this.state.popup.show===1) { this.popupClose(); return;}
 
         return (
-            <Modal show={this.state.popup.show===1? true:false} onHide={this.popupClose} style={{marginTop: "25vh", marginLeft: "5px"}}>
+            <Modal show={this.state.popup.show} onHide={this.popupClose} style={{marginTop: "25vh", marginLeft: "5px"}}>
                 <Modal.Header class="app-element-background" closeButton style={{minWidth: "498px"}}>
                     <div  style={{flexWrap: "wrap", justifyContent: "center", minWidth: "432px"}}>
                         <p style={{paddingTop: "15px", paddingBottom: "30px", fontSize: "25px", textAlign: "center"}}>Do you want to {this.state.popup.message} ?</p>
