@@ -419,6 +419,88 @@ exports.getCourseStats = function (courseId){
 }
 
 
+exports.getWeekStats = function(courseId){
+    return new Promise((resolve, reject) => {
+        const sql = 'SELECT Semester FROM Course WHERE CourseID = ?';
+        db.get(sql, [courseId], (err, row) => {
+            if(err) reject(err);
+            else{
+                retrieveWeekStats(courseId, row.Semester)
+                    .then((list) => {
+                        resolve(list);
+                    })
+                    .catch((err) => {
+                        reject(err);
+                    })
+            }
+        })
+    })
+}
+
+function computeWeeks(startDate, endDate){
+    let list = [];
+    let end = moment(startDate);
+    let start = moment(startDate);
+
+    while(end.isBefore(moment(endDate))){
+        end = moment(start).add(4, 'days');
+        list.push({"startDate": start, "endDate": end});
+        start = moment(start).add(7, 'days');
+    }
+
+    return list;
+}
+
+function retrieveWeekStats(courseId, semester){
+    let list = [];
+    let startWeek;
+    let endWeek;
+    let thisDate = moment();
+    let currentYear;
+    let i = 0;
+
+    if(thisDate.isAfter(moment(6, 'M')))
+        currentYear = moment().year();
+    else currentYear =  moment().year() - 1;
+
+    switch(semester){
+        case 1:
+            startWeek = moment([currentYear, 9, 1]).startOf('isoWeek');
+            endWeek = moment([currentYear+1, 0, 31]).startOf('isoWeek');
+            break;
+        case 2:
+            startWeek = moment([currentYear, 2, 1]).startOf('isoWeek');
+            endWeek = moment([currentYear, 5, 31]).startOf('isoWeek');
+            break;
+        default:
+            break;
+    }
+
+    let weeks = computeWeeks(startWeek, endWeek);
+    let n = weeks.length;
+
+    const sql = 'SELECT AVG(BookedSeats) AS average FROM Lecture WHERE Course_Ref=? AND Date>=? AND Date<=?';
+    return new Promise((resolve, reject) => {
+        for(let week of weeks) {
+            let startDate = moment(week["startDate"]).format('YYYY-MM-DD HH:mm:ss');
+            let endDate = moment(week["endDate"]).add(1, 'days').format('YYYY-MM-DD HH:mm:ss');
+            db.get(sql,[courseId, startDate, endDate], (err,row)=>{
+                if(err) reject(err);
+                else {
+                    let weekName = moment(startDate).format('DD/MM') + "-" + moment(endDate).format('DD/MM');
+                    list.push({"weekName": weekName, "average": row.average});
+                    i++;
+                }
+                if (i===n) resolve(list);
+            });
+        }
+
+    })
+
+
+
+}
+
 /*
  * Input: Course_Ref, Date(start), Date(end)
  * Output: Average value of the information in the date range
@@ -470,11 +552,15 @@ exports.getMonthStats = function (courseId){
     })
 }
 
-
 function retrieveMonthStats(courseId, semester){
     let list = [];
     let months;
-    const currentYear = moment().year();
+    let thisDate = moment();
+    let currentYear;
+    if(thisDate.isAfter(moment(6, 'M')))
+        currentYear = moment().year();
+    else currentYear =  moment().year() - 1;
+
     switch(semester){
         case 1:
             months = [9, 10, 11, 0];
@@ -491,6 +577,7 @@ function retrieveMonthStats(courseId, semester){
     const sql = 'SELECT AVG(BookedSeats) AS average FROM Lecture WHERE Course_Ref=? AND Date>=? AND Date<=?';
     return new Promise((resolve, reject) => {
         for(let month of months) {
+            if(month === 0) currentYear+=1;
             let startDate = moment([currentYear, month, 1]);
             let tmp = moment([currentYear, month, 1]);
             let endDate = tmp.endOf('month');
@@ -500,7 +587,7 @@ function retrieveMonthStats(courseId, semester){
                 if(err) reject(err);
                 else {
                     let monthName = startDate.format('MMMM');
-                    console.log("pushing");
+                    console.log(startDate);
                     list.push({"month": monthName, "average": row.average});
                     i++;
                 }

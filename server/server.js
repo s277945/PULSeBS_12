@@ -349,6 +349,23 @@ app.get('/api/monthStats/:courseId', (req, res) => {
 })
 
 /**
+ * GET /api/historicalStats/:courseId
+ * Retrieves stats of the courses of a given teacher grouped by week (and course)
+ *
+ *  body response: stats grouped by week. Format to be defined
+ */
+
+app.get('/api/weekStats/:courseId', (req, res) => {
+    const courseId = req.params.courseId;
+    dao.getWeekStats(courseId)
+        .then((response) => {
+            res.status(200).json(response);
+        })
+        .catch((err) => {
+            res.status(500).json(err);
+        })
+})
+/**
  * GET /api/monthStats
  * Retrieves stats of the courses of a given teacher grouped by month (and course)
  *
