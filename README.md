@@ -98,8 +98,66 @@
  - request parameters: courseId
  - body response:  [{"lectureName": "SE2 Les:1", "date": "2020-12-10 12:00:00","nBooked": 1}, ...]
  
-  **GET /api/historicalStats/:courseId**
-  - url example: /api/historicalStats/C0123?dateStart=2020-12-10 12:00:00&dateEnd=2020-12-17 12:00:00
-  - request parameters: courseId 
-  - query parameters: dateStart, dateEnd
-  - body response: it's a number, the average. For istance: 0.3333333333333333
+ **GET /api/monthStats/:courseId**
+ - request parameters: courseId
+ - url example: /api/monthStats/C0123
+ - body response: [
+                      {
+                          "month": "October",
+                          "average": null
+                      },
+                      {
+                          "month": "November",
+                          "average": null
+                      },
+                      {
+                          "month": "December",
+                          "average": 0.25
+                      },
+                      {
+                          "month": "January",
+                          "average": null
+                      }
+                  ]
+ - hint: null value on average means that we haven't any data on db to compute
+  
+  
+  **GET /api/weekStats/:courseId**
+   - request parameters: courseId
+   - url example: /api/weekStats/C0123
+   - body response: [
+                        {
+                            "weekName": "02/11-07/11",
+                            "average": null
+                        },
+                        {
+                            "weekName": "16/11-21/11",
+                            "average": null
+                        },
+                        {
+                            "weekName": "23/11-28/11",
+                            "average": null
+                        },
+                        {
+                            "weekName": "30/11-05/12",
+                            "average": null
+                        },
+                        {
+                            "weekName": "07/12-12/12",
+                            "average": 1
+                        },
+                        {
+                            "weekName": "14/12-19/12",
+                            "average": 0
+                        },
+                        {
+                            "weekName": "21/12-26/12",
+                            "average": 0
+                        },
+                        {
+                            "weekName": "28/12-02/01",
+                            "average": null
+                        }
+                    ]
+   - hints: null value on average means that we haven't any data on db to compute
+            Also I cut the response example because it was too long
