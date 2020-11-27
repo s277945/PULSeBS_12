@@ -108,21 +108,6 @@ describe('********TEST SERVER******', function () {
             expect(res.headers['set-cookies']).to.be.undefined;
         });
     });
-    describe('DELETE /api/courseLectures/:courseId', function () {
-        it('should return 500:Delete lecture deadline expired', async function () {
-            let res = await chai.request(url).post('/api/login').send({
-                userName: 's269422',
-                password: 'scimmia'
-            })
-            cookie = res.headers['set-cookie'];
-            res=await chai.request(url).delete('/api/courseLectures/C4567?date=2020-11-15 09:00:00').set('Cookie',cookie).send()
-            expect(res.status).to.equal(500);
-        });
-        it('should return 204 ', async function () {
-            let res=await chai.request(url).delete('/api/courseLectures/C4567?date=2020-12-11 14:00:00').set('Cookie',cookie).send();
-            expect(res.status).to.equal(204);
-        });
-    });
     describe('GET api/checkEmails', function () {
         it('should ', async function () {
             let res=await chai.request(url).get('/api/checkEmails').set('Cookie',cookie).send();
