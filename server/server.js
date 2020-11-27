@@ -337,11 +337,9 @@ app.get('/api/courseStats/:courseId', (req, res) => {
  *  body response: stats grouped by week. Format to be defined
  */
 
-app.get('/api/historicalStats/:courseId', (req, res) => {
+app.get('/api/monthStats/:courseId', (req, res) => {
     const courseId = req.params.courseId;
-    const dateStart = req.query.dateStart;
-    const dateEnd = req.query.dateEnd;
-    dao.getHistoricalStats(courseId, dateStart, dateEnd)
+    dao.getMonthStats(courseId)
         .then((response) => {
             res.status(200).json(response);
         })
