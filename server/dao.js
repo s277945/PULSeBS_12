@@ -48,18 +48,18 @@ exports.addSeat=function(userId, courseId, date){
                         const sql='INSERT INTO Booking VALUES(?,?,?)';
                         db.run(sql, [courseId, date, userId], function(err){
                             if(err) reject(err);
-                            else{ 
+                            else{
                                 const sql2 ='UPDATE Lecture SET BookedSeats=BookedSeats+1 WHERE Course_Ref=? AND Date=?'
                                 db.run(sql2, [courseId, date], function(err2){
                                     if(err2) reject(err2);
                                     else resolve(true);
                                 });
                             }
-                        
+
                         })
                     }
                     else reject(new Error("0 seats available"));
-                }).catch(err=>reject(err));    
+                }).catch(err=>reject(err));
             }else reject(new Error("Course unavailable"));
         }).catch(err=>reject(err));
     })
@@ -122,7 +122,7 @@ exports.deleteSeat=function(userId, courseId, date){
                 db.run(sql2, [courseId, date], (err2) => {
                     if(err2) reject(err2);
                     else{
-                        resolve(true);    
+                        resolve(true);
                     }
                 });
             }
@@ -181,7 +181,7 @@ exports.getLecturesBookedByUserId=function(userId){
 exports.getCoursesByUserId=function(userId){
     return new Promise((resolve, reject) => {
         const sql='SELECT Name FROM Course WHERE CourseID IN ('+
-                'SELECT Course_Ref FROM Presence WHERE User_Ref=?)';
+            'SELECT Course_Ref FROM Presence WHERE User_Ref=?)';
         db.all(sql, [userId], (err,rows)=>{
             if(err){
                 reject(err);
@@ -202,7 +202,7 @@ exports.getCoursesByUserId=function(userId){
 exports.getNextLectureNumber=function(userId){
     
     return new Promise((resolve, reject) => {
-        const date=moment().format('YYYY-MM-DD HH:mm:ss');
+        const date=moment().format ;
         const sql='SELECT Course_Ref, Name, MIN(Date) AS minDate FROM Lecture WHERE Date > ? AND Course_Ref IN (' +
             'SELECT CourseID FROM Course WHERE User_Ref=?)';
         db.get(sql, [date, userId], async (err,row) =>{
@@ -269,13 +269,13 @@ exports.getStudentList=function(courseId, date){
     let list=[];
     return new Promise((resolve, reject) => {
         const sql='SELECT userID, Name, Surname FROM User WHERE userID IN ('+
-        'SELECT Student_Ref FROM Booking WHERE Course_Ref=? AND Date_Ref=?)';
+            'SELECT Student_Ref FROM Booking WHERE Course_Ref=? AND Date_Ref=?)';
         db.all(sql,[courseId,date],(err,rows)=>{
             if(err){
                 reject(err);
             }
             else{
-                rows.forEach((row)=>{ 
+                rows.forEach((row)=>{
                     list.push({"userId":row.userID, "name":row.Name, "surname": row.Surname})
                 });
                 resolve(list);
@@ -346,7 +346,7 @@ function getStudentEmails(courseId, date){
     let list = [];
     return new Promise((resolve, reject) => {
         const sql='SELECT Email FROM User WHERE userID IN ('+
-        'SELECT Student_Ref FROM Booking WHERE Course_Ref=? AND Date_Ref=? )';
+            'SELECT Student_Ref FROM Booking WHERE Course_Ref=? AND Date_Ref=? )';
         db.all(sql, [courseId, date], (err, rows) => {
             if(err)
                 reject(err);
@@ -388,9 +388,9 @@ exports.changeTypeOfLecture = function(courseId, date){
     return new Promise((resolve, reject)=>{
         const sql = 'UPDATE Lecture SET Type="d" WHERE Course_Ref=? AND Date=?';
         db.run(sql, [courseId, date], function (err) {
-            if(err) 
+            if(err)
                 reject(err);
-            else 
+            else
                 resolve(true);
         });
     })
@@ -409,7 +409,7 @@ exports.getCourseStats = function (courseId){
         db.all(sql,[courseId], (err,rows)=>{
             if(err) reject(err);
             else{
-                rows.forEach((row)=>{ 
+                rows.forEach((row)=>{
                     list.push({"lectureName":row.Name, "date":row.Date, "nBooked": row.BookedSeats})
                 });
                 resolve(list);
@@ -443,8 +443,22 @@ exports.getHistoricalStats = function (courseId, dateStart, dateEnd){
  * Receive as a parameter the userId
  * */
 
-exports.getMonthStats = function (userId){
+exports.getMonthStats = function (courseId){
     return new Promise((resolve, reject) => {
+        const sql = 'SELECT Semester FROM Course WHERE CourseID = ?';
+        db.get(sql, [courseId], (err, row) => {
+            if(err) reject(err);
+            else{
+                retrieveMonthStats(courseId, row.Semester)
+                    .then((list) => {
+                        resolve(list);
+                    })
+                    .catch((err) => {
+                        reject(err);
+                    })
+            }
+        })
+        /*
         const sql='SELECT AVG(BookedSeats) AS average FROM Lecture WHERE Course_Ref=? AND Date>=? AND Date<=?'
         db.get(sql,[courseId, dateStart, dateEnd], (err,row)=>{
             if(err) reject(err);
@@ -452,22 +466,67 @@ exports.getMonthStats = function (userId){
                 resolve(row.average);
             }
         })
+        */
     })
+}
+
+
+function retrieveMonthStats(courseId, semester){
+    let list = [];
+    let months;
+    const currentYear = moment().year();
+    switch(semester){
+        case 1:
+            months = [9, 10, 11, 0];
+            break;
+        case 2:
+            months = [2, 3, 4, 5];
+            break;
+        default:
+            months = [];
+            break;
+    }
+    console.log(months);
+    let i = 0;
+    const sql = 'SELECT AVG(BookedSeats) AS average FROM Lecture WHERE Course_Ref=? AND Date>=? AND Date<=?';
+    return new Promise((resolve, reject) => {
+        for(let month of months) {
+            let startDate = moment([currentYear, month, 1]);
+            let tmp = moment([currentYear, month, 1]);
+            let endDate = tmp.endOf('month');
+            db.get(sql,[courseId, startDate.format('YYYY-MM-DD HH:mm:ss'),
+                endDate.format('YYYY-MM-DD HH:mm:ss')], (err,row)=>{
+
+                if(err) reject(err);
+                else {
+                    let monthName = startDate.format('MMMM');
+                    console.log("pushing");
+                    list.push({"month": monthName, "average": row.average});
+                    i++;
+                }
+                if (i===4) resolve(list);
+            });
+        }
+
+    })
+
+
+
 }
 
 // EMAIL FUNCTIONS
 /**
  * Retrieve email of a given student
- * @param {} userId 
+ * @param {} userId
  */
 
 exports.getStudentEmail = function(userId){
     return new Promise((resolve, reject) => {
         const sql = 'SELECT Email FROM User WHERE userID=?';
         db.get(sql, [userId], (err, row)=> {
-            if(err) 
+            if(err)
                 reject(err);
-            else 
+            else
                 resolve(row.Email);
         });
     })
@@ -476,9 +535,9 @@ exports.getStudentEmail = function(userId){
 function getTeacherEmail(courseId){
     return new Promise((resolve, reject) => {
         const sql = 'SELECT Email FROM User WHERE UserType="t" AND userID IN (' +
-                'SELECT User_Ref FROM Course WHERE CourseID=?)';
+            'SELECT User_Ref FROM Course WHERE CourseID=?)';
         db.get(sql, [courseId], (err, row)=> {
-            if(err) 
+            if(err)
                 reject(err);
             else {
                 resolve(row.Email);
@@ -494,9 +553,9 @@ exports.emailSentUpdate = function(courseId, date){
     return new Promise((resolve, reject) => {
         const sql = 'UPDATE Lecture SET EmailSent=1 WHERE Course_Ref=? AND Date=?';
         db.run(sql, [courseId, date], function (err) {
-            if(err) 
+            if(err)
                 reject(err);
-            else 
+            else
                 resolve(true);
         });
     })
