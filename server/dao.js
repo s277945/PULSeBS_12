@@ -73,7 +73,7 @@ exports.addSeat=function(userId, courseId, date){
 
 function findCourse(userId, courseId){
     return new Promise((resolve, reject) => {
-        const sql='SELECT COUNT(*) FROM Course WHERE User_Ref=? AND CourseID=?';
+        const sql='SELECT COUNT(*) FROM Presence WHERE User_Ref=? AND Course_Ref=?';
         db.get(sql,[userId,courseId],(err,row)=>{
             if(err)
                 reject(err);
@@ -140,7 +140,7 @@ exports.getLecturesByUserId=function(userId){
     return new Promise((resolve, reject) => {
         const date=moment().format('YYYY-MM-DD HH:mm:ss');
         const sql='SELECT Course_Ref, Name, Date FROM  Lecture  WHERE DateDeadline > ? AND Type = "p" AND Course_Ref IN (' +
-            'SELECT CourseID FROM Course WHERE User_Ref=?)';
+            'SELECT Course_Ref FROM Presence WHERE User_Ref=?)';
         db.all(sql, [date, userId], (err,rows)=>{
             if(err){
                 reject(err);
@@ -180,7 +180,8 @@ exports.getLecturesBookedByUserId=function(userId){
 
 exports.getCoursesByUserId=function(userId){
     return new Promise((resolve, reject) => {
-        const sql='SELECT Name FROM Course WHERE User_Ref=?';
+        const sql='SELECT Name FROM Course WHERE CourseID IN ('+
+                'SELECT Course_Ref FROM Presence WHERE User_Ref=?)';
         db.all(sql, [userId], (err,rows)=>{
             if(err){
                 reject(err);
@@ -441,9 +442,8 @@ exports.getHistoricalStats = function (courseId, dateStart, dateEnd){
  *
  * Receive as a parameter the userId
  * */
-/*
+
 exports.getMonthStats = function (userId){
-    let list = [];
     return new Promise((resolve, reject) => {
         const sql='SELECT AVG(BookedSeats) AS average FROM Lecture WHERE Course_Ref=? AND Date>=? AND Date<=?'
         db.get(sql,[courseId, dateStart, dateEnd], (err,row)=>{
@@ -453,7 +453,7 @@ exports.getMonthStats = function (userId){
             }
         })
     })
-}*/
+}
 
 // EMAIL FUNCTIONS
 /**
