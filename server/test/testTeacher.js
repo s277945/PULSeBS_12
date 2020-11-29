@@ -90,9 +90,9 @@ describe('TEACHER TESTING', function () {
             expect(res.body.response).to.be.equals(true);
         });
     });
-    /*describe('GET COURSE STATS BY COURSE_ID', function () {
+    describe('GET COURSE STATS BY COURSE_ID', function () {
         it('should return status 200',async function () {
-            let res=await chai.request(url).get("/api/courseStats/:courseId")
+            let res=await chai.request(url).get("/api/courseStats/C4567")
                 .set("Cookie",cookie)
                 .send()
                 .end((err,res)=>{
@@ -100,7 +100,7 @@ describe('TEACHER TESTING', function () {
                 });
         });
         it('should return status 500',async function () {
-            let res=await chai.request(url).get("/api/courseStats/:courseId")
+            let res=await chai.request(url).get("/api/courseStats/C4567")
                 .set("Cookie",cookie)
                 .send()
                 .end((err,res)=>{
@@ -108,9 +108,9 @@ describe('TEACHER TESTING', function () {
                 });
         });
     });
-    describe('GET HISTORICAL STATS', function () {
+    describe('GET MONTH STATS', function () {
         it('should return status 200',async function () {
-            let res=await chai.request(url).get('/api/historicalStats/:courseId')
+            let res=await chai.request(url).get('/api/monthStats/:courseId')
                 .set("Cookie",cookie)
                 .send({dateStart:"",dateEnd:""})
                 .end((err,res)=>{
@@ -118,24 +118,39 @@ describe('TEACHER TESTING', function () {
                 });
         });
         it('should return status 500',async function () {
-            let res=await chai.request(url).get('/api/historicalStats/:courseId')
+            let res=await chai.request(url).get('/api/monthStats/:courseId')
                 .set("Cookie",cookie)
                 .send({dateStart:"",dateEnd:""})
                 .end((err,res)=>{
 
                 });
         });
-    });*/
+    });
+    describe('GET WEEK STATS', function () {
+        it('should return status 200', function () {
+            return chai.request(url)
+                .get("/api/weekStats/:courseId")
+                .set("Cookie",cookie)
+                .send()
+                .then(res=>{
+                    expect(res.status).to.equals(200);
+
+                })
+        });
+        it('should ', function () {
+
+        });
+    });
     after(async()=>{
         const course_id='C4567';
         let date='2020-12-22 09:00:00';
-        restoreTypeLecture(course_id,date);
+        await restoreTypeLecture(course_id,date);
         const course_Ref='C4567';
         date='2020-12-11 14:00:00';
         const deadline='2020-12-17 23:00:00';
         const name='PDS Les:3';
         const capacity=70;
-        insertDeletedRow(course_Ref,name,date,deadline,capacity);
+        await insertDeletedRow(course_Ref,name,date,deadline,capacity);
         let res=await chai.request(url).post('/api/logout').set('Cookie',cookie).send()
     })
 });

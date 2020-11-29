@@ -48,14 +48,7 @@ describe('********TEST SERVER******', function () {
             expect(res.body).to.be.an('array');
         });
     });
-    describe('method GET/api/lectures/next', function () {
-        it('should get response state 201',async function () {
-            let res=await chai.request(url).get('/api/lectures/next').set('Cookie',cookie).send()
-            expect(res.status).to.equal(201);
-            expect(res.body.lectureName).to.be.not.null;
-            expect(res.body.numberOfStudents).to.be.not.null;
-        });
-    });
+
     describe('List Student', function () {
         it('should get response state 201',async function () {
             let res=await chai.request(url).get('/api/lectures/listStudents').set('Cookie',cookie).send({courseRef: "C0123", date: "2020-12-10 12:00:00"})
@@ -111,6 +104,7 @@ describe('********TEST SERVER******', function () {
     describe('GET api/checkEmails', function () {
         it('should ', async function () {
             let res=await chai.request(url).get('/api/checkEmails').set('Cookie',cookie).send();
+            expect(JSON.stringify(res)).to.equals('aa');
             expect(res.status).to.equal(200);
         });
     });
