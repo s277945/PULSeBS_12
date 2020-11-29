@@ -123,7 +123,7 @@ exports.deleteSeat=function(userId, courseId, date){
             if(err)
                 reject(err);
             else{
-                const sql2='UPDATE Lecture SET BookedSeats = BookedSeats - 1 WHERE Course_Ref=? AND Date=?';
+                const sql2='UPDATE Lecture SET BookedSeats = BookedSeats - 1, UnbookedSeats = UnbookedSeats + 1 WHERE Course_Ref=? AND Date=?';
                 db.run(sql2, [courseId, date], (err2) => {
                     /* istanbul ignore if */
                     if(err2) reject(err2);
@@ -653,6 +653,8 @@ function getTeacherEmail(courseId){
     })
 }
 
+
+
 /**
  * Function to update Lecture table in order to not sent too many emails
  */
@@ -669,3 +671,58 @@ exports.emailSentUpdate = function(courseId, date){
     })
 }
 
+//Story 11 functions
+exports.getCourses=function(){
+    return new Promise((resolve, reject) => {
+        const sql='SELECT Name FROM Course';
+        db.all(sql, [userId], (err,rows)=>{
+            /* istanbul ignore if */
+            if(err){
+                reject(err);
+            }
+            else{
+                resolve(rows);
+            }
+        });
+    });
+}
+
+exports.getManagerCourseStats = function (courseId){
+    let list = [];
+    let booking = 0;
+    return new Promise((resolve, reject) => {
+        const sql='SELECT Name, Date, BookedSeats, UnbookedSeats FROM Lecture WHERE Course_Ref=? AND Type="p"';
+        db.all(sql,[courseId], (err,rows)=>{
+            if(err) reject(err);
+            else{
+                rows.forEach((row)=>{
+                    booking = row.BookedSeats+row.UnbookedSeats;
+                    list.push({"lectureName":row.Name, "date":row.Date, "nBooked": booking, "nAttendance": row.BookedSeats, "nCancellations":row.UnbookedSeats});
+                });
+                resolve(list);
+            }
+        })
+    })
+}
+
+exports.getManagerCourseStatsTotal = function (courseId){
+    let list = [];
+    let booking = 0;
+    let attendance = 0;
+    let cancellation = 0;
+    return new Promise((resolve, reject) => {
+        const sql='SELECT Name, Date, BookedSeats, UnbookedSeats FROM Lecture WHERE Course_Ref=? AND Type="p"';
+        db.all(sql,[courseId], (err,rows)=>{
+            if(err) reject(err);
+            else{
+                rows.forEach((row)=>{
+                    booking += row.BookedSeats+row.UnbookedSeats;
+                    attendance += row.BookedSeats;
+                    cancellation += row.UnbookedSeats;
+                    list.push({"courseName":courseId, "nBooked": booking, "nAttendance": attendance, "nCancellations": cancellation});
+                });
+                resolve(list);
+            }
+        })
+    })
+}
