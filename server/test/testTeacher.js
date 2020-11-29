@@ -45,42 +45,45 @@ describe('TEACHER TESTING', function () {
     })
     describe('DELETE FUNCTION', function () {
         it('should return status 500',async function () {
-           let res=await chai.request(url).delete('/api/courseLectures/C4567?date=2020-11-15 09:00:00').set('Cookie',cookie).send()
-               .end((err,res)=>{
-                   expect(err).to.deep.equals("Delete lecture deadline expired");
-                   expect(res.status).to.equal(500);
-               })
+            return chai.request(url)
+                .delete('/api/courseLectures/C4567?date=2020-10-15 09:00:00')
+                .set('Cookie',cookie)
+                .send()
+                .then((res)=>{
+                    expect(res.status).to.equal(500);
+                    expect(res).to.have.property('error');
+                    expect(res.error).to.equal('Delete lecture deadline expired');
+                })
 
         });
         it('should return status 204',async function () {
-            let res=await chai.request(url).delete('/api/courseLectures/C4567?date=2020-12-11 14:00:00').set('Cookie',cookie).send()
-                .end((err,res)=>{
-                    expect(err).to.be.null;
-                    expect(res).to.have.status(204);
-                    expect(res.body.lecture).to.deep.equals('canceled');
-                })
+            let res=await chai.request(url)
+                .delete('/api/courseLectures/C4567?date=2020-12-11 14:00:00')
+                .set('Cookie',cookie)
+                .send()
+            expect(res.err).to.be.undefined;
+            expect(res.status).to.be.equals(204);
+            expect(res.body).to.have.property('lecture');
 
 
         });
     });
     describe('CHANGE TYPE OF LECTURE', function () {
         it('should return status 422', async function () {
-            let res=await chai.request(url).put('/api/lectures').set("Cookie",cookie)
+            return chai.request(url).put('/api/lectures').set("Cookie",cookie)
                 .send({courseId: "C4567",date:"2020-11-17 14:00:00"})
-                .end((err,res)=>{
-                    expect(err.error).to.deep
-                        .equals("Cannot modify type of lecture after 30 minutes before scheduled time");
-                    expect(res).to.have.status(422);
+                .then(res=>{
+                    expect(res.status).to.be.equals(422);
+                    expect(res.body).to.have.property('error')
+                    expect(res.body.error).to.be.equals('Cannot modify type of lecture after 30 minutes before scheduled time')
                 })
         });
         it('should return status 200',async function () {
             let res=await chai.request(url).put('/api/lectures').set("Cookie",cookie)
-                .send({courseId: "C4567",date:"2020-12-22 09:00:00"})
-                .end((err,res)=>{
-                    expect(err).to.be.null;
-                    expect(res).to.have.status(200);
-                    expect(res.body.response).to.deep.equals(true);
-                });
+                .send({courseId: "C4567",date:"2020-12-22 09:00:00"});
+            expect(res.err).to.be.undefined;
+            expect(res).to.have.status(200);
+            expect(res.body).to.have.property('response');
         });
     });
     /*describe('GET COURSE STATS BY COURSE_ID', function () {
