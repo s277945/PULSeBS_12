@@ -64,6 +64,21 @@ export function cancelLecture(courseId, date){
     return axiosInst.delete(`http://localhost:3001/api/courseLectures/${courseId}?date=${date}`, { withCredentials: true });
 }
 
+export function getCourseStats(course){
+    // get list of lectures for student from server
+    return axiosInst.get(`http://localhost:3001/api/courseStats/${course}`, { withCredentials: true });
+}
+
+export function getWeekStats(course){
+    // get list of lectures for student from server
+    return axiosInst.get(`http://localhost:3001/api/weekStats/${course}`, { withCredentials: true });
+}
+
+export function getMonthStats(course){
+    // get list of lectures for student from server
+    return axiosInst.get(`http://localhost:3001/api/monthStats/${course}`, { withCredentials: true });
+}
+
 export async function login (userName, password){
     return axios.post(`http://localhost:3001/api/login`, { userName: userName, password: password}, {withCredentials: true})
         .then(result => {
