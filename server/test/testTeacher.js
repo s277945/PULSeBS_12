@@ -11,9 +11,9 @@ const db=require('../db');
 
 function insertDeletedRow(Course_Ref,Name,Date,DateDeadline,Capacity){
     return new Promise(((resolve, reject) => {
-        const sql='INSERT INTO Lecture(Course_Ref,Name,Date,DateDeadline,Capacity) VALUES(?,?,?,?,?)';
+        const sql='INSERT INTO Lecture(Course_Ref,Name,Date,DateDeadline,Capacity,Type) VALUES(?,?,?,?,?)';
         db.run(sql,[
-            Course_Ref,Name,Date,DateDeadline,Capacity
+            Course_Ref,Name,Date,DateDeadline,Capacity,'p'
         ],function(err){
             if(err)
                 reject(err);
@@ -52,18 +52,21 @@ describe('TEACHER TESTING', function () {
                 .then((res)=>{
                     expect(res.status).to.equal(500);
                     expect(res).to.have.property('error');
-                    expect(res.error).to.equal('Delete lecture deadline expired');
+                    expect(res.body.error).to.equal('Delete lecture deadline expired');
                 })
 
         });
         it('should return status 204',async function () {
-            let res=await chai.request(url)
+            return chai.request(url)
                 .delete('/api/courseLectures/C4567?date=2020-12-11 14:00:00')
                 .set('Cookie',cookie)
                 .send()
-            expect(res.err).to.be.undefined;
-            expect(res.status).to.be.equals(204);
-            expect(res.body).to.have.property('lecture');
+                .then(res=>{
+                    expect(res.err).to.be.undefined;
+                    expect(res.status).to.be.equals(204);
+                })
+
+
 
 
         });
@@ -84,6 +87,7 @@ describe('TEACHER TESTING', function () {
             expect(res.err).to.be.undefined;
             expect(res).to.have.status(200);
             expect(res.body).to.have.property('response');
+            expect(res.body.response).to.be.equals(true);
         });
     });
     /*describe('GET COURSE STATS BY COURSE_ID', function () {
