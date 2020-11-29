@@ -425,6 +425,7 @@ exports.getCourseStats = function (courseId){
     return new Promise((resolve, reject) => {
         const sql='SELECT Name, Date, BookedSeats FROM Lecture WHERE Course_Ref=? AND Type="p"';
         db.all(sql,[courseId], (err,rows)=>{
+            /* istanbul ignore if */
             if(err) reject(err);
             else{
                 rows.forEach((row)=>{
@@ -441,13 +442,14 @@ exports.getWeekStats = function(courseId){
     return new Promise((resolve, reject) => {
         const sql = 'SELECT Semester FROM Course WHERE CourseID = ?';
         db.get(sql, [courseId], (err, row) => {
+            /* istanbul ignore if */
             if(err) reject(err);
             else{
                 retrieveWeekStats(courseId, row.Semester)
                     .then((list) => {
                         resolve(list);
                     })
-                    .catch((err) => {
+                    .catch(/* istanbul ignore next */(err) => {
                         reject(err);
                     })
             }
@@ -480,7 +482,7 @@ function retrieveWeekStats(courseId, semester){
     if(thisDate.isAfter(moment(6, 'M')))
         currentYear = moment().year();
     else currentYear =  moment().year() - 1;
-
+    /* istanbul ignore default */
     switch(semester){
         case 1:
             startWeek = moment([currentYear, 9, 1]).startOf('isoWeek');
@@ -503,6 +505,7 @@ function retrieveWeekStats(courseId, semester){
             let startDate = moment(week["startDate"]).format('YYYY-MM-DD HH:mm:ss');
             let endDate = moment(week["endDate"]).add(1, 'days').format('YYYY-MM-DD HH:mm:ss');
             db.get(sql,[courseId, startDate, endDate], (err,row)=>{
+                /* istanbul ignore if */
                 if(err) reject(err);
                 else {
                     let weekName = moment(startDate).format('DD/MM') + "-" + moment(endDate).format('DD/MM');
@@ -525,7 +528,7 @@ function retrieveWeekStats(courseId, semester){
  * Descrtiption: Function to retrieve the average for the course selected in the date range
  */
 
-exports.getHistoricalStats = function (courseId, dateStart, dateEnd){
+/*exports.getHistoricalStats = function (courseId, dateStart, dateEnd){
     return new Promise((resolve, reject) => {
         const sql='SELECT AVG(BookedSeats) AS average FROM Lecture WHERE Course_Ref=? AND Date>=? AND Date<=?'
         db.get(sql,[courseId, dateStart, dateEnd], (err,row)=>{
@@ -535,7 +538,7 @@ exports.getHistoricalStats = function (courseId, dateStart, dateEnd){
             }
         })
     })
-}
+}*/
 
 /**
  * Function to retrieve stats for the courses associated to a specific teacher grouped by month
@@ -547,13 +550,14 @@ exports.getMonthStats = function (courseId){
     return new Promise((resolve, reject) => {
         const sql = 'SELECT Semester FROM Course WHERE CourseID = ?';
         db.get(sql, [courseId], (err, row) => {
+            /* istanbul ignore if */
             if(err) reject(err);
             else{
                 retrieveMonthStats(courseId, row.Semester)
                     .then((list) => {
                         resolve(list);
                     })
-                    .catch((err) => {
+                    .catch(/* istanbul ignore next */(err) => {
                         reject(err);
                     })
             }
@@ -578,7 +582,7 @@ function retrieveMonthStats(courseId, semester){
     if(thisDate.isAfter(moment(6, 'M')))
         currentYear = moment().year();
     else currentYear =  moment().year() - 1;
-
+    /* istanbul ignore default */
     switch(semester){
         case 1:
             months = [9, 10, 11, 0];
@@ -601,7 +605,7 @@ function retrieveMonthStats(courseId, semester){
             let endDate = tmp.endOf('month');
             db.get(sql,[courseId, startDate.format('YYYY-MM-DD HH:mm:ss'),
                 endDate.format('YYYY-MM-DD HH:mm:ss')], (err,row)=>{
-
+                /* istanbul ignore if */
                 if(err) reject(err);
                 else {
                     let monthName = startDate.format('MMMM');

@@ -131,7 +131,7 @@ app.get('/api/courses', (req, res) => {
       .then((courses) => {
         res.status(200).json(courses);
       })
-      .catch((err) => {
+      .catch(/* istanbul ignore next */(err) => {
         res.status(500).json({errors: [{'msg': err}]});
       });
  });
