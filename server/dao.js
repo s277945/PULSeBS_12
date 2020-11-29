@@ -675,7 +675,7 @@ exports.emailSentUpdate = function(courseId, date){
 exports.getCourses=function(){
     return new Promise((resolve, reject) => {
         const sql='SELECT Name FROM Course';
-        db.all(sql, [userId], (err,rows)=>{
+        db.all(sql, [], (err,rows)=>{
             /* istanbul ignore if */
             if(err){
                 reject(err);

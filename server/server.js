@@ -384,5 +384,28 @@ app.get('/api/monthStats', (req, res) => {
 })
 */
 
+
+/////////////////////////////////
+/// BOOKING MANAGER ENDPOINTS ///
+/////////////////////////////////
+
+/**
+ * GET /api/courses/all
+ *
+ * Retrieves all University Corses in order to be managed by Booking Manager
+ *
+ * No params needed
+ */
+
+app.get('/api/courses/all', (req, res) => {
+    dao.getCourses()
+        .then((courses) => {
+            res.status(200).json(courses);
+        })
+        .catch((err) => {
+            res.status(500).json(err);
+        })
+})
+
 //activate server
 app.listen(port, () => console.log(`Server ready at port: ${port}`));

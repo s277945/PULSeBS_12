@@ -161,3 +161,23 @@
                     ]
    - hints: null value on average means that we haven't any data on db to compute
             Also I cut the response example because it was too long
+            
+            
+ ## BOOKING MANAGER ENDPOINTS 
+ 
+ **GET /api/courses/all**
+ - retrieves all courses that have to be managed by booking manager
+ - no request/query params
+ - body response example: [
+                              {
+                                  "Name": "HCI"
+                              },
+                              {
+                                  "Name": "PDS"
+                              },
+                              {
+                                  "Name": "SE2"
+                              }
+                          ]
+       
+ 
