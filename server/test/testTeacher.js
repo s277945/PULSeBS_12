@@ -1,7 +1,7 @@
 
 const chai=require('chai');
 const {before,after,describe,it}=require('mocha');
-
+const dao=require('../dao');
 const chaiHttp=require('chai-http');
 chai.use(chaiHttp);
 const server=require('../server');
@@ -133,7 +133,7 @@ describe('TEACHER TESTING', function () {
                 });
         });
         it('should return status 200 and list of stats second semester',async function () {
-            return chai.request(url).get('/api/monthStats/C4567')
+            return chai.request(url).get('/api/monthStats/C8901')
                 .set("Cookie",cookie)
                 .send()
                 .then((res)=>{
@@ -142,14 +142,30 @@ describe('TEACHER TESTING', function () {
         });
     });
     describe('GET WEEK STATS', function () {
-        it('should return status 200', function () {
+        it('should return status 200 and week stats of first semester', function () {
             return chai.request(url)
                 .get("/api/weekStats/C4567")
                 .set("Cookie",cookie)
                 .send()
                 .then(res=>{
                     expect(res.status).to.equals(200);
-
+                    expect(res.body).to.be.an('array');
+                    expect(res.body).to.be.not.empty;
+                    expect(res.body[0]).to.haveOwnPropertyDescriptor('weekName')
+                    expect(res.body[0]).to.haveOwnPropertyDescriptor('average')
+                })
+        });
+        it('should return week stats of second semester',async function () {
+            return chai.request(url)
+                .get('/api/weekStats/C8901')
+                .set("Cookie",cookie)
+                .send()
+                .then(res=>{
+                    expect(res.status).to.equals(200)
+                    expect(res.body).to.be.an('array')
+                    expect(res.body).to.be.not.empty;
+                    expect(res.body[0]).to.haveOwnPropertyDescriptor('weekName')
+                    expect(res.body[0]).to.haveOwnPropertyDescriptor('average')
                 })
         });
     });
@@ -158,11 +174,13 @@ describe('TEACHER TESTING', function () {
         let date='2020-12-22 09:00:00';
         await restoreTypeLecture(course_id,date);
         const course_Ref='C4567';
+        const userId='s266260';
         date='2020-12-11 14:00:00';
         const deadline='2020-12-17 23:00:00';
         const name='PDS Les:3';
         const capacity=70;
         await insertDeletedRow(course_Ref,name,date,deadline,capacity);
-        let res=await chai.request(url).post('/api/logout').set('Cookie',cookie).send()
+        await dao.addSeat(userId,course_id,'2020-12-22 09:00:00');
+        let res=await chai.request(url).post('/api/logout').set('Cookie',cookie).send();
     })
 });

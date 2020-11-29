@@ -200,14 +200,14 @@ app.get('/api/courses', (req, res) => {
  *
  */
 
- app.get('/api/lectures/next', (req, res) => {
+ /*app.get('/api/lectures/next', (req, res) => {
     const user = req.user && req.user.user;
     dao.getNextLectureNumber(user)
       .then((response) => {
         res.status(201).json(response);
       })
-      .catch(/* istanbul ignore next */(err) => res.status(500).json({ errors: [{ 'param': 'Server', 'msg': err.message }] }));
- });
+      .catch( istanbul ignore next (err) => res.status(500).json({ errors: [{ 'param': 'Server', 'msg': err.message }] }));
+ });*/
 
 
 /**
