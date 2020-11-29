@@ -165,7 +165,8 @@ app.get('/api/courses', (req, res) => {
               };
 
               mailer.transporter.sendMail(mailOptions, function(err, info){
-                if(err){
+                  /* istanbul ignore if */
+                  if(err){
                     console.log(err);
                 } else {
                     console.log('Email sent: ' + info.response);
@@ -263,6 +264,7 @@ app.get('/api/lectures/booked', (req, res) => {
 
     dao.deleteLecture(courseId, date)
       .then((emails) => {
+          console.log('Email da cancellare: '+emails);
         for(let email of emails){
           var mailOptions = {
             from: mailer.email,
@@ -272,7 +274,8 @@ app.get('/api/lectures/booked', (req, res) => {
           };
 
           mailer.transporter.sendMail(mailOptions, function(err, info){
-            if(err){
+              /* istanbul ignore if */
+              if(err){
                 console.log(err);
             } else {
                 console.log('Email sent: ' + info.response);
