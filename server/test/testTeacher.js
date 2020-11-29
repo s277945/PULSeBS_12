@@ -1,3 +1,4 @@
+
 const chai=require('chai');
 const {before,after,describe,it}=require('mocha');
 
@@ -11,7 +12,7 @@ const db=require('../db');
 
 function insertDeletedRow(Course_Ref,Name,Date,DateDeadline,Capacity){
     return new Promise(((resolve, reject) => {
-        const sql='INSERT INTO Lecture(Course_Ref,Name,Date,DateDeadline,Capacity,Type) VALUES(?,?,?,?,?)';
+        const sql='INSERT INTO Lecture(Course_Ref,Name,Date,DateDeadline,Capacity,Type) VALUES(?,?,?,?,?,?)';
         db.run(sql,[
             Course_Ref,Name,Date,DateDeadline,Capacity,'p'
         ],function(err){
@@ -43,6 +44,19 @@ describe('TEACHER TESTING', function () {
         })
         cookie = res.headers['set-cookie'];
     })
+    describe('/api/courses', function () {
+        it('should return 200 and courses list', function () {
+            return chai.request(url)
+                .get('/api/courses')
+                .set('Cookie',cookie)
+                .send()
+                .then(res=>{
+                    expect(res).to.have.status(200)
+                    expect(res.body).to.be.an('array')
+                    expect(res.body[0]).to.haveOwnPropertyDescriptor('Name')
+                })
+        });
+    });
     describe('DELETE FUNCTION', function () {
         it('should return status 500',async function () {
             return chai.request(url)
@@ -92,53 +106,51 @@ describe('TEACHER TESTING', function () {
     });
     describe('GET COURSE STATS BY COURSE_ID', function () {
         it('should return status 200',async function () {
-            let res=await chai.request(url).get("/api/courseStats/C4567")
+            return chai.request(url).get("/api/courseStats/C4567")
                 .set("Cookie",cookie)
                 .send()
-                .end((err,res)=>{
+                .then((res)=>{
                     expect(res).to.have.status(200);
-                });
-        });
-        it('should return status 500',async function () {
-            let res=await chai.request(url).get("/api/courseStats/C4567")
-                .set("Cookie",cookie)
-                .send()
-                .end((err,res)=>{
-
+                    expect(res.body).to.be.an('array')
+                    expect(res.body[0]).to.haveOwnPropertyDescriptor('lectureName')
+                    expect(res.body[0]).to.haveOwnPropertyDescriptor('date')
+                    expect(res.body[0]).to.haveOwnPropertyDescriptor('nBooked')
+                    expect(res.body).to.have.lengthOf(2)
                 });
         });
     });
     describe('GET MONTH STATS', function () {
-        it('should return status 200',async function () {
-            let res=await chai.request(url).get('/api/monthStats/:courseId')
+        it('should return status 200 and list of stats related first semester',async function () {
+            return  chai.request(url).get('/api/monthStats/C4567')
                 .set("Cookie",cookie)
-                .send({dateStart:"",dateEnd:""})
-                .end((err,res)=>{
+                .send()
+                .then((res)=>{
                     expect(res).to.have.status(200);
+                    expect(res.body).to.be.an('array');
+                    //expect(res.body).to.be.greaterThan(0)
+                    expect(res.body[0]).to.haveOwnPropertyDescriptor('month')
+                    expect(res.body[0]).to.haveOwnPropertyDescriptor('average')
                 });
         });
-        it('should return status 500',async function () {
-            let res=await chai.request(url).get('/api/monthStats/:courseId')
+        it('should return status 200 and list of stats second semester',async function () {
+            return chai.request(url).get('/api/monthStats/C4567')
                 .set("Cookie",cookie)
-                .send({dateStart:"",dateEnd:""})
-                .end((err,res)=>{
-
+                .send()
+                .then((res)=>{
+                    expect(res).to.have.status(200)
                 });
         });
     });
     describe('GET WEEK STATS', function () {
         it('should return status 200', function () {
             return chai.request(url)
-                .get("/api/weekStats/:courseId")
+                .get("/api/weekStats/C4567")
                 .set("Cookie",cookie)
                 .send()
                 .then(res=>{
                     expect(res.status).to.equals(200);
 
                 })
-        });
-        it('should ', function () {
-
         });
     });
     after(async()=>{

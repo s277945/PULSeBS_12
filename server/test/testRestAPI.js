@@ -104,7 +104,6 @@ describe('********TEST SERVER******', function () {
     describe('GET api/checkEmails', function () {
         it('should ', async function () {
             let res=await chai.request(url).get('/api/checkEmails').set('Cookie',cookie).send();
-            expect(JSON.stringify(res)).to.equals('aa');
             expect(res.status).to.equal(200);
         });
     });
