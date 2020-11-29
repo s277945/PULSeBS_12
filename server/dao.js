@@ -314,12 +314,16 @@ exports.checkDeadline=function(dateD){
             }
             else{
                 for(let row of rows){
+
                     await countStudent(row.Course_Ref, row.Date).then(async(n) => {
+
                         await getTeacherEmail(row.Course_Ref).then((email) => {
+
                             list.push({"email":email, "nBooked": n, "nameLecture": row.Name, "dateLecture": row.Date, "Course_Ref": row.Course_Ref})
                         }).catch(err2 => reject(err2));
                     }).catch(/* istanbul ignore next */err3 => reject(err3));
                 }
+
                 resolve(list);
             }
         });
@@ -650,13 +654,12 @@ exports.getStudentEmail = function(userId){
 function getTeacherEmail(courseId){
     return new Promise((resolve, reject) => {
         const sql = 'SELECT Email FROM User WHERE UserType="t" AND userID IN (' +
-            'SELECT User_Ref FROM Presence WHERE CourseID=?)';
+            'SELECT User_Ref FROM Presence WHERE Course_Ref=?)';
         db.get(sql, [courseId], (err, row)=> {
             /* istanbul ignore if */
             if(err)
                 reject(err);
             else {
-                console.log("teacherEmail "+row.Email);
                 resolve(row.Email);
             }
         });

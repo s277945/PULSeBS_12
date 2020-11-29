@@ -21,6 +21,7 @@ const job=cron.schedule('1 * * * * *', function() {
                   };
 
                 mailer.transporter.sendMail(mailOptions, function(err, info){
+                    /* istanbul ignore if */
                     if(err){
                         console.log(err);
                     } else {
@@ -32,10 +33,10 @@ const job=cron.schedule('1 * * * * *', function() {
                     .then((res) => {
                         console.log("operation: " + res);
                     })
-                    .catch((err) => console.log(err));
+                    .catch(/* istanbul ignore next */(err) => console.log(err));
             }
         })
-        .catch((err) => console.log(err));
+        .catch(/* istanbul ignore next */(err) => console.log(err));
 });
 
 app.listen(3002, () => console.log(`Server ready at port: ${3002}`));
