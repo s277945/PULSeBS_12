@@ -37,7 +37,7 @@ app.use(cors({ origin: true, credentials: true }));
 
 /**
  * FAKE ENDPOINT TO CHECK DEADLINE DAO
- * 
+ *
  */
 
  app.get('/api/checkEmails', (req, res) => {
@@ -112,7 +112,7 @@ app.use((err, req, res, next) => {
       .then((lectures) => {
         res.status(200).json(lectures);
       })
-      .catch((err) => {
+      .catch(/* istanbul ignore next */(err) => {
         res.status(500).json({errors: [{'msg': err}]});
       });
  });
@@ -172,7 +172,7 @@ app.get('/api/courses', (req, res) => {
                 }
               });
             })
-            .catch((err) => res.status(500).json({ errors: [{ 'param': 'Server', 'msg': err.message }] }))
+            .catch(/* istanbul ignore next */(err) => res.status(500).json({ errors: [{ 'param': 'Server', 'msg': err.message }] }))
       }).catch((err) => {
         console.log(err.message);
         res.status(500).json({ errors: [{ 'param': 'Server', 'msg': err.message }] });
@@ -192,7 +192,7 @@ app.get('/api/courses', (req, res) => {
     const user = req.user && req.user.user;
     dao.deleteSeat(user, req.params.lectureId, date)
       .then(() => res.status(204).end())
-      .catch((err) => res.status(500).json({ errors: [{ 'param': 'Server', 'msg': err.message }] }));
+      .catch(/* istanbul ignore next */(err) => res.status(500).json({ errors: [{ 'param': 'Server', 'msg': err.message }] }));
  });
 
 /**
@@ -206,7 +206,7 @@ app.get('/api/courses', (req, res) => {
       .then((response) => {
         res.status(201).json(response);
       })
-      .catch((err) => res.status(500).json({ errors: [{ 'param': 'Server', 'msg': err.message }] }));
+      .catch(/* istanbul ignore next */(err) => res.status(500).json({ errors: [{ 'param': 'Server', 'msg': err.message }] }));
  });
 
 
@@ -224,7 +224,7 @@ app.get('/api/courses', (req, res) => {
       .then((list) => {
         res.status(201).json(list);
       })
-      .catch((err) => res.status(500).json({ errors: [{ 'param': 'Server', 'msg': err.message }] }));
+      .catch(/* istanbul ignore next */(err) => res.status(500).json({ errors: [{ 'param': 'Server', 'msg': err.message }] }));
 
  });
 
@@ -241,13 +241,13 @@ app.get('/api/lectures/booked', (req, res) => {
     .then((list) => {
       res.status(201).json(list);
     })
-    .catch((err) => res.status(500).json({ errors: [{ 'param': 'Server', 'msg': err.message }] }));
+    .catch(/* istanbul ignore next */(err) => res.status(500).json({ errors: [{ 'param': 'Server', 'msg': err.message }] }));
 
 });
 
 /**
  * DELETE /api/courseLectures/:courseId?date=...
- * 
+ *
  * parameters: courseId, date
  */
 
@@ -279,9 +279,9 @@ app.get('/api/lectures/booked', (req, res) => {
             }
           });
         }
-        res.status(204).json({"lecture": "canceled"});
+        res.status(204).json({lecture: "canceled"});
       })
-      .catch((err) => {
+      .catch(/* istanbul ignore next */(err) => {
         res.status(500).json(err);
       })
  })
@@ -304,7 +304,7 @@ app.put('/api/lectures', (req, res) => {
         .then((response) => {
             res.status(200).json({response: response});
         })
-        .catch(err => {
+        .catch(/* istanbul ignore next */err => {
             res.status(500).json(err);
         })
 
@@ -324,7 +324,7 @@ app.get('/api/courseStats/:courseId', (req, res) => {
         .then((response) => {
             res.status(200).json(response);
         })
-        .catch((err) => {
+        .catch(/* istanbul ignore next */(err) => {
             res.status(500).json(err);
         })
 
@@ -343,7 +343,7 @@ app.get('/api/monthStats/:courseId', (req, res) => {
         .then((response) => {
             res.status(200).json(response);
         })
-        .catch((err) => {
+        .catch(/* istanbul ignore next */(err) => {
             res.status(500).json(err);
         })
 })
@@ -361,7 +361,7 @@ app.get('/api/weekStats/:courseId', (req, res) => {
         .then((response) => {
             res.status(200).json(response);
         })
-        .catch((err) => {
+        .catch(/* istanbul ignore next */(err) => {
             res.status(500).json(err);
         })
 })
