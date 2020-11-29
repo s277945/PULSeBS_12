@@ -287,10 +287,11 @@ exports.getStudentList=function(courseId, date){
                 reject(err);
             }
             else{
-                rows.forEach((row)=>{
+                /*rows.forEach((row)=>{
                     list.push({"userId":row.userID, "name":row.Name, "surname": row.Surname})
                 });
-                resolve(list);
+                resolve(list);*/
+                resolve(rows);
             }
         });
     });
@@ -342,8 +343,9 @@ exports.deleteLecture=function(courseId, date){
                         /* istanbul ignore if */
                         if(err)
                             reject(err);
-                        else
-                            resolve(emails);
+                        else{
+
+                            resolve(emails);}
                     });
                 }
             });
@@ -368,6 +370,7 @@ function getStudentEmails(courseId, date){
                 reject(err);
             else{
                 for(let row of rows){
+
                     list.push(row.Email);
                 }
                 resolve(list);
@@ -482,7 +485,7 @@ function retrieveWeekStats(courseId, semester){
     if(thisDate.isAfter(moment(6, 'M')))
         currentYear = moment().year();
     else currentYear =  moment().year() - 1;
-    /* istanbul ignore default */
+
     switch(semester){
         case 1:
             startWeek = moment([currentYear, 9, 1]).startOf('isoWeek');
@@ -492,6 +495,7 @@ function retrieveWeekStats(courseId, semester){
             startWeek = moment([currentYear, 2, 1]).startOf('isoWeek');
             endWeek = moment([currentYear, 5, 31]).startOf('isoWeek');
             break;
+        /* istanbul ignore next */
         default:
             break;
     }
@@ -590,6 +594,7 @@ function retrieveMonthStats(courseId, semester){
         case 2:
             months = [2, 3, 4, 5];
             break;
+        /* istanbul ignore next */
         default:
             months = [];
             break;
@@ -645,12 +650,13 @@ exports.getStudentEmail = function(userId){
 function getTeacherEmail(courseId){
     return new Promise((resolve, reject) => {
         const sql = 'SELECT Email FROM User WHERE UserType="t" AND userID IN (' +
-            'SELECT User_Ref FROM Course WHERE CourseID=?)';
+            'SELECT User_Ref FROM Presence WHERE CourseID=?)';
         db.get(sql, [courseId], (err, row)=> {
             /* istanbul ignore if */
             if(err)
                 reject(err);
             else {
+                console.log("teacherEmail "+row.Email);
                 resolve(row.Email);
             }
         });

@@ -27,7 +27,7 @@ describe('********TEST SERVER******', function () {
         });
         it('should return status 200', async function () {
             let res = await chai.request(url).post('/api/login').send({
-                userName: 's269422',
+                userName: 's266260',
                 password: 'scimmia'
             })
             cookie = res.headers['set-cookie'];
@@ -82,17 +82,23 @@ describe('********TEST SERVER******', function () {
             let res=await chai.request(url).post('/api/lectures').set('Cookie',cookie).send({userId: "s269422", lectureId: "C0123", date: "2019-11-1 18:00:00"})
             expect(res.status).to.equal(422);
         });
+        it('should return 0 seats available status 500',async function () {
+            let res=await chai.request(url).post('/api/lectures').set('Cookie',cookie)
+                .send({lectureId: "C4567", date: "2020-12-25 09:00:00"})
+            expect(res).to.have.status(500);
+            //expect(res.body.errors.msg).to.be.equals('0 seats available')
+        });
         it('should return status 201 ', async function () {
-            let res=await chai.request(url).post('/api/lectures').set('Cookie',cookie).send({userId: "s269422", lectureId: "C0123", date: "2020-12-10 12:00:00"})
+            let res=await chai.request(url).post('/api/lectures').set('Cookie',cookie).send({lectureId: "C0123", date: "2020-12-10 12:00:00"})
             expect(res.status).to.equal(201);
         });
         it('should return status 500 ', async function () {
-            let res=await chai.request(url).post('/api/lectures').set('Cookie',cookie).send({userId: "s269422", lectureId: "prova", date: "2020-12-12 20:00:00"})
+            let res=await chai.request(url).post('/api/lectures').set('Cookie',cookie).send({lectureId: "prova", date: "2020-12-12 20:00:00"})
             expect(res.status).to.equal(500);
 
         });
         it('should return status 500 ', async function () {
-            let res=await chai.request(url).post('/api/lectures').set('Cookie',cookie).send({userId: "s269422", lectureId: "C0123", date: "2020-12-10 12:00:00"})
+            let res=await chai.request(url).post('/api/lectures').set('Cookie',cookie).send({lectureId: "C0123", date: "2020-12-10 12:00:00"})
             expect(res.status).to.equal(500);
 
         });
