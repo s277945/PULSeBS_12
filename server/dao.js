@@ -9,6 +9,7 @@ exports.checkUserPwd = function (username, password) {
         var sql = 'SELECT userID, Password FROM User WHERE userID = ?'; // sql query to select user entry from database
 
         db.get(sql, [username], (err, row) => {
+            /* istanbul ignore if */
             if (err) reject(err); // error handling
             else if (typeof row === 'undefined') reject(new Error('User does not exist')); // no entry found
             else if (typeof row !== 'undefined') { // username found
@@ -21,7 +22,7 @@ exports.checkUserPwd = function (username, password) {
                             .then(row2 => {
                                 resolve({userID: row.userID, userType: row2.UserType});
                             })
-                            .catch(err3 => {
+                            .catch(/* istanbul ignore next */err3 => {
                                 reject(err3);
                             })
 
@@ -34,7 +35,7 @@ exports.checkUserPwd = function (username, password) {
 };
 
 /*
-* Input: Student_Ref, Course_Ref, Date_Ref 
+* Input: Student_Ref, Course_Ref, Date_Ref
 * Output: True or False
 * Description: Book a seat for a lecture if possible
 */
@@ -51,6 +52,7 @@ exports.addSeat=function(userId, courseId, date){
                             else{
                                 const sql2 ='UPDATE Lecture SET BookedSeats=BookedSeats+1 WHERE Course_Ref=? AND Date=?'
                                 db.run(sql2, [courseId, date], function(err2){
+                                    /* istanbul ignore if */
                                     if(err2) reject(err2);
                                     else resolve(true);
                                 });
@@ -59,14 +61,14 @@ exports.addSeat=function(userId, courseId, date){
                         })
                     }
                     else reject(new Error("0 seats available"));
-                }).catch(err=>reject(err));
+                }).catch(/* istanbul ignore next */err=>reject(err));
             }else reject(new Error("Course unavailable"));
-        }).catch(err=>reject(err));
+        }).catch(/* istanbul ignore next */err=>reject(err));
     })
 }
 
 /*
-* Input: userID, CourseID 
+* Input: userID, CourseID
 * Output: True or False
 * Description: Check if the student is enrolled in the course specified on the lecture
 */
@@ -75,6 +77,7 @@ function findCourse(userId, courseId){
     return new Promise((resolve, reject) => {
         const sql='SELECT COUNT(*) FROM Presence WHERE User_Ref=? AND Course_Ref=?';
         db.get(sql,[userId,courseId],(err,row)=>{
+            /* istanbul ignore if */
             if(err)
                 reject(err);
             else if(row['COUNT(*)']>0)
@@ -85,7 +88,7 @@ function findCourse(userId, courseId){
 }
 
 /*
-* Input: Course_Ref, Date_Ref 
+* Input: Course_Ref, Date_Ref
 * Output: Capacity
 * Description: Get the max capacity of the selected lecture
 */
@@ -94,6 +97,7 @@ function controlCapacity(courseID,date){
     return new Promise((resolve, reject) => {
         const sql='SELECT Capacity, BookedSeats FROM Lecture WHERE Course_Ref=? AND Date=?';
         db.get(sql,[courseID,date],(err,row)=>{
+            /* istanbul ignore if */
             if(err)
                 reject(err);
             else{
@@ -106,7 +110,7 @@ function controlCapacity(courseID,date){
 }
 
 /*
-* Input: Course_Ref, Date_Ref 
+* Input: Course_Ref, Date_Ref
 * Output: True or False
 * Description: Delete the booking from a lecture
 */
@@ -115,11 +119,13 @@ exports.deleteSeat=function(userId, courseId, date){
     return new Promise((resolve, reject) => {
         const sql='DELETE FROM Booking WHERE Student_Ref=? AND Course_Ref=?AND Date_Ref=?';
         db.run(sql, [userId, courseId, date], (err) => {
+            /* istanbul ignore if */
             if(err)
                 reject(err);
             else{
                 const sql2='UPDATE Lecture SET BookedSeats = BookedSeats - 1 WHERE Course_Ref=? AND Date=?';
                 db.run(sql2, [courseId, date], (err2) => {
+                    /* istanbul ignore if */
                     if(err2) reject(err2);
                     else{
                         resolve(true);
@@ -131,7 +137,7 @@ exports.deleteSeat=function(userId, courseId, date){
 }
 
 /*
-* Input: userID 
+* Input: userID
 * Output: List of lectures (Course_ref, Name, Date)
 * Description: Retrieve the list of lectures from the courses in which the user is enrolled in
 */
@@ -142,6 +148,7 @@ exports.getLecturesByUserId=function(userId){
         const sql='SELECT Course_Ref, Name, Date FROM  Lecture  WHERE DateDeadline > ? AND Type = "p" AND Course_Ref IN (' +
             'SELECT Course_Ref FROM Presence WHERE User_Ref=?)';
         db.all(sql, [date, userId], (err,rows)=>{
+            /* istanbul ignore if */
             if(err){
                 reject(err);
             }
@@ -153,7 +160,7 @@ exports.getLecturesByUserId=function(userId){
 }
 
 /*
-* Input: userID 
+* Input: userID
 * Output: List of lectures booked
 * Description: Retrieve the list of lectures already booked from a student
 */
@@ -162,6 +169,7 @@ exports.getLecturesBookedByUserId=function(userId){
     return new Promise((resolve, reject) => {
         const sql='SELECT Course_Ref, Date_Ref FROM Booking WHERE Student_ref = ?';
         db.all(sql, [userId], (err,rows)=>{
+            /* istanbul ignore if */
             if(err){
                 reject(err);
             }
@@ -173,7 +181,7 @@ exports.getLecturesBookedByUserId=function(userId){
 }
 
 /*
-* Input: userID 
+* Input: userID
 * Output: List of courses of the user
 * Description: Retrieve the list of courses in which the user is enrolled
 */
@@ -183,6 +191,7 @@ exports.getCoursesByUserId=function(userId){
         const sql='SELECT Name FROM Course WHERE CourseID IN ('+
             'SELECT Course_Ref FROM Presence WHERE User_Ref=?)';
         db.all(sql, [userId], (err,rows)=>{
+            /* istanbul ignore if */
             if(err){
                 reject(err);
             }
@@ -194,22 +203,22 @@ exports.getCoursesByUserId=function(userId){
 }
 
 /*
-* Input: userID (Teacher) 
+* Input: userID (Teacher)
 * Output: Name, NumberOfStudents
 * Description: Get the number of students enrolled in the next lecture of one teacher
 */
 /* CANCELLABILE
 exports.getNextLectureNumber=function(userId){
-    
+
     return new Promise((resolve, reject) => {
         const date=moment().format ;
         const sql='SELECT Course_Ref, Name, MIN(Date) AS minDate FROM Lecture WHERE Date > ? AND Course_Ref IN (' +
             'SELECT CourseID FROM Course WHERE User_Ref=?)';
         db.get(sql, [date, userId], async (err,row) =>{
-            if(err){   
+            if(err){
                 reject(err);
             }
-            else{ 
+            else{
                 await countStudent(row.Course_Ref, row.minDate).then(number =>{
 
                         resolve({"lectureName": row.Name, "numberOfStudents": number});
@@ -221,7 +230,7 @@ exports.getNextLectureNumber=function(userId){
 */
 
 /*
-* Input: Course_Ref, Date_Ref 
+* Input: Course_Ref, Date_Ref
 * Output: NumberOfStudents
 * Description: Retrieve the number of students that booked a specific lecture
 */
@@ -230,6 +239,7 @@ function countStudent(courseId, date){
     return new Promise((resolve, reject) => {
         const sql='SELECT BookedSeats FROM Lecture WHERE Course_Ref=? AND Date=?';
         db.get(sql, [courseId, date], (err,row)=>{
+            /* istanbul ignore if */
             if(err)
                 reject(err);
             else
@@ -248,6 +258,7 @@ exports.getRole=function(userId){
     return new Promise((resolve, reject) => {
         const sql='SELECT UserType FROM User WHERE userID=?'
         db.get(sql, [userId], (err, row)=>{
+            /* istanbul ignore if */
             if(err)
                 reject(err);
             else {
@@ -260,7 +271,7 @@ exports.getRole=function(userId){
 }
 
 /*
-* Input: Course_Ref, Date 
+* Input: Course_Ref, Date
 * Output: List of Student_Ref
 * Description: Retrieve the list of students booked to the selected lecture
 */
@@ -271,6 +282,7 @@ exports.getStudentList=function(courseId, date){
         const sql='SELECT userID, Name, Surname FROM User WHERE userID IN ('+
             'SELECT Student_Ref FROM Booking WHERE Course_Ref=? AND Date_Ref=?)';
         db.all(sql,[courseId,date],(err,rows)=>{
+            /* istanbul ignore if */
             if(err){
                 reject(err);
             }
@@ -295,6 +307,7 @@ exports.checkDeadline=function(dateD){
     return new Promise((resolve, reject) => {
         const sql='SELECT Course_Ref, Name, Date FROM Lecture WHERE dateDeadline <=? AND emailSent=0';
         db.all(sql, [dateD], async (err,rows)=>{
+            /* istanbul ignore if */
             if(err){
                 reject(err);
             }
@@ -304,7 +317,7 @@ exports.checkDeadline=function(dateD){
                         await getTeacherEmail(row.Course_Ref).then((email) => {
                             list.push({"email":email, "nBooked": n, "nameLecture": row.Name, "dateLecture": row.Date, "Course_Ref": row.Course_Ref})
                         }).catch(err2 => reject(err2));
-                    }).catch(err3 => reject(err3));
+                    }).catch(/* istanbul ignore next */err3 => reject(err3));
                 }
                 resolve(list);
             }
@@ -313,7 +326,7 @@ exports.checkDeadline=function(dateD){
 }
 
 /*
-* Input: Course_Ref, Date_Ref 
+* Input: Course_Ref, Date_Ref
 * Output: True or False
 * Description: Delete the lecture and the bookings
 */
@@ -325,6 +338,8 @@ exports.deleteLecture=function(courseId, date){
                 if(n){
                     const sql='DELETE FROM Lecture WHERE Course_Ref=? AND Date=?';
                     db.run(sql, [courseId, date], (err) => {
+
+                        /* istanbul ignore if */
                         if(err)
                             reject(err);
                         else
@@ -337,7 +352,7 @@ exports.deleteLecture=function(courseId, date){
 };
 
 /*
-* Input: Course_Ref, Date_Ref 
+* Input: Course_Ref, Date_Ref
 * Output: List of emails
 * Description: Retrieve the list of emails of the students booked for the deleted lecture
 */
@@ -348,6 +363,7 @@ function getStudentEmails(courseId, date){
         const sql='SELECT Email FROM User WHERE userID IN ('+
             'SELECT Student_Ref FROM Booking WHERE Course_Ref=? AND Date_Ref=? )';
         db.all(sql, [courseId, date], (err, rows) => {
+            /* istanbul ignore if */
             if(err)
                 reject(err);
             else{
@@ -361,7 +377,7 @@ function getStudentEmails(courseId, date){
 }
 
 /*
-* Input: Course_Ref, Date_Ref 
+* Input: Course_Ref, Date_Ref
 * Output: True or False
 * Description: Delete all the booking related to a lecture canceled.
 */
@@ -370,6 +386,7 @@ function deleteBookings(courseId, date){
     return new Promise((resolve, reject) => {
         const sql='DELETE FROM Booking WHERE Course_Ref = ? AND Date_Ref = ?';
         db.run(sql, [courseId, date], (err) => {
+            /* istanbul ignore if */
             if(err)
                 reject(err);
             else resolve(true);
@@ -388,6 +405,7 @@ exports.changeTypeOfLecture = function(courseId, date){
     return new Promise((resolve, reject)=>{
         const sql = 'UPDATE Lecture SET Type="d" WHERE Course_Ref=? AND Date=?';
         db.run(sql, [courseId, date], function (err) {
+            /* istanbul ignore if */
             if(err)
                 reject(err);
             else
@@ -611,6 +629,7 @@ exports.getStudentEmail = function(userId){
     return new Promise((resolve, reject) => {
         const sql = 'SELECT Email FROM User WHERE userID=?';
         db.get(sql, [userId], (err, row)=> {
+            /* istanbul ignore if */
             if(err)
                 reject(err);
             else
@@ -624,6 +643,7 @@ function getTeacherEmail(courseId){
         const sql = 'SELECT Email FROM User WHERE UserType="t" AND userID IN (' +
             'SELECT User_Ref FROM Course WHERE CourseID=?)';
         db.get(sql, [courseId], (err, row)=> {
+            /* istanbul ignore if */
             if(err)
                 reject(err);
             else {
@@ -640,6 +660,7 @@ exports.emailSentUpdate = function(courseId, date){
     return new Promise((resolve, reject) => {
         const sql = 'UPDATE Lecture SET EmailSent=1 WHERE Course_Ref=? AND Date=?';
         db.run(sql, [courseId, date], function (err) {
+            /* istanbul ignore if */
             if(err)
                 reject(err);
             else
