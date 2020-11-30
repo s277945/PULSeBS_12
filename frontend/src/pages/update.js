@@ -8,10 +8,10 @@
                  lecList = res.data;
                  console.log(lecList);
                  component.setState({ tableData: lecList });
-             }).catch(err=>{ 
+             }).catch(/* istanbul ignore next */err=>{
                  console.log(err);
-              });              
-              
+              });
+
  }
 
  export default update;

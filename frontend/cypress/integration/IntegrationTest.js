@@ -132,6 +132,21 @@ describe('TEACHER PAGE', function () {
             .click({ force: true });
 
     });
+    it('should reload modal student when refresh page', function () {
+        cy.get('[data-testid="teacherStudent"]').should('have.text', 'Student List')
+            .should('have.attr', 'href', '#studentList')
+            .click()
+        cy.get('tbody>tr').eq(0).find('.btn.btn-primary').should('have.text','SHOW LIST')
+            .click()
+        cy.wait(100)
+        cy.get('[data-testid="studentsList"]').should('have.length', 1)
+            .within(()=>{
+                cy.get('tr').eq(0).should('contain','s266260')
+            })
+
+        cy.reload()
+        cy.get('.modal').should('be.visible')
+    });
     it('should render modal lectures page', function () {
         cy.get('[data-testid="lecturesPage"]')
             .click()
@@ -213,23 +228,137 @@ describe('TEACHER PAGE', function () {
         cy.get('.modal')
             .should('be.visible')
     });
-    /*it('should cancel a lecture', function () {
-        cy.get('tbody>tr').should('have.length',4)
+    /*it('should cancel correctly a lecture', function () {
+        cy.get('tbody>tr')
+            .eq(0)
+            .find('.btn.btn-primary')
+            .should('have.text', 'SELECT')
+            .should('be.visible')
+            .click();
+        cy.get('.modal')
+            .should('be.visible')
+            .within(()=>{
+                cy.get('.btn.btn-danger')
+                    .should('have.text','CANCEL LECTURE')
+                    .should('not.be.disabled')
+                    .click()
+            })
+        cy.wait(100);
+        cy.get('[data-testid="popup"]')
+            .should('be.visible')
+            .within(()=>{
+                cy.get('p').should('have.text','Do you want to cancel this lecture ?')
+                cy.get('.btn.btn-danger')
+                    .should('be.enabled')
+                    .and('have.text','Yes')
+                    .click()
+            })
+        cy.wait(20)
+        cy.get('.modal')
+            .should('not.be.visible')
+        cy.get('tbody>tr')
+            .should('have.length',3)
+    });*/
+    /*it('should turn into distance lecture correctly', function () {
+        cy.get('tbody>tr').should('have.length',3)
             .eq(0).find('.btn.btn-primary')
             .should('have.text', 'SELECT')
             .should('be.visible')
             .click();
         cy.get('.modal').should('be.visible')
             .within(()=>{
-                cy.get('.btn.btn-danger')
-                    .should('have.text', 'CANCEL LECTURE')
+                cy.get('.btn.btn-info')
+                    .should('have.text', 'TURN INTO DISTANCE LECTURE')
                     .click()
             })
-            .click({force:true})
+        cy.get('[data-testid="popup"]').should('be.visible')
+            .within(()=>{
+                cy.get('p')
+                    .should('be.visible')
+                    .and('have.text','Do you want to turn this lecture into a distance lecture ?')
+                cy.get('.btn.btn-info')
+                    .should('not.be.disabled')
+                    .and('have.text','Yes')
+                    .click()
+            })
         cy.wait(100)
-        cy.get('tbody>tr').should('have.length',3)
-
+        cy.get('.modal').should('not.be.visible')
+        cy.get('tbody>tr').should('have.length',2)
     });*/
+    /*it('should not cancel a lecture 60 minute before lecture', function () {
+        cy.get('tbody>tr')
+            .eq(0)
+            .find('.btn.btn-primary')
+            .should('have.text', 'SELECT')
+            .should('be.visible')
+            .click();
+        cy.get('.modal')
+            .should('be.visible')
+            .within(()=>{
+                cy.get('.btn.btn-danger')
+                    .should('have.text','CANCEL LECTURE')
+                    .should('not.be.disabled')
+                    .click()
+                cy.wait(100);
+                cy.get('p').should('have.css','color','#e00d0d')
+                cy.get('.btn.btn-danger')
+                    .should('be.disabled')
+            }).click({force:true})
+        cy.wait(20)
+        cy.get('.modal')
+            .should('not.be.visible')
+        cy.get('tbody>tr')
+            .should('have.length',2)
+    });*/
+    /*it('should not turn into distance lecture 30 minute before', function () {
+        cy.get('tbody>tr')
+            .eq(0).find('.btn.btn-primary')
+            .should('have.text', 'SELECT')
+            .should('be.visible')
+            .click();
+        cy.get('.modal').should('be.visible')
+            .within(()=>{
+                cy.get('.btn.btn-info')
+                    .should('have.text', 'TURN INTO DISTANCE LECTURE')
+                    .click()
+                cy.wait(20)
+                cy.get('p').should('have.css','color','#e00d0d')
+                cy.get('.btn.btn-info')
+                    .should('be.disabled')
+
+            }).click({force:true})
+        cy.get('.modal').should('not.be.visible')
+        cy.get('tbody>tr').should('have.length',2)
+    });
+    */
+    it('should render teacher stats', function () {
+        cy.get('[data-testid="history"]')
+            .click()
+        cy.hash().should('include','#history')
+        cy.get('.page-title')
+            .should('have.text','Historical Data')
+        cy.get('.row')
+            .within(()=>{
+                cy.get('[data-testid="courseStat"]')
+                    .should('have.text','Course: C4567')
+            })
+        cy.get('svg')
+            .should('be.visible')
+
+    });
+    it('should show stats by week', function () {
+        cy.get('[data-testid="history"]')
+            .click()
+        cy.get('select')
+            .select('Week')
+    });
+    it('should show stats by month', function () {
+        cy.get('[data-testid="history"]')
+            .click()
+        cy.get('select')
+            .select('Month')
+    });
+
     it('should logout', function () {
         cy.location('pathname').should('include','/teacherHome')
         cy.get('[data-testid="logout"]')
