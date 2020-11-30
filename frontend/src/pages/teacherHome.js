@@ -12,7 +12,7 @@ export class TeacherHome extends Component {
         show : 0 //This state variable is used to choose the content to show
     }
 
-    componentDidMount() {        
+    componentDidMount() {
         let pagestate = sessionStorage.getItem("pagestate");//get saved state value
         let redir = sessionStorage.getItem("redir");//get saved redir value
         if(pagestate!==null) this.setState({show : parseInt(pagestate, 10)});
@@ -20,18 +20,18 @@ export class TeacherHome extends Component {
         if(redir===null) sessionStorage.setItem("redir", this.context.user.userName);//if none is present, set new redir value
     }
     //Function to set the show variable
-    setShow = (val) => { 
+    setShow = (val) => {
         this.setState({show : val});
     }
-    
+
     //Function that displays the correct content based on this.state.show
-    contentSelect = () => { 
+    contentSelect = () => {
         if (this.state.show === 0) return (
             <div className="app-background">
                 <TeacherTabLec history={this.props.history}></TeacherTabLec>
             </div>
         )
-        
+
         if (this.state.show === 1) return (
             <div className="app-background">
                 <TeacherTabSL history={this.props.history}></TeacherTabSL>
@@ -43,10 +43,10 @@ export class TeacherHome extends Component {
                 <TeacherTabHist history={this.props.history}></TeacherTabHist>
             </div>
         )
-
+        /* istanbul ignore else */
         else return (
             <div>
-                
+
             </div>
         )
     }
@@ -57,7 +57,7 @@ export class TeacherHome extends Component {
             <div>
                 <TeacherNavbar setShow={this.setShow}/>
                 {this.contentSelect()}
-                
+
             </div>
         )
     }

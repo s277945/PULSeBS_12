@@ -24,7 +24,7 @@ export class StudentHome extends Component {
             console.log(response.data)
             this.setBookedLectures();
         })
-        .catch(err => {
+        .catch(/* istanbul ignore next */err => {
             console.log(err);
         })
         let pagestate = sessionStorage.getItem("pagestate");//get saved show state value
@@ -38,9 +38,9 @@ export class StudentHome extends Component {
         if(popup!==null && pagestate==="0") this.setState({ popup: JSON.parse(popup) });
         else sessionStorage.setItem("popup", JSON.stringify(this.state.popup));//if none is present, save popup state value
         if(redir===null) sessionStorage.setItem("redir", this.context.user.userName);//if none is present, set new redir value
-        
-            
-        
+
+
+
     }
 
     setShow = (val) => { //Function to set the show variable
@@ -73,7 +73,7 @@ export class StudentHome extends Component {
                 return index;
             })
             this.setState({lectures: newLectureArray})
-        }).catch(err=>{
+        }).catch(/* istanbul ignore next */err=>{
             console.log(err);
          });
 
@@ -95,10 +95,10 @@ export class StudentHome extends Component {
                 newLectures[index].alreadyBooked = true
                 this.setState({lectures: newLectures})
             }).catch(err=>{
-                console.log(err);                
+                console.log(err);
                 if (err.response.status===500) {
                     if (err.response.data.errors[0].msg==="0 seats available") this.setPopup("Your booking request was not successful: there are no more seats available for this lecture");
-                    else this.setPopup("Your booking request was not successful: server error"); 
+                    else this.setPopup("Your booking request was not successful: server error");
                 }
              });
     }
@@ -110,7 +110,7 @@ export class StudentHome extends Component {
                 const newLectures = this.state.lectures.slice();
                 newLectures[index].alreadyBooked = false
                 this.setState({lectures: newLectures})
-            }).catch(err=>{
+            }).catch(/* istanbul ignore next */err=>{
                 console.log(err);
              });
     }
@@ -193,7 +193,7 @@ export class StudentHome extends Component {
                         <br></br>
                         <div><p style={{paddingTop: "15px", paddingBottom: "30px", fontSize: "23px", textAlign: "center", marginLeft: "23px"}}>{this.state.popup.message}</p></div>
                         <div style={{display: "flex", flexWrap: "nowrap",  justifyContent: "space-around", paddingTop: "7px", paddingBottom: "7px"}}>
-                            <div style={{marginLeft: "37px"}}>                        
+                            <div style={{marginLeft: "37px"}}>
                                 <Button onClick={this.popupClose} variant="secondary" style={{ paddingRight: "17px", paddingLeft: "17px"}}>Close</Button>
                             </div>
                         </div>
@@ -201,7 +201,7 @@ export class StudentHome extends Component {
                 </Modal.Header>
             </Modal>
         )
-        
+
     }
 
     renderLectureTables(){
@@ -238,7 +238,7 @@ export class StudentHome extends Component {
         return(
             <div>
                 <br/>
-                <h1 className="page-title">Calendar</h1>                
+                <h1 className="page-title">Calendar</h1>
                 <Container className="mt-5">
                     <div style={{borderStyle: "solid", borderRadius: "6px", borderWidth: "1px", borderColor: "rgb(235, 235, 235)", padding: "17px", backgroundColor: "white"}}>
                         <Calendar lectures={this.state.lectures}></Calendar>
@@ -260,7 +260,7 @@ export class StudentHome extends Component {
         if(this.state.show === 1) return(this.renderCalendar())
     }
 
-    render() {    
+    render() {
         return (
             <div className="app-element-background">
                 <StudentNavbar setShow={this.setShow}/>

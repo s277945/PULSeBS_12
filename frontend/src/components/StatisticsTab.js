@@ -15,21 +15,21 @@ export class StatisticsTab extends Component {
             .then(res => {
                 //We update selected data as CourseStats (Lectures) is the first option
                 this.setState({ lectures: res.data }, this.updateSelected);
-            }).catch(err => {
+            }).catch(/* istanbul ignore next */err => {
                 console.log(err);
             });
 
         getWeekStats(this.props.course)
             .then(res => {
                 this.setState({ week: res.data });
-            }).catch(err => {
+            }).catch(/* istanbul ignore next */err => {
                 console.log(err);
             });
 
         getMonthStats(this.props.course)
             .then(res => {
                 this.setState({ month: res.data });
-            }).catch(err => {
+            }).catch(/* istanbul ignore next */err => {
                 console.log(err);
             });
 
@@ -60,7 +60,7 @@ export class StatisticsTab extends Component {
     renderChart = () => {
         let gbOptions = ["Lectures", "Week", "Month"]
 
-        
+
 
         let keys = ""
         let indexBy = ""
@@ -89,7 +89,7 @@ export class StatisticsTab extends Component {
             <div>
                 <div className="row">
 
-                    <div className="col-md-2">
+                    <div data-testid={"courseStat"} className="col-md-2">
                         Course: {this.props.course}
                     </div>
 
@@ -119,7 +119,7 @@ export class StatisticsTab extends Component {
                         //set colors
                         colorBy="index"
                         colors={{ scheme: "nivo" }}
-                        
+
                         // Chart options
                         data={this.state.selected}
                         keys={[keys]}
