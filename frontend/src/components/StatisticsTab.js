@@ -87,23 +87,22 @@ export class StatisticsTab extends Component {
 
         return (
             <div>
-                <div className="row">
+                <div style={{display: "flex", wrap: "nowrap", justifyContent: "space-between"}}>
 
-                    <div data-testid={"courseStat"} className="col-md-2">
-                        Course: {this.props.course}
+                    <div data-testid={"courseStat"} style={{ marginLeft: "10px"}}>
+                        <p style={{fontSize: "23px"}}>Course: {this.props.course}</p>
                     </div>
 
-                    <div className="col-md-1">
-                        <p>Level detail: </p>
-                    </div>
-
-                    <div className="col-md-2">
+                    <div style={{display: "flex", wrap: "nowrap"}}>
+                        <p style={{fontSize: "21px", minWidth: "110px", marginRight: "10px"}}>Detail level: </p>
+                    
 
                         <select className="browser-default custom-select "
                             //On change we update the selected groupBy and call updateSelected as a callback
                             onChange={(e) => { this.setState({ groupBy: e.target.value }, this.updateSelected); }}>
                             {gbOptions.map((groupBy) => <option value={groupBy}>{groupBy}</option>)}
-                        </select></div>
+                        </select>
+                    </div>
                 </div>
 
                 <div style={{ height: "400px" }}>

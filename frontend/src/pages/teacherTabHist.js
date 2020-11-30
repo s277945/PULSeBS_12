@@ -18,8 +18,8 @@ export class TeacherTabHist extends Component {
         let courses = [...new Set(this.state.tableData.map(item => item.Course_Ref))];
 
         return (
-            <div><h1 className="page-title">Historical Data</h1>
-                {courses.map((course) => <div style={{margin: "10px", border: "2px solid gray"}}><StatisticsTab course={course}></StatisticsTab></div>)}
+            <div><br></br><h1 className="page-title">Historical Data</h1><br></br>
+                {courses.map((course) => <div style={{margin: "10px", border: "2px solid gray", borderRadius: "11px", padding: "17px"}}><StatisticsTab course={course}></StatisticsTab></div>)}
             </div>
         )
     }
