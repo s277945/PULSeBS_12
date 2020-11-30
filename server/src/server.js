@@ -148,11 +148,12 @@ app.get('/api/courses', (req, res) => {
  app.post('/api/lectures', (req, res) => {
     const user = req.user && req.user.user;
     const date=moment(req.body.date).format('YYYY-MM-DD HH:mm:ss');
+    const endDate=moment(req.body.endDate).format('YYYY-MM-DD HH:mm:ss');
 
     if (moment(date).isBefore(moment()))
       return res.status(422).json({ errors: 'Invalid end date' });
 
-    dao.addSeat(user, req.body.lectureId, date)
+    dao.addSeat(user, req.body.lectureId, date, endDate)
       .then((response) => {
           res.status(201).json({"inserted": response});
           dao.getStudentEmail(user)
