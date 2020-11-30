@@ -93,7 +93,7 @@ export class StatisticsTab extends Component {
                         <p style={{fontSize: "23px"}}>Course: {this.props.course}</p>
                     </div>
 
-                    <div style={{display: "flex", wrap: "nowrap"}}>
+                    <div style={{display: "flex", wrap: "nowrap", marginTop: "1px", marginRight: "7px"}}>
                         <p style={{fontSize: "21px", minWidth: "110px", marginRight: "10px"}}>Detail level: </p>
                     
 
