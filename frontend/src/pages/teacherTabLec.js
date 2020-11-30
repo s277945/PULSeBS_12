@@ -3,7 +3,7 @@ import Table from 'react-bootstrap/Table'
 import Button from 'react-bootstrap/Button'
 import Modal from 'react-bootstrap/Modal'
 import update from './update.js'
-import { cancelLecture } from '../api/api'
+import { cancelLecture, lectreTurnToDistance } from '../api/api'
 import moment from 'moment';
 moment().format();
 
@@ -51,15 +51,22 @@ export class TeacherTabLec extends Component {
         sessionStorage.setItem("modalShow", JSON.stringify(true));
     }
 
-    handleCancel = (e) => {
+    handleConfirm = (e, cancel) => {
         e.preventDefault();
-        cancelLecture(this.state.selectedLec.Course_Ref, this.state.selectedLec.Date)
+        if (cancel===true ) cancelLecture(this.state.selectedLec.Course_Ref, this.state.selectedLec.Date)
             .then(response=> {
                 this.setState({ modalShow: false })
             })
             .catch(err => {
                 console.log(err);
             });
+        else lectreTurnToDistance(this.state.selectedLec.Course_Ref, this.state.selectedLec.Date)
+        .then(response=> {
+            this.setState({ modalShow: false })
+        })
+        .catch(err => {
+            console.log(err);
+        });
         let newTable = this.state.tableData.filter(element=>{return element.Course_Ref!==this.state.selectedLec.Course_Ref || (element.Course_Ref===this.state.selectedLec.Course_Ref&&element.Date!==this.state.selectedLec.Date)});
         this.setState({ tableData: newTable});
     }
@@ -77,14 +84,15 @@ export class TeacherTabLec extends Component {
 
     renderPopup() {
         let confirm = (e) => {// function called when lecture action button is pressed
-            if(this.state.popup.message==="cancel this lecture")  {
-                this.handleCancel(e);// depending on operation, call cancel or turn to distance function
-                this.handleClose();// close modal
-                this.popupClose();// then close popup
+            if(this.state.popup.message==="cancel this lecture")  {// depending on operation, call cancel or turn to distance function
+                this.handleConfirm(e, true); // call cancel function
+                
             }
             else {
-                this.popupClose();// then close popup
+                this.handleConfirm(e, false);// call turn to distance function
             }
+            this.handleClose();// close modal
+            this.popupClose();// then close popup
             
         }
         if(this.state.popup.message==="cancel this lecture"&&moment(this.state.selectedLec.Date).diff(moment(), 'minutes', true)<=60.00&&this.state.popup.show==1) { this.popupClose(); return;} // check if popup can open
