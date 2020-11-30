@@ -62,12 +62,16 @@ export class Login extends Component{
                 }
                 sessionStorage.clear();// delete previous session data
                 // If he wen to /login directly, check his type and redirect him to the correct homepage
+                console.log(user.userType)
                 switch(user.userType){
                     case 's':
                         history.replace('/studentHome')
                         break;
                     case 't':
                         history.replace('/teacherHome')
+                        break;
+                    case 'bm':
+                        history.replace('/bookingHome')
                         break;
                     default:
                         history.replace('/')
