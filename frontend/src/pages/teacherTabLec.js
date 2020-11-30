@@ -51,22 +51,26 @@ export class TeacherTabLec extends Component {
         sessionStorage.setItem("modalShow", JSON.stringify(true));
     }
 
-    handleConfirm = (e, cancel) => {
+    handleConfirm = (e, cancel) => {// cancel is set to true if action to confirm is cancel lecture
         e.preventDefault();
-        if (cancel===true ) cancelLecture(this.state.selectedLec.Course_Ref, this.state.selectedLec.Date)
+        if (cancel===true ) {
+            cancelLecture(this.state.selectedLec.Course_Ref, this.state.selectedLec.Date)
             .then(response=> {
                 this.setState({ modalShow: false })
             })
             .catch(err => {
                 console.log(err);
             });
-        else lectreTurnToDistance(this.state.selectedLec.Course_Ref, this.state.selectedLec.Date)
-        .then(response=> {
-            this.setState({ modalShow: false })
-        })
-        .catch(err => {
-            console.log(err);
-        });
+        }
+        else {
+            lectreTurnToDistance({ courseId: this.state.selectedLec.Course_Ref, date: this.state.selectedLec.Date })
+            .then(response=> {
+                this.setState({ modalShow: false })
+            })
+            .catch(err => {
+                console.log(err);
+            });
+        }
         let newTable = this.state.tableData.filter(element=>{return element.Course_Ref!==this.state.selectedLec.Course_Ref || (element.Course_Ref===this.state.selectedLec.Course_Ref&&element.Date!==this.state.selectedLec.Date)});
         this.setState({ tableData: newTable});
     }

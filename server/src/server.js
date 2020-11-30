@@ -295,16 +295,15 @@ app.get('/api/lectures/booked', (req, res) => {
  * body parameters: {"courseId": C4567, "date": "2020-12-22 09:00:00"}
  * */
 
-app.put('/api/lectures/:courseId', (req, res) => {
-    const courseId = req.params.courseId;
-    const date = req.query.date;
+app.put('/api/lectures', (req, res) => {
+    const courseId = req.body.courseId;
 
-    if(moment().isAfter(moment(date).subtract('30', 'minutes'))){
+    if(moment().isAfter(moment(req.body.date).subtract('30', 'minutes'))){
         return res.status(422).json(
             {error: "Cannot modify type of lecture after 30 minutes before scheduled time"});
     }
 
-    dao.changeTypeOfLecture(courseId, date)
+    dao.changeTypeOfLecture(courseId, req.body.date)
         .then((response) => {
             res.status(200).json({response: response});
         })
