@@ -287,11 +287,11 @@ exports.getStudentList=function(courseId, date){
                 reject(err);
             }
             else{
-                /*rows.forEach((row)=>{
+                rows.forEach((row)=>{
                     list.push({"userId":row.userID, "name":row.Name, "surname": row.Surname})
                 });
-                resolve(list);*/
-                resolve(rows);
+                resolve(list);
+
             }
         });
     });
