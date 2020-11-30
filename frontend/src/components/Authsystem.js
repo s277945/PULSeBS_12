@@ -13,9 +13,12 @@ import {
  * His information a both saved in a context called "authContext" and in the browser memory with the sessionStorage system
  */
 
+// Context that will store auth data (current user, his type, ...)
 export const authContext = createContext();
 
-
+/**
+ * Component that provide the auth system
+ */
 export function ProvideAuth({ children }) {
     const auth = useProvideAuth();
     useResponseInterceptor(auth);// set up interceptor with auth data
@@ -31,18 +34,19 @@ export function useAuth() {
 }
 
 /**
- * Internal FN !
+ *  !! Internal FN !! (for ProvideAuth)
+ *  This fn define how the user state is managed
+ *  The state is stored in userSession
  */
 function useProvideAuth() {
     const [user, setUser] = useState(getUserSession());
-    let history = useHistory();
 
-    // NTH : this shouldn't probably be handle here
+    // NTH : this shouldn't probably be handle here, maybe in a API ? or a new routing manager ?
+    const history = useHistory();
     if(user){
         if(user.userType === "s") history.replace("/studentHome")
         if(user.userType === "t") history.replace("/teacherHome")
     }
-
 
   const signin = (userName, password, cb) => {
     return login(userName, password).then((userr) => {

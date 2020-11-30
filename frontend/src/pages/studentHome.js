@@ -17,6 +17,7 @@ export class StudentHome extends Component {
         modal: {show: 0, lecture: null, index: null, message: null}, //this object contains all modal state variables
         popup: {show: 0, lecture: {Name: "", Date: ""}, message: null}// this object contains all popup related variables
     }
+
     componentDidMount() {
         // Get students lectures
         getLectures().then(response => {
@@ -27,6 +28,7 @@ export class StudentHome extends Component {
         .catch(err => {
             console.log(err);
         })
+
         let pagestate = sessionStorage.getItem("pagestate");//get saved show state value
         let modal = sessionStorage.getItem("modal");//get saved modal state value
         let popup = sessionStorage.getItem("popup");//get saved popup state value
@@ -38,9 +40,6 @@ export class StudentHome extends Component {
         if(popup!==null && pagestate==="0") this.setState({ popup: JSON.parse(popup) });
         else sessionStorage.setItem("popup", JSON.stringify(this.state.popup));//if none is present, save popup state value
         if(redir===null) sessionStorage.setItem("redir", this.context.user.userName);//if none is present, set new redir value
-        
-            
-        
     }
 
     setShow = (val) => { //Function to set the show variable

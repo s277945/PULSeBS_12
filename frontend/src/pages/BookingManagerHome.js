@@ -6,10 +6,13 @@ import Table from 'react-bootstrap/Table'
 import Form from 'react-bootstrap/Form'
 import Navbar  from 'react-bootstrap/Navbar'
 
+/**
+ * Page that will display the monitoring of usage (bookings, cancellations, attendance)
+ */
 export default function BookingManagerHome(){
     return(
         <>
-            <NavBarManager />
+            <NavBarBooking />
 
             <Accordion defaultActiveKey="0">
             <Card>
@@ -40,7 +43,7 @@ export default function BookingManagerHome(){
     )
 }
 
-const NavBarManager = () => 
+const NavBarBooking = () => 
     <Navbar bg="dark" variant="dark">
         <Navbar.Brand>PULSeBS - SystemActivity</Navbar.Brand>
     </Navbar>
