@@ -58,7 +58,7 @@ export class TeacherTabLec extends Component {
             .then(response=> {
                 this.setState({ modalShow: false })
             })
-            .catch(err => {
+            .catch(/* istanbul ignore next */err => {
                 console.log(err);
             });
         }
@@ -67,7 +67,7 @@ export class TeacherTabLec extends Component {
             .then(response=> {
                 this.setState({ modalShow: false })
             })
-            .catch(err => {
+            .catch(/* istanbul ignore next */err => {
                 console.log(err);
             });
         }
