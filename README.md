@@ -180,4 +180,27 @@
                               }
                           ]
        
+ **GET /api/managerCourses/:courseId**
+ - retrieves all stats of a given course of the University
+ - for each lecture associated to the course retrives information about:
+    - lectureName, date, number of booking, number of attendance, number of cancellations
+ - request parameter: courseId
+ - url example: /api/managerCourses/C4567
+ - body response example: [
+                              {
+                                  "lectureName": "PDS Les:1",
+                                  "date": "2020-12-11 14:00:00",
+                                  "nBooked": 1,
+                                  "nAttendance": 1,
+                                  "nCancellations": 0
+                              },
+                              {
+                                  "lectureName": "PDS Les:2",
+                                  "date": "2020-12-15 09:00:00",
+                                  "nBooked": 0,
+                                  "nAttendance": 0,
+                                  "nCancellations": 0
+                              }, ...
+                          ]
+                          
  

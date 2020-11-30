@@ -710,7 +710,8 @@ exports.getManagerCourseStats = function (courseId){
             else{
                 rows.forEach((row)=>{
                     booking = row.BookedSeats+row.UnbookedSeats;
-                    list.push({"lectureName":row.Name, "date":row.Date, "nBooked": booking, "nAttendance": row.BookedSeats, "nCancellations":row.UnbookedSeats});
+                    list.push({"lectureName":row.Name, "date":row.Date, "nBooked": booking,
+                        "nAttendance": row.BookedSeats, "nCancellations":row.UnbookedSeats});
                 });
                 resolve(list);
             }
