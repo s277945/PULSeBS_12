@@ -720,7 +720,6 @@ exports.getManagerCourseStats = function (courseId){
 }
 
 exports.getManagerCourseStatsTotal = function (courseId){
-    let list = [];
     let booking = 0;
     let attendance = 0;
     let cancellation = 0;
@@ -733,9 +732,10 @@ exports.getManagerCourseStatsTotal = function (courseId){
                     booking += row.BookedSeats+row.UnbookedSeats;
                     attendance += row.BookedSeats;
                     cancellation += row.UnbookedSeats;
-                    list.push({"courseName":courseId, "nBooked": booking, "nAttendance": attendance, "nCancellations": cancellation});
                 });
-                resolve(list);
+
+                resolve({"courseName":courseId, "nBooked": booking,
+                    "nAttendance": attendance, "nCancellations": cancellation});
             }
         })
     })

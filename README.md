@@ -203,4 +203,13 @@
                               }, ...
                           ]
                           
- 
+ **GET /api/managerCoursesTotal/:courseId**
+ - retrieves overall stats of a given course of the University
+ - request parameter: courseId
+ - url example: /api/managerCoursesTotal/C4567                   
+ - body response example: {
+                              "courseName": "C0123",
+                              "nBooked": 5,
+                              "nAttendance": 2,
+                              "nCancellations": 3
+                          }
