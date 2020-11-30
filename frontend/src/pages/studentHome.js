@@ -185,7 +185,7 @@ export class StudentHome extends Component {
 
     renderPopup() {
         return(
-            <Modal show={this.state.popup.show===1? true:false} onHide={this.popupClose} style={{marginTop: "25vh"}}>
+            <Modal data-testid={"popup_student"} show={this.state.popup.show===1? true:false} onHide={this.popupClose} style={{marginTop: "25vh"}}>
                 <Modal.Header class="app-element-background" closeButton style={{minWidth: "498px"}}>
                     <div  style={{flexWrap: "wrap", justifyContent: "center", minWidth: "432px", marginTop: "10px"}}>
                         <div><p style={{fontSize: "25px", fontWeight:'bold', display: "inline", marginLeft: "27px"}}>Lecture:  </p><p style={{display: "inline", fontSize: "25px", marginLeft: "10px"}}>{this.state.popup.lecture.Name}</p></div>
