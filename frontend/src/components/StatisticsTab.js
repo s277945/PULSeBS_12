@@ -56,11 +56,8 @@ export class StatisticsTab extends Component {
         }
     }
 
-    //tried to implement a render function but couldn't return the bar chart
-    renderChart = () => { }
-
-    render() {
-
+    //function that renders statistics chart
+    renderChart = () => {
         let gbOptions = ["Lectures", "Week", "Month"]
 
         
@@ -130,6 +127,16 @@ export class StatisticsTab extends Component {
                     /></div>
 
             </div>
+        )
+     }
+
+    render() {
+
+
+        return (
+            <>
+                {this.renderChart()}
+           </>
         )
     }
 }

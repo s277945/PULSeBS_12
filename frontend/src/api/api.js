@@ -59,6 +59,11 @@ export function getStudentList(element){
     return axiosInst.get(`http://localhost:3001/api/lectures/listStudents?courseRef=${element.Course_Ref}&date=${element.Date}`,{ withCredentials: true })
 }
 
+export function lectreTurnToDistance(body) {
+    // change lecture to distance lecture
+    return axiosInst.put('http://localhost:3001/api/lectures/', body, { withCredentials: true });
+}
+
 export function cancelLecture(courseId, date){
     // cancel teacher Lecture
     return axiosInst.delete(`http://localhost:3001/api/courseLectures/${courseId}?date=${date}`, { withCredentials: true });

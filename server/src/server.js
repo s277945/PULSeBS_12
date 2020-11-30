@@ -395,7 +395,7 @@ app.get('/api/monthStats', (req, res) => {
 /**
  * GET /api/courses/all
  *
- * Retrieves all University Corses in order to be managed by Booking Manager
+ * Retrieves all University Courses in order to be managed by Booking Manager
  *
  * No params needed
  */
@@ -409,6 +409,47 @@ app.get('/api/courses/all', (req, res) => {
             res.status(500).json(err);
         })
 })
+
+/**
+ * GET /api/managerCourses/:courseId
+ *
+ * Retrieves stats of a given course of the University
+ *
+ * Request param: courseId
+ *
+ */
+
+app.get('/api/managerCourses/:courseId', (req, res) => {
+    const courseId = req.params.courseId;
+    dao.getManagerCourseStats(courseId)
+        .then((list) => {
+            res.status(200).json(list);
+        })
+        .catch((err) => {
+            res.status(500).json(err);
+        })
+})
+
+/**
+ * GET /api/managerCoursesTotal/:courseId
+ *
+ * Retrieves stats of all courses of the University, grouped by courses
+ *
+ * Request params: courseId
+ *
+ */
+
+app.get('/api/managerCoursesTotal/:courseId', (req, res) => {
+    const courseId = req.params.courseId;
+    dao.getManagerCourseStatsTotal(courseId)
+        .then((stats) => {
+            res.status(200).json(stats);
+        })
+        .catch((err) => {
+            res.status(500).json(err);
+        })
+})
+
 
 //activate server
 app.listen(port, () => console.log(`Server ready at port: ${port}`));

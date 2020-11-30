@@ -3,7 +3,7 @@ import Table from 'react-bootstrap/Table'
 import Button from 'react-bootstrap/Button'
 import Modal from 'react-bootstrap/Modal'
 import update from './update.js'
-import { cancelLecture } from '../api/api'
+import { cancelLecture, lectreTurnToDistance } from '../api/api'
 import moment from 'moment';
 moment().format();
 
@@ -11,13 +11,13 @@ moment().format();
 
 
 export class TeacherTabLec extends Component {
+    
 
-
-    state = {
+    state = {   
                 tableData: [],
                 modalShow: false,
                 selectedLec: {},
-                popup: {show: false, message: ""}
+                popup: {show: false, message: ""} 
             }
 
     componentDidMount() {
@@ -41,7 +41,7 @@ export class TeacherTabLec extends Component {
     }
 
     handleClose = () => {
-        this.setState({ modalShow: false })
+        this.setState({ modalShow: false })        
         sessionStorage.removeItem("modalShow");
         sessionStorage.removeItem("selectedLec");
     }
@@ -51,15 +51,26 @@ export class TeacherTabLec extends Component {
         sessionStorage.setItem("modalShow", JSON.stringify(true));
     }
 
-    handleCancel = (e) => {
+    handleConfirm = (e, cancel) => {// cancel is set to true if action to confirm is cancel lecture
         e.preventDefault();
-        cancelLecture(this.state.selectedLec.Course_Ref, this.state.selectedLec.Date)
+        if (cancel===true ) {
+            cancelLecture(this.state.selectedLec.Course_Ref, this.state.selectedLec.Date)
             .then(response=> {
                 this.setState({ modalShow: false })
             })
             .catch(err => {
                 console.log(err);
             });
+        }
+        else {
+            lectreTurnToDistance({ courseId: this.state.selectedLec.Course_Ref, date: this.state.selectedLec.Date })
+            .then(response=> {
+                this.setState({ modalShow: false })
+            })
+            .catch(err => {
+                console.log(err);
+            });
+        }
         let newTable = this.state.tableData.filter(element=>{return element.Course_Ref!==this.state.selectedLec.Course_Ref || (element.Course_Ref===this.state.selectedLec.Course_Ref&&element.Date!==this.state.selectedLec.Date)});
         this.setState({ tableData: newTable});
     }
@@ -72,26 +83,27 @@ export class TeacherTabLec extends Component {
     setPopup = (message) => {// set popup state variables to passed values and show popup
         let newpopup = {show: 1, message: message};
         this.setState({ popup: newpopup });
-        sessionStorage.setItem("popup", JSON.stringify(newpopup));
+        sessionStorage.setItem("popup", JSON.stringify(newpopup));        
     }
 
     renderPopup() {
         let confirm = (e) => {// function called when lecture action button is pressed
-            if(this.state.popup.message==="cancel this lecture")  {
-                this.handleCancel(e);// depending on operation, call cancel or turn to distance function
-                this.handleClose();// close modal
-                this.popupClose();// then close popup
+            if(this.state.popup.message==="cancel this lecture")  {// depending on operation, call cancel or turn to distance function
+                this.handleConfirm(e, true); // call cancel function
+                
             }
             else {
-                this.popupClose();// then close popup
+                this.handleConfirm(e, false);// call turn to distance function
             }
-
+            this.handleClose();// close modal
+            this.popupClose();// then close popup
+            
         }
         if(this.state.popup.message==="cancel this lecture"&&moment(this.state.selectedLec.Date).diff(moment(), 'minutes', true)<=60.00&&this.state.popup.show==1) { this.popupClose(); return;} // check if popup can open
         if(this.state.popup.message!=="cancel this lecture"&&moment(this.state.selectedLec.Date).diff(moment(), 'minutes', true)<=30.00&&this.state.popup.show==1) { this.popupClose(); return;}
 
         return (
-            <Modal data-testid={"popup"} show={this.state.popup.show} onHide={this.popupClose} style={{marginTop: "25vh", marginLeft: "5px"}}>
+            <Modal show={this.state.popup.show} onHide={this.popupClose} style={{marginTop: "25vh", marginLeft: "5px"}}>
                 <Modal.Header class="app-element-background" closeButton style={{minWidth: "498px"}}>
                     <div  style={{flexWrap: "wrap", justifyContent: "center", minWidth: "432px"}}>
                         <p style={{paddingTop: "15px", paddingBottom: "30px", fontSize: "25px", textAlign: "center"}}>Do you want to {this.state.popup.message} ?</p>
@@ -149,12 +161,12 @@ export class TeacherTabLec extends Component {
                                 <div><p style={{fontWeight:'bold', display: "inline"}}>Date: </p><p style={{display: "inline", marginLeft: "10px"}}>{this.state.selectedLec.Date}</p></div>
                                 <br></br>
                                 {}
-                                {moment(this.state.selectedLec.Date).diff(moment(), 'minutes', true)<=60.00 ?
+                                {moment(this.state.selectedLec.Date).diff(moment(), 'minutes', true)<=60.00 ? 
                                 <div><p style={{fontWeight:'bold', fontSize: "small", color: "#e00d0d"}}>Lectures cannot be cancelled if there is less than 1 hour left to their scheduled time</p></div>
                                 : <div><p style={{fontSize: "small"}}>Lectures cannot be cancelled if there is less than 1 hour left to their scheduled time</p></div>
                                 }
-                                {moment(this.state.selectedLec.Date).diff(moment(), 'minutes', true)<=30.00 ?
-                                    <div><p style={{fontWeight:'bold', fontSize: "small", color: "#e00d0d"}}>Lectures cannot be changed to distance lectures if there are less than 30 minutes left to their scheduled time</p></div>
+                                {moment(this.state.selectedLec.Date).diff(moment(), 'minutes', true)<=30.00 ? 
+                                    <div><p style={{fontWeight:'bold', fontSize: "small", color: "#e00d0d"}}>Lectures cannot be changed to distance lectures if there are less than 30 minutes left to their scheduled time</p></div> 
                                     : <div><p style={{fontSize: "small"}}>Lectures cannot be changed to distance lectures if there are less than 30 minutes left to their scheduled time</p></div>
                                 }
                             </Modal.Title>
