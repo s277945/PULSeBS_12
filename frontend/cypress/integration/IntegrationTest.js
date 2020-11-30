@@ -126,7 +126,7 @@ describe('TEACHER PAGE', function () {
         cy.wait(100)
         cy.get('[data-testid="studentsList"]').should('have.length', 1)
             .within(()=>{
-                cy.get('tr').eq(0).should('contain','s269422')
+                cy.get('tr').eq(0).should('contain','s266260')
             })
         cy.get('.modal').should('be.visible')
             .click({ force: true });
@@ -153,7 +153,7 @@ describe('TEACHER PAGE', function () {
             .click()
         cy.location('pathname').should('include','/')
     });
-    it('should not cancel a lecture', function () {
+    it('should not turn into a distance lecture', function () {
         cy.get('tbody>tr').should('have.length',4)
             .eq(0).find('.btn.btn-primary')
             .should('have.text', 'SELECT')
@@ -165,9 +165,53 @@ describe('TEACHER PAGE', function () {
                     .should('have.text', 'TURN INTO DISTANCE LECTURE')
                     .click()
             })
-            .click({force:true})
+        cy.get('[data-testid="popup"]').should('be.visible')
+            .within(()=>{
+                cy.get('p')
+                    .should('be.visible')
+                    .and('have.text','Do you want to turn this lecture into a distance lecture ?')
+                cy.get('.btn.btn-info')
+                    .should('not.be.disabled')
+                    .and('have.text','Yes')
+                cy.get('.btn.btn-secondary')
+                    .should('be.visible')
+                    .and('have.text','No')
+                    .click()
+            })
         cy.wait(100)
-        cy.get('.modal').should('not.be.visible')
+        cy.get('.modal').should('be.visible')
+    });
+    it('should press cancel lecture, but click on button No', function () {
+        cy.get('tbody>tr')
+            .eq(0)
+            .find('.btn.btn-primary')
+            .should('have.text', 'SELECT')
+            .should('be.visible')
+            .click();
+        cy.get('.modal')
+            .should('be.visible')
+            .within(()=>{
+                cy.get('.btn.btn-danger')
+                    .should('have.text','CANCEL LECTURE')
+                    .should('not.be.disabled')
+                    .click()
+            })
+        cy.wait(100);
+        cy.get('[data-testid="popup"]')
+            .should('be.visible')
+            .within(()=>{
+                cy.get('p').should('have.text','Do you want to cancel this lecture ?')
+                cy.get('.btn.btn-danger')
+                    .should('be.enabled')
+                    .and('have.text','Yes')
+                cy.get('.btn.btn-secondary')
+                    .should('be.enabled')
+                    .and('have.text','No')
+                    .click()
+            })
+        cy.wait(20)
+        cy.get('.modal')
+            .should('be.visible')
     });
     /*it('should cancel a lecture', function () {
         cy.get('tbody>tr').should('have.length',4)
@@ -220,7 +264,7 @@ describe('STUDENT PAGE', function () {
             .should('be.visible')
             .should('have.text','Lectures')
         cy.get('tbody>tr')
-            .should('have.length',8)
+            .should('have.length',5)
             .eq(0)
             .within(()=>{
                 cy.get('td').eq(0).should('have.text','SE2 Les:1')
