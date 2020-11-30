@@ -5,6 +5,8 @@ import Card from 'react-bootstrap/Card'
 import Table from 'react-bootstrap/Table'
 import Form from 'react-bootstrap/Form'
 import Navbar  from 'react-bootstrap/Navbar'
+import Nav from 'react-bootstrap/Nav'
+import {useAuth} from '../components/Authsystem'
 
 /**
  * Page that will display the monitoring of usage (bookings, cancellations, attendance)
@@ -43,10 +45,17 @@ export default function BookingManagerHome(){
     )
 }
 
-const NavBarBooking = () => 
-    <Navbar bg="dark" variant="dark">
-        <Navbar.Brand>PULSeBS - SystemActivity</Navbar.Brand>
-    </Navbar>
+const NavBarBooking = () => {
+    const auth = useAuth();
+    return(
+        <Navbar bg="dark" variant="dark">
+            <Navbar.Brand>PULSeBS - SystemActivity</Navbar.Brand>
+            <Nav className="mr-auto"></Nav>
+            <Nav.Link data-testid="logout" onClick={() => auth.signout()}>Logout</Nav.Link>
+        </Navbar>
+    )
+}
+
 
 const CourseTableInfo = () => 
     <Table striped bordered hover>

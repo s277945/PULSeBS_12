@@ -28,10 +28,9 @@ class App extends Component {
             <PrivateRoute path='/teacherHome' userType='t'>
               <TeacherHome />
             </PrivateRoute>
-            {/**TODO : change to privateRoute */}
-            <Route path='/bookingHome' userType='b'>
+            <PrivateRoute path='/bookingHome' userType='bm'>
               <BookingManagerHome />
-            </Route>
+            </PrivateRoute>
           </Switch>
         </Router>
       </ProvideAuth>

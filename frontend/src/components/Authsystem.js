@@ -46,6 +46,7 @@ function useProvideAuth() {
     if(user){
         if(user.userType === "s") history.replace("/studentHome")
         if(user.userType === "t") history.replace("/teacherHome")
+        if(user.userType === "bm") history.replace("/bookingHome")
     }
 
   const signin = (userName, password, cb) => {
