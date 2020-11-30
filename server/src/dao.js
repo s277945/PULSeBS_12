@@ -40,14 +40,14 @@ exports.checkUserPwd = function (username, password) {
 * Description: Book a seat for a lecture if possible
 */
 
-exports.addSeat=function(userId, courseId, date){
+exports.addSeat=function(userId, courseId, date, endDate){
     return new Promise((resolve, reject) => {
         findCourse(userId, courseId).then(res=>{
             if(res){
                 controlCapacity(courseId, date).then((check)=>{
                     if(check){
-                        const sql='INSERT INTO Booking VALUES(?,?,?)';
-                        db.run(sql, [courseId, date, userId], function(err){
+                        const sql='INSERT INTO Booking VALUES(?,?,?,?)';
+                        db.run(sql, [courseId, date, userId, endDate], function(err){
                             if(err) reject(err);
                             else{
                                 const sql2 ='UPDATE Lecture SET BookedSeats=BookedSeats+1 WHERE Course_Ref=? AND Date=?'
@@ -167,7 +167,7 @@ exports.getLecturesByUserId=function(userId){
 
 exports.getLecturesBookedByUserId=function(userId){
     return new Promise((resolve, reject) => {
-        const sql='SELECT Course_Ref, Date_Ref FROM Booking WHERE Student_ref = ?';
+        const sql='SELECT Course_Ref, Date_Ref, EndDate FROM Booking WHERE Student_ref = ?';
         db.all(sql, [userId], (err,rows)=>{
             /* istanbul ignore if */
             if(err){
