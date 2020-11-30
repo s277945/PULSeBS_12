@@ -83,10 +83,11 @@ export class StudentHome extends Component {
     * Body response: status 201/404/500
     * Button that POST a request to book a seat for the session user
     */
-    bookASeat(lectureId, date, index){
+    bookASeat(lectureId, date, endDate, index){
         const body = {
             lectureId: lectureId,
-            date: date
+            date: date,
+            endDate: endDate
         }
         postStudentBookedLecture(body)
             .then(response => {
@@ -149,7 +150,7 @@ export class StudentHome extends Component {
     renderModal() {
         let confirm = () => {// function called when "yes button is pressed"
             if(this.state.modal.message==="cancel your booking") this.cancelSeat(this.state.modal.lecture.Course_Ref, this.state.modal.lecture.Date, this.state.modal.index);// depending on operation, call cancel or book function
-            else this.bookASeat(this.state.modal.lecture.Course_Ref, this.state.modal.lecture.Date, this.state.modal.index);
+            else this.bookASeat(this.state.modal.lecture.Course_Ref, this.state.modal.lecture.Date, this.state.modal.lecture.EndDate, this.state.modal.index);
             this.modalClose();// then close modal
         }
         return (

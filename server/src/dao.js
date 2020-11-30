@@ -145,7 +145,7 @@ exports.deleteSeat=function(userId, courseId, date){
 exports.getLecturesByUserId=function(userId){
     return new Promise((resolve, reject) => {
         const date=moment().format('YYYY-MM-DD HH:mm:ss');
-        const sql='SELECT Course_Ref, Name, Date FROM  Lecture  WHERE DateDeadline > ? AND Type = "p" AND Course_Ref IN (' +
+        const sql='SELECT Course_Ref, Name, Date, EndDate FROM  Lecture  WHERE DateDeadline > ? AND Type = "p" AND Course_Ref IN (' +
             'SELECT Course_Ref FROM Presence WHERE User_Ref=?)';
         db.all(sql, [date, userId], (err,rows)=>{
             /* istanbul ignore if */

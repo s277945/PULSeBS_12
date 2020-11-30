@@ -94,7 +94,7 @@ export class StatisticsTab extends Component {
                     </div>
 
                     <div className="col-md-1">
-                        <p>Gorup by: </p>
+                        <p>Level detail: </p>
                     </div>
 
                     <div className="col-md-2">

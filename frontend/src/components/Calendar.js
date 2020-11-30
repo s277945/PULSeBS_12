@@ -7,7 +7,8 @@ export default function Calendar({lectures}){
     const events = lectures.map(lecture => {
         return{
             title: lecture.Name,
-            date: lecture.Date
+            start: lecture.Date,
+            end: lecture.EndDate
         }
     })
 
