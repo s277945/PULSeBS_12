@@ -1,5 +1,5 @@
 const {expect} = require("chai");
-const mailer = require("../mail_mod");
+const mailer = require("../src/mail_mod");
 describe('TEST MAIL MODULE', function () {
     it('should not be null', function () {
         expect(mailer).to.not.be.null;

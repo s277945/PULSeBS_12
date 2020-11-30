@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "nyc --reporter=lcov --reporter=text-lcov mocha",
-    "start": "node server.js",
-    "mail_start": "node mail_mod.js"
+    "start": "node src/server.js",
+    "mail_start": "node src/mail_mod.js"
   },
   "author": "alberto-mr",
   "license": "ISC",

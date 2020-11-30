@@ -1,14 +1,14 @@
 
 const chai=require('chai');
 const {before,after,describe,it}=require('mocha');
-const dao=require('../dao');
+const dao=require('../src/dao');
 const chaiHttp=require('chai-http');
 chai.use(chaiHttp);
-const server=require('../server');
+const server=require('../src/server');
 const expect=chai.expect;
 let cookie;
 const url='http://localhost:3001';
-const db=require('../db');
+const db=require('../src/db');
 
 function insertDeletedRow(Course_Ref,Name,Date,DateDeadline,Capacity){
     return new Promise(((resolve, reject) => {

@@ -3,7 +3,7 @@ const {Context}=require('mocha');
 
 const chaiHttp=require('chai-http');
 chai.use(chaiHttp);
-const server=require('../server');
+const server=require('../src/server');
 const expect=chai.expect;
 let cookie;
 const url='http://localhost:3001';
