@@ -14,7 +14,6 @@ describe('STUDENT PAGE', function () {
             .should('be.visible')
             .should('have.text','Lectures')
         cy.get('tbody>tr')
-            .should('have.length',5)
             .eq(0)
             .within(()=>{
                 cy.get('td').eq(0).should('have.text','SE2 Les:1')
@@ -90,7 +89,7 @@ describe('STUDENT PAGE', function () {
     });
     it('should open correctly modal to cancel a seat ', function () {
         cy.wait(200)
-        cy.get('tbody>tr').eq(0).within(()=>{
+        cy.get('tbody>tr').eq(1).within(()=>{
             cy.get('.btn.btn-danger')
                 .click()
         })
@@ -101,14 +100,14 @@ describe('STUDENT PAGE', function () {
                     .click()
 
             })
-        cy.get('tbody>tr').eq(0).within(()=>{
+        cy.get('tbody>tr').eq(1).within(()=>{
             cy.get('.btn.btn-danger')
                 .should('not.be.enabled')
         })
     });
     it('should open correctly modal to book a seat', function () {
         cy.wait(200)
-        cy.get('tbody>tr').eq(0).within(()=>{
+        cy.get('tbody>tr').eq(1).within(()=>{
             cy.get('.btn.btn-primary')
                 .should('be.enabled')
                 .click()
@@ -126,7 +125,7 @@ describe('STUDENT PAGE', function () {
                     .should('have.text', 'Yes')
                     .click()
             })
-        cy.get('tbody>tr').eq(0).within(()=>{
+        cy.get('tbody>tr').eq(1).within(()=>{
             cy.get('.btn.btn-primary')
                 .should('not.be.enabled')
         })
