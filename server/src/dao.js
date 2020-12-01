@@ -251,8 +251,6 @@ exports.getRole=function(userId){
 
 exports.getStudentList=function(courseId, date){
     let list=[];
-    console.log('course id: '+courseId);
-    console.log('date :'+date);
     return new Promise((resolve, reject) => {
         const sql='SELECT userID, Name, Surname FROM User WHERE userID IN ('+
             'SELECT Student_Ref FROM Booking WHERE Course_Ref=? AND Date_Ref=?)';
@@ -262,7 +260,7 @@ exports.getStudentList=function(courseId, date){
                 reject(err);
             }
             else{
-                console.log(JSON.stringify(rows));
+
                 rows.forEach((row)=>{
                     list.push({"userId":row.userID, "name":row.Name, "surname": row.Surname})
                 });
@@ -427,17 +425,15 @@ exports.getCourseStats = function (courseId){
  */
 
 exports.getWeekStats = function(courseId){
-    console.log('courseId: '+courseId);
     return new Promise((resolve, reject) => {
         const sql = 'SELECT Semester FROM Course WHERE CourseID = ?';
         db.get(sql, [courseId], (err, row) => {
             /* istanbul ignore if */
             if(err) reject(err);
             else{
-                console.log('Semester '+row.Semester);
+
                 retrieveWeekStats(courseId, row.Semester)
                     .then((list) => {
-                        console.log("list week :"+JSON.stringify(list));
                         resolve(list);
                     })
                     .catch(/* istanbul ignore next */(err) => {
@@ -458,13 +454,11 @@ function computeWeeks(startDate, endDate){
     let list = [];
     let end = moment(startDate);
     let start = moment(startDate);
-    console.log('ciao porco dio');
     while(end.isBefore(moment(endDate))){
         end = moment(start).add(4, 'days');
         list.push({"startDate": start, "endDate": end});
         start = moment(start).add(7, 'days');
     }
-    console.log('ciao porco dio');
     return list;
 }
 
@@ -484,7 +478,9 @@ function retrieveWeekStats(courseId, semester){
 
     if(thisDate.isAfter(moment(6, 'M')))
         currentYear = moment().year();
-    /* istanbul ignore else */else currentYear =  moment().year() - 1;
+    /* istanbul ignore next */
+    else
+        currentYear =  moment().year() - 1;
 
     switch(semester){
         case 1:
@@ -564,8 +560,10 @@ function retrieveMonthStats(courseId, semester){
     let currentYear;
     if(thisDate.isAfter(moment(6, 'M')))
         currentYear = moment().year();
-    /* istanbul ignore else */else currentYear =  moment().year() - 1;
-    /* istanbul ignore default */
+    /* istanbul ignore next */
+    else
+        currentYear =  moment().year() - 1;
+
     switch(semester){
         case 1:
             months = [9, 10, 11, 0];
