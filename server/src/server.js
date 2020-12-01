@@ -95,6 +95,7 @@ app.use((err, req, res, next) => {
   if (err.name === 'UnauthorizedError') {
       res.status(401).json(authErrorObj);
   }
+    /* istanbul ignore else */
 });
 
 /**
@@ -221,7 +222,9 @@ app.get('/api/courses', (req, res) => {
  app.get('/api/lectures/listStudents', (req, res) => {
 
     const course_ref = req.query.courseRef;
+
     const date = moment(req.query.date).format('YYYY-MM-DD HH:mm:ss');
+     console.log('course_ref '+course_ref+" date: "+date);
     dao.getStudentList(course_ref, date)
       .then((list) => {
         res.status(201).json(list);
@@ -361,6 +364,7 @@ app.get('/api/monthStats/:courseId', (req, res) => {
 
 app.get('/api/weekStats/:courseId', (req, res) => {
     const courseId = req.params.courseId;
+    console.log('Week stat courseId: '+courseId);
     dao.getWeekStats(courseId)
         .then((response) => {
             res.status(200).json(response);
@@ -406,7 +410,7 @@ app.get('/api/courses/all', (req, res) => {
         .then((courses) => {
             res.status(200).json(courses);
         })
-        .catch((err) => {
+        .catch(/* istanbul ignore next */(err) => {
             res.status(500).json(err);
         })
 })
@@ -426,7 +430,7 @@ app.get('/api/managerCourses/:courseId', (req, res) => {
         .then((list) => {
             res.status(200).json(list);
         })
-        .catch((err) => {
+        .catch(/* istanbul ignore next */(err) => {
             res.status(500).json(err);
         })
 })
@@ -446,7 +450,7 @@ app.get('/api/managerCoursesTotal/:courseId', (req, res) => {
         .then((stats) => {
             res.status(200).json(stats);
         })
-        .catch((err) => {
+        .catch(/* istanbul ignore next */(err) => {
             res.status(500).json(err);
         })
 })

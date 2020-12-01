@@ -57,6 +57,19 @@ describe('TEACHER TESTING', function () {
                 })
         });
     });
+    describe('List Student', function () {
+        it('should return status 201 and an array of students', function () {
+            return chai.request(url).get('/api/lectures/listStudents?courseRef=C0123&date=2020-12-10 12:00:00')
+                .set('Cookie',cookie)
+                .send()
+                .then(res=>{
+                    expect(res.status).to.equal(201);
+                    expect(res.body).to.be.an('array');
+                    expect(res.body).not.be.empty;
+
+                })
+        });
+    });
     describe('DELETE FUNCTION', function () {
         it('should return status 500',async function () {
             return chai.request(url)
@@ -155,12 +168,15 @@ describe('TEACHER TESTING', function () {
                     expect(res.body[0]).to.haveOwnPropertyDescriptor('average')
                 })
         });
-        it('should return week stats of second semester',async function () {
-            let res=await chai.request(url)
+        it('should return week stats of second semester',function () {
+            return chai.request(url)
                 .get('/api/weekStats/C8901')
                 .set("Cookie",cookie)
                 .send()
-                    expect(res).to.have.status(200)
+                .then(res=>{
+                    expect(res).to.have.status(200);
+                })
+
                     /*expect(res.body).to.be.an('array')
                     expect(res.body).to.be.not.empty;
                     expect(res.body[0]).to.haveOwnPropertyDescriptor('weekName')

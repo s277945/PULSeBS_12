@@ -48,25 +48,6 @@ describe('********TEST SERVER******', function () {
             expect(res.body).to.be.an('array');
         });
     });
-
-    describe('List Student', function () {
-        it('should return status 201 and an array of students', function () {
-            return chai.request(url).get('/api/lectures/listStudents')
-                .set('Cookie',cookie)
-                .send({courseRef: "C4567", date: "2020-12-22 09:00:00"})
-                .then(res=>{
-                    expect(res.status).to.equal(201);
-                    expect(res.body).to.be.an('array');
-                  /*expect(res.body[0]).to.haveOwnPropertyDescriptor('userId')
-                    expect(res.body[0].userId).to.be.equals('s267348')
-                    expect(res.body[0]).to.haveOwnPropertyDescriptor('name')
-                    expect(res.body[0].name).to.be.equals('Gianluca')
-                    expect(res.body[0]).to.haveOwnPropertyDescriptor('surname')
-                    expect(res.body[0].surname).to.be.equals('Fasulo')*/
-
-                })
-        });
-    });
     describe('Get lectures booked', function () {
         it('should return status 201', async function () {
             let res=await chai.request(url).get('/api/lectures/booked').set('Cookie',cookie).send()

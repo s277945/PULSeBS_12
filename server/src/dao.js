@@ -251,6 +251,8 @@ exports.getRole=function(userId){
 
 exports.getStudentList=function(courseId, date){
     let list=[];
+    console.log('course id: '+courseId);
+    console.log('date :'+date);
     return new Promise((resolve, reject) => {
         const sql='SELECT userID, Name, Surname FROM User WHERE userID IN ('+
             'SELECT Student_Ref FROM Booking WHERE Course_Ref=? AND Date_Ref=?)';
@@ -260,6 +262,7 @@ exports.getStudentList=function(courseId, date){
                 reject(err);
             }
             else{
+                console.log(JSON.stringify(rows));
                 rows.forEach((row)=>{
                     list.push({"userId":row.userID, "name":row.Name, "surname": row.Surname})
                 });
@@ -424,14 +427,17 @@ exports.getCourseStats = function (courseId){
  */
 
 exports.getWeekStats = function(courseId){
+    console.log('courseId: '+courseId);
     return new Promise((resolve, reject) => {
         const sql = 'SELECT Semester FROM Course WHERE CourseID = ?';
         db.get(sql, [courseId], (err, row) => {
             /* istanbul ignore if */
             if(err) reject(err);
             else{
+                console.log('Semester '+row.Semester);
                 retrieveWeekStats(courseId, row.Semester)
                     .then((list) => {
+                        console.log("list week :"+JSON.stringify(list));
                         resolve(list);
                     })
                     .catch(/* istanbul ignore next */(err) => {
@@ -452,13 +458,13 @@ function computeWeeks(startDate, endDate){
     let list = [];
     let end = moment(startDate);
     let start = moment(startDate);
-
+    console.log('ciao porco dio');
     while(end.isBefore(moment(endDate))){
         end = moment(start).add(4, 'days');
         list.push({"startDate": start, "endDate": end});
         start = moment(start).add(7, 'days');
     }
-
+    console.log('ciao porco dio');
     return list;
 }
 
@@ -478,7 +484,7 @@ function retrieveWeekStats(courseId, semester){
 
     if(thisDate.isAfter(moment(6, 'M')))
         currentYear = moment().year();
-    else currentYear =  moment().year() - 1;
+    /* istanbul ignore else */else currentYear =  moment().year() - 1;
 
     switch(semester){
         case 1:
@@ -487,7 +493,7 @@ function retrieveWeekStats(courseId, semester){
             break;
         case 2:
             startWeek = moment([currentYear, 2, 1]).startOf('isoWeek');
-            endWeek = moment([currentYear, 5, 31]).startOf('isoWeek');
+            endWeek = moment([currentYear, 5, 30]).startOf('isoWeek');
             break;
         /* istanbul ignore next */
         default:
@@ -558,7 +564,7 @@ function retrieveMonthStats(courseId, semester){
     let currentYear;
     if(thisDate.isAfter(moment(6, 'M')))
         currentYear = moment().year();
-    else currentYear =  moment().year() - 1;
+    /* istanbul ignore else */else currentYear =  moment().year() - 1;
     /* istanbul ignore default */
     switch(semester){
         case 1:
@@ -572,7 +578,6 @@ function retrieveMonthStats(courseId, semester){
             months = [];
             break;
     }
-    console.log(months);
     let i = 0;
     const sql = 'SELECT AVG(BookedSeats) AS average FROM Lecture WHERE Course_Ref=? AND Date>=? AND Date<=?';
     return new Promise((resolve, reject) => {
@@ -587,7 +592,7 @@ function retrieveMonthStats(courseId, semester){
                 if(err) reject(err);
                 else {
                     let monthName = startDate.format('MMMM');
-                    console.log(startDate);
+
                     list.push({"month": monthName, "average": row.average});
                     i++;
                 }
@@ -656,7 +661,7 @@ exports.emailSentUpdate = function(courseId, date){
 //Story 11 functions
 
 /*
- * Input: 
+ * Input:
  * Output: List of all the existent courses on the university
  * Descrtiption: Retrieve the list of all the courses present on the university for the booking manager
  */
@@ -688,7 +693,7 @@ exports.getManagerCourseStats = function (courseId){
     return new Promise((resolve, reject) => {
         const sql='SELECT Name, Date, BookedSeats, UnbookedSeats FROM Lecture WHERE Course_Ref=? AND Type="p"';
         db.all(sql,[courseId], (err,rows)=>{
-            if(err) reject(err);
+            /* istanbul ignore if */if(err) reject(err);
             else{
                 rows.forEach((row)=>{
                     booking = row.BookedSeats+row.UnbookedSeats;
@@ -714,7 +719,7 @@ exports.getManagerCourseStatsTotal = function (courseId){
     return new Promise((resolve, reject) => {
         const sql='SELECT Name, Date, BookedSeats, UnbookedSeats FROM Lecture WHERE Course_Ref=? AND Type="p"';
         db.all(sql,[courseId], (err,rows)=>{
-            if(err) reject(err);
+            /* istanbul ignore if */if(err) reject(err);
             else{
                 rows.forEach((row)=>{
                     booking += row.BookedSeats+row.UnbookedSeats;
