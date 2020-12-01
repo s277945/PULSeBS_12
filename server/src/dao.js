@@ -90,7 +90,7 @@ function findCourse(userId, courseId){
 /*
 * Input: Course_Ref, Date_Ref
 * Output: Capacity
-* Description: Get the max capacity of the selected lecture
+* Description: Get the max capacity and the current occupation of the selected lecture
 */
 
 function controlCapacity(courseID,date){
@@ -112,7 +112,7 @@ function controlCapacity(courseID,date){
 /*
 * Input: Course_Ref, Date_Ref
 * Output: True or False
-* Description: Delete the booking from a lecture
+* Description: Delete the booking from a lecture and update the avaiable seats of the lecture
 */
 
 exports.deleteSeat=function(userId, courseId, date){
@@ -201,33 +201,6 @@ exports.getCoursesByUserId=function(userId){
         });
     });
 }
-
-/*
-* Input: userID (Teacher)
-* Output: Name, NumberOfStudents
-* Description: Get the number of students enrolled in the next lecture of one teacher
-*/
-/* CANCELLABILE
-exports.getNextLectureNumber=function(userId){
-
-    return new Promise((resolve, reject) => {
-        const date=moment().format ;
-        const sql='SELECT Course_Ref, Name, MIN(Date) AS minDate FROM Lecture WHERE Date > ? AND Course_Ref IN (' +
-            'SELECT CourseID FROM Course WHERE User_Ref=?)';
-        db.get(sql, [date, userId], async (err,row) =>{
-            if(err){
-                reject(err);
-            }
-            else{
-                await countStudent(row.Course_Ref, row.minDate).then(number =>{
-
-                        resolve({"lectureName": row.Name, "numberOfStudents": number});
-                }).catch(err2 => reject(err2));
-            }
-        });
-    });
-}
-*/
 
 /*
 * Input: Course_Ref, Date_Ref
@@ -401,11 +374,11 @@ function deleteBookings(courseId, date){
     });
 }
 
-/**
- * Function to update type of lecture
- *
- * Receives as parameters: courseId, date, type
- * */
+/*
+* Input: Course_Ref, Date_Ref
+* Output: True or False
+* Description: Change the type of the selected lecture from "presence" to "distance"
+*/
 
 exports.changeTypeOfLecture = function(courseId, date){
 
@@ -444,6 +417,11 @@ exports.getCourseStats = function (courseId){
     })
 }
 
+/*
+ * Input: CourseID
+ * Output: List of weeks and associated datas
+ * Descrtiption: Retrieve a list of weeks for the course selected with the number of bookings
+ */
 
 exports.getWeekStats = function(courseId){
     return new Promise((resolve, reject) => {
@@ -464,6 +442,12 @@ exports.getWeekStats = function(courseId){
     })
 }
 
+/*
+ * Input: First monday of the first month of the semester, Last monday of the last month of the semester
+ * Output: List of weeks of the semester
+ * Descrtiption: Retrieve a list of weeks for the selected semester
+ */
+
 function computeWeeks(startDate, endDate){
     let list = [];
     let end = moment(startDate);
@@ -477,6 +461,12 @@ function computeWeeks(startDate, endDate){
 
     return list;
 }
+
+/*
+ * Input: CourseID, Semester
+ * Output: List of weeks and associated average
+ * Descrtiption: Retrieve a list of weeks for the course selected with the associated average
+ */
 
 function retrieveWeekStats(courseId, semester){
     let list = [];
@@ -531,28 +521,10 @@ function retrieveWeekStats(courseId, semester){
 }
 
 /*
- * Input: Course_Ref, Date(start), Date(end)
- * Output: Average value of the information in the date range
- * Descrtiption: Function to retrieve the average for the course selected in the date range
+ * Input: CourseID
+ * Output: List of months and associated data
+ * Descrtiption: Retrieve a list of months for the course selected with the average number of bookings
  */
-
-/*exports.getHistoricalStats = function (courseId, dateStart, dateEnd){
-    return new Promise((resolve, reject) => {
-        const sql='SELECT AVG(BookedSeats) AS average FROM Lecture WHERE Course_Ref=? AND Date>=? AND Date<=?'
-        db.get(sql,[courseId, dateStart, dateEnd], (err,row)=>{
-            if(err) reject(err);
-            else{
-                resolve(row.average);
-            }
-        })
-    })
-}*/
-
-/**
- * Function to retrieve stats for the courses associated to a specific teacher grouped by month
- *
- * Receive as a parameter the userId
- * */
 
 exports.getMonthStats = function (courseId){
     return new Promise((resolve, reject) => {
@@ -570,17 +542,14 @@ exports.getMonthStats = function (courseId){
                     })
             }
         })
-        /*
-        const sql='SELECT AVG(BookedSeats) AS average FROM Lecture WHERE Course_Ref=? AND Date>=? AND Date<=?'
-        db.get(sql,[courseId, dateStart, dateEnd], (err,row)=>{
-            if(err) reject(err);
-            else{
-                resolve(row.average);
-            }
-        })
-        */
     })
 }
+
+/*
+ * Input: CourseID, Semester
+ * Output: List of months and associated data
+ * Descrtiption: Retrieve a list of months for the course selected with the associated average
+ */
 
 function retrieveMonthStats(courseId, semester){
     let list = [];
@@ -685,6 +654,13 @@ exports.emailSentUpdate = function(courseId, date){
 }
 
 //Story 11 functions
+
+/*
+ * Input: 
+ * Output: List of all the existent courses on the university
+ * Descrtiption: Retrieve the list of all the courses present on the university for the booking manager
+ */
+
 exports.getCourses=function(){
     return new Promise((resolve, reject) => {
         const sql='SELECT Name FROM Course';
@@ -699,6 +675,12 @@ exports.getCourses=function(){
         });
     });
 }
+
+/*
+ * Input: Course_Ref
+ * Output: List of lectures for the selected course
+ * Descrtiption: Retrieve a list of lectures for the selected course with the associated data (booking/cancellation/attendance)
+ */
 
 exports.getManagerCourseStats = function (courseId){
     let list = [];
@@ -718,6 +700,12 @@ exports.getManagerCourseStats = function (courseId){
         })
     })
 }
+
+/*
+ * Input: Course_Ref
+ * Output: Total values for a single course
+ * Descrtiption: Retrieve the total number of booking/cancellation/attendance of the lectures for the selected course
+ */
 
 exports.getManagerCourseStatsTotal = function (courseId){
     let booking = 0;
