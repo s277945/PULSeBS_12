@@ -44,7 +44,7 @@ describe('TEACHER PAGE', function () {
         cy.wait(100)
         cy.get('[data-testid="studentsList"]').should('be.visible')
             .within(()=>{
-                cy.get('tr').eq(0).should('contain','s267348')
+                cy.get('tr').eq(0).should('contain','s266260')
             })
         cy.get('.modal').should('be.visible')
             .click({ force: true });
@@ -59,7 +59,7 @@ describe('TEACHER PAGE', function () {
         cy.wait(100)
         cy.get('[data-testid="studentsList"]').should('have.length', 1)
             .within(()=>{
-                cy.get('tr').eq(0).should('contain','s267348')
+                cy.get('tr').eq(0).should('contain','s266260')
             })
 
         cy.reload()
@@ -68,7 +68,7 @@ describe('TEACHER PAGE', function () {
     it('should render modal lectures page', function () {
         cy.get('[data-testid="lecturesPage"]')
             .click()
-        cy.get('tbody>tr').should('have.length',6)
+        cy.get('tbody>tr')
             .eq(1).find('.btn.btn-primary')
             .should('have.text', 'SELECT')
             .should('be.visible')
@@ -111,8 +111,8 @@ describe('TEACHER PAGE', function () {
                     .and('have.text','No')
                     .click()
             })
-        cy.wait(100)
-        cy.get('.modal').should('be.visible')
+        cy.get('tbody>tr').should('have.length',7)
+
     });
     it('should press cancel lecture, but click on button No', function () {
         cy.get('tbody>tr')
@@ -172,10 +172,8 @@ describe('TEACHER PAGE', function () {
                     .click()
             })
         cy.wait(20)
-        cy.get('.modal')
-            .should('not.be.visible')
-        //cy.get('tbody>tr')
-          //  .should('have.length',5)
+        cy.get('tbody>tr')
+            .should('have.length',6)
     });
     it('should turn into distance lecture correctly', function () {
         cy.get('tbody>tr')
@@ -200,7 +198,8 @@ describe('TEACHER PAGE', function () {
                     .click()
             })
         cy.wait(100)
-        cy.get('.modal').should('not.be.visible')
+        cy.get('tbody>tr')
+            .should('have.length',6)
 
     });
     it('should not cancel a lecture 60 minute before lecture', function () {
@@ -220,7 +219,8 @@ describe('TEACHER PAGE', function () {
                 cy.wait(100);
             }).click({force:true})
         cy.wait(20)
-
+        cy.get('tbody>tr')
+            .should('have.length',6)
     });
     it('should not turn into distance lecture 30 minute before', function () {
         cy.get('tbody>tr')
@@ -236,7 +236,8 @@ describe('TEACHER PAGE', function () {
                     .should('be.disabled')
 
             }).click({force:true})
-
+        cy.get('tbody>tr')
+            .should('have.length',6)
     });
 
     it('should render teacher stats', function () {
@@ -245,25 +246,18 @@ describe('TEACHER PAGE', function () {
         cy.hash().should('include','#history')
         cy.get('.page-title')
             .should('have.text','Historical Data')
-        cy.get('.row')
-            .within(()=>{
-                cy.get('[data-testid="courseStat"]')
-                    .should('have.text','Course: C4567')
-            })
-        cy.get('svg')
-            .should('be.visible')
 
     });
     it('should show stats by week', function () {
         cy.get('[data-testid="history"]')
             .click()
-        cy.get('select')
+        cy.get('select').first()
             .select('Week')
     });
     it('should show stats by month', function () {
         cy.get('[data-testid="history"]')
             .click()
-        cy.get('select')
+        cy.get('select').first()
             .select('Month')
     });
 
