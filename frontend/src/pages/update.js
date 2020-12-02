@@ -1,17 +1,17 @@
- import axios from 'axios';
-
+ import { getLectures } from '../api/api'
 
  function update(component) {
    let lecList = [];
-         axios.get(`http://localhost:3001/api/lectures`, { withCredentials: true })
+        getLectures()
              .then(res => {
                  console.log(res.data);
                  lecList = res.data;
                  console.log(lecList);
                  component.setState({ tableData: lecList });
-             }).catch(err=>{ 
+             }).catch(/* istanbul ignore next */err=>{
                  console.log(err);
               });
+
  }
 
  export default update;

@@ -6,8 +6,9 @@ const moment = require('moment');
 
 const app = express();
 app.disable("x-powered-by");
-
-cron.schedule('1 * * * * *', function() {
+// use */10 * * * * * for test
+const job=cron.schedule('1 * * * * *', function() {
+    console.log('sto per essere eseguito');
     const date=moment().format('YYYY-MM-DD HH:mm:ss');
     dao.checkDeadline(date)
         .then((list) => {
@@ -20,6 +21,7 @@ cron.schedule('1 * * * * *', function() {
                   };
 
                 mailer.transporter.sendMail(mailOptions, function(err, info){
+                    /* istanbul ignore if */
                     if(err){
                         console.log(err);
                     } else {
@@ -31,10 +33,11 @@ cron.schedule('1 * * * * *', function() {
                     .then((res) => {
                         console.log("operation: " + res);
                     })
-                    .catch((err) => console.log(err));
+                    .catch(/* istanbul ignore next */(err) => console.log(err));
             }
         })
-        .catch((err) => console.log(err));
+        .catch(/* istanbul ignore next */(err) => console.log(err));
 });
 
 app.listen(3002, () => console.log(`Server ready at port: ${3002}`));
+module.exports={job};

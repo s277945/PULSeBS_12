@@ -5,14 +5,21 @@
   "dependencies": {
     "3": "^2.1.0",
     "-": "0.0.1",
+    "@fullcalendar/core": "^5.4.0",
+    "@fullcalendar/daygrid": "^5.4.0",
+    "@fullcalendar/react": "^5.4.0",
+    "@fullcalendar/timegrid": "^5.4.0",
+    "@nivo/bar": "^0.66.0",
+    "@nivo/core": "^0.66.0",
     "@reduxjs/toolkit": "^1.4.0",
     "@testing-library/jest-dom": "^4.2.4",
-    "@testing-library/react": "^9.5.0",
     "@testing-library/user-event": "^7.2.1",
     "axios": "^0.20.0",
     "bootstrap": "^4.5.3",
     "fontsource-roboto": "^3.0.3",
     "jquery": "^1.9.1",
+    "moment": "^2.29.1",
+    "nivo": "^0.31.0",
     "popper.js": "^1.16.1",
     "react": "^16.14.0",
     "react-bootstrap": "^1.4.0",
@@ -20,14 +27,17 @@
     "react-redux": "^7.2.1",
     "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.3",
+    "react-test-renderer": "^17.0.1",
     "redux": "^4.0.5"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "test:coverage" : "npm test -- --coverage --watchAll=false",
-    "eject": "react-scripts eject"
+    "test:coverage": "npm test -- --coverage --watchAll=false",
+    "eject": "react-scripts eject",
+    "cypress": "react-scripts -r @cypress/instrument-cra start",
+    "test:cypress": "npx cypress open"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -43,5 +53,13 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@cypress/code-coverage": "^3.8.4",
+    "@cypress/instrument-cra": "^1.4.0",
+    "@testing-library/dom": "^7.27.1",
+    "@testing-library/react": "^9.5.0",
+    "babel-plugin-istanbul": "^6.0.0",
+    "history": "^ 4.10.1"
   }
 }

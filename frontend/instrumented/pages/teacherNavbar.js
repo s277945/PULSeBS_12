@@ -17,24 +17,15 @@ class TeacherNavbar extends Component {
     }
      showLectures = () => { //function called when Lectures link is selected
          this.props.setShow(0);
-         sessionStorage.clear();
          sessionStorage.setItem("pagestate", 0);//save state value
          this.setState({ lectureslink: true,studentslink: false});
      }
 
      showStudentList = () =>{
          this.props.setShow(1)
-         sessionStorage.clear();
          sessionStorage.setItem("pagestate", 1);//save state value
          this.setState({ lectureslink: false,studentslink: true});
      }
-
-     showHistory = () =>{
-        this.props.setShow(2)
-        sessionStorage.clear();
-        sessionStorage.setItem("pagestate", 2);//save state value
-        this.setState({ lectureslink: false,studentslink: false});
-    }
 
      redirHome = (e) => { //function that redirects to the home page
          e.preventDefault();
@@ -59,7 +50,6 @@ class TeacherNavbar extends Component {
                      <Nav className="mr-auto">
                          <Nav.Link data-testid={"lecturesPage"} href="#lectures" active={this.state.lectureslink} onSelect={this.showLectures}>Lectures</Nav.Link>
                          <Nav.Link data-testid="teacherStudent" href="#studentList" active={this.state.studentslink} onSelect={this.showStudentList}>Student List</Nav.Link>
-                         <Nav.Link data-testid="history" href="#history" onSelect={this.showHistory}>Historical Data</Nav.Link>
                      </Nav>
                      <Nav.Link data-testid="logout" href="#logout" onSelect={this.handleLogout}>Logout</Nav.Link>
                  </Navbar>

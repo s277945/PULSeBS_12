@@ -5,6 +5,7 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 import Login from './pages/Login'
 import { StudentHome } from './pages/studentHome'
 import { TeacherHome } from './pages/teacherHome'
+import BookingManagerHome from './pages/BookingManagerHome'
 import {PrivateRoute, ProvideAuth} from './components/Authsystem';
 
 
@@ -26,6 +27,9 @@ class App extends Component {
             </PrivateRoute>
             <PrivateRoute path='/teacherHome' userType='t'>
               <TeacherHome />
+            </PrivateRoute>
+            <PrivateRoute path='/bookingHome' userType='bm'>
+              <BookingManagerHome />
             </PrivateRoute>
           </Switch>
         </Router>
