@@ -17,9 +17,28 @@ describe('TEST MANAGER PAGE', function () {
 
 
     });
-    after(()=>{
+    it('should open accordion of a course', function () {
+        cy.get('.accordion')
+            .should('have.length',5)
+            .contains('Data Science')
+            .should('be.visible')
+            .click({force:true})
+    });
+    it('should change lecture inside select', function () {
+        cy.get('.accordion')
+            .contains('Data Science')
+            .click({force:true})
+        cy.get('.collapse.show')
+            .should('be.visible')
+            .within(()=>{
+                cy.get('select')
+                    .select('DS Les:2')
+            })
+
+    });
+    it('should logout', function () {
         cy.get('[data-testid="logout"]')
             .click()
 
-    })
+    });
 });

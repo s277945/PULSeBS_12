@@ -27,8 +27,9 @@ export default function BookingManagerHome(){
 
     const getStatsForCourse = (CourseID) => {
         const courseIndex = courses.findIndex(course => course.CourseID === CourseID);
-
-        if(courses[courseIndex].stats) return;
+        /* istanbul ignore if */
+        if(courses[courseIndex].stats)
+            return;
 
         getStatsByCourseID(CourseID).then(response => {
             const newCourses = courses.slice();
@@ -49,7 +50,7 @@ export default function BookingManagerHome(){
         <>
             <NavBarBooking />
 
-            {courses.map(course => 
+            {courses.map(course =>
                 <Accordion key={course.Name}>
                 <Card>
                     <Accordion.Toggle as={Card.Header} onClick={() => getStatsForCourse(course.CourseID)} eventKey="0">
@@ -128,12 +129,14 @@ const LectureStats = ({courseStats, lectureStats }) =>{
 }
 
 const LectureCourseSelector = ({lectureStats, setSelectedLecture}) =>{
-    if(!lectureStats) return <></>
+    /* istanbul ignore if */
+    if(!lectureStats)
+        return <></>
 
     return(
         <Form.Group controlId="exampleForm.SelectCustom">
         <Form.Control as="select" custom onChange={(value) => setSelectedLecture(value.target.value)}>
-            {lectureStats.map(lecture => 
+            {lectureStats.map(lecture =>
                 <option key={lecture.lectureName} value={lecture.lectureName}>{lecture.lectureName}</option>
             )}
         </Form.Control>
@@ -143,10 +146,14 @@ const LectureCourseSelector = ({lectureStats, setSelectedLecture}) =>{
 
 
 const LectureTableInfo = ({lectureStats, selectedLecture}) =>{
-    if(!lectureStats || !selectedLecture) return <></>
+
+    if(!lectureStats || !selectedLecture)
+        return <></>
 
     const lecture = lectureStats.find((lecture) => lecture.lectureName === selectedLecture)
-    if(!lecture) return<></>;
+    /* istanbul ignore if */
+    if(!lecture)
+        return<></>;
 
     return(
         <Table striped bordered hover>
