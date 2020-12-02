@@ -431,7 +431,6 @@ exports.getWeekStats = function(courseId){
             /* istanbul ignore if */
             if(err) reject(err);
             else{
-
                 retrieveWeekStats(courseId, row.Semester)
                     .then((list) => {
                         resolve(list);
@@ -488,8 +487,8 @@ function retrieveWeekStats(courseId, semester){
             endWeek = moment([currentYear+1, 0, 31]).startOf('isoWeek');
             break;
         case 2:
-            startWeek = moment([currentYear, 2, 1]).startOf('isoWeek');
-            endWeek = moment([currentYear, 5, 30]).startOf('isoWeek');
+            startWeek = moment([currentYear+1, 2, 1]).startOf('isoWeek');
+            endWeek = moment([currentYear+1, 5, 30]).startOf('isoWeek');
             break;
         /* istanbul ignore next */
         default:
@@ -498,7 +497,7 @@ function retrieveWeekStats(courseId, semester){
 
     let weeks = computeWeeks(startWeek, endWeek);
     let n = weeks.length;
-
+    
     const sql = 'SELECT AVG(BookedSeats) AS average FROM Lecture WHERE Course_Ref=? AND Date>=? AND Date<=?';
     return new Promise((resolve, reject) => {
         for(let week of weeks) {
@@ -508,7 +507,7 @@ function retrieveWeekStats(courseId, semester){
                 /* istanbul ignore if */
                 if(err) reject(err);
                 else {
-                    let weekName = moment(startDate).format('DD/MM') + "-" + moment(endDate).format('DD/MM');
+                    let weekName = moment(startDate).format('MM/DD') + "-" + moment(endDate).format('MM/DD');
                     list.push({"weekName": weekName, "average": row.average});
                     i++;
                 }
@@ -570,6 +569,7 @@ function retrieveMonthStats(courseId, semester){
             break;
         case 2:
             months = [2, 3, 4, 5];
+            currentYear = currentYear+1;
             break;
         /* istanbul ignore next */
         default:
@@ -577,7 +577,7 @@ function retrieveMonthStats(courseId, semester){
             break;
     }
     let i = 0;
-    const sql = 'SELECT AVG(BookedSeats) AS average FROM Lecture WHERE Course_Ref=? AND Date>=? AND Date<=?';
+    const sql = 'SELECT AVG(BookedSeats) AS average FROM Lecture WHERE Course_Ref=? AND Date>=? AND Date<=? ORDER BY Date';
     return new Promise((resolve, reject) => {
         for(let month of months) {
             if(month === 0) currentYear+=1;
