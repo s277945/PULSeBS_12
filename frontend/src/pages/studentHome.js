@@ -53,11 +53,11 @@ export class StudentHome extends Component {
         sessionStorage.removeItem("modal");
     }
 
-    modalShow = () => {
+ /*   modalShow = () => {
         let newmodal = this.state.modal;
         newmodal.show=1;
         this.setState({ modal: newmodal });
-    }
+    }*/
 
     setBookedLectures(){
         // Go through all lectures, if its a booked one, put alreadyBooked to true

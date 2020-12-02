@@ -25,13 +25,13 @@ export function useResponseInterceptor(auth) { // function to set up response in
     );
 }
 
-export function useRequestInterceptor(auth) { // function to set up request interceptor with authentication state and functions
+/*export function useRequestInterceptor(auth) { // function to set up request interceptor with authentication state and functions
     axiosInst.interceptors.request.use(// create request interceptor
         (request) => { //perfrom tasks on request
             return request 
         }
     );
-}
+}*/
 
 
 export function getLectures(){
