@@ -84,6 +84,18 @@ export function getMonthStats(course){
     return axiosInst.get(`http://localhost:3001/api/monthStats/${course}`, { withCredentials: true });
 }
 
+export function getAllCoursesForBookingManager(){
+    return axiosInst.get(`http://localhost:3001/api/courses/all`, { withCredentials: true });
+}
+
+export function getStatsByCourseID(courseID){
+    return axiosInst.get(`http://localhost:3001/api/managerCoursesTotal/${courseID}`, { withCredentials: true });
+}
+
+export function getLecturesStatsByCourseID(courseID){
+    return axiosInst.get(`http://localhost:3001/api/managerCourses/${courseID}`, { withCredentials: true });
+}
+
 export async function login (userName, password){
     return axios.post(`http://localhost:3001/api/login`, { userName: userName, password: password}, {withCredentials: true})
         .then(result => {
