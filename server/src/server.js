@@ -346,6 +346,7 @@ app.get('/api/courseStats/:courseId', (req, res) => {
 
 app.get('/api/monthStats/:courseId', (req, res) => {
     const courseId = req.params.courseId;
+    console.log('Month stat courseId: '+courseId);
     dao.getMonthStats(courseId)
         .then((response) => {
             res.status(200).json(response);
