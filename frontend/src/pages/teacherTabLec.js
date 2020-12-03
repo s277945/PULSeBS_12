@@ -4,7 +4,7 @@ import Button from 'react-bootstrap/Button'
 import Modal from 'react-bootstrap/Modal'
 import update from './update.js'
 import { cancelLecture, lectreTurnToDistance } from '../api/api'
-import moment from 'moment';
+import moment from 'moment'
 moment().format();
 
 
@@ -61,6 +61,8 @@ export class TeacherTabLec extends Component {
             .catch(/* istanbul ignore next */err => {
                 console.log(err);
             });
+            let newTable = this.state.tableData.filter(element=>{return element.Course_Ref!==this.state.selectedLec.Course_Ref || (element.Course_Ref===this.state.selectedLec.Course_Ref&&element.Date!==this.state.selectedLec.Date)});
+            this.setState({ tableData: newTable});
         }
         else {
             lectreTurnToDistance({ courseId: this.state.selectedLec.Course_Ref, date: this.state.selectedLec.Date })
@@ -70,9 +72,14 @@ export class TeacherTabLec extends Component {
             .catch(/* istanbul ignore next */err => {
                 console.log(err);
             });
+            let newTable = this.state.tableData.map(element=>{
+                                                    if (!(element.Course_Ref!==this.state.selectedLec.Course_Ref || (element.Course_Ref===this.state.selectedLec.Course_Ref&&element.Date!==this.state.selectedLec.Date))) {
+                                                        element.Type="d";                                                        
+                                                    }
+                                                    return element
+                                                });
+            this.setState({ tableData: newTable});
         }
-        let newTable = this.state.tableData.filter(element=>{return element.Course_Ref!==this.state.selectedLec.Course_Ref || (element.Course_Ref===this.state.selectedLec.Course_Ref&&element.Date!==this.state.selectedLec.Date)});
-        this.setState({ tableData: newTable});
     }
 
     popupClose = () => {
@@ -119,23 +126,19 @@ export class TeacherTabLec extends Component {
         )
     }
 
-    enableAction = (type) => {// function that checks if certain action is avaiable
-
-    }
-    render() {
-
+    renderModal() {// function that returns modal for lecture actions
         let tableBody = []
         let k=0;
         this.state.tableData.forEach(element => {
             tableBody.push(<tr key={k++}>
                 <td>{element.Course_Ref}</td>
                 <td>{element.Name}</td>
-                <td>{element.Date}</td>
+                <td>{moment(element.Date).format('YYYY-MM-DD HH:mm')}</td>
                 <td style={{display: "flex", justifyContent: "flex-start"}}><Button style={{marginLeft: "15px"}} data-testid={"showCourse_"+k++} onClick={(e) => { e.preventDefault(); this.showModifications(element) }}>SELECT</Button></td>
             </tr>)
         });
         return (
-            <div>
+            <>
                 <br/>
                 <h1 className="page-title">Lectures</h1>
                 <br/>
@@ -158,7 +161,7 @@ export class TeacherTabLec extends Component {
                         <div>
                             <Modal.Title style={{marginLeft: "43px", marginTop: "17px"}}>
                                 <div><p style={{fontWeight:'bold', display: "inline"}}>Lecture:  </p><p style={{display: "inline", marginLeft: "10px"}}>{this.state.selectedLec.Name}</p></div>
-                                <div><p style={{fontWeight:'bold', display: "inline"}}>Date: </p><p style={{display: "inline", marginLeft: "10px"}}>{this.state.selectedLec.Date}</p></div>
+                                <div><p style={{fontWeight:'bold', display: "inline"}}>Date: </p><p style={{display: "inline", marginLeft: "10px"}}>{moment(this.state.selectedLec.Date).format('YYYY-MM-DD HH:mm')}</p></div>
                                 <br></br>
                                 {}
                                 {moment(this.state.selectedLec.Date).diff(moment(), 'minutes', true)<=60.00 ?
@@ -172,11 +175,24 @@ export class TeacherTabLec extends Component {
                             </Modal.Title>
                             <div style={{display: "flex", flexWrap: "no-wrap", justifyContent: "flex-end", marginTop: "27px"}}>
                                 <Button disabled={moment(this.state.selectedLec.Date).diff(moment(), 'minutes', true)<=60.00?true:false} variant="danger" style={{marginLeft: "27px", marginTop: "17px", marginBottom: "17px", paddingLeft: "11px", paddingRight: "11px" }} onClick={(e) => { e.preventDefault(); this.setPopup("cancel this lecture"); }}>CANCEL LECTURE</Button>
-                                <Button disabled={moment(this.state.selectedLec.Date).diff(moment(), 'minutes', true)<=30.00?true:false} variant="info" style={{marginLeft: "17px", marginTop: "17px", marginBottom: "17px", paddingLeft: "11px", paddingRight: "11px" }} onClick={(e) => { e.preventDefault(); this.setPopup("turn this lecture into a distance lecture"); }}>TURN INTO DISTANCE LECTURE</Button>
+                                <Button disabled={moment(this.state.selectedLec.Date).diff(moment(), 'minutes', true)<=30.00||this.state.selectedLec.Type!=='p'?true:false} variant="info" style={{marginLeft: "17px", marginTop: "17px", marginBottom: "17px", paddingLeft: "11px", paddingRight: "11px" }} onClick={(e) => { e.preventDefault(); this.setPopup("turn this lecture into a distance lecture"); }}>TURN INTO DISTANCE LECTURE</Button>
                             </div>
                         </div>
                     </Modal.Header>
                 </Modal>
+            </>
+        )
+    }
+
+    enableAction = (type) => {// function that checks if certain action is avaiable
+
+    }
+    render() {
+
+
+        return (
+            <div>
+                {this.renderModal()}
                 {this.renderPopup()}
             </div>
         )

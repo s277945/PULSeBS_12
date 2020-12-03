@@ -7,6 +7,7 @@ import { authContext } from '../components/Authsystem'
 import { getLectures, getStudentBookedLectures, postStudentBookedLecture, deleteStudentBookedLecture } from '../api/api'
 import Calendar from '../components/Calendar';
 import Container from 'react-bootstrap/Container'
+import moment from 'moment'
 
 export class StudentHome extends Component {
     static contextType = authContext
@@ -115,26 +116,26 @@ export class StudentHome extends Component {
              });
     }
 
-    renderBookASeatButton(lecture, index){
+    renderBookASeatButton(lecture, index, disabled){
         return(
             <>
-            {lecture.alreadyBooked &&
+            {(lecture.alreadyBooked || disabled) &&
                 <Button disabled>Book Seat</Button>
             }
-            {!lecture.alreadyBooked &&
+            {(!lecture.alreadyBooked && ! disabled) &&
                 <Button data-testid={'bookButton_'+index} onClick={() => this.setModal(lecture, index, "book a seat")}>Book Seat</Button>
             }
             </>
         )
     }
 
-    renderCancelButton(lecture, index){
+    renderCancelButton(lecture, index, disabled){
         return (
             <>
-            {lecture.alreadyBooked &&
+            {(lecture.alreadyBooked && ! disabled) &&
                 <Button data-testid={'cancelButton_'+index} onClick={() => this.setModal(lecture, index, "cancel your booking")} variant="danger">Cancel</Button>
             }
-            {!lecture.alreadyBooked &&
+            {(!lecture.alreadyBooked  || disabled) &&
                 <Button variant="danger" disabled>Cancel</Button>
             }
             </>
@@ -215,6 +216,9 @@ export class StudentHome extends Component {
                     <tr>
                         <th>Lecture</th>
                         <th>Time and date</th>
+                        <th>Booked seats</th>
+                        <th>Total capacity</th>
+                        <th>Lecture type</th>
                         <th>Lecture Booking</th>
                         <th>Cancel booking</th>
                     </tr>
@@ -223,9 +227,12 @@ export class StudentHome extends Component {
                     {this.state.lectures.map((lecture,index) =>
                         <tr key={index}>
                             <td>{lecture.Name}</td>
-                            <td>{lecture.Date}</td>
-                            <td>{this.renderBookASeatButton(lecture, index)}</td>
-                            <td>{this.renderCancelButton(lecture, index)}</td>
+                            <td>{moment(lecture.Date).format('YYYY-MM-DD HH:mm')}</td>
+                            <td>{lecture.Type==='p'?lecture.BookedSeats:"/"}</td>
+                            <td>{lecture.Type==='p'?lecture.Capacity:"/"}</td>
+                            <td>{lecture.Type==='p'?"Presence":"Virtual Classroom"}</td>
+                            <td>{lecture.Type==='p'?this.renderBookASeatButton(lecture, index, false):this.renderBookASeatButton(lecture, index, true)}</td>
+                            <td>{lecture.Type==='p'?this.renderCancelButton(lecture, index, false):this.renderCancelButton(lecture, index, true)}</td>
                         </tr>
                     )}
                     </tbody>
