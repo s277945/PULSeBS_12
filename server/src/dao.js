@@ -435,8 +435,8 @@ exports.getWeekStats = function(courseId){
                     .then((list) => {
                         resolve(list);
                     })
-                    .catch(/* istanbul ignore next */(err) => {
-                        reject(err);
+                    .catch(/* istanbul ignore next */(err2) => {
+                        reject(err2);
                     })
             }
         })
@@ -538,8 +538,8 @@ exports.getMonthStats = function (courseId){
                     .then((list) => {
                         resolve(list);
                     })
-                    .catch(/* istanbul ignore next */(err) => {
-                        reject(err);
+                    .catch(/* istanbul ignore next */(err2) => {
+                        reject(err2);
                     })
             }
         })
