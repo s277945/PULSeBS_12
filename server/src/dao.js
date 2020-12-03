@@ -188,7 +188,7 @@ exports.getLecturesBookedByUserId=function(userId){
 
 exports.getCoursesByUserId=function(userId){
     return new Promise((resolve, reject) => {
-        const sql='SELECT Name FROM Course WHERE CourseID IN ('+
+        const sql='SELECT CourseID, Name FROM Course WHERE CourseID IN ('+
             'SELECT Course_Ref FROM Presence WHERE User_Ref=?)';
         db.all(sql, [userId], (err,rows)=>{
             /* istanbul ignore if */

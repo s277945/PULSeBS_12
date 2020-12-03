@@ -1,25 +1,31 @@
 import React, { Component } from 'react'
-import update from './update.js'
 import {StatisticsTab} from '../components/StatisticsTab'
+import { getCourses } from '../api/api'
 
 
 export class TeacherTabHist extends Component {
 
     state = { tableData: [], statistics: [], course: null, startDate: null, endDate: null, groupBy: "Total" }
 
-    componentDidMount() {
-        update(this)
+    componentDidMount() {// get courses from server
+        let courses = [];
+        getCourses()
+             .then(res => {
+                 console.log(res.data);
+                 courses = res.data;
+                 console.log(courses);
+                 this.setState({ tableData: courses });
+             }).catch(/* istanbul ignore next */err=>{
+                 console.log(err);
+              });
     }
 
 
     render() {
 
-        //Get unique values from lectures, i.e courses
-        let courses = [...new Set(this.state.tableData.map(item => item.Course_Ref))];
-
         return (
             <div  className="app-element-background"><br></br><h1 className="page-title">Historical Data</h1><br></br>
-                {courses.map((course) => <div style={{margin: "10px", border: "2px solid gray", borderRadius: "11px", padding: "17px"}}><StatisticsTab course={course}></StatisticsTab></div>)}
+                {this.state.tableData.map((course) => <div style={{margin: "10px", border: "2px solid gray", borderRadius: "11px", padding: "17px"}}><StatisticsTab course={course}></StatisticsTab></div>)}
             </div>
         )
     }

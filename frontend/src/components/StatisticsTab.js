@@ -12,7 +12,7 @@ export class StatisticsTab extends Component {
 
     componentDidMount() {
 
-        getCourseStats(this.props.course)
+        getCourseStats(this.props.course.CourseID)
             .then(res => {
                 //We update selected data as CourseStats (Lectures) is the first option
                 this.setState({ lectures: res.data }, this.updateSelected);
@@ -20,7 +20,7 @@ export class StatisticsTab extends Component {
                 console.log(err);
             });
 
-        getWeekStats(this.props.course)
+        getWeekStats(this.props.course.CourseID)
             .then(res => {
                 this.setState({ week: res.data });
                 let neweek = this.state.week.sort((w1,w2)=>{
@@ -33,7 +33,7 @@ export class StatisticsTab extends Component {
                 console.log(err);
             });
 
-        getMonthStats(this.props.course)
+        getMonthStats(this.props.course.CourseID)
             .then(res => {
                 this.setState({ month: res.data });
                 let newmonth = this.state.month.sort((m1,m2)=>{
@@ -104,7 +104,7 @@ export class StatisticsTab extends Component {
                 <div style={{display: "flex", wrap: "nowrap", justifyContent: "space-between"}}>
 
                     <div data-testid={"courseStat"} style={{ marginLeft: "10px"}}>
-                        <p style={{fontSize: "23px"}}>Course: {this.props.course}</p>
+                        <p style={{fontSize: "23px"}}>Course: {this.props.course.Name+" ("+this.props.course.CourseID+")"}</p>
                     </div>
 
                     <div style={{display: "flex", wrap: "nowrap", marginTop: "1px", marginRight: "7px"}}>
