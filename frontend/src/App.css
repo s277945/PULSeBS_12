@@ -100,24 +100,3 @@
   color: #23272c;
  }
 
- .fc-v-event .fc-event-main {
-  background-color: #40474e;
-  border-color: #40474e
- }
- 
- .fc-v-event {
-  border: 1px solid var(--fc-event-border-color, #40474e) !important;
- }
-
- .fc .fc-daygrid-event {
-  color: #23272c;
- }
-
- .fc-daygrid-event-dot {
-  border: 4px solid #23272c !important;
-  border: calc(var(--fc-daygrid-event-dot-width, 8px) / 2) solid var(--fc-event-border-color,#23272c) !important;
- }
-
- .fc-daygrid-dot-event {
-  background: rgba(0, 0, 0, 0.025);
- }
