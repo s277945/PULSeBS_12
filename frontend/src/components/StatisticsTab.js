@@ -36,13 +36,13 @@ export class StatisticsTab extends Component {
         getMonthStats(this.props.course)
             .then(res => {
                 this.setState({ month: res.data });
-                /*let newmonth = this.state.month.sort((m1,m2)=>{
+                let newmonth = this.state.month.sort((m1,m2)=>{
                     let a = moment(m1.month+"/"+m1.year, "MMMM/YYYY");
                     let b = moment(m2.month+"/"+m2.year, "MMMM/YYYY");
                     console.log(a.format()+" "+b.format());
                     return a.diff(b, 'days');
                 });
-                this.setState({ week: newmonth });*/
+                this.setState({ month: newmonth });
             }).catch(/* istanbul ignore next */err => {
                 console.log(err);
             });
