@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { getCourseStats, getWeekStats, getMonthStats } from '../api/api'
 import { ResponsiveBar } from "@nivo/bar";
+import moment from 'moment'
 
 
 
@@ -22,6 +23,12 @@ export class StatisticsTab extends Component {
         getWeekStats(this.props.course)
             .then(res => {
                 this.setState({ week: res.data });
+                let neweek = this.state.week.sort((w1,w2)=>{
+                    let a = moment(w1.weekName.slice(0, 5), "MM/DD");
+                    let b = moment(w2.weekName.slice(0, 5), "MM/DD");
+                    return a.diff(b, 'days');
+                });
+                this.setState({ week: neweek });
             }).catch(/* istanbul ignore next */err => {
                 console.log(err);
             });
@@ -29,6 +36,13 @@ export class StatisticsTab extends Component {
         getMonthStats(this.props.course)
             .then(res => {
                 this.setState({ month: res.data });
+                let newmonth = this.state.month.sort((m1,m2)=>{
+                    let a = moment(m1.month+"/"+m1.year, "MMMM/YYYY");
+                    let b = moment(m2.month+"/"+m2.year, "MMMM/YYYY");
+                    console.log(a.format()+" "+b.format());
+                    return a.diff(b, 'days');
+                });
+                this.setState({ week: newmonth });
             }).catch(/* istanbul ignore next */err => {
                 console.log(err);
             });

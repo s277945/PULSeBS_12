@@ -560,7 +560,7 @@ function retrieveMonthStats(courseId, semester){
     if(thisDate.isAfter(moment(6, 'M')))
         currentYear = moment().year();
     /* istanbul ignore next */
-    else
+    else 
         currentYear =  moment().year() - 1;
 
     switch(semester){
@@ -590,8 +590,8 @@ function retrieveMonthStats(courseId, semester){
                 if(err) reject(err);
                 else {
                     let monthName = startDate.format('MMMM');
-
-                    list.push({"month": monthName, "average": row.average});
+                    console.log(monthName+" "+currentYear);
+                    list.push({"month": monthName, "year": currentYear, "average": row.average});
                     i++;
                 }
                 if (i===4) resolve(list);
