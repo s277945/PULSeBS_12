@@ -16,18 +16,24 @@ var stringToColour = function(str) {
     }
     return colour;
 }
-export default function Calendar({lectures}){
+export default function Calendar({lectures,courses}){
     const events = lectures.map(lecture => {
         //generate a color based on hash
-        let array=lecture.Name.split(" ");
-        let lectureId=array[0];
-        let color=stringToColour(lectureId);
+        let course=courses.filter(courses=>courses.CourseID===lecture.Course_Ref)[0];
 
+        let color=stringToColour(course.Name);
         return{
-            title: lecture.Name,
+            extendedProps:{
+                lectureName: lecture.Name,
+                courseName:course.Name,
+                lectureType:lecture.Type
+            },
+            html:true,
+            content:lecture.Name,
             start: lecture.Date,
             end: lecture.EndDate,
-            color: color
+            color: color,
+
         }
     })
 
@@ -47,7 +53,18 @@ export default function Calendar({lectures}){
                 slotMinTime={"08:00:00"}
                 slotMaxTime={"22:00:00"}
                 slotEventOverlap={false}
-                eventColor={"#204001"}
+                eventContent={function(arg, createElement) {
+                    let children=[];
+                    if (arg.event.extendedProps) {
+
+                        let elem1=createElement('p',{},arg.event.extendedProps.lectureName);
+                        let elem2=createElement('b',{},arg.event.extendedProps.courseName);
+                        let elem3=createElement('p',{},arg.event.extendedProps.lectureType==='p'?'Presence':'Virtual Classroom');
+                        children=[elem2,elem1,elem3];
+                    }
+                    createElement()
+                    return createElement('div', {}, children);
+                }}
             />
     )
 }
