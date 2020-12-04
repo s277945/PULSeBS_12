@@ -100,3 +100,15 @@
   color: #23272c;
  }
 
+ .page-subtitle-1 {
+  text-align: center;
+  font-weight: bold;
+ }
+
+.page-subtitle-2 {
+  text-align: left;
+  font-weight: bold;
+  padding-left: 17px;
+  padding-bottom: 10px;
+  padding-top: 20px;
+}
