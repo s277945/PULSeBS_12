@@ -18,6 +18,7 @@ export class StudentHome extends Component {
         show : 0, //This state variable is used to choose the content to show. (0 : table, 1: calendar)
         courses: [],
         lectures: [],
+        togglecourse: null,
         modal: {show: 0, lecture: null, index: null, message: null}, //this object contains all modal state variables
         popup: {show: 0, lecture: {Name: "", Date: ""}, message: null}// this object contains all popup related variables
     }
@@ -41,6 +42,7 @@ export class StudentHome extends Component {
         })
 
         let pagestate = sessionStorage.getItem("pagestate");//get saved show state value
+        let togglecourse = sessionStorage.getItem("togglecourse");//get saved accordion state value
         let modal = sessionStorage.getItem("modal");//get saved modal state value
         let popup = sessionStorage.getItem("popup");//get saved popup state value
         let redir = sessionStorage.getItem("redir");//get saved redir value
@@ -50,6 +52,8 @@ export class StudentHome extends Component {
         else sessionStorage.setItem("modal", JSON.stringify(this.state.modal));//if none is present, save modal state value
         if(popup!==null && pagestate==="0") this.setState({ popup: JSON.parse(popup) });
         else sessionStorage.setItem("popup", JSON.stringify(this.state.popup));//if none is present, save popup state value
+        if(togglecourse!==null && pagestate==="0") this.setState({ togglecourse: togglecourse });
+        else sessionStorage.setItem("togglecourse", this.state.togglecourse);//if none is present, save modal state value
         if(redir===null) sessionStorage.setItem("redir", this.context.user.userName);//if none is present, set new redir value
     }
 
@@ -105,11 +109,13 @@ export class StudentHome extends Component {
                 const newLectures = this.state.lectures.slice();
                 newLectures[index].alreadyBooked = true
                 this.setState({lectures: newLectures})
+                this.modalClose();// then close modal
             }).catch(err=>{
                 console.log(err);
                 if (err.response.status===500) {
                     if (err.response.data.errors[0].msg==="0 seats available") this.setPopup("Your booking request was not successful: there are no more seats available for this lecture");
                     else this.setPopup("Your booking request was not successful: server error");
+                    this.modalClose();// then close modal
                 }
              });
     }
@@ -121,6 +127,7 @@ export class StudentHome extends Component {
                 const newLectures = this.state.lectures.slice();
                 newLectures[index].alreadyBooked = false
                 this.setState({lectures: newLectures})
+                this.modalClose();// then close modal
             }).catch(/* istanbul ignore next */err=>{
                 console.log(err);
              });
@@ -162,7 +169,6 @@ export class StudentHome extends Component {
         let confirm = () => {// function called when "yes button is pressed"
             if(this.state.modal.message==="cancel your booking") this.cancelSeat(this.state.modal.lecture.Course_Ref, this.state.modal.lecture.Date, this.state.modal.index);// depending on operation, call cancel or book function
             else this.bookASeat(this.state.modal.lecture.Course_Ref, this.state.modal.lecture.Date, this.state.modal.lecture.EndDate, this.state.modal.index);
-            this.modalClose();// then close modal
         }
         return (
             <Modal show={this.state.modal.show===1? true:false} onHide={this.modalClose} style={{marginTop: "25vh"}}>
@@ -219,48 +225,57 @@ export class StudentHome extends Component {
         return (
             <div>
                 <h4 className="page-subtitle-2">Select by course</h4>
-                {this.state.courses.map(course =>
-                    <Accordion key={course.Name}>
-                    <Card>
-                        <Accordion.Toggle as={Card.Header}  eventKey="0">
-                        {course.Name}
-                        </Accordion.Toggle>
-                        <Accordion.Collapse eventKey="0">
-                        <Card.Body>
-                            <Table data-testid={'lectures'} striped bordered hover style={{ backgroundColor: "#fff" }}>
-                                <thead>
-                                    <tr>
-                                        <th>Lecture</th>
-                                        <th>Time and date</th>
-                                        <th>Booking deadline</th>
-                                        <th>Booked seats</th>
-                                        <th>Total capacity</th>
-                                        <th>Lecture type</th>
-                                        <th>Lecture Booking</th>
-                                        <th>Cancel booking</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {this.state.lectures.filter(lecture=>lecture.Course_Ref===course.CourseID).map((lecture, index) =>
-                                        <tr key={index}>
-                                            <td>{lecture.Name}</td>
-                                            <td>{moment(lecture.Date).format('YYYY-MM-DD HH:mm')}</td>
-                            <td>{moment(lecture.DateDeadline).format('YYYY-MM-DD HH:mm')}</td>
-                                            <td>{lecture.Type === 'p' ? lecture.BookedSeats : "/"}</td>
-                                            <td>{lecture.Type === 'p' ? lecture.Capacity : "/"}</td>
-                                            <td>{lecture.Type === 'p' ? "Presence" : "Virtual Classroom"}</td>
-                                            <td>{lecture.Type === 'p'&&moment().isBefore(lecture.DateDeadline)? this.renderBookASeatButton(lecture, index, false) : this.renderBookASeatButton(lecture, index, true)}</td>
-                                            <td>{lecture.Type === 'p'&&moment().isBefore(lecture.DateDeadline)? this.renderCancelButton(lecture, index, false) : this.renderCancelButton(lecture, index, true)}</td>
-                                        </tr>
-                                    )}
-                                </tbody>
-                            </Table>
-                        </Card.Body>
-                        </Accordion.Collapse>
-                    </Card>
-                    </Accordion>
-                )}
-               
+                <Accordion activeKey={this.state.togglecourse}>
+                    {this.state.courses.map(course =>
+                        <Card key={course.Name}>
+                            <Accordion.Toggle as={Card.Header}  eventKey={course.Name} onClick={(e)=> {// set accordion selection state
+                                e.preventDefault();
+                                if (this.state.togglecourse===e.target.innerText) {
+                                    this.setState({togglecourse: null});// if already open close
+                                    sessionStorage.removeItem("togglecourse");// remove accordion session data
+                                }
+                                else {
+                                    this.setState({togglecourse: e.target.innerText});// else open
+                                    sessionStorage.setItem("togglecourse", e.target.innerText);// save accordion session data
+                                }
+                                }}>
+                            {course.Name}
+                            </Accordion.Toggle>
+                            <Accordion.Collapse eventKey={course.Name}>
+                                <Card.Body>
+                                    <Table data-testid={'lectures'} striped bordered hover style={{ backgroundColor: "#fff" }}>
+                                        <thead>
+                                            <tr>
+                                                <th>Lecture</th>
+                                                <th>Time and date</th>
+                                                <th>Booking deadline</th>
+                                                <th>Booked seats</th>
+                                                <th>Total capacity</th>
+                                                <th>Lecture type</th>
+                                                <th>Lecture Booking</th>
+                                                <th>Cancel booking</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {this.state.lectures.filter(lecture=>lecture.Course_Ref===course.CourseID).map((lecture, index) =>
+                                                <tr key={index}>
+                                                    <td>{lecture.Name}</td>
+                                                    <td>{moment(lecture.Date).format('YYYY-MM-DD HH:mm')}</td>
+                                    <td>{moment(lecture.DateDeadline).format('YYYY-MM-DD HH:mm')}</td>
+                                                    <td>{lecture.Type === 'p' ? lecture.BookedSeats : "/"}</td>
+                                                    <td>{lecture.Type === 'p' ? lecture.Capacity : "/"}</td>
+                                                    <td>{lecture.Type === 'p' ? "Presence" : "Virtual Classroom"}</td>
+                                                    <td>{lecture.Type === 'p'&&moment().isBefore(lecture.DateDeadline)? this.renderBookASeatButton(lecture, index, false) : this.renderBookASeatButton(lecture, index, true)}</td>
+                                                    <td>{lecture.Type === 'p'&&moment().isBefore(lecture.DateDeadline)? this.renderCancelButton(lecture, index, false) : this.renderCancelButton(lecture, index, true)}</td>
+                                                </tr>
+                                            )}
+                                        </tbody>
+                                    </Table>
+                                </Card.Body>
+                            </Accordion.Collapse>
+                        </Card>                    
+                    )}
+               </Accordion>
             </div>
         )
     }
