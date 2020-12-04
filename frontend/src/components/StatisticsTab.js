@@ -12,7 +12,7 @@ export class StatisticsTab extends Component {
 
     componentDidMount() {
 
-        getCourseStats(this.props.course)
+        getCourseStats(this.props.course.CourseID)
             .then(res => {
                 //We update selected data as CourseStats (Lectures) is the first option
                 this.setState({ lectures: res.data }, this.updateSelected);
@@ -20,29 +20,34 @@ export class StatisticsTab extends Component {
                 console.log(err);
             });
 
-        getWeekStats(this.props.course)
+        getWeekStats(this.props.course.CourseID)
             .then(res => {
                 this.setState({ week: res.data });
                 let neweek = this.state.week.sort((w1,w2)=>{
                     let a = moment(w1.weekName.slice(0, 5), "MM/DD");
                     let b = moment(w2.weekName.slice(0, 5), "MM/DD");
                     return a.diff(b, 'days');
+                }).map((w)=>{
+                    if(w.average) return { average: w.average.toFixed(2), weekName: w.weekName};// truncate floating point to second digit
+                    else return w;
                 });
                 this.setState({ week: neweek });
             }).catch(/* istanbul ignore next */err => {
                 console.log(err);
             });
 
-        getMonthStats(this.props.course)
+        getMonthStats(this.props.course.CourseID)
             .then(res => {
                 this.setState({ month: res.data });
-                /*let newmonth = this.state.month.sort((m1,m2)=>{
+                let newmonth = this.state.month.sort((m1,m2)=>{
                     let a = moment(m1.month+"/"+m1.year, "MMMM/YYYY");
                     let b = moment(m2.month+"/"+m2.year, "MMMM/YYYY");
-                    console.log(a.format()+" "+b.format());
                     return a.diff(b, 'days');
+                }).map((m)=>{
+                    if(m.average) return { average: m.average.toFixed(2), month: m.month};// truncate floating point to second digit
+                    else return m;
                 });
-                this.setState({ week: newmonth });*/
+                this.setState({ month: newmonth });
             }).catch(/* istanbul ignore next */err => {
                 console.log(err);
             });
@@ -104,7 +109,7 @@ export class StatisticsTab extends Component {
                 <div style={{display: "flex", wrap: "nowrap", justifyContent: "space-between"}}>
 
                     <div data-testid={"courseStat"} style={{ marginLeft: "10px"}}>
-                        <p style={{fontSize: "23px"}}>Course: {this.props.course}</p>
+                        <p style={{fontSize: "23px"}}>Course: {this.props.course.Name+" ("+this.props.course.CourseID+")"}</p>
                     </div>
 
                     <div style={{display: "flex", wrap: "nowrap", marginTop: "1px", marginRight: "7px"}}>

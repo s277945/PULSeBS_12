@@ -188,7 +188,7 @@ exports.getLecturesBookedByUserId=function(userId){
 
 exports.getCoursesByUserId=function(userId){
     return new Promise((resolve, reject) => {
-        const sql='SELECT Name FROM Course WHERE CourseID IN ('+
+        const sql='SELECT CourseID, Name FROM Course WHERE CourseID IN ('+
             'SELECT Course_Ref FROM Presence WHERE User_Ref=?)';
         db.all(sql, [userId], (err,rows)=>{
             /* istanbul ignore if */
@@ -553,6 +553,7 @@ exports.getMonthStats = function (courseId){
  */
 
 function retrieveMonthStats(courseId, semester){
+    console.log(courseId, semester);
     let list = [];
     let months;
     let thisDate = moment();
@@ -580,9 +581,11 @@ function retrieveMonthStats(courseId, semester){
     const sql = 'SELECT AVG(BookedSeats) AS average FROM Lecture WHERE Course_Ref=? AND Date>=? AND Date<=? ORDER BY Date';
     return new Promise((resolve, reject) => {
         for(let month of months) {
-            if(month === 0) currentYear+=1;
-            let startDate = moment([currentYear, month, 1]);
-            let tmp = moment([currentYear, month, 1]);
+            let monthYear;
+            if(month === 0) monthYear = currentYear+=1;
+            else monthYear = currentYear;
+            let startDate = moment([monthYear, month, 1]);
+            let tmp = moment([monthYear, month, 1]);
             let endDate = tmp.endOf('month');
             db.get(sql,[courseId, startDate.format('YYYY-MM-DD HH:mm:ss'),
                 endDate.format('YYYY-MM-DD HH:mm:ss')], (err,row)=>{
@@ -590,8 +593,8 @@ function retrieveMonthStats(courseId, semester){
                 if(err) reject(err);
                 else {
                     let monthName = startDate.format('MMMM');
-                    console.log(monthName+" "+currentYear);
-                    list.push({"month": monthName, "year": currentYear, "average": row.average});
+                    console.log(monthName+" "+monthYear);
+                    list.push({"month": monthName, "year": monthYear, "average": row.average});
                     i++;
                 }
                 if (i===4) resolve(list);

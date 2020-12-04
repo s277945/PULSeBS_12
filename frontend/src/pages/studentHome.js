@@ -1,10 +1,12 @@
 import React, { Component } from 'react'
 import StudentNavbar from './studentNavbar'
+import Accordion from 'react-bootstrap/Accordion'
+import Card from 'react-bootstrap/Card'
 import Table from 'react-bootstrap/Table'
 import Button from 'react-bootstrap/Button'
 import Modal from 'react-bootstrap/Modal'
 import { authContext } from '../components/Authsystem'
-import { getLectures, getStudentBookedLectures, postStudentBookedLecture, deleteStudentBookedLecture } from '../api/api'
+import { getLectures, getCourses, getStudentBookedLectures, postStudentBookedLecture, deleteStudentBookedLecture } from '../api/api'
 import Calendar from '../components/Calendar';
 import Container from 'react-bootstrap/Container'
 import moment from 'moment'
@@ -14,13 +16,21 @@ export class StudentHome extends Component {
 
     state = {
         show : 0, //This state variable is used to choose the content to show. (0 : table, 1: calendar)
+        courses: null,
         lectures: null,
         modal: {show: 0, lecture: null, index: null, message: null}, //this object contains all modal state variables
         popup: {show: 0, lecture: {Name: "", Date: ""}, message: null}// this object contains all popup related variables
     }
 
     componentDidMount() {
-        // Get students lectures
+        // Get students courses data
+        getCourses().then(response => {
+            this.setState({ courses: response.data })
+            console.log(response.data)
+        })
+        .catch(/* istanbul ignore next */err => {
+            console.log(err);
+        })
         getLectures().then(response => {
             this.setState({ lectures: response.data })
             console.log(response.data)
@@ -208,8 +218,57 @@ export class StudentHome extends Component {
     renderLectureTables(){
         return (
             <div>
+                <h4 className="page-subtitle-2">Select by course</h4>
+                {this.state.courses.map(course =>
+                    <Accordion key={course.Name}>
+                    <Card>
+                        <Accordion.Toggle as={Card.Header}  eventKey="0">
+                        {course.Name}
+                        </Accordion.Toggle>
+                        <Accordion.Collapse eventKey="0">
+                        <Card.Body>
+                            <Table data-testid={'lectures'} striped bordered hover style={{ backgroundColor: "#fff" }}>
+                                <thead>
+                                    <tr>
+                                        <th>Lecture</th>
+                                        <th>Time and date</th>
+                                        <th>Booked seats</th>
+                                        <th>Total capacity</th>
+                                        <th>Lecture type</th>
+                                        <th>Lecture Booking</th>
+                                        <th>Cancel booking</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {this.state.lectures.filter(lecture=>lecture.Course_Ref===course.CourseID).map((lecture, index) =>
+                                        <tr key={index}>
+                                            <td>{lecture.Name}</td>
+                                            <td>{moment(lecture.Date).format('YYYY-MM-DD HH:mm')}</td>
+                                            <td>{lecture.Type === 'p' ? lecture.BookedSeats : "/"}</td>
+                                            <td>{lecture.Type === 'p' ? lecture.Capacity : "/"}</td>
+                                            <td>{lecture.Type === 'p' ? "Presence" : "Virtual Classroom"}</td>
+                                            <td>{lecture.Type === 'p' ? this.renderBookASeatButton(lecture, index, false) : this.renderBookASeatButton(lecture, index, true)}</td>
+                                            <td>{lecture.Type === 'p' ? this.renderCancelButton(lecture, index, false) : this.renderCancelButton(lecture, index, true)}</td>
+                                        </tr>
+                                    )}
+                                </tbody>
+                            </Table>
+                        </Card.Body>
+                        </Accordion.Collapse>
+                    </Card>
+                    </Accordion>
+                )}
+               
+            </div>
+        )
+    }
+
+    renderTodayLectureTables(){
+        return (
+
+            <div>
                 <br/>
-                <h1 className="page-title">Lectures</h1>
+                <h3 className="page-subtitle-1">Today</h3>
                 <br/>
                 <Table data-testid={'lectures'} striped bordered hover style={{backgroundColor: "#fff"}}>
                     <thead>
@@ -224,7 +283,7 @@ export class StudentHome extends Component {
                     </tr>
                     </thead>
                     <tbody>
-                    {this.state.lectures.map((lecture,index) =>
+                    {this.state.lectures.filter(lecture=>moment(lecture.Date).diff(moment(), 'days')===0).map((lecture,index) =>
                         <tr key={index}>
                             <td>{lecture.Name}</td>
                             <td>{moment(lecture.Date).format('YYYY-MM-DD HH:mm')}</td>
@@ -263,7 +322,11 @@ export class StudentHome extends Component {
             )
         }
 
-        if (this.state.show === 0) return (this.renderLectureTables());
+        if (this.state.show === 0) return ( <>
+                                                <br/>
+                                                <h1 className="page-title">Lectures</h1>
+                                                <br/>{this.renderTodayLectureTables()}{this.renderLectureTables()}
+                                            </>);
         if(this.state.show === 1) return(this.renderCalendar())
     }
 
