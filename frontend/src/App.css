@@ -112,3 +112,7 @@
   padding-bottom: 10px;
   padding-top: 20px;
 }
+
+ .fc .fc-daygrid-event {
+  color: #23272c;
+ }
