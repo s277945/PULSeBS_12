@@ -27,6 +27,9 @@ export class StatisticsTab extends Component {
                     let a = moment(w1.weekName.slice(0, 5), "MM/DD");
                     let b = moment(w2.weekName.slice(0, 5), "MM/DD");
                     return a.diff(b, 'days');
+                }).map((w)=>{
+                    if(w.average) return { average: w.average.toFixed(2), weekName: w.weekName};// truncate floating point to second digit
+                    else return w;
                 });
                 this.setState({ week: neweek });
             }).catch(/* istanbul ignore next */err => {
@@ -39,8 +42,10 @@ export class StatisticsTab extends Component {
                 let newmonth = this.state.month.sort((m1,m2)=>{
                     let a = moment(m1.month+"/"+m1.year, "MMMM/YYYY");
                     let b = moment(m2.month+"/"+m2.year, "MMMM/YYYY");
-                    console.log(a.format()+" "+b.format());
                     return a.diff(b, 'days');
+                }).map((m)=>{
+                    if(m.average) return { average: m.average.toFixed(2), month: m.month};// truncate floating point to second digit
+                    else return m;
                 });
                 this.setState({ month: newmonth });
             }).catch(/* istanbul ignore next */err => {
