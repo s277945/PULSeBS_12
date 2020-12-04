@@ -4,7 +4,11 @@
 
 //import express
 const express = require('express');
-const dao = require('./dao');
+const userDao = require('./Dao/userDao')
+const studentDao = require('./Dao/studentDao')
+const generalDao = require('./Dao/generalDao')
+const teacherDao = require('./Dao/teacherDao')
+const bookingManagerDao = require('./Dao/bookingManagerDao')
 const mailer = require('./mailer');
 const morgan = require('morgan'); // logging middleware
 const cors = require('cors');
@@ -53,7 +57,7 @@ app.use(cors({ origin: true, credentials: true }));
 
 //login route
 app.post('/api/login', (req, res) => {
-  dao.checkUserPwd(req.body.userName, req.body.password)
+  userDao.checkUserPwd(req.body.userName, req.body.password)
       .then((response) => {
         console.log(response.userID);
           const token = jsonwebtoken.sign({ user: response.userID, userType: response.userType }, jwtSecret, { expiresIn: expireTime });
@@ -109,7 +113,7 @@ app.use((err, req, res, next) => {
  app.get('/api/lectures', (req, res) => {
   const user = req.user && req.user.user;
   console.log("User: " + user);
-    dao.getLecturesByUserId(user)
+    generalDao.getLecturesByUserId(user)
       .then((lectures) => {
         res.status(200).json(lectures);
       })
@@ -128,7 +132,7 @@ app.use((err, req, res, next) => {
 
 app.get('/api/courses', (req, res) => {
   const user = req.user && req.user.user;
-    dao.getCoursesByUserId(user)
+    generalDao.getCoursesByUserId(user)
       .then((courses) => {
         res.status(200).json(courses);
       })
@@ -154,10 +158,10 @@ app.get('/api/courses', (req, res) => {
     if (moment(date).isBefore(moment()))
       return res.status(422).json({ errors: 'Invalid end date' });
 
-    dao.addSeat(user, req.body.lectureId, date, endDate)
+    studentDao.addSeat(user, req.body.lectureId, date, endDate)
       .then((response) => {
           res.status(201).json({"inserted": response});
-          dao.getStudentEmail(user)
+          studentDao.getStudentEmail(user)
             .then((email) => {
               var mailOptions = {
                 from: mailer.email,
@@ -193,7 +197,7 @@ app.get('/api/courses', (req, res) => {
  app.delete('/api/lectures/:lectureId', (req,res) => {
     let date = moment(req.query.date).format('YYYY-MM-DD HH:mm:ss');
     const user = req.user && req.user.user;
-    dao.deleteSeat(user, req.params.lectureId, date)
+    studentDao.deleteSeat(user, req.params.lectureId, date)
       .then(() => res.status(204).end())
       .catch(/* istanbul ignore next */(err) => res.status(500).json({ errors: [{ 'param': 'Server', 'msg': err.message }] }));
  });
@@ -225,7 +229,7 @@ app.get('/api/courses', (req, res) => {
 
     const date = moment(req.query.date).format('YYYY-MM-DD HH:mm:ss');
      console.log('course_ref '+course_ref+" date: "+date);
-    dao.getStudentList(course_ref, date)
+    teacherDao.getStudentList(course_ref, date)
       .then((list) => {
         res.status(201).json(list);
       })
@@ -242,7 +246,7 @@ app.get('/api/courses', (req, res) => {
 
 app.get('/api/lectures/booked', (req, res) => {
   const user = req.user && req.user.user;
-  dao.getLecturesBookedByUserId(user)
+  studentDao.getLecturesBookedByUserId(user)
     .then((list) => {
       res.status(201).json(list);
     })
@@ -266,7 +270,7 @@ app.get('/api/lectures/booked', (req, res) => {
       return res.status(500).json({error: "Delete lecture deadline expired"});
     }
 
-    dao.deleteLecture(courseId, date)
+    teacherDao.deleteLecture(courseId, date)
       .then((emails) => {
           console.log('Email da cancellare: '+emails);
         for(let email of emails){
@@ -307,7 +311,7 @@ app.put('/api/lectures', (req, res) => {
             {error: "Cannot modify type of lecture after 30 minutes before scheduled time"});
     }
 
-    dao.changeTypeOfLecture(courseId, req.body.date)
+    teacherDao.changeTypeOfLecture(courseId, req.body.date)
         .then((response) => {
             res.status(200).json({response: response});
         })
@@ -327,7 +331,7 @@ app.put('/api/lectures', (req, res) => {
 
 app.get('/api/courseStats/:courseId', (req, res) => {
     const courseId = req.params.courseId;
-    dao.getCourseStats(courseId)
+    teacherDao.getCourseStats(courseId)
         .then((response) => {
             res.status(200).json(response);
         })
@@ -347,7 +351,7 @@ app.get('/api/courseStats/:courseId', (req, res) => {
 app.get('/api/monthStats/:courseId', (req, res) => {
     const courseId = req.params.courseId;
     console.log('Month stat courseId: '+courseId);
-    dao.getMonthStats(courseId)
+    teacherDao.getMonthStats(courseId)
         .then((response) => {
             res.status(200).json(response);
         })
@@ -366,7 +370,7 @@ app.get('/api/monthStats/:courseId', (req, res) => {
 app.get('/api/weekStats/:courseId', (req, res) => {
     const courseId = req.params.courseId;
     console.log('Week stat courseId: '+courseId);
-    dao.getWeekStats(courseId)
+    teacherDao.getWeekStats(courseId)
         .then((response) => {
             res.status(200).json(response);
         })
@@ -374,25 +378,6 @@ app.get('/api/weekStats/:courseId', (req, res) => {
             res.status(500).json(err);
         })
 })
-/**
- * GET /api/monthStats
- * Retrieves stats of the courses of a given teacher grouped by month (and course)
- *
- *  body response: stats grouped by month. Format to be defined
- */
-/*
-app.get('/api/monthStats', (req, res) => {
-    const user = req.user && req.user.user;
-    dao.getMonthStats(user)
-        .then((response) => {
-            res.status(200).json(response);
-        })
-        .catch((err) => {
-            res.status(500).json(err);
-        })
-})
-*/
-
 
 /////////////////////////////////
 /// BOOKING MANAGER ENDPOINTS ///
@@ -407,7 +392,7 @@ app.get('/api/monthStats', (req, res) => {
  */
 
 app.get('/api/courses/all', (req, res) => {
-    dao.getCourses()
+    bookingManagerDao.getCourses()
         .then((courses) => {
             res.status(200).json(courses);
         })
@@ -427,7 +412,7 @@ app.get('/api/courses/all', (req, res) => {
 
 app.get('/api/managerCourses/:courseId', (req, res) => {
     const courseId = req.params.courseId;
-    dao.getManagerCourseStats(courseId)
+    bookingManagerDao.getManagerCourseStats(courseId)
         .then((list) => {
             res.status(200).json(list);
         })
@@ -447,7 +432,7 @@ app.get('/api/managerCourses/:courseId', (req, res) => {
 
 app.get('/api/managerCoursesTotal/:courseId', (req, res) => {
     const courseId = req.params.courseId;
-    dao.getManagerCourseStatsTotal(courseId)
+    bookingManagerDao.getManagerCourseStatsTotal(courseId)
         .then((stats) => {
             res.status(200).json(stats);
         })
