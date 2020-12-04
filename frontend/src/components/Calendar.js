@@ -2,6 +2,8 @@ import React from "react";
 import FullCalendar from '@fullcalendar/react'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import timeGridPlugin from '@fullcalendar/timegrid'
+import moment from 'moment'
+
 
 var stringToColour = function(str) {
     var hash = 0;
@@ -56,11 +58,10 @@ export default function Calendar({lectures,courses}){
                 eventContent={function(arg, createElement) {
                     let children=[];
                     if (arg.event.extendedProps) {
-
-                        let elem1=createElement('p',{},arg.event.extendedProps.lectureName);
+                        let elem4=createElement('div',{},"From: "+moment(arg.event.start).format("HH:MM")+" To: "+moment(arg.event.end).format("HH:MM"));
+                        let elem1=createElement('div',{},arg.event.extendedProps.lectureName+" / "+(arg.event.extendedProps.lectureType==='p'?'Presence':'Virtual Classroom'));
                         let elem2=createElement('b',{},arg.event.extendedProps.courseName);
-                        let elem3=createElement('p',{},arg.event.extendedProps.lectureType==='p'?'Presence':'Virtual Classroom');
-                        children=[elem2,elem1,elem3];
+                        children=[elem2,elem1,elem4];
                     }
                     createElement()
                     return createElement('div', {}, children);
