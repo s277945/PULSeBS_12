@@ -16,8 +16,8 @@ export class StudentHome extends Component {
 
     state = {
         show : 0, //This state variable is used to choose the content to show. (0 : table, 1: calendar)
-        courses: null,
-        lectures: null,
+        courses: [],
+        lectures: [],
         modal: {show: 0, lecture: null, index: null, message: null}, //this object contains all modal state variables
         popup: {show: 0, lecture: {Name: "", Date: ""}, message: null}// this object contains all popup related variables
     }
@@ -232,6 +232,7 @@ export class StudentHome extends Component {
                                     <tr>
                                         <th>Lecture</th>
                                         <th>Time and date</th>
+                                        <th>Booking deadline</th>
                                         <th>Booked seats</th>
                                         <th>Total capacity</th>
                                         <th>Lecture type</th>
@@ -244,11 +245,12 @@ export class StudentHome extends Component {
                                         <tr key={index}>
                                             <td>{lecture.Name}</td>
                                             <td>{moment(lecture.Date).format('YYYY-MM-DD HH:mm')}</td>
+                            <td>{moment(lecture.DateDeadline).format('YYYY-MM-DD HH:mm')}</td>
                                             <td>{lecture.Type === 'p' ? lecture.BookedSeats : "/"}</td>
                                             <td>{lecture.Type === 'p' ? lecture.Capacity : "/"}</td>
                                             <td>{lecture.Type === 'p' ? "Presence" : "Virtual Classroom"}</td>
-                                            <td>{lecture.Type === 'p' ? this.renderBookASeatButton(lecture, index, false) : this.renderBookASeatButton(lecture, index, true)}</td>
-                                            <td>{lecture.Type === 'p' ? this.renderCancelButton(lecture, index, false) : this.renderCancelButton(lecture, index, true)}</td>
+                                            <td>{lecture.Type === 'p'&&moment().isBefore(lecture.DateDeadline)? this.renderBookASeatButton(lecture, index, false) : this.renderBookASeatButton(lecture, index, true)}</td>
+                                            <td>{lecture.Type === 'p'&&moment().isBefore(lecture.DateDeadline)? this.renderCancelButton(lecture, index, false) : this.renderCancelButton(lecture, index, true)}</td>
                                         </tr>
                                     )}
                                 </tbody>
@@ -275,6 +277,7 @@ export class StudentHome extends Component {
                     <tr>
                         <th>Lecture</th>
                         <th>Time and date</th>
+                        <th>Booking deadline</th>
                         <th>Booked seats</th>
                         <th>Total capacity</th>
                         <th>Lecture type</th>
@@ -287,11 +290,12 @@ export class StudentHome extends Component {
                         <tr key={index}>
                             <td>{lecture.Name}</td>
                             <td>{moment(lecture.Date).format('YYYY-MM-DD HH:mm')}</td>
+                            <td>{moment(lecture.DateDeadline).format('YYYY-MM-DD HH:mm')}</td>
                             <td>{lecture.Type==='p'?lecture.BookedSeats:"/"}</td>
                             <td>{lecture.Type==='p'?lecture.Capacity:"/"}</td>
                             <td>{lecture.Type==='p'?"Presence":"Virtual Classroom"}</td>
-                            <td>{lecture.Type==='p'?this.renderBookASeatButton(lecture, index, false):this.renderBookASeatButton(lecture, index, true)}</td>
-                            <td>{lecture.Type==='p'?this.renderCancelButton(lecture, index, false):this.renderCancelButton(lecture, index, true)}</td>
+                            <td>{lecture.Type==='p'&&moment().isBefore(lecture.DateDeadline)?this.renderBookASeatButton(lecture, index, false):this.renderBookASeatButton(lecture, index, true)}</td>
+                            <td>{lecture.Type==='p'&&moment().isBefore(lecture.DateDeadline)?this.renderCancelButton(lecture, index, false):this.renderCancelButton(lecture, index, true)}</td>
                         </tr>
                     )}
                     </tbody>
