@@ -108,6 +108,13 @@ export class StatisticsTab extends Component {
                                         <td>/</td>
                                     </tr>                                
                                 )})}
+                                <tr>
+                                        <td></td>
+                                        <td></td>
+                                        <th>Average</th>
+                                        <td>{w.average}</td>
+                                        <td>/</td>
+                                    </tr>    
                             </tbody>
                         </Table>
                         );})}
@@ -165,6 +172,13 @@ export class StatisticsTab extends Component {
                                     <td>/</td>
                                 </tr>                                
                             )})}
+                             <tr>
+                                <td></td>
+                                <td></td>
+                                <th>Average</th>
+                                <td>{m.average}</td>
+                                <td>/</td>
+                            </tr>
                         </tbody>
                     </Table>
                     );})}
