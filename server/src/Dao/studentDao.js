@@ -23,7 +23,7 @@ exports.addSeat=function(userId, courseId, date, endDate){
                                 db.run(sql2, [courseId, date], function(err2){
                                     /* istanbul ignore if */
                                     if(err2) reject(err2);
-                                    else resolve(true);
+                                    else resolve("booked");
                                 });
                             }
 
@@ -31,7 +31,7 @@ exports.addSeat=function(userId, courseId, date, endDate){
                     }
                     else{
                         addWaitingList(userId, courseId, date, endDate).then((check2)=>{
-                            if(check2) resolve(true);
+                            if(check2) resolve("waiting");
                             else reject(err);
                         }).catch(/* istanbul ignore next */err=>reject(err));
                     }

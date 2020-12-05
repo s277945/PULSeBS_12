@@ -160,15 +160,28 @@ app.get('/api/courses', (req, res) => {
 
     studentDao.addSeat(user, req.body.lectureId, date, endDate)
       .then((response) => {
-          res.status(201).json({"inserted": response});
+          res.status(201).json({"operation": response});
           studentDao.getStudentEmail(user)
             .then((email) => {
-              var mailOptions = {
-                from: mailer.email,
-                to: email,
-                subject: 'Booking Confirmation',
-                text: `Dear ${user}, you booked a seat for Course ${req.body.lectureId} for lecture on ${date}`
-              };
+                let mailOptions;
+                if(response === "booked"){
+                    mailOptions = {
+                        from: mailer.email,
+                        to: email,
+                        subject: 'Booking Confirmation',
+                        text: `Dear ${user}, you booked a seat for Course ${req.body.lectureId} for lecture on ${date}`
+                    };
+                } else if(response === "waiting"){
+                    mailOptions = {
+                        from: mailer.email,
+                        to: email,
+                        subject: 'Lecture waiting list',
+                        text: `Dear ${user}, you have been inserted in a waiting list for a seat of Course ${req.body.lectureId} for lecture on ${date}`
+                    };
+                } else {
+                    return;
+                }
+
 
               mailer.transporter.sendMail(mailOptions, function(err, info){
                   /* istanbul ignore if */
