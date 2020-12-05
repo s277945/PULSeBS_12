@@ -329,7 +329,7 @@ function retrieveWeekStats(courseId, semester){
                 if(err) reject(err);
                 else {
                     let weekName = moment(startDate).format('MM/DD') + "-" + moment(endDate).format('MM/DD');
-                    list.push({"weekName": weekName, "average": row.average});
+                    list.push({"weekName": weekName, "startDate": moment(startDate).format('YYYY/MM/DD'), "endDate": moment(endDate).format('YYYY/MM/DD'), "average": row.average});
                     i++;
                 }
                 if (i===n) resolve(list);
