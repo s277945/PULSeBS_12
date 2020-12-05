@@ -29,7 +29,12 @@ exports.addSeat=function(userId, courseId, date, endDate){
 
                         })
                     }
-                    else reject(new Error("0 seats available"));
+                    else{
+                        addWaitingList(userId, courseId, date, endDate).then((check2)=>{
+                            if(check2) resolve(true);
+                            else reject(err);
+                        }).catch(/* istanbul ignore next */err=>reject(err));
+                    }
                 }).catch(/* istanbul ignore next */err=>reject(err));
             }else reject(new Error("Course unavailable"));
         }).catch(/* istanbul ignore next */err=>reject(err));
@@ -81,30 +86,110 @@ function controlCapacity(courseID,date){
 /**
 * Input: Course_Ref, Date_Ref
 * Output: True or False
-* Description: Delete the booking from a lecture and update the avaiable seats of the lecture
+* Description: Add the student to the waiting list for that lecture
+*/
+
+function addWaitingList(userId, courseId, date, endDate){
+    return new Promise((resolve, reject) => {
+        let bookingDate = moment().format('YYYY-MM-DD HH:mm:ss');
+        console.log(bookingDate);
+        const sql='INSERT INTO WaitingList VALUES (?,?,?,?,?)';
+        db.run(sql,[courseId, date, userId, endDate, bookingDate],(err) => {
+            /* istanbul ignore if */
+            if(err)
+                reject(err);
+            else resolve(true);
+        })
+    });
+}
+
+/**
+* Input: Course_Ref, Date_Ref
+* Output: True or False
+* Description: Delete the booking from a lecture and update the avaiable seats of the lecture or pick the most recent student from 
+* the waiting list and keep the BookedSeats number the same
 */
 
 exports.deleteSeat=function(userId, courseId, date){
     return new Promise((resolve, reject) => {
-        const sql='DELETE FROM Booking WHERE Student_Ref=? AND Course_Ref=?AND Date_Ref=?';
+        const sql='DELETE FROM Booking WHERE Student_Ref=? AND Course_Ref=? AND Date_Ref=?';
         db.run(sql, [userId, courseId, date], (err) => {
             /* istanbul ignore if */
             if(err)
                 reject(err);
             else{
-                const sql2='UPDATE Lecture SET BookedSeats = BookedSeats - 1, UnbookedSeats = UnbookedSeats + 1 WHERE Course_Ref=? AND Date=?';
-                db.run(sql2, [courseId, date], (err2) => {
+                controlWaitingList(courseId, date).then((check) => {
+                    if(check > 0){
+                        addFromWaitingList(courseId, date).then((user) => {
+                            resolve(user);
+                        }).catch(/* istanbul ignore next */err=>reject(err));
+                    }else{
+                        const sql2='UPDATE Lecture SET BookedSeats = BookedSeats - 1, UnbookedSeats = UnbookedSeats + 1 WHERE Course_Ref=? AND Date=?';
+                        db.run(sql2, [courseId, date], (err2) => {
+                        /* istanbul ignore if */
+                            if(err2) reject(err2);
+                            else resolve("NoUser");
+                        });
+                    }
+                }).catch(/* istanbul ignore next */err=>reject(err));
+            }
+        })
+    });
+}
+
+/**
+* Input: Course_Ref, Date_Ref
+* Output: Number of student in the waiting list for that lecture
+* Description: Return the number of student for the selected lecture
+*/
+
+function controlWaitingList(courseId, date){
+    return new Promise((resolve, reject) => {
+        const sql='SELECT COUNT(*) FROM WaitingList WHERE Course_Ref=? AND Date_Ref=?';
+        db.get(sql,[courseId, date],(err,row)=>{
+            /* istanbul ignore if */
+            if(err)
+                reject(err);
+            else {
+                resolve(row['COUNT(*)']);
+            }
+        })
+    });
+}
+
+/**
+* Input: Course_Ref, Date_Ref
+* Output: True or False
+* Description: Pick the most recent booking from the waiting list for the lecture that received a cancel booking request
+*/
+
+function addFromWaitingList(courseId, date){
+    return new Promise((resolve, reject) => {
+        const sql='SELECT EndDate_Ref, Student_Ref FROM WaitingList WHERE DateBooking IN ('+
+        'SELECT MIN(DateBooking) FROM WaitingList WHERE Course_Ref=? AND Date_Ref=?)';
+        db.get(sql,[courseId, date],(err,row)=>{
+            /* istanbul ignore if */
+            if(err)
+                reject(err);
+            else {
+                console.log("Student_Ref "+row.Student_Ref);
+                const sql2='INSERT INTO Booking VALUES (?,?,?,?)';
+                db.run(sql2, [courseId, date, row.Student_Ref, row.EndDate_Ref], (err2) => {
                     /* istanbul ignore if */
                     if(err2) reject(err2);
-                    else{
-                        resolve(true);
+                    else {
+                        const sql3='DELETE FROM WaitingList WHERE Course_Ref=? AND Date_Ref=? AND Student_Ref=?';
+                        db.run(sql3, [courseId, date, row.Student_Ref], (err3) => {
+                            /* istanbul ignore if */
+                            if(err3) reject(err3);
+                            else resolve(row.Student_Ref);                 
+                        });
                     }
                 });
             }
         })
     });
 }
-
 
 /*
 * Input: userID

@@ -198,7 +198,27 @@ app.get('/api/courses', (req, res) => {
     let date = moment(req.query.date).format('YYYY-MM-DD HH:mm:ss');
     const user = req.user && req.user.user;
     studentDao.deleteSeat(user, req.params.lectureId, date)
-      .then(() => res.status(204).end())
+      .then((userId) => {res.status(204).end()
+        if(userId!=="NoUser") studentDao.getStudentEmail(userId)
+        .then((email) => {
+          var mailOptions = {
+            from: mailer.email,
+            to: email,
+            subject: 'Waiting list notification',
+            text: `Dear ${userId}, you got moved from the waiting list for Course ${req.params.lectureId} for lecture on ${date}`
+          };
+
+          mailer.transporter.sendMail(mailOptions, function(err, info){
+              /* istanbul ignore if */
+              if(err){
+                console.log(err);
+            } else {
+                console.log('Email sent: ' + info.response);
+            }
+          });
+        })
+        .catch(/* istanbul ignore next */(err) => res.status(500).json({ errors: [{ 'param': 'Server', 'msg': err.message }] }))
+      })
       .catch(/* istanbul ignore next */(err) => res.status(500).json({ errors: [{ 'param': 'Server', 'msg': err.message }] }));
  });
 
