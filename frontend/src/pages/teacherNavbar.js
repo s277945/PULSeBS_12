@@ -9,38 +9,40 @@ class TeacherNavbar extends Component {
     static contextType = authContext
     state = {
         lectureslink: true,
-        studentslink: false
+        studentslink: false,
+        historylink: false
     }
     componentDidMount() {
         let pagestate = parseInt(sessionStorage.getItem("pagestate"), 10);//get saved state value
-        if(pagestate===1) this.setState({ lectureslink: false,studentslink: true });
+        if(pagestate===1) this.setState({ lectureslink: false, studentslink: true, historylink: false });
+        else if(pagestate===2) this.setState({ lectureslink: false, studentslink: false, historylink: true });
     }
      showLectures = () => { //function called when Lectures link is selected
          this.props.setShow(0);
          sessionStorage.clear();
          sessionStorage.setItem("pagestate", 0);//save state value
-         this.setState({ lectureslink: true,studentslink: false});
+         this.setState({ lectureslink: true, studentslink: false, historylink: false});
      }
 
      showStudentList = () =>{
          this.props.setShow(1)
          sessionStorage.clear();
          sessionStorage.setItem("pagestate", 1);//save state value
-         this.setState({ lectureslink: false,studentslink: true});
+         this.setState({ lectureslink: false, studentslink: true, historylink: false });
      }
 
      showHistory = () =>{
         this.props.setShow(2)
         sessionStorage.clear();
         sessionStorage.setItem("pagestate", 2);//save state value
-        this.setState({ lectureslink: false,studentslink: false});
+        this.setState({ lectureslink: false, studentslink: false, historylink: true});
     }
 
      redirHome = (e) => { //function that redirects to the home page
          e.preventDefault();
          this.props.setShow(0);
          sessionStorage.setItem("pagestate", 0);//save state value
-         this.setState({ lectureslink: true,studentslink: false});
+         this.setState({ lectureslink: true, studentslink: false, historylink: false });
          this.props.history.push("/teacherHome");
      }
 
@@ -59,7 +61,7 @@ class TeacherNavbar extends Component {
                      <Nav className="mr-auto">
                          <Nav.Link data-testid={"lecturesPage"} href="#lectures" active={this.state.lectureslink} onSelect={this.showLectures}>Lectures</Nav.Link>
                          <Nav.Link data-testid="teacherStudent" href="#studentList" active={this.state.studentslink} onSelect={this.showStudentList}>Student List</Nav.Link>
-                         <Nav.Link data-testid="history" href="#history" onSelect={this.showHistory}>Historical Data</Nav.Link>
+                         <Nav.Link data-testid="history" href="#history" active={this.state.historylink} onSelect={this.showHistory}>Historical Data</Nav.Link>
                      </Nav>
                      <Nav.Link data-testid="logout" href="#logout" onSelect={this.handleLogout}>Logout</Nav.Link>
                  </Navbar>
