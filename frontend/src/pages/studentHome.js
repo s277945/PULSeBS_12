@@ -19,7 +19,7 @@ export class StudentHome extends Component {
         courses: [],
         lectures: [],
         togglecourse: null,
-        modal: {show: 0, lecture: null, index: null, message: null}, //this object contains all modal state variables
+        modal: {show: 0, lecture: null, message: null}, //this object contains all modal state variables
         popup: {show: 0, lecture: {Name: "", Date: ""}, message: null}// this object contains all popup related variables
     }
 
@@ -98,7 +98,7 @@ export class StudentHome extends Component {
     * Body response: status 201/404/500
     * Button that POST a request to book a seat for the session user
     */
-    bookASeat(lectureId, date, endDate, index){
+    bookASeat(lectureId, date, endDate){
         const body = {
             lectureId: lectureId,
             date: date,
@@ -107,6 +107,9 @@ export class StudentHome extends Component {
         postStudentBookedLecture(body)
             .then(response => {
                 const newLectures = this.state.lectures.slice();
+                const index = this.state.lectures.findIndex(lecture =>
+                    lecture.Course_Ref === lectureId && lecture.Date === date
+                )
                 newLectures[index].alreadyBooked = true
                 this.setState({lectures: newLectures})
                 this.modalClose();// then close modal
@@ -120,11 +123,14 @@ export class StudentHome extends Component {
              });
     }
 
-    cancelSeat(lectureId, date, index){
+    cancelSeat(lectureId, date){
         deleteStudentBookedLecture(lectureId, date)
             .then(response => {
                 console.log(response)
                 const newLectures = this.state.lectures.slice();
+                const index = this.state.lectures.findIndex(lecture =>
+                    lecture.Course_Ref === lectureId && lecture.Date === date
+                )
                 newLectures[index].alreadyBooked = false
                 this.setState({lectures: newLectures})
                 this.modalClose();// then close modal
@@ -139,8 +145,8 @@ export class StudentHome extends Component {
             {(lecture.alreadyBooked || disabled) &&
                 <Button disabled>Book Seat</Button>
             }
-            {(!lecture.alreadyBooked && ! disabled) &&
-                <Button data-testid={'bookButton_'+index} onClick={() => this.setModal(lecture, index, "book a seat")}>Book Seat</Button>
+            {(!lecture.alreadyBooked && !disabled) &&
+                <Button data-testid={'bookButton_'+index} onClick={() => this.setModal(lecture, "book a seat")}>Book Seat</Button>
             }
             </>
         )
@@ -149,8 +155,8 @@ export class StudentHome extends Component {
     renderCancelButton(lecture, index, disabled){
         return (
             <>
-            {(lecture.alreadyBooked && ! disabled) &&
-                <Button data-testid={'cancelButton_'+index} onClick={() => this.setModal(lecture, index, "cancel your booking")} variant="danger">Cancel</Button>
+            {(lecture.alreadyBooked && !disabled) &&
+                <Button data-testid={'cancelButton_'+index} onClick={() => this.setModal(lecture, "cancel your booking")} variant="danger">Cancel</Button>
             }
             {(!lecture.alreadyBooked  || disabled) &&
                 <Button variant="danger" disabled>Cancel</Button>
@@ -159,16 +165,16 @@ export class StudentHome extends Component {
         )
     }
 
-    setModal(lecture, index, message) {// set modal state variables to passed values and show modal
-        let newmodal = {show: 1, lecture: lecture, index: index, message: message};
+    setModal(lecture, message) {// set modal state variables to passed values and show modal
+        let newmodal = {show: 1, lecture: lecture, message: message};
         this.setState({ modal: newmodal });
         sessionStorage.setItem("modal", JSON.stringify(newmodal));
     }
 
     renderModal() {
         let confirm = () => {// function called when "yes button is pressed"
-            if(this.state.modal.message==="cancel your booking") this.cancelSeat(this.state.modal.lecture.Course_Ref, this.state.modal.lecture.Date, this.state.modal.index);// depending on operation, call cancel or book function
-            else this.bookASeat(this.state.modal.lecture.Course_Ref, this.state.modal.lecture.Date, this.state.modal.lecture.EndDate, this.state.modal.index);
+            if(this.state.modal.message==="cancel your booking") this.cancelSeat(this.state.modal.lecture.Course_Ref, this.state.modal.lecture.Date);// depending on operation, call cancel or book function
+            else this.bookASeat(this.state.modal.lecture.Course_Ref, this.state.modal.lecture.Date, this.state.modal.lecture.EndDate);
         }
         return (
             <Modal show={this.state.modal.show===1? true:false} onHide={this.modalClose} style={{marginTop: "25vh"}}>
@@ -195,7 +201,7 @@ export class StudentHome extends Component {
     setPopup(message) {// set up popup state variables, hide modal, show popup, handle session data
         let lecture = this.state.modal.lecture;
         let newpopup = {show: 1, lecture: lecture, message: message};
-        this.setState({ modal: {show: 0, lecture: null, index: null, message: null}, popup: newpopup });
+        this.setState({ modal: {show: 0, lecture: null, message: null}, popup: newpopup });
         sessionStorage.setItem("popup", JSON.stringify(newpopup));
         sessionStorage.removeItem("modal");
     }
@@ -258,7 +264,7 @@ export class StudentHome extends Component {
                                         </thead>
                                         <tbody>
                                             {this.state.lectures.filter(lecture=>lecture.Course_Ref===course.CourseID).map((lecture, index) =>
-                                                <tr key={index}>
+                                                <tr key={lecture.Name}>
                                                     <td>{lecture.Name}</td>
                                                     <td>{moment(lecture.Date).format('YYYY-MM-DD HH:mm')}</td>
                                     <td>{moment(lecture.DateDeadline).format('YYYY-MM-DD HH:mm')}</td>
