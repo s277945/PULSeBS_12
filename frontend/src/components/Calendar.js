@@ -58,7 +58,7 @@ export default function Calendar({lectures,courses}){
                 eventContent={function(arg, createElement) {
                     let children=[];
                     if (arg.event.extendedProps) {
-                        let elem4=createElement('div',{},"From: "+moment(arg.event.start).format("HH:MM")+" To: "+moment(arg.event.end).format("HH:MM"));
+                        let elem4=createElement('div',{},moment(arg.event.start).format("HH:mm")+" - "+moment(arg.event.end).format("HH:mm"));
                         let elem1=createElement('div',{},arg.event.extendedProps.lectureName+" / "+(arg.event.extendedProps.lectureType==='p'?'Presence':'Virtual Classroom'));
                         let elem2=createElement('b',{},arg.event.extendedProps.courseName);
                         children=[elem2,elem1,elem4];

@@ -147,7 +147,7 @@ export class TeacherTabLec extends Component {
                         <tr>
                             <th>Course</th>
                             <th>Lecture name</th>
-                            <th>Time and date</th>
+                            <th>Date and time</th>
                             <th>Modifications</th>
                         </tr>
                     </thead>

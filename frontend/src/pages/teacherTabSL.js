@@ -82,7 +82,7 @@
                          <tr>
                              <th>Course</th>
                              <th>Lecture name</th>
-                             <th>Time and date</th>
+                             <th>Date and time</th>
                              <th>List of students</th>
                          </tr>
                      </thead>
