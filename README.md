@@ -4,9 +4,12 @@
 
   From a command line run:
     
-
+  clone git directory:
+  
     git clone https://github.com/s277945/PULSeBS_12.git
     cd PULSeBS_12
+  start the project:
+  
     ./start_script.sh
 
 
@@ -15,20 +18,37 @@
   From a command line run:
   
   Linux:
-  ```
-  git clone https://github.com/s277945/PULSeBS_12.git
-  cd PULSeBS_12
-  sudo docker pull alebottisio/pulsebs_12:stable
-  sudo docker run -i -p 3000:3000 -p 3001:3001 -p 3002:3002 alebottisio/pulsebs_12:stable
-  ```
+  
+  clone git directory:
+  
+    git clone https://github.com/s277945/PULSeBS_12.git
+    cd PULSeBS_12
+  download prebuilt images:
+  
+    sudo docker pull alebottisio/pulsebs_12:stable
+  or build local images:
+  
+    sudo docker build -t alebottisio/pulsebs_12:latest .
+  then run the docker container:
+  
+    sudo docker run -i -p 3000:3000 -p 3001:3001 -p 3002:3002 alebottisio/pulsebs_12:stable
 
   Windows:
-  ```
-  git clone https://github.com/s277945/PULSeBS_12.git
-  cd PULSeBS_12
-  docker pull alebottisio/pulsebs_12:stable
-  docker run -i -p 3000:3000 -p 3001:3001 -p 3002:3002 alebottisio/pulsebs_12:stable
-  ```
+
+  clone git directory:
+  
+    git clone https://github.com/s277945/PULSeBS_12.git
+    cd PULSeBS_12
+  download prebuilt images:
+  
+    docker pull alebottisio/pulsebs_12:stable
+  or build local images:
+  
+    docker build -t alebottisio/pulsebs_12:latest .
+  then run the docker container:
+  
+    docker run -i -p 3000:3000 -p 3001:3001 -p 3002:3002 alebottisio/pulsebs_12:stable
+
 
 ## SONARSCANNER INSTRUCTIONS
   Just run the following command from the project's root folder
