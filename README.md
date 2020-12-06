@@ -1,6 +1,16 @@
 # PULSeBS_12
 
-## DOCKER INSTALL INSTRUCTIONS
+## INSTALL AND START PROJECT WITHOUT DOCKER
+
+    From a command line run:
+    
+    ```
+    git clone https://github.com/s277945/PULSeBS_12.git
+    cd PULSeBS_12
+    ./start_script.sh
+    ```
+
+## DOCKER INSTALL AND START INSTRUCTIONS
 
   From a command line run:
   
@@ -11,6 +21,7 @@
   sudo docker pull alebottisio/pulsebs_12:stable
   sudo docker run -i -p 3000:3000 -p 3001:3001 -p 3002:3002 alebottisio/pulsebs_12:stable
   ```
+
   Windows:
   ```
   git clone https://github.com/s277945/PULSeBS_12.git
