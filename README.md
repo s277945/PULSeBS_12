@@ -28,7 +28,7 @@
     sudo docker pull alebottisio/pulsebs_12:stable
   or build local images:
   
-    sudo docker build -t alebottisio/pulsebs_12:latest .
+    sudo docker build -t alebottisio/pulsebs_12:stable .
   then run the docker container:
   
     sudo docker run -i -p 3000:3000 -p 3001:3001 -p 3002:3002 alebottisio/pulsebs_12:stable
@@ -44,7 +44,7 @@
     docker pull alebottisio/pulsebs_12:stable
   or build local images:
   
-    docker build -t alebottisio/pulsebs_12:latest .
+    docker build -t alebottisio/pulsebs_12:stable .
   then run the docker container:
   
     docker run -i -p 3000:3000 -p 3001:3001 -p 3002:3002 alebottisio/pulsebs_12:stable
