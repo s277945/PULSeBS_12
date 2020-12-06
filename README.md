@@ -2,7 +2,7 @@
 
 ## INSTALL AND START PROJECT WITHOUT DOCKER
 
-    From a command line run:
+  From a command line run:
     
     ```
     git clone https://github.com/s277945/PULSeBS_12.git
