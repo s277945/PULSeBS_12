@@ -8,19 +8,15 @@
   ```
   git clone https://github.com/s277945/PULSeBS_12.git
   cd PULSeBS_12
-  sudo docker pull alebottisio/pulsebs_12:frontend_stable
-  sudo docker pull alebottisio/pulsebs_12:mail_stable
-  sudo docker pull alebottisio/pulsebs_12:server_stable
-  sudo docker-compose up
+  sudo docker pull alebottisio/pulsebs_12:stable
+  sudo docker run -i -p 3000:3000 -p 3001:3001 -p 3002:3002 alebottisio/pulsebs_12:stable
   ```
   Windows:
   ```
   git clone https://github.com/s277945/PULSeBS_12.git
   cd PULSeBS_12
-  docker pull alebottisio/pulsebs_12:frontend_stable
-  docker pull alebottisio/pulsebs_12:mail_stable
-  docker pull alebottisio/pulsebs_12:server_stable
-  docker-compose up
+  docker pull alebottisio/pulsebs_12:stable
+  docker run -i -p 3000:3000 -p 3001:3001 -p 3002:3002 alebottisio/pulsebs_12:stable
   ```
 
 ## SONARSCANNER INSTRUCTIONS
