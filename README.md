@@ -17,7 +17,7 @@
 
   From a command line run:
   
-  **Linux:
+  **Linux:**
   
   clone git directory:
   
@@ -33,7 +33,7 @@
   
     sudo docker run -i -p 3000:3000 -p 3001:3001 -p 3002:3002 alebottisio/pulsebs_12:stable
 
-  **Windows:
+  **Windows:**
 
   clone git directory:
   
