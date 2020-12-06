@@ -29,7 +29,7 @@ const job=cron.schedule('1 * * * * *', function() {
                     }
                 });
 
-                dao.emailSentUpdate(el.Course_Ref, el.dateLecture)
+                teacherDao.emailSentUpdate(el.Course_Ref, el.dateLecture)
                     .then((res) => {
                         console.log("operation: " + res);
                     })
