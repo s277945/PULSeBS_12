@@ -36,6 +36,7 @@ export class StudentHome extends Component {
             this.setState({ lectures: response.data })
             console.log(response.data)
             this.setBookedLectures();
+            this.setWaitingLectures();
         })
         .catch(/* istanbul ignore next */err => {
             console.log(err);
