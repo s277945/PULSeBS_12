@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import {StatisticsTab} from '../components/StatisticsTab'
-import { getCourses } from '../api/api'
+import { getTeacherCourses } from '../api/api'
 
 
 export class TeacherTabHist extends Component {
@@ -9,7 +9,7 @@ export class TeacherTabHist extends Component {
 
     componentDidMount() {// get courses from server
         let courses = [];
-        getCourses()
+        getTeacherCourses()
              .then(res => {
                  console.log(res.data);
                  courses = res.data;

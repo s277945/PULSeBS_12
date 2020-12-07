@@ -2,7 +2,7 @@
 const db = require('../db');
 const moment = require('moment');
 
-students, courses, teachers, lectures, and classes
+//students, courses, teachers, lectures, and classes
 
 exports.uploadStudent=function(userId, email, password, name, surname){
     return new Promise((resolve, reject) => {

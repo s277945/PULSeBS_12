@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import Table from 'react-bootstrap/Table'
 import Button from 'react-bootstrap/Button'
 import Modal from 'react-bootstrap/Modal'
-import update from './update.js'
+import {update, updateTeacher} from './update.js'
 import { cancelLecture, lectreTurnToDistance } from '../api/api'
 import moment from 'moment'
 moment().format();
@@ -21,7 +21,7 @@ export class TeacherTabLec extends Component {
             }
 
     componentDidMount() {
-        update(this);
+        updateTeacher(this);
         let modalShow = sessionStorage.getItem("modalShow");//get saved modalShow state value
         let popup = sessionStorage.getItem("popup");//get saved popup state value
         let selectedLec = sessionStorage.getItem("selectedLec");//get saved selectedLec value

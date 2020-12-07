@@ -2,7 +2,7 @@
  import Table from 'react-bootstrap/Table'
  import Button from 'react-bootstrap/Button'
  import Modal from 'react-bootstrap/Modal'
- import update from './update.js'
+ import {update, updateTeacher} from './update.js'
  import { getStudentList } from '../api/api'
 
  export class TeacherTabSL extends Component {
@@ -11,7 +11,7 @@
      state = { tableData: [],modalTableData: [], modal: 0, element: null }
 
      componentDidMount() {
-         update(this);
+         updateTeacher(this);
          let modal = sessionStorage.getItem("modal");//get saved modal state value
          let element = sessionStorage.getItem("element");//get saved element state value
          if(modal!==null) this.setState({ modal: parseInt(modal, 10) });

@@ -113,7 +113,27 @@ app.use((err, req, res, next) => {
  app.get('/api/lectures', (req, res) => {
   const user = req.user && req.user.user;
   console.log("User: " + user);
-    generalDao.getLecturesByUserId(user)
+    studentDao.getLecturesByStudentId(user)
+      .then((lectures) => {
+        res.status(200).json(lectures);
+      })
+      .catch(/* istanbul ignore next */(err) => {
+        res.status(500).json({errors: [{'msg': err}]});
+      });
+ });
+
+/**
+ * GET api/teacherLectures
+ *
+ * Returns list of available lectures for a given teacher
+ *
+ * userId => userId
+ */
+
+app.get('/api/teacherLectures', (req, res) => {
+  const user = req.user && req.user.user;
+  console.log("User: " + user);
+    teacherDao.getLecturesByTeacherId(user)
       .then((lectures) => {
         res.status(200).json(lectures);
       })
@@ -132,7 +152,7 @@ app.use((err, req, res, next) => {
 
 app.get('/api/courses', (req, res) => {
   const user = req.user && req.user.user;
-    generalDao.getCoursesByUserId(user)
+    studentDao.getCoursesByStudentId(user)
       .then((courses) => {
         res.status(200).json(courses);
       })
@@ -141,6 +161,24 @@ app.get('/api/courses', (req, res) => {
       });
  });
 
+/**
+ * GET api/teacherCourses
+ *
+ * Returns list of available courses for a given teacher
+ *
+ * userId => userId
+ */
+
+app.get('/api/teacherCourses', (req, res) => {
+  const user = req.user && req.user.user;
+    teacherDao.getCoursesByTeacherId(user)
+      .then((courses) => {
+        res.status(200).json(courses);
+      })
+      .catch(/* istanbul ignore next */(err) => {
+        res.status(500).json({errors: [{'msg': err}]});
+      });
+ });
 
 /**
  * POST api/lectures

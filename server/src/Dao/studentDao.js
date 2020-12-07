@@ -4,6 +4,51 @@ const db = require('../db');
 const moment = require('moment');
 
 /**
+* Input: userID
+* Output: List of courses of the user
+* Description: Retrieve the list of courses in which the user is enrolled
+*/
+
+exports.getCoursesByStudentId=function(userId){
+    return new Promise((resolve, reject) => {
+        const sql='SELECT CourseID, Name FROM Course WHERE CourseID IN ('+
+            'SELECT Course_Ref FROM Enrollment WHERE Student_Ref=?)';
+        db.all(sql, [userId], (err,rows)=>{
+            /* istanbul ignore if */
+            if(err){
+                reject(err);
+            }
+            else{
+                resolve(rows);
+            }
+        });
+    });
+}
+
+/**
+ * Input: userID
+ * Output: List of lectures (Course_ref, Name, Date)
+ * Description: Retrieve the list of lectures from the courses in which the user is enrolled in
+ */
+
+exports.getLecturesByStudentId=function(userId){
+    return new Promise((resolve, reject) => {
+        const date=moment().format('YYYY-MM-DD HH:mm:ss');
+        const sql='SELECT Course_Ref, Name, Date, DateDeadline, EndDate, BookedSeats, Capacity, Type FROM  Lecture  WHERE Date > ? AND Course_Ref IN (' +
+            'SELECT Course_Ref FROM Enrollment WHERE Student_Ref=?)';
+        db.all(sql, [date, userId], (err,rows)=>{
+            /* istanbul ignore if */
+            if(err){
+                reject(err);
+            }
+            else{
+                resolve(rows);
+            }
+        });
+    });
+}
+
+/**
  * Input: Student_Ref, Course_Ref, Date_Ref
  * Output: True or False
  * Description: Book a seat for a lecture if possible
@@ -49,7 +94,7 @@ exports.addSeat=function(userId, courseId, date, endDate){
 
 function findCourse(userId, courseId){
     return new Promise((resolve, reject) => {
-        const sql='SELECT COUNT(*) FROM Enrollment WHERE User_Ref=? AND Course_Ref=?';
+        const sql='SELECT COUNT(*) FROM Enrollment WHERE Student_Ref=? AND Course_Ref=?';
         db.get(sql,[userId,courseId],(err,row)=>{
             /* istanbul ignore if */
             if(err)
