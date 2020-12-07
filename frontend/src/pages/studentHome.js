@@ -84,7 +84,7 @@ export class StudentHome extends Component {
                 const index = this.state.lectures.findIndex(lecture =>
                     lecture.Course_Ref === bookedLecture.Course_Ref && lecture.Date === bookedLecture.Date_Ref
                 )
-                newLectureArray[index].alreadyBooked = true;
+                if(index!==-1)newLectureArray[index].alreadyBooked = true;
                 return index;
             })
             this.setState({lectures: newLectureArray})
