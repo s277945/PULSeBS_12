@@ -13,7 +13,7 @@ exports.getLecturesByUserId=function(userId){
     return new Promise((resolve, reject) => {
         const date=moment().format('YYYY-MM-DD HH:mm:ss');
         const sql='SELECT Course_Ref, Name, Date, DateDeadline, EndDate, BookedSeats, Capacity, Type FROM  Lecture  WHERE Date > ? AND Course_Ref IN (' +
-            'SELECT Course_Ref FROM Presence WHERE User_Ref=?)';
+            'SELECT Course_Ref FROM Enrollment WHERE User_Ref=?)';
         db.all(sql, [date, userId], (err,rows)=>{
             /* istanbul ignore if */
             if(err){
@@ -36,7 +36,7 @@ exports.getLecturesByUserId=function(userId){
 exports.getCoursesByUserId=function(userId){
     return new Promise((resolve, reject) => {
         const sql='SELECT CourseID, Name FROM Course WHERE CourseID IN ('+
-            'SELECT Course_Ref FROM Presence WHERE User_Ref=?)';
+            'SELECT Course_Ref FROM Enrollment WHERE User_Ref=?)';
         db.all(sql, [userId], (err,rows)=>{
             /* istanbul ignore if */
             if(err){

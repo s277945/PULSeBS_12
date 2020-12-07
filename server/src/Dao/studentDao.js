@@ -49,7 +49,7 @@ exports.addSeat=function(userId, courseId, date, endDate){
 
 function findCourse(userId, courseId){
     return new Promise((resolve, reject) => {
-        const sql='SELECT COUNT(*) FROM Presence WHERE User_Ref=? AND Course_Ref=?';
+        const sql='SELECT COUNT(*) FROM Enrollment WHERE User_Ref=? AND Course_Ref=?';
         db.get(sql,[userId,courseId],(err,row)=>{
             /* istanbul ignore if */
             if(err)
