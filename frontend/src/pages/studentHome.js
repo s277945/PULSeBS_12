@@ -81,10 +81,11 @@ export class StudentHome extends Component {
         getStudentBookedLectures().then((reponse) => {
             newLectureArray = this.state.lectures.slice()
             reponse.data.map(bookedLecture => {
-                const index = this.state.lectures.findIndex(lecture =>
-                    lecture.Course_Ref === bookedLecture.Course_Ref && lecture.Date === bookedLecture.Date_Ref
+                const index = this.state.lectures.findIndex(lecture => {
+                    return lecture.Course_Ref === bookedLecture.Course_Ref && lecture.Date === bookedLecture.Date_Ref
+                }
                 )
-                newLectureArray[index].alreadyBooked = true;
+                if(index!==-1) newLectureArray[index].alreadyBooked = true;
                 return index;
             })
             this.setState({lectures: newLectureArray})
