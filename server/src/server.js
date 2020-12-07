@@ -288,6 +288,22 @@ app.get('/api/lectures/booked', (req, res) => {
 });
 
 /**
+ * GET /lectures/waiting
+ *
+ * query parameters: userId => retrieved from cookie
+ */
+
+app.get('/api/lectures/waiting', (req, res) => {
+  const user = req.user && req.user.user;
+  studentDao.getLecturesWaitingByUserId(user)
+    .then((list) => {
+      res.status(201).json(list);
+    })
+    .catch(/* istanbul ignore next */(err) => res.status(500).json({ errors: [{ 'param': 'Server', 'msg': err.message }] }));
+
+});
+
+/**
  * DELETE /api/courseLectures/:courseId?date=...
  *
  * parameters: courseId, date

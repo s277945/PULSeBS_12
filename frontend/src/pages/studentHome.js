@@ -106,11 +106,21 @@ export class StudentHome extends Component {
         }
         postStudentBookedLecture(body)
             .then(response => {
+                console.log(response)
+                
                 const newLectures = this.state.lectures.slice();
-                const index = this.state.lectures.findIndex(lecture =>
+                const index = this.state.lectures.findIndex(lecture => //get lecture index in state array
                     lecture.Course_Ref === lectureId && lecture.Date === date
                 )
-                newLectures[index].alreadyBooked = true
+                if(response.data.operation==="booked") {
+                    newLectures[index].BookedSeats++;// increase booked seats number if successful booking
+                    if(newLectures[index].BookedSeats>newLectures[index].Capacity) newLectures[index].BookedSeats=newLectures[index].Capacity; //check booking number constraint
+                    newLectures[index].alreadyBooked = true// set booking state to true
+                }
+                else {
+                    newLectures[index].BookedSeats=newLectures[index].Capacity;// otherwise all capacity is used
+                    newLectures[index].alreadyWaiting = true// set waiting list state to true
+                }
                 this.setState({lectures: newLectures})
                 this.modalClose();// then close modal
             }).catch(err=>{
@@ -128,10 +138,14 @@ export class StudentHome extends Component {
             .then(response => {
                 console.log(response)
                 const newLectures = this.state.lectures.slice();
-                const index = this.state.lectures.findIndex(lecture =>
+                const index = this.state.lectures.findIndex(lecture => //get lecture index in state array
                     lecture.Course_Ref === lectureId && lecture.Date === date
                 )
-                newLectures[index].alreadyBooked = false
+                if(newLectures[index].alreadyBooked) {//check if student was booked
+                    newLectures[index].alreadyBooked = false// set booking requested state to false
+                    newLectures[index].BookedSeats--;// decrease booked seats number if successful canceling
+                }
+                else newLectures[index].alreadyWaiting=false;// set waiting list state to false                
                 this.setState({lectures: newLectures})
                 this.modalClose();// then close modal
             }).catch(/* istanbul ignore next */err=>{
@@ -142,11 +156,17 @@ export class StudentHome extends Component {
     renderBookASeatButton(lecture, index, disabled){
         return(
             <>
-            {(lecture.alreadyBooked || disabled) &&
+            {(lecture.alreadyBooked || disabled)  &&
                 <Button disabled>Book Seat</Button>
             }
-            {(!lecture.alreadyBooked && !disabled) &&
+            {(!lecture.alreadyBooked && !lecture.alreadyWaiting && !disabled) && lecture.BookedSeats<lecture.Capacity &&
                 <Button data-testid={'bookButton_'+index} onClick={() => this.setModal(lecture, "book a seat")}>Book Seat</Button>
+            }
+            {(lecture.alreadyWaiting || disabled) && !lecture.alreadyBooked &&
+                <Button variant="warning" disabled>In waiting list</Button>
+            }
+            {(!lecture.alreadyBooked && !lecture.alreadyWaiting && !disabled) && lecture.BookedSeats>=lecture.Capacity &&
+                <Button variant="warning" data-testid={'waitButton_'+index} onClick={() => this.setModal(lecture, "enter the waiting list")}>Enter waiting list</Button>
             }
             </>
         )
@@ -158,7 +178,10 @@ export class StudentHome extends Component {
             {(lecture.alreadyBooked && !disabled) &&
                 <Button data-testid={'cancelButton_'+index} onClick={() => this.setModal(lecture, "cancel your booking")} variant="danger">Cancel</Button>
             }
-            {(!lecture.alreadyBooked  || disabled) &&
+            {(lecture.alreadyWaiting && !disabled) && !lecture.alreadyBooked &&
+                <Button data-testid={'cancelButton_'+index} onClick={() => this.setModal(lecture, "cancel your reservation")} variant="danger">Cancel</Button>
+            }
+            {((!lecture.alreadyBooked && !lecture.alreadyWaiting) || disabled) &&
                 <Button variant="danger" disabled>Cancel</Button>
             }
             </>
@@ -176,6 +199,24 @@ export class StudentHome extends Component {
             if(this.state.modal.message==="cancel your booking") this.cancelSeat(this.state.modal.lecture.Course_Ref, this.state.modal.lecture.Date);// depending on operation, call cancel or book function
             else this.bookASeat(this.state.modal.lecture.Course_Ref, this.state.modal.lecture.Date, this.state.modal.lecture.EndDate);
         }
+        let renderColor = () => {
+            switch (this.state.modal.message) {
+                case "book a seat":
+                    return "primary";
+                    
+                case "cancel your reservation":
+                    return "warning";
+    
+                case "enter the waiting list":
+                    return "warning";
+    
+                case "cancel your booking": 
+                    return "danger";
+    
+                default:
+                    return "secondary";
+            }
+        }
         return (
             <Modal show={this.state.modal.show===1? true:false} onHide={this.modalClose} style={{marginTop: "25vh"}}>
                 <Modal.Header class="app-element-background" closeButton style={{minWidth: "498px"}}>
@@ -183,7 +224,7 @@ export class StudentHome extends Component {
                         <p style={{paddingTop: "15px", paddingBottom: "30px", fontSize: "25px", textAlign: "center"}}>Do you want to {this.state.modal.message} for this lecture?</p>
                         <div style={{display: "flex", flexWrap: "nowrap",  justifyContent: "space-around", paddingTop: "7px", paddingBottom: "7px"}}>
                             <div style={{marginLeft: "37px"}}>
-                                <Button onClick={() => confirm()} variant={this.state.modal.message==="cancel your booking" ? "danger" : "primary"} style={{ marginRight: "27px", paddingRight: "17px", paddingLeft: "17px"}}>Yes</Button>
+                                <Button onClick={() => confirm()} variant={renderColor()} style={{ marginRight: "27px", paddingRight: "17px", paddingLeft: "17px"}}>Yes</Button>
                                 <Button onClick={this.modalClose} variant="secondary" style={{ paddingRight: "17px", paddingLeft: "17px"}}>No</Button>
                             </div>
                         </div>

@@ -92,6 +92,12 @@
   border-color:#bd2130;
   box-shadow:0 0 0 .2rem rgba(225,83,97, 0) !important
  }
+ .btn-warning:focus {
+  color:#fff;
+  background-color:#ffc107;
+  border-color:#ffc107;
+  box-shadow:0 0 0 .2rem rgba(225,83,97, 0) !important
+ }
  .fc .fc-col-header-cell-cushion {
   color: #23272c;
  }

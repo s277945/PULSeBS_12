@@ -212,6 +212,21 @@ exports.getLecturesBookedByUserId=function(userId){
     });
 }
 
+exports.getLecturesWaitingByUserId=function(userId){
+    return new Promise((resolve, reject) => {
+        /*const sql='SELECT Course_Ref, Date_Ref, EndDate FROM Booking WHERE Student_ref = ?';
+        db.all(sql, [userId], (err,rows)=>{*/
+            /* istanbul ignore if */
+        /*    if(err){
+                reject(err);
+            }
+            else{
+                resolve(rows);
+            }
+        });*/
+    });
+}
+
 /**
  * Retrieve email of a given student
  * @param {} userId
