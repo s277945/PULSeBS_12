@@ -6,7 +6,7 @@ import Table from 'react-bootstrap/Table'
 import Button from 'react-bootstrap/Button'
 import Modal from 'react-bootstrap/Modal'
 import { authContext } from '../components/Authsystem'
-import { getLectures, getCourses, getStudentBookedLectures, postStudentBookedLecture, deleteStudentBookedLecture } from '../api/api'
+import { getLectures, getCourses, getStudentBookedLectures, getStudentWaitingLectures, postStudentBookedLecture, deleteStudentBookedLecture } from '../api/api'
 import Calendar from '../components/Calendar';
 import Container from 'react-bootstrap/Container'
 import moment from 'moment'
@@ -84,6 +84,25 @@ export class StudentHome extends Component {
                     lecture.Course_Ref === bookedLecture.Course_Ref && lecture.Date === bookedLecture.Date_Ref
                 )
                 newLectureArray[index].alreadyBooked = true;
+                return index;
+            })
+            this.setState({lectures: newLectureArray})
+        }).catch(/* istanbul ignore next */err=>{
+            console.log(err);
+         });
+
+    }
+
+    setWaitingLectures(){
+        // Go through all lectures, if its one where the student is in waiting list, put alreadyWaiting to true
+        let newLectureArray;
+        getStudentWaitingLectures().then((reponse) => {
+            newLectureArray = this.state.lectures.slice()
+            reponse.data.map(waitingLecture => {
+                const index = this.state.lectures.findIndex(lecture =>
+                    lecture.Course_Ref === waitingLecture.Course_Ref && lecture.Date === waitingLecture.Date_Ref
+                )
+                newLectureArray[index].alreadyWaiting = true;
                 return index;
             })
             this.setState({lectures: newLectureArray})
@@ -178,8 +197,8 @@ export class StudentHome extends Component {
             {(lecture.alreadyBooked && !disabled) &&
                 <Button data-testid={'cancelButton_'+index} onClick={() => this.setModal(lecture, "cancel your booking")} variant="danger">Cancel</Button>
             }
-            {(lecture.alreadyWaiting && !disabled) && !lecture.alreadyBooked &&
-                <Button data-testid={'cancelButton_'+index} onClick={() => this.setModal(lecture, "cancel your reservation")} variant="danger">Cancel</Button>
+            {(lecture.alreadyWaiting) && !lecture.alreadyBooked &&
+                <Button disabled data-testid={'cancelButton_'+index} onClick={() => this.setModal(lecture, "cancel your reservation")} variant="danger">Cancel</Button>
             }
             {((!lecture.alreadyBooked && !lecture.alreadyWaiting) || disabled) &&
                 <Button variant="danger" disabled>Cancel</Button>
@@ -203,7 +222,7 @@ export class StudentHome extends Component {
             switch (this.state.modal.message) {
                 case "book a seat":
                     return "primary";
-                    
+
                 case "cancel your reservation":
                     return "warning";
     

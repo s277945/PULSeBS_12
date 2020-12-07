@@ -49,6 +49,11 @@ export function getStudentBookedLectures(){
     return axiosInst.get(`http://localhost:3001/api/lectures/booked`, { withCredentials: true});
 }
 
+export function getStudentWaitingLectures(){
+    // get list of student lectures where s/he is in waiting list from server
+    return axiosInst.get(`http://localhost:3001/api/lectures/waiting`, { withCredentials: true});
+}
+
 export function postStudentBookedLecture(body){
     // add booking for a lecture to server
     return axiosInst.post(`http://localhost:3001/api/lectures`, body, { withCredentials: true})
