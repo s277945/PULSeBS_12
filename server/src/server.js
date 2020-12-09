@@ -6,7 +6,7 @@
 const express = require('express');
 const userDao = require('./Dao/userDao')
 const studentDao = require('./Dao/studentDao')
-const generalDao = require('./Dao/generalDao')
+const supportOfficer = require('./Dao/supportOfficerDao')
 const teacherDao = require('./Dao/teacherDao')
 const bookingManagerDao = require('./Dao/bookingManagerDao')
 const mailer = require('./mailer');
@@ -527,6 +527,111 @@ app.get('/api/managerCoursesTotal/:courseId', (req, res) => {
             res.status(500).json(err);
         })
 })
+
+
+/**
+ * POST api/uploadStudents
+ *
+ * Uploads list of students
+ *
+ * body request: [{"userId": "900000", "name": "Ambra", "surname":"Ferri", "city": "Poggio Ferro", "email":	"s900000@students.politu.it",
+ *                "birthday": "1991-11-04", "ssn": "MK97060783"}, ...]
+ */
+
+app.post('/api/uploadStudents', (req, res) => {
+
+    supportOfficer.uploadStudents(req.body)
+        .then((response) => {
+            res.status(200).json({"inserted": response});
+        })
+        .catch(/* istanbul ignore next */(err) => {
+            res.status(500).json(err);
+        })
+
+});
+
+/**
+ * POST api/uploadTeachers
+ *
+ * Uploads list of teachers
+ *
+ * body request: [{"userId": "d9000", "name": "Ines", "surname":"Beneventi", "email":"Ines.Beneventi@politu.it"
+ *                "ssn": "XT6141393"}, ...]
+ */
+
+app.post('/api/uploadTeachers', (req, res) => {
+
+    supportOfficer.uploadTeachers(req.body)
+        .then((response) => {
+            res.status(200).json({"inserted": response});
+        })
+        .catch(/* istanbul ignore next */(err) => {
+            res.status(500).json(err);
+        })
+
+});
+
+
+/**
+ * POST api/uploadCourses
+ *
+ * Uploads list of courses
+ *
+ * body request: [{"courseId", "XY1211", "year": 1, "name": "Metodi di finanziamento delle imprese", "semester": 1, "teacherId": "d9000"}]
+ */
+
+app.post('/api/uploadCourses', (req, res) => {
+
+    supportOfficer.uploadCourses(req.body)
+        .then((response) => {
+            res.status(200).json({"inserted": response});
+        })
+        .catch(/* istanbul ignore next */(err) => {
+            res.status(500).json(err);
+        })
+
+});
+
+/**
+ * POST api/uploadEnrollment
+ *
+ * Uploads list of enrollments
+ *
+ * body request: [{"courseId", "XY1211", "studentId": "900000"}, ...]
+ */
+
+app.post('/api/uploadEnrollment', (req, res) => {
+
+    supportOfficer.uploadEnrollment(req.body)
+        .then((response) => {
+            res.status(200).json({"inserted": response});
+        })
+        .catch(/* istanbul ignore next */(err) => {
+            res.status(500).json(err);
+        })
+
+});
+
+
+/**
+ * POST api/uploadSchedule
+ *
+ * Uploads list of schedule
+ *
+ * body request: [{"courseId": "XY1211","room": 1, "day": "Mon", "seats": 120, "Time": "8:30-11:30"}, ...]
+ */
+
+app.post('/api/uploadSchedule', (req, res) => {
+
+    supportOfficer.uploadSchedule(req.body)
+        .then((response) => {
+            res.status(200).json({"inserted": response});
+        })
+        .catch(/* istanbul ignore next */(err) => {
+            res.status(500).json(err);
+        })
+
+});
 
 
 //activate server

@@ -9,6 +9,7 @@ const moment = require('moment');
 */
 
 exports.getCoursesByTeacherId=function(userId){
+    console.log(userId)
     return new Promise((resolve, reject) => {
         const sql='SELECT CourseID, Name FROM Course WHERE Teacher_Ref = ?';
         db.all(sql, [userId], (err,rows)=>{
@@ -17,6 +18,7 @@ exports.getCoursesByTeacherId=function(userId){
                 reject(err);
             }
             else{
+                console.log("riga: " + rows)
                 resolve(rows);
             }
         });
@@ -33,13 +35,14 @@ exports.getLecturesByTeacherId=function(userId){
     return new Promise((resolve, reject) => {
         const date=moment().format('YYYY-MM-DD HH:mm:ss');
         const sql='SELECT Course_Ref, Name, Date, DateDeadline, EndDate, BookedSeats, Capacity, Type FROM  Lecture  WHERE Date > ? AND Course_Ref IN (' +
-            'SELECT Course_Ref FROM Course WHERE Teacher_Ref=?)';
+            'SELECT CourseID FROM Course WHERE Teacher_Ref=?)';
         db.all(sql, [date, userId], (err,rows)=>{
             /* istanbul ignore if */
             if(err){
                 reject(err);
             }
             else{
+                console.log("lectures: " + rows + " userId " + userId);
                 resolve(rows);
             }
         });
