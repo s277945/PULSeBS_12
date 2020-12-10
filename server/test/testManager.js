@@ -25,7 +25,7 @@ describe('TEST SUITE MANAGER FUNCTION', function () {
                 .then(res=>{
                     expect(res).to.have.status(200);
                     expect(res.body).to.be.an('array');
-                    expect(res.body).to.have.lengthOf(3);
+                    expect(res.body).to.be.not.empty
                     expect(res.body[0]).to.haveOwnPropertyDescriptor('Name');
                 })
         });

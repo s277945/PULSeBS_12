@@ -1,9 +1,10 @@
 
 const chai=require('chai');
 const {before,after,describe,it}=require('mocha');
-const dao=require('../src/dao');
+const dao=require('../src/Dao/studentDao');
 const chaiHttp=require('chai-http');
 chai.use(chaiHttp);
+chai.use(require('chai-match'));
 const server=require('../src/server');
 const expect=chai.expect;
 let cookie;
@@ -44,22 +45,49 @@ describe('TEACHER TESTING', function () {
         })
         cookie = res.headers['set-cookie'];
     })
-    describe('/api/courses', function () {
+    describe('/api/teacherLectures', function () {
+        it('should return list of courses not empty', function () {
+           return chai.request(url)
+               .get('api/teacherLectures')
+               .set('Cookie',cookie)
+               .send()
+               .then(res=>{
+                   expect(res).to.have.status(200)
+                   expect(res.body).to.be.an('array')
+                   expect(res.body).to.be.not.empty
+                   expect(res.body[0]).to.haveOwnProperty('Course_Ref')
+                   expect(res.body[0].Course_Ref).to.match(/[A-Z0-9]{5}/)
+                   expect(res.body[0]).to.haveOwnProperty('Name')
+                   expect(res.body[0].Name).to.match(/[\w\s:]+/)
+                   expect(res.body[0]).to.haveOwnProperty('Date')
+                   expect(res.body[0]).to.haveOwnProperty('DateDeadline')
+                   expect(res.body[0]).to.haveOwnProperty('EndDate')
+                   expect(res.body[0]).to.haveOwnProperty('BookedSeats')
+                   expect(res.body[0]).to.haveOwnProperty('Capacity')
+                   expect(res.body[0].Capacity).to.be.a('number')
+                   expect(res.body[0]).to.haveOwnProperty('Type')
+               })
+        });
+    });
+    describe('/api/teacherCourses', function () {
         it('should return 200 and courses list', function () {
             return chai.request(url)
-                .get('/api/courses')
+                .get('/api/teacherCourses')
                 .set('Cookie',cookie)
                 .send()
                 .then(res=>{
                     expect(res).to.have.status(200)
                     expect(res.body).to.be.an('array')
-                    expect(res.body[0]).to.haveOwnPropertyDescriptor('Name')
+                    expect(res.body).to.be.not.empty
+                    expect(res.body[0]).to.haveOwnProperty('Name')
+                    expect(res.body[0]).to.haveOwnProperty('CourseID')
+                    expect(res.body[0].CourseID).to.match(/[A-Z0-9]{5}/)
                 })
         });
     });
     describe('List Student', function () {
         it('should return status 201 and an array of students', function () {
-            return chai.request(url).get('/api/lectures/listStudents?courseRef=C0123&date=2020-12-10 12:00:00')
+            return chai.request(url).get('/api/lectures/listStudents?courseRef=C4567&date=2020-12-22 09:00:00')
                 .set('Cookie',cookie)
                 .send()
                 .then(res=>{
@@ -125,10 +153,11 @@ describe('TEACHER TESTING', function () {
                 .then((res)=>{
                     expect(res).to.have.status(200);
                     expect(res.body).to.be.an('array')
+                    expect(res.body).to.be.not.empty
                     expect(res.body[0]).to.haveOwnPropertyDescriptor('lectureName')
                     expect(res.body[0]).to.haveOwnPropertyDescriptor('date')
                     expect(res.body[0]).to.haveOwnPropertyDescriptor('nBooked')
-                    expect(res.body).to.have.lengthOf(3)
+
                 });
         });
     });

@@ -7,7 +7,8 @@ const moment = require('moment');
 const app = express();
 app.disable("x-powered-by");
 // use */10 * * * * * for test
-const job=cron.schedule('1 * * * * *', function() {
+//1 * * * * *
+const job=cron.schedule('*/10 * * * * *', function() {
     console.log('sto per essere eseguito');
     const date=moment().format('YYYY-MM-DD HH:mm:ss');
     teacherDao.checkDeadline(date)
