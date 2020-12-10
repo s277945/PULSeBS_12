@@ -86,7 +86,6 @@ exports.uploadEnrollment=function(list){
 }
 
 exports.uploadSchedule=function(list){
-    const lenght = list.length;
     let i = 0;
     return new Promise((resolve, reject) => {
         const sql='INSERT INTO Schedule VALUES(?,?,?,?,?)';
@@ -96,10 +95,106 @@ exports.uploadSchedule=function(list){
                 if (err)
                     reject(err);
                 else {
-                    i++;
-                    if (lenght === i) resolve(true);
+                    getListLectures(element)
+                        .then((listLectures) => {
+                            for (let el of listLectures ){
+                                let sql2 = 'INSERT INTO Lecture VALUES(?,?,?,?,?,?,?,?,?,?)';
+                                db.run(sql2, [el.Course_Ref, el.Name, el.Capacity, el.Date, el.EndDate, el.DateDeadline,
+                                    el.BookedSeats, el.UnbookedSeats, el.Type, el.EmailSent], (err2) => {
+
+                                    if(err2)
+                                        reject(err2)
+                                    else{
+                                        i++
+                                        if(i === listLectures.length) resolve(true);
+                                    }
+                                })
+                            }
+                        })
+                        .catch(/* istanbul ignore next */(err2) => {
+                            reject(err2);
+                        })
                 }
             })
         }
     });
+}
+
+function getListLectures(schedule){
+    let list = []
+    let dayMap = {
+        "Mon": 0,
+        "Tue": 1,
+        "Wed": 2,
+        "Thu": 3,
+        "Fri": 4
+    }
+    return new Promise((resolve, reject) => {
+        const sql = 'SELECT Name, Semester FROM Course WHERE CourseID=?'
+        db.get(sql, [schedule.courseId], (err, row) => {
+            if (!err) {
+                let courseName = row.Name
+                let semester = row.Semester
+                let nDay = dayMap[schedule.day]
+                let startDate
+                let endDate
+                let time = schedule.time.split("-")
+                let thisDate = moment();
+                let currentYear
+                if (thisDate.isAfter(moment(6, 'M')))
+                    currentYear = moment().year();
+                /* istanbul ignore next */
+                else
+                    currentYear = moment().year() - 1;
+
+                switch (semester){
+                    case 1:
+                        startDate = moment([currentYear, 9, 1]).startOf('isoWeek').add(nDay, 'day');
+                        endDate = moment([currentYear+1, 0, 31]).startOf('isoWeek').add(nDay, 'day');;
+                        break;
+                    case 2:
+                        startDate = moment([currentYear + 1, 2, 1]).startOf('isoWeek').add(nDay, 'day');;
+                        endDate = moment([currentYear + 1, 5, 30]).startOf('isoWeek').add(nDay, 'day');;
+                        break;
+                    /* istanbul ignore next */
+                    default:
+                        break;
+                }
+
+                let start = moment(startDate)
+                let end = moment(endDate)
+                let i = 0
+                while(start.isBefore(end)){
+                    i++
+                    if(time[0].length === 4)
+                        time[0] = "0"+time[0]
+
+                    let startLecture = start.format("YYYY-MM-DD").concat(" " + time[0] + ":00")
+                    let deadline = moment(startLecture).subtract(1, 'day').format("YYYY-MM-DD").concat(" 23:00:00")
+                    let endLecture = start.format("YYYY-MM-DD").concat(" " + time[1] + ":00")
+
+                    let obj = {
+                            "Course_Ref": schedule.courseId,
+                            "Name": courseName + "Les:" + i,
+                            "Capacity": schedule.seats,
+                            "Date": startLecture,
+                            "EndDate": endLecture,
+                            "DateDeadline": deadline,
+                            "BookedSeats": 0,
+                            "UnbookedSeats": 0,
+                            "Type": "p",
+                            "EmailSent": 0
+                    }
+                    list.push(obj)
+
+                    start.add(7, 'day')
+                }
+
+                resolve(list)
+            } else {
+                reject(err)
+            }
+        })
+    })
+
 }
