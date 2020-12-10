@@ -243,7 +243,7 @@ function countStudent(courseId, date){
 function getTeacherEmail(courseId){
     return new Promise((resolve, reject) => {
         const sql = 'SELECT Email FROM User WHERE UserType="t" AND userID IN (' +
-            'SELECT Teacher_Ref FROM Course WHERE Course_Ref=?)';
+            'SELECT Teacher_Ref FROM Course WHERE CourseID=?)';
         db.get(sql, [courseId], (err, row)=> {
             /* istanbul ignore if */
             if(err)

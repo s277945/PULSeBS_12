@@ -3,6 +3,7 @@ const {Context}=require('mocha');
 const db = require('../src/db');
 const chaiHttp=require('chai-http');
 chai.use(chaiHttp);
+chai.use(require('chai-match'));
 const server=require('../src/server');
 const expect=chai.expect;
 let cookie;
@@ -65,6 +66,23 @@ describe('********STUDENT TEST******', function () {
             })
 
             expect(res.status).to.equal(401);
+        });
+    });
+    describe('/api/courses', function () {
+        it('should return list of student courses', function () {
+            return chai.request(url)
+                .get('/api/courses')
+                .set('Cookie',cookie)
+                .send()
+                .then(res=>{
+                    expect(res).to.have.status(200)
+                    expect(res.body).to.be.an('array')
+                    expect(res.body).to.be.not.empty
+                    expect(res.body[0]).to.haveOwnProperty('CourseID')
+                    expect(res.body[0].courseID).to.match(/[A-Z0-9]{5}/)
+                    expect(res.body[0]).to.haveOwnProperty('Name')
+                    expect(res.body[0].Name).to.match(/[\w\s:]+/);
+                })
         });
     });
     describe('method GET/Lectures', function () {

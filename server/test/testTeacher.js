@@ -48,7 +48,7 @@ describe('TEACHER TESTING', function () {
     describe('/api/teacherLectures', function () {
         it('should return list of courses not empty', function () {
            return chai.request(url)
-               .get('api/teacherLectures')
+               .get('/api/teacherLectures')
                .set('Cookie',cookie)
                .send()
                .then(res=>{
