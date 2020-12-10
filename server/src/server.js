@@ -597,7 +597,7 @@ app.post('/api/uploadCourses', (req, res) => {
  *
  * Uploads list of enrollments
  *
- * body request: [{"courseId", "XY1211", "studentId": "900000"}, ...]
+ * body request: [{"courseId":"XY1211", "studentId": "900000"}, ...]
  */
 
 app.post('/api/uploadEnrollment', (req, res) => {
@@ -618,7 +618,7 @@ app.post('/api/uploadEnrollment', (req, res) => {
  *
  * Uploads list of schedule
  *
- * body request: [{"courseId": "XY1211","room": 1, "day": "Mon", "seats": 120, "Time": "8:30-11:30"}, ...]
+ * body request: [{"courseId": "XY1211","room": 1, "day": "Mon", "seats": 120, "time": "8:30-11:30"}, ...]
  */
 
 app.post('/api/uploadSchedule', (req, res) => {
