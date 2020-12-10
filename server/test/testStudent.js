@@ -7,9 +7,11 @@ chai.use(require('chai-match'));
 const server=require('../src/server');
 const expect=chai.expect;
 let cookie;
+
+const studDao=require('../src/Dao/studentDao');
 const url='http://localhost:3001';
-const date='2020-12-22 09:00:00';
-const course_id='C4567';
+const date='2021-03-08 15:00:00';
+const course_id='C2468';
 let capacity;
 function getCourseCapacity(id,date){
     return new Promise((resolve, reject) => {
@@ -32,6 +34,17 @@ function updateCourseCapacity(id,date,capacity){
                 resolve(true);
         })
     });
+}
+function deleteFromWaiting(user,date,courseRef){
+    return new Promise((resolve, reject) => {
+        const sql='DELETE FROM WaitingList WHERE Course_Ref=? AND Date_Ref=? AND Student_Ref=?';
+        db.run(sql, [courseRef,date,user],function(err){
+            if(err)
+                reject(err);
+            else
+                resolve(true);
+        })
+    })
 }
 
 describe('********STUDENT TEST******', function () {
@@ -79,7 +92,7 @@ describe('********STUDENT TEST******', function () {
                     expect(res.body).to.be.an('array')
                     expect(res.body).to.be.not.empty
                     expect(res.body[0]).to.haveOwnProperty('CourseID')
-                    expect(res.body[0].courseID).to.match(/[A-Z0-9]{5}/)
+                    expect(res.body[0].CourseID).to.match(/[A-Z0-9]{5}/)
                     expect(res.body[0]).to.haveOwnProperty('Name')
                     expect(res.body[0].Name).to.match(/[\w\s:]+/);
                 })
@@ -98,15 +111,15 @@ describe('********STUDENT TEST******', function () {
         });
     });
     describe('POST/Lectures', function () {
-        it('should return 401', async function () {
+        it('should return 401 if i am not logged in', async function () {
             let res=await chai.request(url).post('/api/lectures').send({userId: "s269422", lectureId: "C0123", date: "2019-11-1 18:00:00"})
             expect(res.status).to.equal(401);
         });
-        it('should return status 422 ', async function () {
+        it('should return status 422 if i try to book a lecture that starts before of now', async function () {
             let res=await chai.request(url).post('/api/lectures').set('Cookie',cookie).send({userId: "s269422", lectureId: "C0123", date: "2019-11-1 18:00:00"})
             expect(res.status).to.equal(422);
         });
-        before(async()=>{
+        /*before(async()=>{
             //i will set a lecture to 0 seat
             getCourseCapacity(course_id,date)
                 .then(async (val)=>{
@@ -118,14 +131,17 @@ describe('********STUDENT TEST******', function () {
                             }
                         })
                 })
-        })
+        })*/
         it('should return 0 seats available status 500',async function () {
-            let res=await chai.request(url).post('/api/lectures').set('Cookie',cookie)
-                .send({lectureId: "C4567", date: "2020-12-25 09:00:00"})
-            expect(res).to.have.status(500);
+            return chai.request(url).post('/api/lectures').set('Cookie',cookie)
+                .send({lectureId: "C2468", date: "2021-03-08 15:00:00",endDate:"2021-03-08 18:00:00"})
+                .then(res=>{
+                    expect(res).to.have.status(201)
+                    expect(res.body.operation).to.equals('waiting')
+            })
             //expect(res.body.errors.msg).to.be.equals('0 seats available')
         });
-        after(async()=>{
+        /*after(async()=>{
             //restore current value of that lecture
             updateCourseCapacity(course_id,date,capacity)
                 .then(res=>{
@@ -136,29 +152,61 @@ describe('********STUDENT TEST******', function () {
                     if(err)
                         throw Error(err);
                 });
-        })
+        })*/
         it('should return status 201 ', async function () {
-            let res=await chai.request(url).post('/api/lectures').set('Cookie',cookie).send({lectureId: "C0123", date: "2020-10-02 14:30:00"})
+            let res=await chai.request(url).post('/api/lectures').set('Cookie',cookie).send({lectureId: "C4567", date: "2020-12-14 11:30:00",endDate:"2020-12-14 14:30:00"})
             expect(res.status).to.equal(201);
+            expect(res.body.operation).to.equals("booked");
         });
         it('should return status 500 ', async function () {
             let res=await chai.request(url).post('/api/lectures').set('Cookie',cookie).send({lectureId: "prova", date: "2020-12-12 20:00:00"})
             expect(res.status).to.equal(500);
 
         });
-        it('should return status 500 ', async function () {
+        /*it('should return status 500 ', async function () {
             let res=await chai.request(url).post('/api/lectures').set('Cookie',cookie).send({lectureId: "C0123", date: "2020-12-10 12:00:00"})
             expect(res.status).to.equal(500);
 
-        });
+        });*/
 
     });
+    describe('/api/lectures/waiting', function () {
+        it('should return the list of all the courses in which i am in waiting list', function () {
+            return chai.request(url)
+                .get('/api/lectures/waiting')
+                .set('Cookie',cookie)
+                .send()
+                .then(res=>{
+                    expect(res).to.have.status(201)
+                    expect(res.body).to.be.an('array')
+                    expect(res.body).to.be.not.empty
+                    expect(res.body[0]).to.haveOwnProperty('Course_Ref')
+                    expect(res.body[0].Course_Ref).to.match(/[A-Z0-9]{5}/)
+                    expect(res.body[0]).to.haveOwnProperty('Date_Ref')
+                    expect(res.body[0]).to.haveOwnProperty('EndDate_Ref')
+                })
+        });
+    });
     describe('DELETE', function () {
-        it('should delete status 204',async function () {
-            let res=await chai.request(url).delete('/api/lectures/C0123?date=2020-12-10 12:00:00').set('Cookie',cookie).send()
-            expect(res.status).to.equal(204);
+        it('should delete an user and there is someone else in waiting list', function () {
+            return  chai.request(url)
+                .delete('/api/lectures/C2468?date=2021-03-08 15:00:00')
+                .set('Cookie',cookie)
+                .send()
+                .then(res=>{
+                    expect(res).to.have.status(204)
+                    expect(res.body).to.haveOwnProperty('Student_Ref')
+                    expect(res.body.Student_Ref).to.match(/s[0-9]{6}/)
+
+                })
+
         });
 
+        it('should delete an user and there is no one in waiting list',async function () {
+            let res=await chai.request(url).delete('/api/lectures/C4567?date=2020-12-14 11:30:00').set('Cookie',cookie).send()
+            expect(res.status).to.equal(204);
+            expect(res.body.operation).to.equals("NoUser")
+        });
     });
 
     describe('Logout', function () {
