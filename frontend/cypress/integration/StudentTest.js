@@ -141,7 +141,7 @@ describe('STUDENT PAGE', function () {
                 .should('not.be.enabled')
         })
     });
-    it('should not book a seat when a room is full', function () {
+    it('should put student in waiting list if room is full', function () {
         //PDS Les:5
         cy.get('accordion').contains('')
             .click({force:true})
@@ -149,7 +149,7 @@ describe('STUDENT PAGE', function () {
                 cy.get('tbody>tr')
                     .contains('td','PDS Les:5')
                     .siblings()
-                    .find('.btn.btn-primary')
+                    .find('.btn.btn-warning')
                     .should('be.enabled')
                     .click()
             })
@@ -158,10 +158,10 @@ describe('STUDENT PAGE', function () {
             .within(()=>{
                 cy.get('p')
                     .should('be.visible')
-                    .should('have.text','Do you want to book a seat for this lecture?')
+                    .should('have.text','Do you want to enter the waiting list for this lecture?')
                 cy.get('.btn.btn-secondary')
                     .should('have.text','No')
-                cy.get('.btn.btn-primary')
+                cy.get('.btn.btn-warning')
                     .should('be.visible')
                     .should('have.text', 'Yes')
                     .click()
