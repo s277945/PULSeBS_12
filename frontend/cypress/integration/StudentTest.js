@@ -14,7 +14,7 @@ describe('STUDENT PAGE', function () {
             .should('be.visible')
             .should('have.text','Lectures')
         cy.get('accordion')
-            .eq(0).click({force:true})
+            .eq(0).click()
             .within(()=>{
                 cy.get('table')
                     .should('be.visible')
@@ -61,7 +61,7 @@ describe('STUDENT PAGE', function () {
         cy.get('[data-testid="studentLectures"]')
             .click()
         cy.get('accordion')
-            .eq(1).click({force:true})
+            .eq(1).click()
             .within(()=>{
                 cy.get('tbody>tr').eq(0).within(()=>{
                     cy
@@ -91,7 +91,7 @@ describe('STUDENT PAGE', function () {
     it('should open correctly modal to cancel a seat ', function () {
         cy.wait(200)
         cy.get('accordion')
-            .eq(1).click({force:true})
+            .eq(1).click()
             .within(()=>{
                 cy.get('tbody>tr').eq(0).within(()=>{
                     cy
@@ -114,7 +114,7 @@ describe('STUDENT PAGE', function () {
     });
     it('should open correctly modal to book a seat', function () {
         cy.wait(200)
-        cy.get('accordion').eq(1).click({force:true})
+        cy.get('accordion').eq(1).click()
             .within(()=>{
                 cy.get('tbody>tr').eq(1).within(()=>{
                     cy.get('.btn.btn-primary')
@@ -144,7 +144,7 @@ describe('STUDENT PAGE', function () {
     it('should put student in waiting list if room is full', function () {
         //PDS Les:5
         cy.get('accordion').contains('')
-            .click({force:true})
+            .click()
             .within(()=>{
                 cy.get('tbody>tr')
                     .contains('td','PDS Les:5')
