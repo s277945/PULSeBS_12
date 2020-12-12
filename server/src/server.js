@@ -692,6 +692,30 @@ app.post('/api/students/:studentSsn', (req, res) => {
         })
 });
 
+/**
+ * GET /api/reports/:studentSsn
+ *
+ * Retrieves list of students that participated to the same lectures of a positive student
+ *
+ * Needed to create a report
+ *
+ * Request params: studentSsn
+ *
+ */
+
+app.get('/api/reports/:studentSsn', (req, res) => {
+    const param = req.params.studentSsn
+
+    bookingManagerDao.generateReport(param)
+        .then((list) => {
+            res.status(201).json(list)
+        })
+        .catch((err) => {
+            res.status(500).json(err)
+        })
+
+})
+
 
 
 //activate server

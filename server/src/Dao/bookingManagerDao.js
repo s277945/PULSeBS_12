@@ -1,5 +1,6 @@
 'use strict';
 const db = require('../db');
+const moment = require('moment');
 
 /**
  * Input:
@@ -109,6 +110,78 @@ exports.setPositiveStudent = function (ssn){
         db.run(sql, [ssn], (err) =>{
             /* istanbul ignore if */if(err) reject(err);
             else resolve(true);
+        })
+    })
+}
+
+
+exports.generateReport = function(ssn){
+    let list = []
+    return new Promise ((resolve, reject) => {
+        getUserId(ssn)
+            .then((userId) => {
+                retrieveLectures(userId)
+                    .then((lectures) => {
+                        const date = moment().format("YYYY-MM-DD HH:mm:ss")
+                        const sql = 'SELECT Name, Surname, Birthday, SSN FROM User WHERE UserID != ? AND UserID IN ('+
+                            'SELECT Student_Ref FROM Booking WHERE Course_Ref=? AND Date_Ref=? AND Date_Ref<?)'
+                        let iterator = 0;
+                        for(let lecture of lectures){
+                            iterator++
+                            db.all(sql, [userId, lecture.course, lecture.date, date], (err, rows) => {
+                                if(err)
+                                    reject(err)
+                                else{
+                                    rows.forEach((row) => {
+                                        let obj = {
+                                            "name": row.Name,
+                                            "surname": row.Surname,
+                                            "birthday": row.Birthday,
+                                            "ssn": row.SSN
+                                        }
+                                        let cond = list.includes(obj)
+
+                                        if(!cond)
+                                            list.push(obj)
+                                    })
+                                }
+                                if(iterator === lectures.length) resolve(list)
+                            })
+
+                        }
+                    })
+            })
+
+
+    })
+}
+
+function retrieveLectures(studentId){
+    let list = []
+    return new Promise((resolve, reject) =>{
+        const sql = 'SELECT Course_Ref, Date_Ref FROM Booking WHERE Student_Ref = ?'
+        db.all(sql, [studentId], (err, rows) => {
+            if(err)
+                reject(err)
+            else{
+                rows.forEach((el) => {
+                    list.push({"course": el.Course_Ref, "date": el.Date_Ref})
+                })
+                resolve(list)
+            }
+
+        })
+    })
+}
+
+function getUserId(ssn){
+    return new Promise((resolve, reject) =>{
+        const sql = 'SELECT userID FROM User WHERE SSN = ?'
+        db.get(sql, [ssn], (err, row) => {
+            if(err)
+                reject(err)
+            else
+                resolve(row.userID)
         })
     })
 }
