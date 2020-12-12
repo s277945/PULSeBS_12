@@ -8,6 +8,13 @@ let cookie;
 const url='http://localhost:3001';
 
 describe('TEST SUPPORT OFFICER', function () {
+    before(async() => {
+        let res = await chai.request(url).post('/api/login').send({
+            userName: 'TODO',
+            password: 'scimmia'
+        })
+        cookie = res.headers['set-cookie'];
+    })
     describe('insert a student inside table', function () {
         it('should insert correctly a student', function () {
             return chai.request(url)
