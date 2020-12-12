@@ -639,7 +639,7 @@ app.post('/api/uploadSchedule', (req, res) => {
 ////////////////////////
 
 /**
- * GET /api/students/:student
+ * GET /api/students/:studentSsn
  *
  * Retrieves list of positive students or a single
  *

@@ -244,3 +244,64 @@
                               "nAttendance": 2,
                               "nCancellations": 3
                           }
+
+## UPLOAD ENDPOINTS
+
+ **POST api/uploadStudents**
+- upload list of students
+- body request example: [{"userId": "900000", "name": "Ambra", "surname":"Ferri", "city": "Poggio Ferro", "email":	"s900000@students.politu.it",
+                "birthday": "1991-11-04", "ssn": "MK97060783"}, ...]
+  
+
+**POST api/uploadTeachers**
+- upload list of teachers
+- body request example: [{"userId": "d9000", "name": "Ines", "surname":"Beneventi", "email":"Ines.Beneventi@politu.it"
+                "ssn": "XT6141393"}, ...]
+  
+**POST api/uploadCourses**
+- upload list of courses
+- body request example: [{"courseId": "XY1211", "year": 1, "name": "Metodi di finanziamento delle imprese", "semester": 1, "teacherId": "d9000"}]
+
+**POST api/uploadEnrollment**
+- upload list of enrollments
+- body request example: [{"courseId":"XY1211", "studentId": "900000"}, ...]
+
+**POST api/uploadSchedule**
+- upload list of schedule
+- body request example: [{"courseId": "XY1211","room": 1, "day": "Mon", "seats": 120, "time": "8:30-11:30"}, ...]
+
+## CONTACT TRACING ENDPOINTS
+
+**GET /api/students/:studentSsn**
+- Retrieves list of positive students or a single student
+- Request params: studentSsn
+- IMPORTANT: pass "positiveStudents" as parameter if you need list of positive students otherwise insert SSN of student
+- response: 
+    -if you use "positiveStudents": [{"name": "Gianluca","surname": "Fasulo","birthday": "16/07/1995"}, ...]
+    -if you insert a specific SSN: {"name": "Fortunato Sabato","surname": "Sole","birthday": "18/08/1994","ssn": "WHTRWHRW"}
+
+**POST api/students/:studentSsn**
+- Sets a student as positive to covid
+- body request: nothing
+- response: {"setAsPositive": true}
+
+**GET /api/reports/:studentSsn**
+- Retrieves list of students that participated to the same lectures of a positive student
+- Needed to create a report
+- Request params: studentSsn
+- Response example: [
+  {
+  "name": "Fortunato Sabato",
+  "surname": "Sole",
+  "birthday": "18/08/1994",
+  "ssn": "WHTRWHRW"
+  },
+  {
+  "name": "Francesco",
+  "surname": "Garau",
+  "birthday": "13/03/1996",
+  "ssn": "GERTHETH"
+  }
+  ]
+
+
