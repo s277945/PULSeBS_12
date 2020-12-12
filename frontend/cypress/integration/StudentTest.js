@@ -1,7 +1,7 @@
 describe('STUDENT PAGE', function () {
     beforeEach(() => {
         cy.visit('http://localhost:3000/')
-        cy.get('input:first').type('s269422').should('have.value','s269422')
+        cy.get('input:first').type('s266260').should('have.value','s266260')
         cy.get('input:last').type('scimmia').should('have.value','scimmia')
         cy.get('.btn.btn-primary')
             .click()
@@ -13,13 +13,14 @@ describe('STUDENT PAGE', function () {
         cy.get('.page-title')
             .should('be.visible')
             .should('have.text','Lectures')
-        cy.get('accordion')
+        cy.get('.card')
             .eq(0).click()
             .within(()=>{
                 cy.get('table')
                     .should('be.visible')
             })
     });
+
 
     it('should reload correctly the same page', function () {
         cy.wait(100)
@@ -60,7 +61,7 @@ describe('STUDENT PAGE', function () {
         cy.wait(200)
         cy.get('[data-testid="studentLectures"]')
             .click()
-        cy.get('accordion')
+        cy.get('.card')
             .eq(1).click()
             .within(()=>{
                 cy.get('tbody>tr').eq(0).within(()=>{
@@ -90,7 +91,7 @@ describe('STUDENT PAGE', function () {
     });
     it('should open correctly modal to cancel a seat ', function () {
         cy.wait(200)
-        cy.get('accordion')
+        cy.get('.card')
             .eq(1).click()
             .within(()=>{
                 cy.get('tbody>tr').eq(0).within(()=>{
@@ -114,7 +115,7 @@ describe('STUDENT PAGE', function () {
     });
     it('should open correctly modal to book a seat', function () {
         cy.wait(200)
-        cy.get('accordion').eq(1).click()
+        cy.get('.card').eq(1).click()
             .within(()=>{
                 cy.get('tbody>tr').eq(1).within(()=>{
                     cy.get('.btn.btn-primary')
@@ -143,11 +144,11 @@ describe('STUDENT PAGE', function () {
     });
     it('should put student in waiting list if room is full', function () {
         //PDS Les:5
-        cy.get('accordion').contains('')
+        cy.get('.card').contains('Web Application')
             .click()
             .within(()=>{
-                cy.get('tbody>tr')
-                    .contains('td','PDS Les:5')
+                cy.get("tbody>tr")
+                    .contains('td','WA Les:3')
                     .siblings()
                     .find('.btn.btn-warning')
                     .should('be.enabled')

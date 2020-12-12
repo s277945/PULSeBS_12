@@ -23,35 +23,3 @@
 //
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
-
-const dao=require('../../../server/test/supportFunction')
-const daoStud=require('../../../server/src/Dao/studentDao')
-const courseId='';
-const date='';
-const deadline='';
-const capacity=100;
-Cypress.Commands.add("database",(operation)=>{
-    if(operation.equals('teacher')){
-        //restore type of lecture
-        //restore deleted lecture
-        dao.restoreTypeLecture(courseId, date).then(r =>{
-
-        });
-        dao.insertDeletedRow(courseId,'',date,deadline,capacity)
-            .then(res=>{
-
-            });
-
-    }
-    else if(operation.equals('student')){
-        //modify size of a lecture to test waiting list
-        daoStud.addSeat('',courseId,date,'')
-            .then(res=>{
-
-            });
-        dao.updateCourseCapacity(courseId,date,1)
-            .then();
-        dao.deleteFromWaiting('',date,courseId)
-            .then()
-    }
-})
