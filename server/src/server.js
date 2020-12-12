@@ -634,5 +634,65 @@ app.post('/api/uploadSchedule', (req, res) => {
 });
 
 
+////////////////////////
+// STORY 12 ENDPOINTS //
+////////////////////////
+
+/**
+ * GET /api/students/:student
+ *
+ * Retrieves list of positive students or a single
+ *
+ * Request params: student
+ *
+ * IMPORTANT: pass "positiveStudents" as parameter if you need list of positive students otherwise insert SSN of student
+ */
+
+app.get('/api/students/:studentSsn', (req, res) => {
+    const param = req.params.studentSsn
+    console.log(param)
+
+    if(param === "positiveStudents"){
+        bookingManagerDao.getPositiveStudents()
+            .then((list) => {
+                res.status(201).json(list)
+            })
+            .catch(/* istanbul ignore next */(err) => {
+                res.status(500).json(err)
+            })
+    } else {
+        bookingManagerDao.searchStudentBySsn(param)
+            .then((student) => {
+                res.status(201).json(student)
+            })
+            .catch(/* istanbul ignore next */(err) => {
+                res.status(500).json(err)
+            })
+    }
+})
+
+
+/**
+ * POST api/students/:studentSsn
+ *
+ * Sets a student as positive to covid
+ *
+ * body request: nothing
+ */
+
+app.post('/api/students/:studentSsn', (req, res) => {
+    const ssn = req.params.studentSsn
+
+    bookingManagerDao.setPositiveStudent(ssn)
+        .then((response)=>{
+            res.status(200).json({"setAsPositive": response})
+        })
+        .catch((err) => {
+            res.status(500).json(err)
+        })
+});
+
+
+
 //activate server
 app.listen(port, () => console.log(`Server ready at port: ${port}`));

@@ -79,7 +79,7 @@ exports.getPositiveStudents = function(){
     let list = [];
     return new Promise((resolve, reject) => {
         const sql='SELECT Name, Surname, Birthday FROM User WHERE Covid=?';
-        db.all(sql,[0], (err,rows)=>{
+        db.all(sql,[1], (err,rows)=>{
             /* istanbul ignore if */if(err) reject(err);
             else{
                 rows.forEach((row)=>{
