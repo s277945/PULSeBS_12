@@ -1,51 +1,18 @@
 const chai=require('chai');
 const {Context}=require('mocha');
-const db = require('../src/db');
 const chaiHttp=require('chai-http');
+const supportFunc=require('./supportFunction')
 chai.use(chaiHttp);
 chai.use(require('chai-match'));
 const server=require('../src/server');
 const expect=chai.expect;
 let cookie;
-
 const studDao=require('../src/Dao/studentDao');
 const url='http://localhost:3001';
 const date='2021-03-08 15:00:00';
 const course_id='C2468';
 let capacity;
-function getCourseCapacity(id,date){
-    return new Promise((resolve, reject) => {
-        const sql='SELECT Capacity FROM Lecture WHERE Course_Ref=? AND Date=?';
-        db.get(sql,[id,date],(err,row)=>{
-            if(err)
-                reject(err)
-            else
-                resolve(row);
-        })
-    });
-}
-function updateCourseCapacity(id,date,capacity){
-    return new Promise((resolve, reject) => {
-        const sql='UPDATE Lecture SET Capacity=? WHERE Course_Ref=? AND Date=?';
-        db.run(sql,[capacity,id,date],function (err){
-            if(err)
-                reject(err);
-            else
-                resolve(true);
-        })
-    });
-}
-function deleteFromWaiting(user,date,courseRef){
-    return new Promise((resolve, reject) => {
-        const sql='DELETE FROM WaitingList WHERE Course_Ref=? AND Date_Ref=? AND Student_Ref=?';
-        db.run(sql, [courseRef,date,user],function(err){
-            if(err)
-                reject(err);
-            else
-                resolve(true);
-        })
-    })
-}
+
 
 describe('********STUDENT TEST******', function () {
     describe('method POST/login', function () {

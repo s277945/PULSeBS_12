@@ -1,7 +1,7 @@
 describe('STUDENT PAGE', function () {
     beforeEach(() => {
         cy.visit('http://localhost:3000/')
-        cy.get('input:first').type('s269422').should('have.value','s269422')
+        cy.get('input:first').type('s266260').should('have.value','s266260')
         cy.get('input:last').type('scimmia').should('have.value','scimmia')
         cy.get('.btn.btn-primary')
             .click()
@@ -13,17 +13,14 @@ describe('STUDENT PAGE', function () {
         cy.get('.page-title')
             .should('be.visible')
             .should('have.text','Lectures')
-        cy.get('tbody>tr')
-            .eq(0)
+        cy.get('.card')
+            .eq(0).click()
             .within(()=>{
-                cy.get('td').eq(0).should('have.text','SE2 Les:1')
-                cy.get('td').eq(1).should('have.text','2020-12-10 12:00:00')
-                cy.get('.btn.btn-primary').should('be.disabled')
-                    .should('have.text','Book Seat')
-                cy.get('.btn.btn-danger').should('not.be.disabled')
-                    .should('have.text', 'Cancel')
+                cy.get('table')
+                    .should('be.visible')
             })
     });
+
 
     it('should reload correctly the same page', function () {
         cy.wait(100)
@@ -64,12 +61,17 @@ describe('STUDENT PAGE', function () {
         cy.wait(200)
         cy.get('[data-testid="studentLectures"]')
             .click()
-        cy.get('tbody>tr').eq(0).within(()=>{
-            cy
-                .get('.btn.btn-danger')
-                .should('be.enabled')
-                .click()
-        })
+        cy.get('.card')
+            .eq(1).click()
+            .within(()=>{
+                cy.get('tbody>tr').eq(0).within(()=>{
+                    cy
+                        .get('.btn.btn-danger')
+                        .should('be.enabled')
+                        .click()
+                })
+            })
+
         cy.wait(10)
         cy.get('.modal')
             .should('be.visible')
@@ -89,10 +91,16 @@ describe('STUDENT PAGE', function () {
     });
     it('should open correctly modal to cancel a seat ', function () {
         cy.wait(200)
-        cy.get('tbody>tr').eq(1).within(()=>{
-            cy.get('.btn.btn-danger')
-                .click()
-        })
+        cy.get('.card')
+            .eq(1).click()
+            .within(()=>{
+                cy.get('tbody>tr').eq(0).within(()=>{
+                    cy
+                        .get('.btn.btn-danger')
+                        .should('be.enabled')
+                        .click()
+                })
+            })
         cy.get('.modal')
             .should('be.visible')
             .within(()=>{
@@ -107,11 +115,15 @@ describe('STUDENT PAGE', function () {
     });
     it('should open correctly modal to book a seat', function () {
         cy.wait(200)
-        cy.get('tbody>tr').eq(1).within(()=>{
-            cy.get('.btn.btn-primary')
-                .should('be.enabled')
-                .click()
-        })
+        cy.get('.card').eq(1).click()
+            .within(()=>{
+                cy.get('tbody>tr').eq(1).within(()=>{
+                    cy.get('.btn.btn-primary')
+                        .should('be.enabled')
+                        .click()
+                })
+            })
+
         cy.wait(10)
         cy.get('.modal')
             .within(()=>{
@@ -130,23 +142,27 @@ describe('STUDENT PAGE', function () {
                 .should('not.be.enabled')
         })
     });
-    it('should not book a seat when a room is full', function () {
+    it('should put student in waiting list if room is full', function () {
         //PDS Les:5
-        cy.get('tbody>tr')
-            .contains('td','PDS Les:5')
-            .siblings()
-            .find('.btn.btn-primary')
-            .should('be.enabled')
+        cy.get('.card').contains('Web Application')
             .click()
+            .within(()=>{
+                cy.get("tbody>tr")
+                    .contains('td','WA Les:3')
+                    .siblings()
+                    .find('.btn.btn-warning')
+                    .should('be.enabled')
+                    .click()
+            })
         cy.wait(100)
         cy.get('.modal')
             .within(()=>{
                 cy.get('p')
                     .should('be.visible')
-                    .should('have.text','Do you want to book a seat for this lecture?')
+                    .should('have.text','Do you want to enter the waiting list for this lecture?')
                 cy.get('.btn.btn-secondary')
                     .should('have.text','No')
-                cy.get('.btn.btn-primary')
+                cy.get('.btn.btn-warning')
                     .should('be.visible')
                     .should('have.text', 'Yes')
                     .click()

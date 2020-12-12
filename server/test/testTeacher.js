@@ -9,32 +9,7 @@ const server=require('../src/server');
 const expect=chai.expect;
 let cookie;
 const url='http://localhost:3001';
-const db=require('../src/db');
-
-function insertDeletedRow(Course_Ref,Name,Date,DateDeadline,Capacity){
-    return new Promise(((resolve, reject) => {
-        const sql='INSERT INTO Lecture(Course_Ref,Name,Date,DateDeadline,Capacity,Type) VALUES(?,?,?,?,?,?)';
-        db.run(sql,[
-            Course_Ref,Name,Date,DateDeadline,Capacity,'p'
-        ],function(err){
-            if(err)
-                reject(err);
-            else
-                resolve(true);
-        });
-    }))
-}
-function restoreTypeLecture(Course_Ref,Date){
-    return new Promise((resolve, reject) => {
-        const sql='UPDATE Lecture SET Type="p" WHERE Course_Ref=? AND Date=?'
-        db.run(sql,[Course_Ref,Date], function(err){
-            if(err)
-                reject(err);
-            else
-                resolve(true);
-        })
-    })
-}
+const supportFunc=require('./supportFunction');
 
 describe('TEACHER TESTING', function () {
     //login teacher and saves its session before to do other stuffs
@@ -216,14 +191,14 @@ describe('TEACHER TESTING', function () {
     after(async()=>{
         const course_id='C4567';
         let date='2020-12-22 09:00:00';
-        await restoreTypeLecture(course_id,date);
+        await supportFunc.restoreTypeLecture(course_id,date);
         const course_Ref='C4567';
         const userId='s266260';
         date='2020-12-11 14:00:00';
         const deadline='2020-12-17 23:00:00';
         const name='PDS Les:3';
         const capacity=70;
-        await insertDeletedRow(course_Ref,name,date,deadline,capacity);
+        await supportFunc.insertDeletedRow(course_Ref,name,date,deadline,capacity);
         await dao.addSeat(userId,course_id,date);
         let res=await chai.request(url).post('/api/logout').set('Cookie',cookie).send();
     })

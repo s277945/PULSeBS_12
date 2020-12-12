@@ -74,3 +74,41 @@ exports.getManagerCourseStatsTotal = function (courseId){
         })
     })
 }
+
+exports.getPositiveStudents = function(){
+    let list = [];
+    return new Promise((resolve, reject) => {
+        const sql='SELECT Name, Surname, Birthday FROM User WHERE Covid=?';
+        db.all(sql,[0], (err,rows)=>{
+            /* istanbul ignore if */if(err) reject(err);
+            else{
+                rows.forEach((row)=>{
+                    list.push({"name":row.Name, "surname":row.Surname, "birthday":row.Birthday});
+                });
+                resolve(list);
+            }
+        })
+    })
+}
+
+exports.searchStudentBySsn = function (ssn){
+    return new Promise((resolve, reject) => {
+        const sql='SELECT Name, Surname, Birthday, SSN FROM User WHERE SSN=?';
+        db.get(sql, [ssn], (err,row)=>{
+            /* istanbul ignore if */if(err) reject(err);
+            else{
+                resolve(row);
+            }
+        })
+    })
+}
+
+exports.setPositiveStudent = function (ssn){
+    return new Promise((resolve, reject) => {
+        const sql='UPDATE User SET Covid = 1 WHERE SSN=?';
+        db.run(sql, [ssn], (err) =>{
+            /* istanbul ignore if */if(err) reject(err);
+            else resolve(true);
+        })
+    })
+}
