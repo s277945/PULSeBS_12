@@ -93,6 +93,9 @@ const UploadFileButton = ({Name, listType}) => {
             contents.shift()
             const data = contents.map((line, index) => {
                 const res = {}
+
+                // clean \r or other unwanted symbol
+                line = line.replace(/\n|\r/g, "");
                 const values = line.split(",")
                 values.map((val, index2) => {
                     const header = headers[index2] 
