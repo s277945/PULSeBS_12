@@ -79,12 +79,12 @@ exports.getManagerCourseStatsTotal = function (courseId){
 exports.getPositiveStudents = function(){
     let list = [];
     return new Promise((resolve, reject) => {
-        const sql='SELECT Name, Surname, Birthday FROM User WHERE Covid=?';
+        const sql='SELECT Name, Surname, Birthday, SSN FROM User WHERE Covid=?';
         db.all(sql,[1], (err,rows)=>{
             /* istanbul ignore if */if(err) reject(err);
             else{
                 rows.forEach((row)=>{
-                    list.push({"name":row.Name, "surname":row.Surname, "birthday":row.Birthday});
+                    list.push({"name":row.Name, "surname":row.Surname, "birthday":row.Birthday,"ssn":row.SSN});
                 });
                 resolve(list);
             }

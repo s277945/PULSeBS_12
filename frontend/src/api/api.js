@@ -116,6 +116,19 @@ export function getLecturesStatsByCourseID(courseID){
     return axiosInst.get(`http://localhost:3001/api/managerCourses/${courseID}`, { withCredentials: true });
 }
 
+export function getAllPosStudents(){
+    return axiosInst.get(`http://localhost:3001/api/students/positiveStudents`, { withCredentials: true });
+}
+
+export function getStudentBySSN(ssn){
+    return axiosInst.get(`http://localhost:3001/api/students/${ssn}`, { withCredentials: true });
+}
+
+// Be aware that when sending a post request with an empty body you must specify the empty body with {}
+export function postMarkStudent(ssn){
+    return axiosInst.post(`http://localhost:3001/api/students/${ssn}`,{}, { withCredentials: true, credentials: 'include' });
+}
+
 export async function login (userName, password){
     return axios.post(`http://localhost:3001/api/login`, { userName: userName, password: password}, {withCredentials: true})
         .then(result => {

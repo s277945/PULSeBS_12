@@ -48,7 +48,7 @@
      }
 
      render() {
-
+        //Create main table body
          let body = []
          let k=0;
          this.state.tableData.forEach(row => {
@@ -59,6 +59,8 @@
                  <td style={{display: "flex", justifyContent: "flex-start"}}><Button style={{marginLeft: "5px"}} data-testid={"showList_"+k++} onClick={(e) => { e.preventDefault(); this.showList(row) }}>SHOW LIST</Button></td>
              </tr>)
          });
+
+         //Create Modal table body
 
          let modalTableBody = []
 
