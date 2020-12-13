@@ -6,7 +6,8 @@ import Login from './pages/Login'
 import { StudentHome } from './pages/studentHome'
 import { TeacherHome } from './pages/teacherHome'
 import BookingManagerHome from './pages/BookingManagerHome'
-import {PrivateRoute, ProvideAuth} from './components/Authsystem';
+import {PrivateRoute, ProvideAuth} from './components/Authsystem'
+import SupportOfficerHome from './pages/SupportOfficerHome'
 
 
 class App extends Component {
@@ -31,6 +32,10 @@ class App extends Component {
             <PrivateRoute path='/bookingHome' userType='bm'>
               <BookingManagerHome />
             </PrivateRoute>
+            {/* TODO : Set a privateRoute */}
+            <Route path='/supportOfficer'>
+              <SupportOfficerHome />
+            </Route>
           </Switch>
         </Router>
       </ProvideAuth>
