@@ -9,8 +9,9 @@ exports.uploadStudents=function(list){
     const password = "$2a$10$Uoatm1KqMfPsesdIcOm8a.yTYzUQAvEkfhZNOIh.1BFt.hY4jv8yq"
     let i = 0;
     return new Promise((resolve, reject) => {
-        const sql='INSERT INTO User VALUES(?,?,?,?,?,?,?,?,?)';
+        const sql='INSERT INTO User(userID,Name,Surname,City,Email,Password,Birthday,SSN,UserType) VALUES(?,?,?,?,?,?,?,?,?)';
         for(let element of list) {
+            console.log("list element student:"+JSON.stringify(element))
             db.run(sql, [element.userId, element.name, element.surname, element.city, element.email, password,
                 element.birthday, element.ssn, "s"], (err) => {
                 /* istanbul ignore if */
@@ -30,7 +31,7 @@ exports.uploadTeachers=function(list){
     let i = 0;
     const password = "$2a$10$Uoatm1KqMfPsesdIcOm8a.yTYzUQAvEkfhZNOIh.1BFt.hY4jv8yq"
     return new Promise((resolve, reject) => {
-        const sql='INSERT INTO User VALUES(?,?,?,?,?,?,?,?,?)';
+        const sql='INSERT INTO User(userID,Name,Surname,Email,Password,SSN,UserType) VALUES(?,?,?,?,?,?,?,?,?)';
         for(let element of list) {
             db.run(sql, [element.userId, element.name, element.surname, "", element.email, password,
                 "", element.ssn, "t"], (err) => {
@@ -120,7 +121,7 @@ exports.uploadSchedule=function(list){
     });
 }
 
-function getListLectures(schedule){
+exports.getListLectures=function (schedule){
     let list = []
     let dayMap = {
         "Mon": 0,
