@@ -12,7 +12,7 @@ exports.uploadStudents=function(list){
         const sql='INSERT INTO User(userID,Name,Surname,City,Email,Password,Birthday,SSN,UserType) VALUES(?,?,?,?,?,?,?,?,?)';
         for(let element of list) {
             console.log("list element student:"+JSON.stringify(element))
-            db.run(sql, [element.userId, element.name, element.surname, element.city, element.email, password,
+            db.run(sql, [element.userID, element.Name, element.Surname, element.City, element.email, password,
                 element.birthday, element.ssn, "s"], (err) => {
                 /* istanbul ignore if */
                 if (err)
@@ -103,8 +103,11 @@ exports.uploadSchedule=function(list){
                                 db.run(sql2, [el.Course_Ref, el.Name, el.Capacity, el.Date, el.EndDate, el.DateDeadline,
                                     el.BookedSeats, el.UnbookedSeats, el.Type, el.EmailSent], (err2) => {
 
-                                    if(err2)
+                                    if(err2){
+                                        console.log("fail");
                                         reject(err2)
+                                    }
+
                                     else{
                                         i++
                                         if(i === listLectures.length) resolve(true);
