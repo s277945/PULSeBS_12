@@ -98,7 +98,10 @@ exports.searchStudentBySsn = function (ssn){
         db.get(sql, [ssn], (err,row)=>{
             /* istanbul ignore if */if(err) reject(err);
             else{
-                resolve({"name":row.Name, "surname":row.Surname, "birthday":row.Birthday, "ssn":row.SSN});
+                if(row!=undefined)
+                    resolve({"name":row.Name, "surname":row.Surname, "birthday":row.Birthday, "ssn":row.SSN});
+                else
+                    reject(new Error({err: "Nothing to show"}))
             }
         })
     })
