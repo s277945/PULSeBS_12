@@ -13,7 +13,9 @@ var stringToColour = function(str) {
     var colour = '#';
     for (i = 0; i < 3; i++) {
         var value = (hash >> (i * 8)) & 0xff;
-        value=(value+0x8f)& 0xff;
+        if(i===0) value=(value*70/100)  & 0xff;// set red brightness
+        if(i===1) value=(value*80/100)  & 0xff;// set green brightness
+        if(i===2) value=(value*90/100)  & 0xff;// set blue brightness
         colour += ('00' + value.toString(16)).substr(-2);
     }
     return colour;

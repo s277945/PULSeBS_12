@@ -129,6 +129,11 @@ export function postMarkStudent(ssn){
     return axiosInst.post(`http://localhost:3001/api/students/${ssn}`,{}, { withCredentials: true, credentials: 'include' });
 }
 
+export function uploadStudents(studentList){
+    return axiosInst.post(`http://localhost:3001/api/uploadStudents`, studentList, { withCredentials: true, credentials: 'include' });
+}
+
+
 export async function login (userName, password){
     return axios.post(`http://localhost:3001/api/login`, { userName: userName, password: password}, {withCredentials: true})
         .then(result => {
