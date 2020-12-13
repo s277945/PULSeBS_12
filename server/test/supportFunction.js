@@ -99,23 +99,37 @@ exports.readFromCsv=function (type){
 
 }
 exports.deleteRowsStudent=function (list){
+    let length=list.length;
+    let i=0;
     return new Promise((resolve, reject) => {
         const sql='DELETE FROM User WHERE UserID=?'
-        list.foreach(row=>{
+        list.forEach(row=>{
             db.run(sql,[row.userId],function (err){
                 if(err)
                     reject(err)
+                else{
+                    i++;
+                    if(i==length)
+                        resolve(true);
+                }
             })
         })
     })
 }
 exports.deleteRowsTeacher=function (list){
     return new Promise((resolve, reject) => {
+        let i=0;
+        let length=list.length;
         const sql='DELETE FROM User WHERE UserID=?'
-        list.foreach(row=>{
+        list.forEach(row=>{
             db.run(sql,[row.userId],function (err){
                 if(err)
                     reject(err)
+                else{
+                    i++;
+                    if(i==length)
+                        resolve(true);
+                }
             })
         })
         resolve(true);
@@ -123,11 +137,18 @@ exports.deleteRowsTeacher=function (list){
 }
 exports.deleteRowsCourse=function (list){
     return new Promise((resolve, reject) => {
+        let i=0;
+        let length=list.length;
         const sql='DELETE FROM Course WHERE CourseID=? AND Year=?'
-        list.foreach(row=>{
+        list.forEach(row=>{
             db.run(sql,[row.Code,row.Year],function (err){
                 if(err)
                     reject(err)
+                else{
+                    i++;
+                    if(i==length)
+                        resolve(true);
+                }
             })
         })
         resolve(true);
@@ -135,11 +156,18 @@ exports.deleteRowsCourse=function (list){
 }
 exports.deleteRowsEnrollment=function (list){
     return new Promise((resolve, reject) => {
+        let i=0;
+        let length=list.length;
         const sql='DELETE FROM Enrollment WHERE Course_Ref=? AND Student_Ref=?'
-        list.foreach(row=>{
+        list.forEach(row=>{
             db.run(sql,[row.Code,row.Student],function (err){
                 if(err)
                     reject(err)
+                else{
+                    i++;
+                    if(i==length)
+                        resolve(true);
+                }
             })
         })
         resolve(true);
@@ -147,8 +175,9 @@ exports.deleteRowsEnrollment=function (list){
 }
 exports.deleteRowsSchedule=function (list){
     return new Promise((resolve, reject) => {
+        let i=0;
         let sql='DELETE FROM Schedule WHERE Code=?'
-        list.foreach(row=>{
+        list.forEach(row=>{
             db.run(sql,[row.Code],function (err){
                 if(err)
                     reject(err)
@@ -160,6 +189,11 @@ exports.deleteRowsSchedule=function (list){
                                 db.run(sql2,[el.Course_Ref,el.Date],function (err){
                                     if(err)
                                         reject(err)
+                                    else{
+                                        i++;
+                                        if(i==listLectures.length)
+                                            resolve(true);
+                                    }
                                 })
                             }
                         })

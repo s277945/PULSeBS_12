@@ -19,10 +19,10 @@ describe('TEST SUPPORT OFFICER', function () {
             password: 'scimmia'
         })
         cookie = res.headers['set-cookie'];
-        student.push({"userId": "900000", "name": "Ambra", "surname":"Ferri",
-            "city": "Poggio Ferro", "email":	"s900000@students.politu.it",
+        student.push({"userID": "900000", "Name": "Ambra", "Surname":"Ferri",
+            "City": "Poggio Ferro", "email":	"s900000@students.politu.it",
             "birthday": "1991-11-04", "ssn": "MK97060783"});
-        teacher.push({"userId": "d9000", "name": "Ines", "surname":"Beneventi", "email":"Ines.Beneventi@politu.it",
+        teacher.push({"userID": "d9000", "Name": "Ines", "Surname":"Beneventi", "email":"Ines.Beneventi@politu.it",
             "ssn": "XT6141393"});
         course.push({"courseId": "XY1211", "year": 1, "name": "Metodi di finanziamento delle imprese", "semester": 1, "teacherId": "d9000"});
         enrollment.push({"courseId":"XY1211", "studentId": "900000"});
@@ -132,22 +132,22 @@ describe('TEST SUPPORT OFFICER', function () {
                     expect(res).to.have.status(500)
                 })
         });
+        it('should reset', async function () {
+            await support.deleteRowsSchedule(schedule).then(res=>{
+                expect(res).to.equals(true);
+            })
+            await support.deleteRowsEnrollment(enrollment).then(res=>{
+                expect(res).to.equals(true);
+            })
+            await support.deleteRowsCourse(course).then(res=>{
+                expect(res).to.equals(true);
+            })
+            await support.deleteRowsTeacher(teacher).then(res=>{
+                expect(res).to.equals(true);
+            })
+            await support.deleteRowsStudent(student).then(res=>{
+                expect(res).to.equals(true);
+            })
+        });
     });
-    after(async()=>{
-        support.deleteRowsSchedule(schedule).then(res=>{
-
-        })
-        support.deleteRowsEnrollment(enrollment).then(res=>{
-
-        })
-        support.deleteRowsCourse(course).then(res=>{
-
-        })
-        support.deleteRowsTeacher(teacher).then(res=>{
-
-        })
-        support.deleteRowsStudent(student).then(res=>{
-
-        })
-    })
 });
