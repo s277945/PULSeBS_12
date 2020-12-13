@@ -56,7 +56,6 @@ describe('TEST SUPPORT OFFICER', function () {
                 .set("Cookie",cookie)
                 .send(teacher)
                 .then(res=>{
-                    expect(JSON.stringify(res)).to.equals('a')
                     expect(res).to.have.status(200)
                     expect(res.body.inserted).to.equals(true)
                 })

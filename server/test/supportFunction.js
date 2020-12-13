@@ -1,7 +1,7 @@
 const db = require('../src/db');
 const csv=require('csvtojson')
 const fs = require('fs');
-const {getListLectures} = require("../src/Dao/supportOfficerDao");
+const dao = require("../src/Dao/supportOfficerDao");
 exports.getCourseCapacity= function(id,date){
     return new Promise((resolve, reject) => {
         const sql='SELECT Capacity FROM Lecture WHERE Course_Ref=? AND Date=?';
@@ -153,7 +153,7 @@ exports.deleteRowsSchedule=function (list){
                 if(err)
                     reject(err)
                 else{
-                    getListLectures(row)
+                    dao.getListLectures(row)
                         .then(listLectures=>{
                             for(let el of listLectures){
                                 let sql2='DELETE FROM Lecture WHERE Course_Ref=?AND Date=?'
