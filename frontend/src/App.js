@@ -32,10 +32,9 @@ class App extends Component {
             <PrivateRoute path='/bookingHome' userType='bm'>
               <BookingManagerHome />
             </PrivateRoute>
-            {/* TODO : Set a privateRoute */}
-            <Route path='/supportOfficer'>
+            <PrivateRoute path='/supportOfficer' userType='so'>
               <SupportOfficerHome />
-            </Route>
+            </PrivateRoute>
           </Switch>
         </Router>
       </ProvideAuth>

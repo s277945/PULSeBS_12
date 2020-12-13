@@ -73,6 +73,9 @@ export class Login extends Component{
                     case 'bm':
                         history.replace('/bookingHome')
                         break;
+                    case 'so':
+                        history.replace('/supportOfficer')
+                        break;
                     default:
                         history.replace('/')
                         break;
