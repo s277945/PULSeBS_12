@@ -20,6 +20,7 @@ describe('TEST MANAGER PAGE', function () {
 
 
     });
+
     it('should open accordion of a course', function () {
         cy.get('.accordion')
             .eq(1)
@@ -43,6 +44,51 @@ describe('TEST MANAGER PAGE', function () {
         cy.visit('http://localhost:3000/')
         cy.wait(200)
         cy.location('pathname').should('include','/bookingHome')
+    });
+    it('should show correctly positive page', function () {
+        cy.get('[data-testid="report"]')
+            .click()
+        cy.get('.page-title').should('have.text','Positive students and reports')
+        cy.get('table').should('be.visible')
+    });
+    it('should add a new positive student', function () {
+        cy.get('[data-testid="report"]')
+            .click()
+        cy.get('[data-testid="addSSN"]').should('have.text','Add New Student')
+            .click()
+        cy.get('[data-testid="modalSSN"]').should('be.visible')
+            .within(()=>{
+                cy.get('input')
+                    .should('be.visible')
+                    .type('WHTRWHRW')
+                cy.get('[data-testid="search"]').click()
+                cy.wait(100)
+                cy.get('[data-testid="listTabSL"]').should('be.visible')
+                    .and('have.length',1)
+                cy.get('[data-testid="confirmButton"]')
+                    .should('be.visible')
+                    .click()
+
+            })
+
+    });
+    it('should not add a positive student if the ssn does not exists', function () {
+        cy.get('[data-testid="report"]')
+            .click()
+        cy.get('[data-testid="addSSN"]').should('have.text','Add New Student')
+            .click()
+        cy.get('[data-testid="modalSSN"]').should('be.visible')
+            .within(()=>{
+                cy.get('input')
+                    .should('be.visible')
+                    .type('TODO')
+                cy.get('[data-testid="search"]').click()
+    });
+    it('should generate a report', function () {
+
+    });
+    it('should not generate a report if a student is not enrolled in any lectures', function () {
+
     });
     it('should logout', function () {
         cy.get('[data-testid="logout"]')

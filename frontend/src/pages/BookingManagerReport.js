@@ -169,7 +169,7 @@ export class BookingManagerReport extends Component {
                     <tr >
                         <td>{this.state.searchedStudent.name} {this.state.searchedStudent.surname}</td>
                         <td>{this.state.searchedStudent.birthday}</td>
-                        <td style={{ display: "flex", justifyContent: "flex-start" }}><Button style={{ marginLeft: "5px" }} onClick={(e) => { e.preventDefault(); this.markSelectedStudent(this.state.searchedStudent.ssn) }}>Mark as Positive</Button></td>
+                        <td style={{ display: "flex", justifyContent: "flex-start" }}><Button data-testid="confirmButton" style={{ marginLeft: "5px" }} onClick={(e) => { e.preventDefault(); this.markSelectedStudent(this.state.searchedStudent.ssn) }}>Mark as Positive</Button></td>
                     </tr>
                 </tbody>
             </Table>
@@ -179,7 +179,7 @@ export class BookingManagerReport extends Component {
     rednerModal = () => {
 
         return (
-            <Modal show={this.state.modal} onHide={() => { /* When the modal is closed clear the response message and the searched student */ this.setState({ modal: false }); this.setState({ modalResult: "" }); this.setState({ searchedStudent: ""}) }}>
+            <Modal data-testid="modalSSN" show={this.state.modal} onHide={() => { /* When the modal is closed clear the response message and the searched student */ this.setState({ modal: false }); this.setState({ modalResult: "" }); this.setState({ searchedStudent: ""}) }}>
                 <Modal.Header data-testid={"close"} closeButton>
                     <Modal.Title>Add new positive student</Modal.Title>
                 </Modal.Header>
@@ -187,7 +187,7 @@ export class BookingManagerReport extends Component {
                     <p>Search by SSN:</p>
 
                     <input type="text" name="fname" placeholder="SSN" onChange={(e) => { this.setState({ searchField: e.target.value }) }} />
-                    <Button style={{ marginLeft: "5px" }} onClick={(e) => { e.preventDefault(); this.setState({ modalResult: "" }); this.searchBySSN() }}>Search</Button>
+                    <Button data-testid="search" style={{ marginLeft: "5px" }} onClick={(e) => { e.preventDefault(); this.setState({ modalResult: "" }); this.searchBySSN() }}>Search</Button>
 
                     <br />
                     <br />
@@ -206,7 +206,7 @@ export class BookingManagerReport extends Component {
         return (
             <div ><br></br><h1 className="page-title">Positive students and reports</h1><br></br>
 
-                <Button style={{ marginLeft: "5px" }} onClick={(e) => { e.preventDefault(); this.setState({ modal: true }) }}>Add New Student</Button>
+                <Button data-testid="addSSN" style={{ marginLeft: "5px" }} onClick={(e) => { e.preventDefault(); this.setState({ modal: true }) }}>Add New Student</Button>
 
                 <br/>
                 <br/>
