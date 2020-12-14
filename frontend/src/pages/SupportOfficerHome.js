@@ -21,8 +21,8 @@ const NavBarOfficer = (props) => {// page navbar
         <Navbar bg="dark" variant="dark">
             <Navbar.Brand>PULSeBS</Navbar.Brand>
             <Nav className="mr-auto">
-            <Nav.Link data-testid="setup" href="#setup" active={props.show===0?true:false} onClick={() => props.setShow(0)}>System setup</Nav.Link>
-            <Nav.Link data-testid="updatebookable" href="#updatebookable" active={props.show===1?true:false} onClick={() => props.setShow(1)}>Courses setup</Nav.Link>
+            <Nav.Link data-testid="setup" href="#sysetup" active={props.show===0?true:false} onClick={() => props.setShow(0)}>System setup</Nav.Link>
+            <Nav.Link data-testid="updatebookable" href="#coursetup" active={props.show===1?true:false} onClick={() => props.setShow(1)}>Courses setup</Nav.Link>
             </Nav>
             <Nav.Link data-testid="logout" onClick={() => auth.signout()}>Logout</Nav.Link>
         </Navbar>
