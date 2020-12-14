@@ -92,7 +92,7 @@ const UploadFileButton = ({Name, listType}) => {
                 case "professor":
                     apiCall = uploadTeachers
                     headers = "userID,Name,Surname,City,email,birthday,ssn".split(',')
-
+                break;
                 case "course":
                     apiCall = uploadCourses
                     headers = "courseId,year,name,semester,teacherId".split(',')
@@ -123,7 +123,6 @@ const UploadFileButton = ({Name, listType}) => {
 
                 return res
             })
-
 
             apiCall(data).then(response => {
                 toast.info(Name + " correctly uploaded")
