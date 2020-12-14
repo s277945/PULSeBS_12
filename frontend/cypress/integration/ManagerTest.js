@@ -83,12 +83,25 @@ describe('TEST MANAGER PAGE', function () {
                     .should('be.visible')
                     .type('TODO')
                 cy.get('[data-testid="search"]').click()
-            });
+            })
+            .should('contain.text','Student not found');
         it('should generate a report', function () {
-
+            cy.get('[data-testid="report"]')
+                .click()
+            cy.get('tbody>tr').eq(1)
+                .within(()=>{
+                    cy.get('.btn.btn-primary')
+                        .click()
+                })
         });
         it('should not generate a report if a student is not enrolled in any lectures', function () {
-
+            cy.get('[data-testid="report"]')
+                .click()
+            cy.get('tbody>tr').eq(2)
+                .within(()=>{
+                    cy.get('.btn.btn-primary')
+                        .click()
+                })
         });
         it('should logout', function () {
             cy.get('[data-testid="logout"]')
