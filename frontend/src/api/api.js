@@ -137,6 +137,22 @@ export function uploadStudents(studentList){
     return axiosInst.post(`http://localhost:3001/api/uploadStudents`, studentList, { withCredentials: true, credentials: 'include' });
 }
 
+export function uploadTeachers(data){
+    return axiosInst.post(`http://localhost:3001/api/uploadTeachers`, data, { withCredentials: true, credentials: 'include' });
+}
+
+export function uploadCourses(data){
+    return axiosInst.post(`http://localhost:3001/api/uploadCourses`, data, { withCredentials: true, credentials: 'include' });
+}
+
+export function uploadEnrollment(data){
+    return axiosInst.post(`http://localhost:3001/api/uploadEnrollment`, data, { withCredentials: true, credentials: 'include' });
+}
+
+export function uploadSchedule(data){
+    return axiosInst.post(`http://localhost:3001/api/uploadSchedule`, data, { withCredentials: true, credentials: 'include' });
+}
+
 export function getCoursesData(){
     // get list of courses for support officer selection from server
     return axiosInst.get(`http://localhost:3001/api/coursesData`, { withCredentials: true });
