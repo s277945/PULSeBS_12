@@ -1,9 +1,9 @@
 describe('TEST MANAGER PAGE', function () {
-    beforeEach(()=>{
+    beforeEach(() => {
         cy.visit('http://localhost:3000/')
         cy.get('input:first').type('b123456')
         cy.get('input:last').type('scimmia')
-        cy.intercept('POST','/api/login').as('login')
+        cy.intercept('POST', '/api/login').as('login')
 
         cy.get('.btn.btn-primary')
             .click()
@@ -12,11 +12,11 @@ describe('TEST MANAGER PAGE', function () {
         Cypress.Cookies.debug(true)
     })
     it('should load correctly manager page', function () {
-        cy.location('pathname').should('include','/bookingHome')
+        cy.location('pathname').should('include', '/bookingHome')
     });
     it('should render', function () {
         cy.get('nav')
-            .should('include.text','PULSeBS - SystemActivity')
+            .should('include.text', 'PULSeBS - SystemActivity')
 
 
     });
@@ -34,7 +34,7 @@ describe('TEST MANAGER PAGE', function () {
         cy.wait(100)
         cy.get('.card').eq(0)
             .should('be.visible')
-            .within(()=>{
+            .within(() => {
                 cy.get('select')
                     .first()
             })
@@ -43,28 +43,28 @@ describe('TEST MANAGER PAGE', function () {
     it('should not redirect', function () {
         cy.visit('http://localhost:3000/')
         cy.wait(200)
-        cy.location('pathname').should('include','/bookingHome')
+        cy.location('pathname').should('include', '/bookingHome')
     });
     it('should show correctly positive page', function () {
         cy.get('[data-testid="report"]')
             .click()
-        cy.get('.page-title').should('have.text','Positive students and reports')
+        cy.get('.page-title').should('have.text', 'Positive students and reports')
         cy.get('table').should('be.visible')
     });
     it('should add a new positive student', function () {
         cy.get('[data-testid="report"]')
             .click()
-        cy.get('[data-testid="addSSN"]').should('have.text','Add New Student')
+        cy.get('[data-testid="addSSN"]').should('have.text', 'Add New Student')
             .click()
         cy.get('[data-testid="modalSSN"]').should('be.visible')
-            .within(()=>{
+            .within(() => {
                 cy.get('input')
                     .should('be.visible')
                     .type('WHTRWHRW')
                 cy.get('[data-testid="search"]').click()
                 cy.wait(100)
                 cy.get('[data-testid="listTabSL"]').should('be.visible')
-                    .and('have.length',1)
+                    .and('have.length', 1)
                 cy.get('[data-testid="confirmButton"]')
                     .should('be.visible')
                     .click()
@@ -75,24 +75,25 @@ describe('TEST MANAGER PAGE', function () {
     it('should not add a positive student if the ssn does not exists', function () {
         cy.get('[data-testid="report"]')
             .click()
-        cy.get('[data-testid="addSSN"]').should('have.text','Add New Student')
+        cy.get('[data-testid="addSSN"]').should('have.text', 'Add New Student')
             .click()
         cy.get('[data-testid="modalSSN"]').should('be.visible')
-            .within(()=>{
+            .within(() => {
                 cy.get('input')
                     .should('be.visible')
                     .type('TODO')
                 cy.get('[data-testid="search"]').click()
-    });
-    it('should generate a report', function () {
+            });
+        it('should generate a report', function () {
 
-    });
-    it('should not generate a report if a student is not enrolled in any lectures', function () {
+        });
+        it('should not generate a report if a student is not enrolled in any lectures', function () {
 
-    });
-    it('should logout', function () {
-        cy.get('[data-testid="logout"]')
-            .click()
+        });
+        it('should logout', function () {
+            cy.get('[data-testid="logout"]')
+                .click()
 
+        });
     });
-});
+})
