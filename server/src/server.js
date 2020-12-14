@@ -718,14 +718,14 @@ app.get('/api/reports/:studentSsn', (req, res) => {
 //// STORY 17
 
 /**
- * GET /api/coursesData/all
+ * GET /api/coursesData
  *
  * Retrieves all University Courses and related data in order to be managed by Support Officer
  *
  * No params needed
  */
 
-app.get('/api/coursesData/all', (req, res) => {
+app.get('/api/coursesData', (req, res) => {
   supportOfficerDao.getCoursesData()
       .then((courses) => {
           res.status(200).json(courses);
@@ -736,11 +736,11 @@ app.get('/api/coursesData/all', (req, res) => {
 })
 
 /**
- * POST api/uploadSchedule
+ * POST api/lecturesBookable
  *
- * Uploads list of schedule
+ * Change the bookability of a course/year
  *
- * body request: [{"courseId": "XY1211","room": 1, "day": "Mon", "seats": 120, "time": "8:30-11:30"}, ...]
+ * body request: [{"courseId": "C4567","restriction": 0}, ...]
  */
 
 app.post('/api/lecturesBookable', (req, res) => {
