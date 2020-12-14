@@ -18,7 +18,7 @@
     ./start_script.sh
 
 
-## DOCKER INSTALL AND START INSTRUCTIONS
+## INSTALL AND START PROJECT WITH DOCKER
 
   From a command line run:
   
