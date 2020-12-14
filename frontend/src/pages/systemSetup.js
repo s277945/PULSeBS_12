@@ -9,6 +9,9 @@ import { toast } from 'react-toastify';
 export default function SystemSetupView() {
     return(
         <>
+            <br/>
+            <h2 className="page-title">Upload data</h2>
+
             <UploadComponent Name={"Student list"} listType="student" />
             <UploadComponent Name={"Professor list"} listType="professor" />
             <UploadComponent Name={"Course list"} listType="course" />
