@@ -33,7 +33,7 @@ exports.uploadTeachers=function(list){
     return new Promise((resolve, reject) => {
         const sql='INSERT INTO User(userID,Name,Surname,City,Email,Password,Birthday,SSN,UserType) VALUES(?,?,?,?,?,?,?,?,?)';
         for(let element of list) {
-            db.run(sql, [element.userId, element.name, element.surname, "", element.email, password,
+            db.run(sql, [element.userID, element.Name, element.Surname, "", element.email, password,
                 "", element.ssn, "t"], (err) => {
                 /* istanbul ignore if */
                 if (err)
