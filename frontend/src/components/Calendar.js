@@ -8,7 +8,7 @@ import moment from 'moment'
 var stringToColour = function(str) {
     var hash = 0;
     for (var i = 0; i < str.length; i++) {
-        hash = str.charCodeAt(i) + ((hash << 5) - hash);
+        hash = str.charCodeAt(i) + ((hash << 5) - hash);// generate color from course name hash
     }
     var colour = '#';
     for (i = 0; i < 3; i++) {
@@ -16,7 +16,7 @@ var stringToColour = function(str) {
         if(i===0) value=(value*70/100)  & 0xff;// set red brightness
         if(i===1) value=(value*80/100)  & 0xff;// set green brightness
         if(i===2) value=(value*90/100)  & 0xff;// set blue brightness
-        colour += ('00' + value.toString(16)).substr(-2);
+        colour += ('00' + value.toString(16)).substr(-2);// add primary color to final color string
     }
     return colour;
 }

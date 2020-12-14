@@ -137,6 +137,15 @@ export function uploadStudents(studentList){
     return axiosInst.post(`http://localhost:3001/api/uploadStudents`, studentList, { withCredentials: true, credentials: 'include' });
 }
 
+export function getCoursesData(){
+    // get list of courses for support officer selection from server
+    return axiosInst.get(`http://localhost:3001/api/coursesData`, { withCredentials: true });
+}
+
+export function postCoursesType(coursesData){// receives array of { coursesId: "CID", restriction: 0/1 }
+    // post list of courses of which to update type for support officer selection from server
+    return axiosInst.get(`http://localhost:3001/api/lecturesBookable?type=${action}`, coursesData, { withCredentials: true });
+}
 
 export async function login (userName, password){
     return axios.post(`http://localhost:3001/api/login`, { userName: userName, password: password}, {withCredentials: true})
