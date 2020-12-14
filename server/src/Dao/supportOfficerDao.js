@@ -66,7 +66,6 @@ exports.uploadCourses=function(list){
     });
 }
 
-
 exports.uploadEnrollment=function(list){
     const lenght = list.length;
     let i = 0;
@@ -201,4 +200,44 @@ exports.getListLectures=function (schedule){
         })
     })
 
+}
+
+exports.getCoursesData=function(){
+    let list = [];
+    return new Promise((resolve, reject) => {
+        const sql='SELECT CourseID, Year, Name, Semester FROM Course';
+        db.all(sql, [], (err, rows) => {
+            /* istanbul ignore if */
+            if (err)
+                reject(err);
+            else {
+                for(let row of rows){
+                    list.push({"courseId":row.CourseID, "year":row.Year, "name":row.Name, "semester":row.Semester});
+                }
+                resolve(list);
+            }
+        });
+    });
+}
+
+exports.modifyBookableLectures=function(list){
+    let i = 0;
+    const date=moment().format('YYYY-MM-DD HH:mm:ss'); 
+    return new Promise((resolve, reject) => {
+        console.log("QUI"+list);
+        for(let el of list){
+            console.log(el.courseId);
+            let sql='UPDATE Lecture SET Type="d" WHERE Course_Ref=? AND Date > ?';
+            db.run(sql, [el.courseId, date], (err) => {
+                /* istanbul ignore if */
+                if (err)
+                    reject(err);
+                else {
+                    i++;
+                    if(i === list.length)
+                        resolve(true);
+                }
+            });
+        }
+    });
 }
