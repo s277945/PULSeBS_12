@@ -1,13 +1,16 @@
 import React, { Component } from 'react'
-import { getAllPosStudents, getStudentBySSN, postMarkStudent } from '../api/api'
+import { getAllPosStudents, getStudentBySSN, postMarkStudent, getStudentReport } from '../api/api'
 import Table from 'react-bootstrap/Table'
 import Button from 'react-bootstrap/Button'
 import Modal from 'react-bootstrap/Modal'
 
+import jsPDF from "jspdf";
+import "jspdf-autotable";
+
 
 export class BookingManagerReport extends Component {
 
-    state = { posStudents: [], modal: false, searchField: "", searchedStudent: "", modalResult:"" }
+    state = { posStudents: [], modal: false, searchField: "", searchedStudent: "", modalResult: "" }
 
     componentDidMount() {
 
@@ -15,6 +18,7 @@ export class BookingManagerReport extends Component {
 
     }
 
+    //Update the list of positive students to show on the page
     updateReport = () => {
         getAllPosStudents()
             .then(res => {
@@ -24,8 +28,78 @@ export class BookingManagerReport extends Component {
             });
     }
 
-    createReport = () => { }
+    //Get report for sertain student (ssn)
+    createReport = (student) => {
+        getStudentReport(student.ssn)
+            .then(res => {
+                console.log(res.data)
+                //After receiving response from server we invoke the function to generate the pdf
+                this.generatePDF(student, res.data)
+            }).catch(/* istanbul ignore next */err => {
+                console.log(err);
+            });
+    }
 
+    //Function to generate pdf report for certain student
+    generatePDF = (student, report) => {
+        // initialize jsPDF
+        const doc = new jsPDF();
+
+        // table title. and  margin-left,margin-top
+        doc.text("PULSeBS Team 12", 100, 16, 'center');
+        doc.text("Report of COVID-19 positive for student:", 14, 32);
+
+        // define the columns we want and their titles
+        const tableColumn = ["Name", "Birthday", "SSN"];
+
+        const tableRowStudent = [[
+            `${student.name} ${student.surname}`,
+            student.birthday,
+            student.ssn
+        ]];
+
+        doc.autoTable(tableColumn, tableRowStudent, { startY: 40 });
+
+        //if the server returns empty array as a report []
+
+        if (report.length === 0 ) {
+
+            doc.text("The mentioned student was not in contact with other students. ", 14, 64);
+         }
+
+        else {
+
+        // else print all the reported students in a table
+
+            // define an empty array of rows
+            const tableRows = [];
+
+            // for each student pass all its data into an array
+            report.forEach(student => {
+                const studentData = [
+                    `${student.name} ${student.surname}`,
+                    student.birthday,
+                    student.ssn,
+                ];
+                // push each student's info into a row
+                tableRows.push(studentData);
+            });
+
+            doc.text("The following students participated in the same lectures of the mentioned ", 14, 64);
+
+            doc.text("student:", 14, 72);
+
+            // startY is basically margin-top
+            doc.autoTable(tableColumn, tableRows, { startY: 80 });
+
+        }
+
+        // we define the name of our PDF file.
+        doc.save(`report ${student.name} ${student.surname}.pdf`);
+
+    }
+
+    //Render list of positive students
     renderPosStudents = () => {
 
         //Fill the body of the table from fetched values
@@ -35,7 +109,9 @@ export class BookingManagerReport extends Component {
             body.push(<tr key={k++}>
                 <td>{row.name} {row.surname}</td>
                 <td>{row.birthday}</td>
-                <td style={{ display: "flex", justifyContent: "flex-start" }}><Button style={{ marginLeft: "5px" }} data-testid={"showReport_" + k++} onClick={(e) => { e.preventDefault(); this.createReport(row.ssn) }}>Create Report</Button></td>
+                {//button to generate report
+                }
+                <td style={{ display: "flex", justifyContent: "flex-start" }}><Button style={{ marginLeft: "5px" }} data-testid={"showReport_" + k++} onClick={(e) => { e.preventDefault(); this.createReport(row) }}>Create Report</Button></td>
             </tr>)
         });
 
@@ -56,12 +132,14 @@ export class BookingManagerReport extends Component {
         )
     }
 
+    //Search student by ssn
     searchBySSN = () => {
         getStudentBySSN(this.state.searchField)
             .then(res => {
                 this.setState({ searchedStudent: res.data });
             }).catch(/* istanbul ignore next */err => {
-                console.log(err);
+                console.log(err)
+                this.setState({ modalResult: "Student not found" })
             });
     }
 
@@ -71,7 +149,7 @@ export class BookingManagerReport extends Component {
                 console.log(res.data);
                 // After a succesful mark, update the table
                 this.updateReport()
-                this.setState({modalResult: "Student added as positive."})
+                this.setState({ modalResult: "Student added as positive." })
             }).catch(/* istanbul ignore next */err => {
                 console.log(err);
             });
@@ -101,20 +179,23 @@ export class BookingManagerReport extends Component {
     rednerModal = () => {
 
         return (
-            <Modal show={this.state.modal} onHide={() => { this.setState({ modal: false });this.setState({ modalResult: "" }) }}>
+            <Modal show={this.state.modal} onHide={() => { /* When the modal is closed clear the response message and the searched student */ this.setState({ modal: false }); this.setState({ modalResult: "" }); this.setState({ searchedStudent: ""}) }}>
                 <Modal.Header data-testid={"close"} closeButton>
                     <Modal.Title>Add new positive student</Modal.Title>
                 </Modal.Header>
                 <Modal.Body className="app-element-background">
                     <p>Search by SSN:</p>
+
                     <input type="text" name="fname" placeholder="SSN" onChange={(e) => { this.setState({ searchField: e.target.value }) }} />
-                    <Button style={{ marginLeft: "5px" }} onClick={(e) => { e.preventDefault();this.setState({ modalResult: "" }); this.searchBySSN() }}>Search</Button>
+                    <Button style={{ marginLeft: "5px" }} onClick={(e) => { e.preventDefault(); this.setState({ modalResult: "" }); this.searchBySSN() }}>Search</Button>
+
+                    <br />
                     <br />
                     {this.state.searchedStudent !== "" ? this.renderModalTable() : <div></div>}
-                    <br/>
+                    <br />
                     {
-                    //This state is to show the result of the mark api. If succesful show the message. We deactivate the message when the modal closes or when a new search is performed.
-                    this.state.modalResult !== "" ? this.state.modalResult : <div></div>}
+                        //This state is to show the result of the mark student as positive api. If succesful show the message, also show when student is not found. We deactivate the message when the modal closes or when a new search is performed.
+                        this.state.modalResult !== "" ? this.state.modalResult : <div></div>}
                 </Modal.Body>
             </Modal>
         )
@@ -127,7 +208,8 @@ export class BookingManagerReport extends Component {
 
                 <Button style={{ marginLeft: "5px" }} onClick={(e) => { e.preventDefault(); this.setState({ modal: true }) }}>Add New Student</Button>
 
-                <br></br>
+                <br/>
+                <br/>
 
                 {this.renderPosStudents()}
 
