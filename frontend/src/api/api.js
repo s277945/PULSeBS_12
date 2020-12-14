@@ -144,7 +144,7 @@ export function getCoursesData(){
 
 export function postCoursesType(coursesData){// receives array of { coursesId: "CID", restriction: 0/1 }
     // post list of courses of which to update type for support officer selection from server
-    return axiosInst.get(`http://localhost:3001/api/lecturesBookable?type=${action}`, coursesData, { withCredentials: true });
+    return axiosInst.get(`http://localhost:3001/api/lecturesBookable`, coursesData, { withCredentials: true });
 }
 
 export async function login (userName, password){

@@ -205,7 +205,7 @@ exports.getListLectures=function (schedule){
 exports.getCoursesData=function(){
     let list = [];
     return new Promise((resolve, reject) => {
-        const sql='SELECT CourseID, Year, Name, Semester FROM Course';
+        const sql='SELECT CourseID, Year, Name, Semester, Restriction FROM Course';
         db.all(sql, [], (err, rows) => {
             /* istanbul ignore if */
             if (err)
@@ -220,15 +220,34 @@ exports.getCoursesData=function(){
     });
 }
 
-exports.modifyBookableLectures=function(list){
-    let i = 0;
-    const date=moment().format('YYYY-MM-DD HH:mm:ss'); 
+exports.modifyBookableLectures=function(list){ 
     return new Promise((resolve, reject) => {
-        console.log("QUI"+list);
+        const sql='UPDATE Course SET Restriction=? WHERE CourseID=?'
+            for(let el of list){
+                db.run(sql, [el.restriction, el.courseId], (err) => {
+                    if(err) reject(err);
+                    else{
+                        updateLectures(list).then(result =>{
+                            resolve(result);
+                        }).catch(err => reject(err));  
+                    }
+                })
+            }
+    });
+}
+
+function updateLectures(list){
+    let i = 0;
+    let type;
+    const date=moment().format('YYYY-MM-DD HH:mm:ss');
+    return new Promise((resolve, reject) => {
+        const sql='UPDATE Lecture SET Type=? WHERE Course_Ref=? AND Date > ?';
         for(let el of list){
-            console.log(el.courseId);
-            let sql='UPDATE Lecture SET Type="d" WHERE Course_Ref=? AND Date > ?';
-            db.run(sql, [el.courseId, date], (err) => {
+            if(el.restriction===0)
+                type = "p";
+            else if(el.restriction===1)
+                type = "d";
+            db.run(sql, [type, el.courseId, date], (err) => {
                 /* istanbul ignore if */
                 if (err)
                     reject(err);

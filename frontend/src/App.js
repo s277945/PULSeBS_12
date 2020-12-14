@@ -8,7 +8,8 @@ import { TeacherHome } from './pages/teacherHome'
 import BookingManagerHome from './pages/BookingManagerHome'
 import {PrivateRoute, ProvideAuth} from './components/Authsystem'
 import SupportOfficerHome from './pages/SupportOfficerHome'
-
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 class App extends Component {
   componentDidMount(){
@@ -18,6 +19,7 @@ class App extends Component {
   render(){
     return(
       <ProvideAuth>
+        <ToastContainer/>
         <Router>
           <Switch>
             <Route exact path='/'>
