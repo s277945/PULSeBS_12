@@ -86,24 +86,18 @@ describe('********STUDENT TEST******', function () {
             let res=await chai.request(url).post('/api/lectures').set('Cookie',cookie).send({userId: "s269422", lectureId: "C0123", date: "2019-11-1 18:00:00"})
             expect(res.status).to.equal(422);
         });
-        /*before(async()=>{
+        before(async()=>{
             //i will set a lecture to 0 seat
-            getCourseCapacity(course_id,date)
-                .then(async (val)=>{
-                    capacity=val;
-                    await updateCourseCapacity(course_id,date,0)
-                        .then(res=>{
-                            if(res==true){
-                                return;
-                            }
-                        })
-                })
-        })*/
+            supportFunc.updateCourseCapacity(course_id,date,1).then(res=>{
+                console.log(res)
+            })
+
+        })
         it('should return 0 seats available status 500',async function () {
             return chai.request(url).post('/api/lectures').set('Cookie',cookie)
                 .send({lectureId: "C2468", date: "2021-03-08 15:00:00",endDate:"2021-03-08 18:00:00"})
                 .then(res=>{
-                    expect(res).to.have.status(201)
+                    expect(res).to.have.status(500)
                     expect(res.body.operation).to.equals('waiting')
             })
             //expect(res.body.errors.msg).to.be.equals('0 seats available')
@@ -121,12 +115,12 @@ describe('********STUDENT TEST******', function () {
                 });
         })*/
         it('should return status 201 ', async function () {
-            let res=await chai.request(url).post('/api/lectures').set('Cookie',cookie).send({lectureId: "C4567", date: "2020-12-14 11:30:00",endDate:"2020-12-14 14:30:00"})
+            let res=await chai.request(url).post('/api/lectures').set('Cookie',cookie).send({lectureId: "C4567", date: "2020-12-25 09:00:00",endDate:"2020-12-25 12:00:00"})
             expect(res.status).to.equal(201);
             expect(res.body.operation).to.equals("booked");
         });
         it('should return status 500 ', async function () {
-            let res=await chai.request(url).post('/api/lectures').set('Cookie',cookie).send({lectureId: "prova", date: "2020-12-12 20:00:00"})
+            let res=await chai.request(url).post('/api/lectures').set('Cookie',cookie).send({lectureId: "prova", date: "2020-12-18 20:00:00"})
             expect(res.status).to.equal(500);
 
         });
@@ -155,6 +149,20 @@ describe('********STUDENT TEST******', function () {
         });
     });
     describe('DELETE', function () {
+        before(async()=>{
+            //update course capacity, add a booking and then add a waiting list before testing
+            await supportFunc.updateCourseCapacity('C2468','2021-03-05 11:00:00',1).then(async res=>{
+                if(res.equals(true)){
+                    await studDao.addSeat('s266260','C2468','2021-03-05 11:00:00','2021-03-05 14:00:00')
+                        .then(async res=>{
+                            await studDao.addSeat('s267348','C2468','2021-03-05 11:00:00','2021-03-05 14:00:00').then(
+                                res=>console.log('success')
+                            )
+                        })
+
+                }
+            })
+        })
         it('should delete an user and there is someone else in waiting list', function () {
             return  chai.request(url)
                 .delete('/api/lectures/C2468?date=2021-03-08 15:00:00')
@@ -168,9 +176,14 @@ describe('********STUDENT TEST******', function () {
                 })
 
         });
+        before(async()=>{
+            await supportFunc.updateCourseCapacity('C2468','2021-03-05 11:00:00',70).then(
+                res=>console.log('ok')
+            )
+        })
 
         it('should delete an user and there is no one in waiting list',async function () {
-            let res=await chai.request(url).delete('/api/lectures/C4567?date=2020-12-14 11:30:00').set('Cookie',cookie).send()
+            let res=await chai.request(url).delete('/api/lectures/C4567?date=2020-12-25 09:00:00').set('Cookie',cookie).send()
             expect(res.status).to.equal(204);
             expect(res.body.operation).to.equals("NoUser")
         });

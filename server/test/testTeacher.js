@@ -88,7 +88,7 @@ describe('TEACHER TESTING', function () {
         });
         it('should return status 204',async function () {
             return chai.request(url)
-                .delete('/api/courseLectures/C4567?date=2020-12-11 14:00:00')
+                .delete('/api/courseLectures/C4567?date=2020-12-25 09:00:00')
                 .set('Cookie',cookie)
                 .send()
                 .then(res=>{
@@ -194,9 +194,9 @@ describe('TEACHER TESTING', function () {
         await supportFunc.restoreTypeLecture(course_id,date);
         const course_Ref='C4567';
         const userId='s266260';
-        date='2020-12-11 14:00:00';
-        const deadline='2020-12-17 23:00:00';
-        const name='PDS Les:3';
+        date='2020-12-25 09:00:00';
+        const deadline='2020-12-24 23:00:00';
+        const name='DS Les:6';
         const capacity=70;
         await supportFunc.insertDeletedRow(course_Ref,name,date,deadline,capacity);
         await dao.addSeat(userId,course_id,date);

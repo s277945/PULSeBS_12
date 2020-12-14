@@ -104,7 +104,7 @@ exports.deleteRowsStudent=function (list){
     return new Promise((resolve, reject) => {
         const sql='DELETE FROM User WHERE UserID=?'
         list.forEach(row=>{
-            db.run(sql,[row.userId],function (err){
+            db.run(sql,[row.userID],function (err){
                 if(err)
                     reject(err)
                 else{
@@ -122,7 +122,7 @@ exports.deleteRowsTeacher=function (list){
         let length=list.length;
         const sql='DELETE FROM User WHERE UserID=?'
         list.forEach(row=>{
-            db.run(sql,[row.userId],function (err){
+            db.run(sql,[row.userID],function (err){
                 if(err)
                     reject(err)
                 else{
@@ -141,7 +141,7 @@ exports.deleteRowsCourse=function (list){
         let length=list.length;
         const sql='DELETE FROM Course WHERE CourseID=? AND Year=?'
         list.forEach(row=>{
-            db.run(sql,[row.Code,row.Year],function (err){
+            db.run(sql,[row.courseId,row.year],function (err){
                 if(err)
                     reject(err)
                 else{
@@ -160,7 +160,7 @@ exports.deleteRowsEnrollment=function (list){
         let length=list.length;
         const sql='DELETE FROM Enrollment WHERE Course_Ref=? AND Student_Ref=?'
         list.forEach(row=>{
-            db.run(sql,[row.Code,row.Student],function (err){
+            db.run(sql,[row.courseId,row.studentId],function (err){
                 if(err)
                     reject(err)
                 else{
@@ -178,7 +178,7 @@ exports.deleteRowsSchedule=function (list){
         let i=0;
         let sql='DELETE FROM Schedule WHERE Code=?'
         list.forEach(row=>{
-            db.run(sql,[row.Code],function (err){
+            db.run(sql,[row.courseId],function (err){
                 if(err)
                     reject(err)
                 else{
