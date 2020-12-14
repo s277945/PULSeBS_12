@@ -8,6 +8,11 @@
   
     git clone https://github.com/s277945/PULSeBS_12.git
     cd PULSeBS_12
+    
+  install dependencies:
+  
+    ./install_script.sh
+    
   start the project:
   
     ./start_script.sh
