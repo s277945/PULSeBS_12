@@ -6,7 +6,8 @@ import Form from 'react-bootstrap/Form'
 import {useAuth} from '../components/Authsystem'
 import Button from 'react-bootstrap/Button'
 import bsCustomFileInput from 'bs-custom-file-input'
-import {uploadStudents} from '../api/api';
+import {uploadStudents, uploadTeachers, uploadCourses, uploadEnrollment, uploadSchedule} from '../api/api';
+import { toast } from 'react-toastify';
 
 export default function BookingManagerHome(){
 
@@ -17,6 +18,9 @@ export default function BookingManagerHome(){
 
             <UploadComponent Name={"Student list"} listType="student"/>
             <UploadComponent Name={"Professor list"} listType="professor"/>
+            <UploadComponent Name={"Course list"} listType="course"/>
+            <UploadComponent Name={"Enrollment list"} listType="enrollment"/>
+            <UploadComponent Name={"Schedule list"} listType="schedule"/>
 
         </>
     )
@@ -79,13 +83,27 @@ const UploadFileButton = ({Name, listType}) => {
 
             // Find headers by list type
             let headers;
+            let apiCall;
             switch(listType){
                 case "student":
+                    apiCall = uploadStudents
                     headers = "userID,Name,Surname,City,email,birthday,ssn".split(',')
                 break; 
-
                 case "professor":
+                    apiCall = uploadTeachers
                     headers = "userID,Name,Surname,City,email,birthday,ssn".split(',')
+                break;
+                case "course":
+                    apiCall = uploadCourses
+                    headers = "courseId,year,name,semester,teacherId".split(',')
+                break; 
+                case "enrollment":
+                    apiCall = uploadEnrollment
+                    headers = "courseId,studentId".split(',')
+                break; 
+                case "schedule":
+                    apiCall = uploadSchedule
+                    headers = "courseId, room, day, seats, time".split(',')
                 break; 
             }
 
@@ -106,11 +124,12 @@ const UploadFileButton = ({Name, listType}) => {
                 return res
             })
 
-
-            uploadStudents(data).then(response => {
-                console.log(response)
+            apiCall(data).then(response => {
+                toast.info(Name + " correctly uploaded")
             })
-
+            .catch(e => {
+                toast.error("Error sending data to server")
+            })
         };
 
         reader.readAsText(file);
