@@ -203,3 +203,15 @@ exports.deleteRowsSchedule=function (list){
         resolve(true);
     })
 }
+exports.setNotPositive=function(userId){
+    return new Promise((resolve, reject) => {
+        const sql='UPDATE User SET Covid=0 WHERE userID=?';
+        db.run(sql,[userId],function (err) {
+            if(err)
+                reject(err)
+            else{
+                resolve(true)
+            }
+        })
+    })
+}

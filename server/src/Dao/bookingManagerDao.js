@@ -123,37 +123,40 @@ exports.generateReport = function(ssn){
     return new Promise ((resolve, reject) => {
         getUserId(ssn)
             .then((userId) => {
-                retrieveLectures(userId)
-                    .then((lectures) => {
-                        const date = moment().format("YYYY-MM-DD HH:mm:ss")
-                        const sql = 'SELECT Name, Surname, Birthday, SSN FROM User WHERE UserID != ? AND UserID IN ('+
-                            'SELECT Student_Ref FROM Booking WHERE Course_Ref=? AND Date_Ref=? AND Date_Ref<?)'
-                        let iterator = 0;
-                        for(let lecture of lectures){
-                            iterator++
-                            db.all(sql, [userId, lecture.course, lecture.date, date], (err, rows) => {
-                                if(err)
-                                    reject(err)
-                                else{
-                                    rows.forEach((row) => {
-                                        let obj = {
-                                            "name": row.Name,
-                                            "surname": row.Surname,
-                                            "birthday": row.Birthday,
-                                            "ssn": row.SSN
-                                        }
-                                        let cond = list.includes(obj)
+                    retrieveLectures(userId)
+                        .then((lectures) => {
+                            if(lectures.length==0)
+                                reject(new Error('Student was not in any class'))
+                            const date = moment().format("YYYY-MM-DD HH:mm:ss")
+                            const sql = 'SELECT Name, Surname, Birthday, SSN FROM User WHERE UserID != ? AND UserID IN ('+
+                                'SELECT Student_Ref FROM Booking WHERE Course_Ref=? AND Date_Ref=? AND Date_Ref<?)'
+                            let iterator = 0;
+                            for(let lecture of lectures){
+                                iterator++
+                                db.all(sql, [userId, lecture.course, lecture.date, date], (err, rows) => {
+                                    if(err)
+                                        reject(err)
+                                    else{
+                                        rows.forEach((row) => {
+                                            let obj = {
+                                                "name": row.Name,
+                                                "surname": row.Surname,
+                                                "birthday": row.Birthday,
+                                                "ssn": row.SSN
+                                            }
+                                            let cond = list.includes(obj)
 
-                                        if(!cond)
-                                            list.push(obj)
-                                    })
-                                }
-                                if(iterator === lectures.length) resolve(list)
-                            })
+                                            if(!cond)
+                                                list.push(obj)
+                                        })
+                                    }
+                                    if(iterator === lectures.length) resolve(list)
+                                })
 
-                        }
-                    })
-            })
+                            }
+                        })
+
+            }).catch(err=>reject(err))
 
 
     })
@@ -183,8 +186,13 @@ function getUserId(ssn){
         db.get(sql, [ssn], (err, row) => {
             if(err)
                 reject(err)
-            else
-                resolve(row.userID)
+            else{
+                if(row!=undefined)
+                    resolve(row.userID)
+                else
+                    reject(new Error('Student not found'))
+            }
+
         })
     })
 }
