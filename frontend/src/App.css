@@ -122,3 +122,10 @@
  .fc .fc-daygrid-event {
   color: #23272c;
  }
+
+ .accordion-custom-setup-1 {
+   display: flex;
+   flex-wrap: nowrap;
+   justify-content: space-between;
+   background-color: #F7F7F7;
+  }

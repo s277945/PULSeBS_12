@@ -51,7 +51,7 @@ exports.uploadCourses=function(list){
     const lenght = list.length;
     let i = 0;
     return new Promise((resolve, reject) => {
-        const sql='INSERT INTO Course VALUES(?,?,?,?,?)';
+        const sql='INSERT INTO Course(CourseID, Year, Name, Semester, Teacher_Ref) VALUES(?,?,?,?,?)';
         for(let element of list) {
             db.run(sql, [element.courseId, element.year, element.name, element.semester, element.teacherId], (err) => {
                 /* istanbul ignore if */
@@ -66,12 +66,11 @@ exports.uploadCourses=function(list){
     });
 }
 
-
 exports.uploadEnrollment=function(list){
     const lenght = list.length;
     let i = 0;
     return new Promise((resolve, reject) => {
-        const sql='INSERT INTO Enrollment VALUES(?,?)';
+        const sql='INSERT INTO Enrollment(Course_Ref, Student_Ref) VALUES(?,?)';
         for(let element of list) {
             db.run(sql, [element.courseId, element.studentId], (err) => {
                 /* istanbul ignore if */
@@ -89,14 +88,14 @@ exports.uploadEnrollment=function(list){
 exports.uploadSchedule=function(list){
     let i = 0;
     return new Promise((resolve, reject) => {
-        const sql='INSERT INTO Schedule VALUES(?,?,?,?,?)';
+        const sql='INSERT INTO Schedule(code, Room, Day, Seats, Time) VALUES(?,?,?,?,?)';
         for(let element of list) {
             db.run(sql, [element.courseId, element.room, element.day, element.seats, element.time], (err) => {
                 /* istanbul ignore if */
                 if (err)
                     reject(err);
                 else {
-                    this.getListLectures(element)
+                    getListLectures(element)
                         .then((listLectures) => {
                             for (let el of listLectures ){
                                 let sql2 = 'INSERT INTO Lecture VALUES(?,?,?,?,?,?,?,?,?,?)';
@@ -124,7 +123,7 @@ exports.uploadSchedule=function(list){
     });
 }
 
-exports.getListLectures=function (schedule){
+function getListLectures(schedule){
     let list = []
     let dayMap = {
         "Mon": 0,
@@ -201,4 +200,63 @@ exports.getListLectures=function (schedule){
         })
     })
 
+}
+
+exports.getCoursesData=function(){
+    let list = [];
+    return new Promise((resolve, reject) => {
+        const sql='SELECT CourseID, Year, Name, Semester, Restriction FROM Course';
+        db.all(sql, [], (err, rows) => {
+            /* istanbul ignore if */
+            if (err)
+                reject(err);
+            else {
+                for(let row of rows){
+                    list.push({"courseId":row.CourseID, "year":row.Year, "name":row.Name, "semester":row.Semester});
+                }
+                resolve(list);
+            }
+        });
+    });
+}
+
+exports.modifyBookableLectures=function(list){ 
+    return new Promise((resolve, reject) => {
+        const sql='UPDATE Course SET Restriction=? WHERE CourseID=?'
+            for(let el of list){
+                db.run(sql, [el.restriction, el.courseId], (err) => {
+                    if(err) reject(err);
+                    else{
+                        updateLectures(list).then(result =>{
+                            resolve(result);
+                        }).catch(err => reject(err));  
+                    }
+                })
+            }
+    });
+}
+
+function updateLectures(list){
+    let i = 0;
+    let type;
+    const date=moment().format('YYYY-MM-DD HH:mm:ss');
+    return new Promise((resolve, reject) => {
+        const sql='UPDATE Lecture SET Type=? WHERE Course_Ref=? AND Date > ?';
+        for(let el of list){
+            if(el.restriction===0)
+                type = "p";
+            else if(el.restriction===1)
+                type = "d";
+            db.run(sql, [type, el.courseId, date], (err) => {
+                /* istanbul ignore if */
+                if (err)
+                    reject(err);
+                else {
+                    i++;
+                    if(i === list.length)
+                        resolve(true);
+                }
+            });
+        }
+    });
 }

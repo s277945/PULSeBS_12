@@ -8,12 +8,17 @@
   
     git clone https://github.com/s277945/PULSeBS_12.git
     cd PULSeBS_12
+    
+  install node dependencies:
+  
+    ./install_script.sh
+    
   start the project:
   
     ./start_script.sh
 
 
-## DOCKER INSTALL AND START INSTRUCTIONS
+## INSTALL AND START PROJECT WITH DOCKER
 
   From a command line run:
   
@@ -305,3 +310,15 @@
   ]
 
 
+## UPDATE BOOKABLE LECTURES ENDPOINTS
+
+**GET /api/coursesData**
+- Retrieves all University Courses and associated data in order to be managed by Support Officer
+- No params needed
+- response example: [{"courseId": C4567, "year":1 , "name": "Data Science", "semester":1}, ...] 
+
+
+**POST /api/lecturesBookable**
+- Changes the bookability of a course/year
+- body request: [{"courseId": "C4567","restriction": 0}, ...]
+- response example: {"modified": true}

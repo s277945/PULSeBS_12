@@ -6,7 +6,7 @@
 const express = require('express');
 const userDao = require('./Dao/userDao')
 const studentDao = require('./Dao/studentDao')
-const supportOfficer = require('./Dao/supportOfficerDao')
+const supportOfficerDao = require('./Dao/supportOfficerDao')
 const teacherDao = require('./Dao/teacherDao')
 const bookingManagerDao = require('./Dao/bookingManagerDao')
 const mailer = require('./mailer');
@@ -540,7 +540,7 @@ app.get('/api/managerCoursesTotal/:courseId', (req, res) => {
 
 app.post('/api/uploadStudents', (req, res) => {
 
-    supportOfficer.uploadStudents(req.body)
+    supportOfficerDao.uploadStudents(req.body)
         .then((response) => {
             res.status(200).json({"inserted": response});
         })
@@ -561,7 +561,7 @@ app.post('/api/uploadStudents', (req, res) => {
 
 app.post('/api/uploadTeachers', (req, res) => {
 
-    supportOfficer.uploadTeachers(req.body)
+    supportOfficerDao.uploadTeachers(req.body)
         .then((response) => {
             res.status(200).json({"inserted": response});
         })
@@ -582,7 +582,7 @@ app.post('/api/uploadTeachers', (req, res) => {
 
 app.post('/api/uploadCourses', (req, res) => {
 
-    supportOfficer.uploadCourses(req.body)
+    supportOfficerDao.uploadCourses(req.body)
         .then((response) => {
             res.status(200).json({"inserted": response});
         })
@@ -602,7 +602,7 @@ app.post('/api/uploadCourses', (req, res) => {
 
 app.post('/api/uploadEnrollment', (req, res) => {
 
-    supportOfficer.uploadEnrollment(req.body)
+    supportOfficerDao.uploadEnrollment(req.body)
         .then((response) => {
             res.status(200).json({"inserted": response});
         })
@@ -623,7 +623,7 @@ app.post('/api/uploadEnrollment', (req, res) => {
 
 app.post('/api/uploadSchedule', (req, res) => {
 
-    supportOfficer.uploadSchedule(req.body)
+    supportOfficerDao.uploadSchedule(req.body)
         .then((response) => {
             res.status(200).json({"inserted": response});
         })
@@ -713,10 +713,46 @@ app.get('/api/reports/:studentSsn', (req, res) => {
         .catch((err) => {
             res.status(500).json(err)
         })
-
 })
 
+//// STORY 17
 
+/**
+ * GET /api/coursesData
+ *
+ * Retrieves all University Courses and related data in order to be managed by Support Officer
+ *
+ * No params needed
+ */
+
+app.get('/api/coursesData', (req, res) => {
+  supportOfficerDao.getCoursesData()
+      .then((courses) => {
+          res.status(200).json(courses);
+      })
+      .catch(/* istanbul ignore next */(err) => {
+          res.status(500).json(err);
+      })
+})
+
+/**
+ * POST api/lecturesBookable
+ *
+ * Change the bookability of a course/year
+ *
+ * body request: [{"courseId": "C4567","restriction": 0}, ...]
+ */
+
+app.post('/api/lecturesBookable', (req, res) => {
+  supportOfficerDao.modifyBookableLectures(req.body) 
+      .then((response) => {
+          res.status(200).json({"modified": response});
+      })
+      .catch(/* istanbul ignore next */(err) => {
+          res.status(500).json(err);
+      })
+
+});
 
 //activate server
 app.listen(port, () => console.log(`Server ready at port: ${port}`));
