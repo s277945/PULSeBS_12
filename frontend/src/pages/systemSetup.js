@@ -143,7 +143,7 @@ const UploadFileButton = ({Name, listType}) => {
             .catch(e => {
                 console.log(e);
                 if(e.response.status===500){
-                    if(e.response.data.errno===19) toast.error("Server error: data duplication")
+                    if(e.response.data.errno===19) toast.error("Server error: database constraint violation")
                     else toast.error("Server error: error sending data to server")
                 }
                 /*else{
