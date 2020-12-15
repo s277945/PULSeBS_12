@@ -20,11 +20,19 @@ export default function CoursesSetupView() {
 
 const CoursesSetup = () => {
     const [courses, setCourses] = useState([]);
+    const [years, setYears] = useState([]);// init years array
+    const [semesters, setSemesters] = useState([]);// init semesters array
     useEffect(() => {// fetch data from server
         getCoursesData()
             .then(response => {
                 setCourses(response.data);
                 console.log(response.data);
+                let ytemp=[];// init new years array state
+                for (let index in response.data){
+                    console.log(response.data[index]);
+                    if(!ytemp.includes(response.data[index].year)) ytemp.push(response.data[index].year);// add years as unique elements
+                }
+                setYears(ytemp);// set new years array state
             })
             .catch(/* istanbul ignore next */err => {
                 console.log(err);
@@ -33,7 +41,7 @@ const CoursesSetup = () => {
 
     return(
         <>
-            {courses.map(course=>course.year).map(year =>
+            {years.map(year =>
                 <Accordion key={year}>
                     <Card>
                         <Accordion.Toggle as={Card.Header} onClick={(e) => {e.preventDefault();}} eventKey="0">
