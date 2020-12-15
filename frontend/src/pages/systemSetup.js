@@ -126,7 +126,12 @@ const UploadFileButton = ({Name, listType}) => {
 
             })
             .catch(e => {
-                toast.error("Error sending data to server")
+                if(e.message.search("500")){
+                    toast.error("Server error. Probably wrong file format or data duplication")
+                }
+                else{
+                    toast.error("Error sending data to server")
+                }
                 setUploading(false)
             })
         };
