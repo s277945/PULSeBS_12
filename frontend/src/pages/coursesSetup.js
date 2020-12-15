@@ -21,7 +21,6 @@ export default function CoursesSetupView() {
 const CoursesSetup = () => {
     const [courses, setCourses] = useState([]);
     const [years, setYears] = useState([]);// init years array
-    const [semesters, setSemesters] = useState([]);// init semesters array
     useEffect(() => {// fetch data from server
         getCoursesData()
             .then(response => {
@@ -32,7 +31,7 @@ const CoursesSetup = () => {
                     console.log(response.data[index]);
                     if(!ytemp.includes(response.data[index].year)) ytemp.push(response.data[index].year);// add years as unique elements
                 }
-                setYears(ytemp);// set new years array state
+                setYears(ytemp);// set new years array state                
             })
             .catch(/* istanbul ignore next */err => {
                 console.log(err);
@@ -52,7 +51,40 @@ const CoursesSetup = () => {
                         </Accordion.Toggle>
                         <Accordion.Collapse eventKey="0">
                             <Card.Body>
-                                
+                                {courses.filter(course=>{return course.year===year&&course.semester===1}).length>0?
+                                    <Accordion key={year+"s1"}>
+                                        <Card>
+                                            <Accordion.Toggle as={Card.Header} onClick={(e) => { e.preventDefault(); }} eventKey="0">
+                                                <div style={{ display: "flex", flexWrap: "nowrap", justifyContent: "space-between" }}>
+                                                    Semester 1
+                                                    <Form.Check type="checkbox" />
+                                                </div>
+                                            </Accordion.Toggle>
+                                            <Accordion.Collapse eventKey="0">
+                                                <Card.Body>
+
+                                                </Card.Body>
+                                            </Accordion.Collapse>
+                                        </Card>
+                                    </Accordion>
+                                :<div/>}
+                                {courses.filter(course=>{return course.year===year&&course.semester===2}).length>0?
+                                    <Accordion key={year+"s1"}>
+                                        <Card>
+                                            <Accordion.Toggle as={Card.Header} onClick={(e) => { e.preventDefault(); }} eventKey="0">
+                                                <div style={{ display: "flex", flexWrap: "nowrap", justifyContent: "space-between" }}>
+                                                    Semester 2
+                                                    <Form.Check type="checkbox" />
+                                                </div>
+                                            </Accordion.Toggle>
+                                            <Accordion.Collapse eventKey="0">
+                                                <Card.Body>
+
+                                                </Card.Body>
+                                            </Accordion.Collapse>
+                                        </Card>
+                                    </Accordion>
+                                :<div/>}
                             </Card.Body>
                         </Accordion.Collapse>
                     </Card>
