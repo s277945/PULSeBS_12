@@ -51,7 +51,7 @@ exports.uploadCourses=function(list){
     const lenght = list.length;
     let i = 0;
     return new Promise((resolve, reject) => {
-        const sql='INSERT INTO Course VALUES(?,?,?,?,?)';
+        const sql='INSERT INTO Course(CourseID, Year, Name, Semester, Teacher_Ref) VALUES(?,?,?,?,?)';
         for(let element of list) {
             db.run(sql, [element.courseId, element.year, element.name, element.semester, element.teacherId], (err) => {
                 /* istanbul ignore if */
@@ -70,7 +70,7 @@ exports.uploadEnrollment=function(list){
     const lenght = list.length;
     let i = 0;
     return new Promise((resolve, reject) => {
-        const sql='INSERT INTO Enrollment VALUES(?,?)';
+        const sql='INSERT INTO Enrollment(Course_Ref, Student_Ref) VALUES(?,?)';
         for(let element of list) {
             db.run(sql, [element.courseId, element.studentId], (err) => {
                 /* istanbul ignore if */
@@ -88,14 +88,14 @@ exports.uploadEnrollment=function(list){
 exports.uploadSchedule=function(list){
     let i = 0;
     return new Promise((resolve, reject) => {
-        const sql='INSERT INTO Schedule VALUES(?,?,?,?,?)';
+        const sql='INSERT INTO Schedule(code, Room, Day, Seats, Time) VALUES(?,?,?,?,?)';
         for(let element of list) {
             db.run(sql, [element.courseId, element.room, element.day, element.seats, element.time], (err) => {
                 /* istanbul ignore if */
                 if (err)
                     reject(err);
                 else {
-                    this.getListLectures(element)
+                    getListLectures(element)
                         .then((listLectures) => {
                             for (let el of listLectures ){
                                 let sql2 = 'INSERT INTO Lecture VALUES(?,?,?,?,?,?,?,?,?,?)';
@@ -123,7 +123,7 @@ exports.uploadSchedule=function(list){
     });
 }
 
-exports.getListLectures=function (schedule){
+function getListLectures(schedule){
     let list = []
     let dayMap = {
         "Mon": 0,
