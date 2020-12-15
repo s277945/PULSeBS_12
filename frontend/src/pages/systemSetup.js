@@ -28,7 +28,7 @@ const UploadComponent = ({Name, listType}) => {
             <Table className="w-75 table-bordered">
             <thead>
             <tr>
-                <th>{Name}</th>
+                <th style={{width: "500px"}}>{Name}</th>
                 <th>Last Update</th>
                 <th>Actions</th>
             </tr>
