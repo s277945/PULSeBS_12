@@ -10,7 +10,6 @@ export default function BookingManagerHome(){
         <>
             <NavBarOfficer show={show} setShow={setShow}/>
             {show===0?<SystemSetupView/>:<div/>}
-
         </>
     )
 }

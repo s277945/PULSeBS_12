@@ -5,6 +5,7 @@ import Button from 'react-bootstrap/Button'
 import bsCustomFileInput from 'bs-custom-file-input'
 import {uploadStudents, uploadTeachers, uploadCourses, uploadEnrollment, uploadSchedule} from '../api/api';
 import { toast } from 'react-toastify';
+import Spinner  from 'react-bootstrap/Spinner'
 
 export default function SystemSetupView() {
     return(
@@ -27,7 +28,7 @@ const UploadComponent = ({Name, listType}) => {
             <Table className="w-75 table-bordered">
             <thead>
             <tr>
-                <th style={{width: "500px"}}>{Name}</th>
+                <th>{Name}</th>
                 <th>Last Update</th>
                 <th>Actions</th>
             </tr>
@@ -45,7 +46,9 @@ const UploadComponent = ({Name, listType}) => {
 }
 
 const UploadFileButton = ({Name, listType}) => {
-    const [files, setFiles] = useState();
+    const [files, setFiles] = useState([]);
+    const [uploading, setUploading] = useState(false);
+
 
     useEffect(() => {
         bsCustomFileInput.init();
@@ -55,15 +58,14 @@ const UploadFileButton = ({Name, listType}) => {
         let file = files[0];
         if(!file) return;
 
+        setUploading(true)
+
         const reader = new FileReader();
 
         reader.onload = e => {
             let contents = e.target.result;
       
             contents = contents.split('\n')
-
-            // TODO : REMOVE ME
-            contents.splice(5)
 
             // Find headers by list type
             let headers;
@@ -90,16 +92,18 @@ const UploadFileButton = ({Name, listType}) => {
                     headers = "courseId, room, day, seats, time".split(',')
                 break; 
                 default :
+                    console.error("Incorrect list type")
                 break;
             }
 
-            // Create an array 
+            // Create data table (remove first elem bcs it's the the csv headers)
             contents.shift()
             const data = contents.map((line, index) => {
                 const res = {}
 
                 // clean \r or other unwanted symbol
                 line = line.replace(/\n|\r/g, "");
+
                 const values = line.split(",")
                 values.map((val, index2) => {
                     const header = headers[index2] 
@@ -110,11 +114,20 @@ const UploadFileButton = ({Name, listType}) => {
                 return res
             })
 
-            apiCall(data).then(response => {
+            const requests = []
+            while(data.length){
+                const elems = data.splice(0, 200);
+                requests.push(() => apiCall(elems))
+            }
+
+            Promise.all(requests.map(fn => fn())).then(response => {
                 toast.info(Name + " correctly uploaded")
+                setUploading(false)
+
             })
             .catch(e => {
                 toast.error("Error sending data to server")
+                setUploading(false)
             })
         };
 
@@ -122,16 +135,21 @@ const UploadFileButton = ({Name, listType}) => {
     }
 
     return(
-    <Form>
-        <div className="d-flex">
-            <Form.File 
-                id="custom-file"
-                label= {Name + " csv list file"}
-                custom
-                onChange={(event) => setFiles(event.target.files)}
-            />
-            <Button className="ml-1" variant="primary" onClick={() => sendFile()}>Send</Button>
-        </div>
-    </Form>
+    <div className="d-flex">
+        <Form>
+            <div className="d-flex">
+                <Form.File 
+                    id="custom-file"
+                    label= {Name + " csv list file"}
+                    custom
+                    onChange={(event) => setFiles(event.target.files)}
+                />
+            </div>
+        </Form>
+        <Button disabled={uploading} className="ml-3" variant="primary" onClick={() => sendFile()}>
+            {!uploading && <div>Send</div>}
+            {uploading && <div><Spinner as="span" animation="grow" size="sm" role="status" aria-hidden="true"/> Uploading...</div>}
+        </Button>
+    </div>
     )
 }
