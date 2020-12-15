@@ -9,16 +9,16 @@ import Spinner  from 'react-bootstrap/Spinner'
 
 export default function SystemSetupView() {
     return(
-        <>
+        <div style={{minWidth: "1000px"}}>
             <br/>
             <h2 className="page-title">Upload data</h2>
 
-            <UploadComponent Name={"Student list"} listType="student" />
-            <UploadComponent Name={"Professor list"} listType="professor" />
-            <UploadComponent Name={"Course list"} listType="course" />
-            <UploadComponent Name={"Enrollment list"} listType="enrollment" />
-            <UploadComponent Name={"Schedule list"} listType="schedule" />
-        </>
+            <UploadComponent Name={"Student list"} listType="student"/>
+            <UploadComponent Name={"Professor list"} listType="professor"/>
+            <UploadComponent Name={"Course list"} listType="course"/>
+            <UploadComponent Name={"Enrollment list"} listType="enrollment"/>
+            <UploadComponent Name={"Schedule list"} listType="schedule"/>
+        </div>
     )
 }
 

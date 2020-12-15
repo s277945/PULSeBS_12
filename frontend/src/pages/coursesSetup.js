@@ -43,23 +43,27 @@ const CoursesSetup = () => {
             {years.map(year =>
                 <Accordion key={year}>
                     <Card>
-                        <Accordion.Toggle as={Card.Header} onClick={(e) => {e.preventDefault();}} eventKey="0">
-                            <div style={{display: "flex",  flexWrap: "nowrap", justifyContent: "space-between"}}>
-                                <div style={{display: "flex",  flexWrap: "nowrap"}}><p style={{marginRight: "5px"}}>Year </p>{year}</div>
-                                <Form.Check type="checkbox"/>
-                            </div>
-                        </Accordion.Toggle>
+                        <div className="accordion-custom-setup-1">
+                            <Accordion.Toggle as={Card.Header} onClick={(e) => {e.preventDefault();}} eventKey="0" style={{width: "97%", backgroundColor: "#F7F7F7", borderStyle: "none"}}>
+                                <div style={{display: "flex",  flexWrap: "nowrap", justifyContent: "space-between"}}>
+                                    <div style={{display: "flex",  flexWrap: "nowrap"}}><p style={{marginRight: "5px"}}>Year </p>{year}</div>
+                                </div>
+                            </Accordion.Toggle>
+                            <Form.Check type="checkbox"  onClick={(e) => {e.preventDefault();}} style={{margin: "auto"}}/>
+                        </div>
                         <Accordion.Collapse eventKey="0">
                             <Card.Body>
                                 {courses.filter(course=>{return course.year===year&&course.semester===1}).length>0?
                                     <Accordion key={year+"s1"}>
                                         <Card>
-                                            <Accordion.Toggle as={Card.Header} onClick={(e) => { e.preventDefault(); }} eventKey="0">
-                                                <div style={{ display: "flex", flexWrap: "nowrap", justifyContent: "space-between" }}>
-                                                    Semester 1
-                                                    <Form.Check type="checkbox" />
-                                                </div>
-                                            </Accordion.Toggle>
+                                            <div className="accordion-custom-setup-1">
+                                                <Accordion.Toggle as={Card.Header} onClick={(e) => { e.preventDefault(); }} eventKey="0" style={{width: "97%", backgroundColor: "#F7F7F7", borderStyle: "none"}}>
+                                                    <div style={{ display: "flex", flexWrap: "nowrap", justifyContent: "space-between" }}>
+                                                        Semester 1
+                                                    </div>
+                                                </Accordion.Toggle>
+                                                <Form.Check type="checkbox" style={{margin: "auto"}}/>
+                                            </div>
                                             <Accordion.Collapse eventKey="0">
                                                 <Card.Body>
                                                     <Table data-testid={year+'courses'+"s1"} striped bordered hover style={{ backgroundColor: "#fff" }}>
