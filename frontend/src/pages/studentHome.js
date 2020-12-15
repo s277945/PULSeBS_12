@@ -182,7 +182,7 @@ export class StudentHome extends Component {
             {(!lecture.alreadyBooked && !lecture.alreadyWaiting && !disabled) && lecture.BookedSeats<lecture.Capacity &&
                 <Button data-testid={'bookButton_'+index} onClick={() => this.setModal(lecture, "book a seat")}>Book Seat</Button>
             }
-            {(lecture.alreadyWaiting || disabled) && !lecture.alreadyBooked &&
+            {lecture.alreadyWaiting && !lecture.alreadyBooked &&
                 <Button variant="warning" disabled>In waiting list</Button>
             }
             {(!lecture.alreadyBooked && !lecture.alreadyWaiting && !disabled) && lecture.BookedSeats>=lecture.Capacity &&
