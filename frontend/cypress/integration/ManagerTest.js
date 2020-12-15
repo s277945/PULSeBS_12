@@ -63,14 +63,24 @@ describe('TEST MANAGER PAGE', function () {
                     .type('WHTRWHRW')
                 cy.get('[data-testid="search"]').click()
                 cy.wait(100)
+                //cy.get('table)
                 cy.get('[data-testid="listTabSL"]').should('be.visible')
                     .and('have.length', 1)
                 cy.get('[data-testid="confirmButton"]')
                     .should('be.visible')
                     .click()
+                cy.wait(200)
 
             })
 
+    });
+    it('should close correctly popup', function () {
+        cy.get('[data-testid="report"]')
+            .click()
+        cy.get('[data-testid="addSSN"]').should('have.text', 'Add New Student')
+            .click()
+        cy.get('.modal').should('be.visible')
+            .click({ force: true });
     });
     it('should not add a positive student if the ssn does not exists', function () {
         cy.get('[data-testid="report"]')
@@ -84,7 +94,8 @@ describe('TEST MANAGER PAGE', function () {
                     .type('TODO')
                 cy.get('[data-testid="search"]').click()
             })
-            .should('contain.text','Student not found');
+            .should('contain.text', 'Student not found');
+    });
         it('should generate a report', function () {
             cy.get('[data-testid="report"]')
                 .click()
@@ -103,10 +114,18 @@ describe('TEST MANAGER PAGE', function () {
                         .click()
                 })
         });
+        it('should generate correctly a report', function () {
+            cy.get('[data-testid="report"]').click()
+            cy.get('tbody>tr').eq(0)
+                .within(()=>{
+                    cy.get('.btn.btn-primary')
+                        .click()
+                    cy.wait(500);
+                })
+        });
         it('should logout', function () {
             cy.get('[data-testid="logout"]')
                 .click()
 
         });
     });
-})
