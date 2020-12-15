@@ -48,7 +48,7 @@ const UploadComponent = ({Name, listType}) => {
 const UploadFileButton = ({Name, listType}) => {
     const [files, setFiles] = useState([]);
     const [uploading, setUploading] = useState(false);
-
+    const [ percentage, setPercentage] = useState(0);
 
     useEffect(() => {
         bsCustomFileInput.init();
@@ -113,17 +113,32 @@ const UploadFileButton = ({Name, listType}) => {
 
                 return res
             })
-
+            let datalength=data.length;
+            let lbuffer=0;
+            let index=0;
+            let datasentlength=[];
             const requests = []
             while(data.length){
-                const elems = data.splice(0, 200);
-                requests.push(() => apiCall(elems))
+                const elems = data.splice(0, 200);                
+                lbuffer+=elems.length;
+                datasentlength.push(lbuffer);
+                requests.push(() => {
+                    return apiCall(elems)
+                })
             }
-
-            Promise.all(requests.map(fn => fn())).then(response => {
+            let br=false;
+            Promise.all(requests.map(fn => {
+                return new Promise((resolve, reject) => {
+                    fn()
+                        .then((response)=>{
+                            setPercentage(Math.round((datasentlength[index++]/datalength)*100));
+                            resolve(response);
+                        })
+                        .catch(err=>{reject(err)})
+            })}))
+            .then(response => {
                 toast.info(Name + " correctly uploaded")
                 setUploading(false)
-
             })
             .catch(e => {
                 if(e.message.search("500")){
@@ -153,8 +168,9 @@ const UploadFileButton = ({Name, listType}) => {
         </Form>
         <Button disabled={uploading} className="ml-3" variant="primary" onClick={() => sendFile()}>
             {!uploading && <div>Send</div>}
-            {uploading && <div><Spinner as="span" animation="grow" size="sm" role="status" aria-hidden="true"/> Uploading...</div>}
+            {uploading && <div><Spinner as="span" animation="grow" size="sm" role="status" aria-hidden="true" style={{marginRight: "5px"}}/>Uploading...</div>}
         </Button>
+            {uploading?<h3 style={{marginLeft: "10px", color: "grey"}}>{percentage}%</h3>:<div/>}
     </div>
     )
 }
