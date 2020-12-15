@@ -63,6 +63,7 @@ describe('TEST MANAGER PAGE', function () {
                     .type('WHTRWHRW')
                 cy.get('[data-testid="search"]').click()
                 cy.wait(100)
+                //cy.get('table)
                 cy.get('[data-testid="listTabSL"]').should('be.visible')
                     .and('have.length', 1)
                 cy.get('[data-testid="confirmButton"]')
@@ -98,6 +99,14 @@ describe('TEST MANAGER PAGE', function () {
             cy.get('[data-testid="report"]')
                 .click()
             cy.get('tbody>tr').eq(2)
+                .within(()=>{
+                    cy.get('.btn.btn-primary')
+                        .click()
+                })
+        });
+        it('should generate correctly a report', function () {
+            cy.get('[data-testid="report"]').click()
+            cy.get('tbody>tr').eq(0)
                 .within(()=>{
                     cy.get('.btn.btn-primary')
                         .click()
