@@ -71,7 +71,7 @@ const CoursesSetup = () => {
                                                         <thead>
                                                             {courses.filter(course=>{return course.year===year&&course.semester===1}).map(course=>
                                                                 <tr>
-                                                                    <td>{course.name}</td>
+                                                                    <td>{course.name+" ("+course.courseId+")"}</td>
                                                                     <td style={{width: "15px"}}><Form.Check style={{marginLeft: "4px"}} type="checkbox"/></td>
                                                                 </tr>
                                                             )}
@@ -85,19 +85,21 @@ const CoursesSetup = () => {
                                 {courses.filter(course=>{return course.year===year&&course.semester===2}).length>0?
                                     <Accordion key={year+"s2"}>
                                         <Card>
-                                            <Accordion.Toggle as={Card.Header} onClick={(e) => { e.preventDefault(); }} eventKey="0">
-                                                <div style={{ display: "flex", flexWrap: "nowrap", justifyContent: "space-between" }}>
-                                                    Semester 2
-                                                    <Form.Check type="checkbox" />
-                                                </div>
-                                            </Accordion.Toggle>
+                                            <div className="accordion-custom-setup-1">
+                                                <Accordion.Toggle as={Card.Header} onClick={(e) => { e.preventDefault(); }} eventKey="0" style={{width: "97%", backgroundColor: "#F7F7F7", borderStyle: "none"}}>
+                                                    <div style={{ display: "flex", flexWrap: "nowrap", justifyContent: "space-between" }}>
+                                                        Semester 2
+                                                    </div>
+                                                </Accordion.Toggle>
+                                                <Form.Check type="checkbox" style={{margin: "auto"}}/>
+                                            </div>
                                             <Accordion.Collapse eventKey="0">
                                                 <Card.Body>
-                                                <Table data-testid={year+'courses'+"s2"} striped bordered hover style={{ backgroundColor: "#fff" }}>
+                                                    <Table data-testid={year+'courses'+"s2"} striped bordered hover style={{ backgroundColor: "#fff" }}>
                                                         <thead>
                                                             {courses.filter(course=>{return course.year===year&&course.semester===2}).map(course=>
                                                                 <tr>
-                                                                    <td>{course.name}</td>
+                                                                    <td>{course.name+" ("+course.courseId+")"}</td>
                                                                     <td style={{width: "15px"}}><Form.Check style={{marginLeft: "4px"}} type="checkbox"/></td>
                                                                 </tr>
                                                             )}
