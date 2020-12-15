@@ -77,11 +77,11 @@ const UploadFileButton = ({Name, listType}) => {
                 break; 
                 case "professor":
                     apiCall = uploadTeachers
-                    headers = "userID,Name,Surname,City,email,birthday,ssn".split(',')
+                    headers = "userID,Name,Surname,email,ssn".split(',')
                 break;
                 case "course":
                     apiCall = uploadCourses
-                    headers = "courseId,year,name,semester,teacherId".split(',')
+                    headers = "courseId,year,semester,name,teacherId".split(',')
                 break; 
                 case "enrollment":
                     apiCall = uploadEnrollment
@@ -89,7 +89,7 @@ const UploadFileButton = ({Name, listType}) => {
                 break; 
                 case "schedule":
                     apiCall = uploadSchedule
-                    headers = "courseId, room, day, seats, time".split(',')
+                    headers = "courseId,room,day,seats,time".split(',')
                 break; 
                 default :
                     console.error("Incorrect list type")
