@@ -62,14 +62,23 @@ const CoursesSetup = () => {
                                             </Accordion.Toggle>
                                             <Accordion.Collapse eventKey="0">
                                                 <Card.Body>
-
+                                                    <Table data-testid={year+'courses'+"s1"} striped bordered hover style={{ backgroundColor: "#fff" }}>
+                                                        <thead>
+                                                            {courses.map(course=>
+                                                                <tr>
+                                                                    <td>{course.name}</td>
+                                                                    <td style={{width: "15px"}}><Form.Check style={{marginLeft: "4px"}} type="checkbox"/></td>
+                                                                </tr>
+                                                            )}
+                                                        </thead>
+                                                    </Table>
                                                 </Card.Body>
                                             </Accordion.Collapse>
                                         </Card>
                                     </Accordion>
                                 :<div/>}
                                 {courses.filter(course=>{return course.year===year&&course.semester===2}).length>0?
-                                    <Accordion key={year+"s1"}>
+                                    <Accordion key={year+"s2"}>
                                         <Card>
                                             <Accordion.Toggle as={Card.Header} onClick={(e) => { e.preventDefault(); }} eventKey="0">
                                                 <div style={{ display: "flex", flexWrap: "nowrap", justifyContent: "space-between" }}>
