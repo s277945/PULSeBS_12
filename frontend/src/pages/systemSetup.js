@@ -121,7 +121,7 @@ const UploadFileButton = ({Name, listType}) => {
             while(data.length){
                 const elems = data.splice(0, 200);                
                 lbuffer+=elems.length;
-                datasentlength.push(lbuffer);
+                datasentlength.push(lbuffer);// set upload percentage values
                 requests.push(() => {
                     return apiCall(elems)
                 })
@@ -131,7 +131,7 @@ const UploadFileButton = ({Name, listType}) => {
                 return new Promise((resolve, reject) => {
                     fn()
                         .then((response)=>{
-                            setPercentage(Math.round((datasentlength[index++]/datalength)*100));
+                            setPercentage(Math.round((datasentlength[index++]/datalength)*100));// update upload percentage value
                             resolve(response);
                         })
                         .catch(err=>{reject(err)})
@@ -141,12 +141,14 @@ const UploadFileButton = ({Name, listType}) => {
                 setUploading(false)
             })
             .catch(e => {
-                if(e.message.search("500")){
-                    toast.error("Server error. Probably wrong file format or data duplication")
+                console.log(e);
+                if(e.response.status===500){
+                    if(e.response.data.errno===19) toast.error("Server error: data duplication")
+                    else toast.error("Server error: error sending data to server")
                 }
-                else{
+                /*else{
                     toast.error("Error sending data to server")
-                }
+                }*/
                 setUploading(false)
             })
         };

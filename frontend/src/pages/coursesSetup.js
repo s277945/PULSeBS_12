@@ -21,6 +21,7 @@ export default function CoursesSetupView() {
 const CoursesSetup = () => {
     const [courses, setCourses] = useState([]);
     const [years, setYears] = useState([]);// init years array
+
     useEffect(() => {// fetch data from server
         getCoursesData()
             .then(response => {
@@ -49,7 +50,7 @@ const CoursesSetup = () => {
                                     <div style={{display: "flex",  flexWrap: "nowrap"}}><p style={{marginRight: "5px"}}>Year </p>{year}</div>
                                 </div>
                             </Accordion.Toggle>
-                            <Form.Check type="checkbox"  onClick={(e) => {e.preventDefault();}} style={{margin: "auto"}}/>
+                            <Form.Check type="checkbox" style={{margin: "auto"}}/>
                         </div>
                         <Accordion.Collapse eventKey="0">
                             <Card.Body>
