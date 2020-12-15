@@ -64,7 +64,7 @@ const CoursesSetup = () => {
                                                 <Card.Body>
                                                     <Table data-testid={year+'courses'+"s1"} striped bordered hover style={{ backgroundColor: "#fff" }}>
                                                         <thead>
-                                                            {courses.map(course=>
+                                                            {courses.filter(course=>{return course.year===year&&course.semester===1}).map(course=>
                                                                 <tr>
                                                                     <td>{course.name}</td>
                                                                     <td style={{width: "15px"}}><Form.Check style={{marginLeft: "4px"}} type="checkbox"/></td>
@@ -88,7 +88,16 @@ const CoursesSetup = () => {
                                             </Accordion.Toggle>
                                             <Accordion.Collapse eventKey="0">
                                                 <Card.Body>
-
+                                                <Table data-testid={year+'courses'+"s2"} striped bordered hover style={{ backgroundColor: "#fff" }}>
+                                                        <thead>
+                                                            {courses.filter(course=>{return course.year===year&&course.semester===2}).map(course=>
+                                                                <tr>
+                                                                    <td>{course.name}</td>
+                                                                    <td style={{width: "15px"}}><Form.Check style={{marginLeft: "4px"}} type="checkbox"/></td>
+                                                                </tr>
+                                                            )}
+                                                        </thead>
+                                                    </Table>
                                                 </Card.Body>
                                             </Accordion.Collapse>
                                         </Card>
