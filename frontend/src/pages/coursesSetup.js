@@ -139,18 +139,19 @@ const CoursesSetup = () => {
     }
 
     return(
-        <div style={{width: "99%", margin: "auto"}}>
-            <div style={{display: "flex", wrap: "nowrap", justifyContent: "space-between", marginTop: "37px", marginBottom: "7px"}}>
+        <div className="accordion-container-1">
+            <div style={{display: "flex", wrap: "nowrap", justifyContent: "space-between", marginTop: "13px", marginBottom: "13px"}}>
                 <div/>
                 <div>
                     <Button variant="info" style={{margin:"5px"}}>Turn to distance type</Button>
                     <Button style={{margin:"5px"}}>Turn to presence type</Button>
                     <Button variant="secondary" style={{margin:"5px"}}>Invert type</Button>
-                    <Button variant="danger" style={{margin:"5px"}} onClick={() => {reset()}}>Reset selection</Button>
+                    <Button variant="danger" style={{margin:"5px", marginRight:"17px"}} onClick={() => {reset()}}>Reset selection</Button>
                 </div>
             </div>
+            <div>
             {yearsChecked.map(year =>
-                <Accordion key={year.year} style={{marginBottom: "2px"}}>
+                <Accordion key={year.year} style={{margin: "3px"}}>
                     <Card>
                         <div className="accordion-custom-setup-1">
                             <Accordion.Toggle as={Card.Header} onClick={(e) => {e.preventDefault();}} eventKey="0" style={{width: "97%", backgroundColor: "#F7F7F7", borderStyle: "none"}}>
@@ -223,7 +224,6 @@ const CoursesSetup = () => {
                     </Card>
                 </Accordion>
             )}
-        </div>
+        </div></div>
     )
 }
-
