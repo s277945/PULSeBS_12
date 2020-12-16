@@ -158,7 +158,7 @@ const UploadFileButton = ({Name, listType}) => {
     }
 
     return(
-    <div className="d-flex">
+    <div style={{display: "flex", wrap: "nowrap"}}>
         <Form>
             <div className="d-flex">
                 <Form.File 
@@ -169,11 +169,11 @@ const UploadFileButton = ({Name, listType}) => {
                 />
             </div>
         </Form>
-        <Button disabled={uploading} className="ml-3" variant="primary" onClick={() => sendFile()}>
+        <Button disabled={uploading} className="ml-3" variant="primary" onClick={() => sendFile()} style={{height: "38px"}}>
             {!uploading && <div>Send</div>}
-            {uploading && <div><Spinner as="span" animation="grow" size="sm" role="status" aria-hidden="true" style={{marginRight: "5px", marginBottom: "1px"}}/>Uploading...</div>}
+            {uploading && <div style={{minWidth: "105px"}}><Spinner as="span" animation="grow" size="sm" role="status" aria-hidden="true" style={{marginRight: "5px", marginBottom: "1.5px"}}/>Uploading...</div>}
         </Button>
-            {uploading?<h3 style={{marginTop: "3px", marginLeft: "10px", color: "grey"}}>{percentage}%</h3>:<div/>}
+            {uploading?<h3 style={{marginTop: "0px", marginLeft: "10px", color: "grey"}}>{percentage}%</h3>:<div/>}
     </div>
     )
 }

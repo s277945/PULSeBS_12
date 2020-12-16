@@ -3,11 +3,12 @@ import { getAllPosStudents, getStudentBySSN, postMarkStudent, getStudentReport }
 import Table from 'react-bootstrap/Table'
 import Button from 'react-bootstrap/Button'
 import Modal from 'react-bootstrap/Modal'
-
 import jsPDF from "jspdf";
 import "jspdf-autotable";
-
-
+import Parser from "json2csv"
+import CsvDownload from 'react-json-to-csv'
+import * as FileSaver from 'file-saver';
+import * as XLSX from 'xlsx';
 export class BookingManagerReport extends Component {
 
     state = { posStudents: [], modal: false, searchField: "", searchedStudent: "", modalResult: ""}
@@ -41,6 +42,38 @@ export class BookingManagerReport extends Component {
                 this.generatePDF(student,[])
             });
     }
+     convertToCSV=(objArray)=> {
+        let array = typeof objArray != 'object' ? JSON.parse(objArray) : objArray;
+        let str = '';
+
+        for (let i = 0; i < array.length; i++) {
+            let line = '';
+            for (let index in array[i]) {
+                if (line != '') line += ','
+
+                line += array[i][index];
+            }
+
+            str += line + '\r\n';
+        }
+
+        return str;
+    }
+
+
+     exportToCSV = (csvData, fileName) => {
+            console.log("csv: "+csvData);
+            const header = ["Name","Surname", "Birthday", "SSN"];
+            csvData.unshift(header);
+            let jsonObject = JSON.stringify(csvData);
+            const csv=this.convertToCSV(jsonObject);
+            console.log('csv1: '+csv);
+            let blob=new Blob([csv],{type: 'text/csv;charset=utf-8;'});
+            FileSaver.saveAs(blob, fileName + ".csv");
+        }
+
+
+
 
     //Function to generate pdf report for certain student
     generatePDF = (student, report) => {
@@ -96,10 +129,9 @@ export class BookingManagerReport extends Component {
             doc.autoTable(tableColumn, tableRows, { startY: 88 });
 
         }
-
         // we define the name of our PDF file.
         doc.save(`report ${student.name} ${student.surname}.pdf`);
-
+        this.exportToCSV(report,student.surname)
     }
 
     //Render list of positive students
