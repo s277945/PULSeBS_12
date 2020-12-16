@@ -261,8 +261,8 @@ const CoursesSetup = () => {
             <div style={{display: "flex", wrap: "nowrap", justifyContent: "flex-start", marginTop: "4vh", marginBottom: "10px"}}>
                 <div/>
                 <div style={{display: "flex", wrap: "nowrap"}}>
-                    <Button variant="info" style={{margin:"5px", marginLeft:"27px"}} disabled={distanceDisable()} onClick={() => {turnToDistance()}}>Turn to distance type</Button>
-                    <Button style={{margin:"5px"}} disabled={presenceDisable()} onClick={() => {turnToPresence()}}>Turn to presence type</Button>
+                    <Button variant="info" style={{margin:"5px", marginLeft:"27px"}} disabled={distanceDisable()} onClick={() => {turnToDistance()}}>Make not bookable</Button>
+                    <Button style={{margin:"5px"}} disabled={presenceDisable()} onClick={() => {turnToPresence()}}>Make bookable</Button>
                     <Button variant="secondary" style={{margin:"5px"}} disabled={invertDisable()} onClick={() => {invertType()}}>Invert type</Button>
                 </div>
                 <div style={{margin: "auto"}}></div>
@@ -280,8 +280,8 @@ const CoursesSetup = () => {
                             <Accordion.Toggle as={Card.Header} onClick={(e) => {e.preventDefault();}} eventKey="0" style={{width: "97%", backgroundColor: "#F7F7F7", borderStyle: "none"}}>
                                 <div style={{display: "flex",  flexWrap: "nowrap", justifyContent: "flex-start", alignItems: "cnter", marginTop: "13px"}}>
                                     <h5 style={{marginRight: "5px"}}>Year </h5><h5>{year.year}</h5>
-                                    <p style={{fontStyle: "italic", marginLeft: "17px", marginTop: "1px", color: "#bababa"}}>{courses.filter(course=>(course.year===year.year&&course.restriction===1)).length}</p><p style={{fontStyle: "italic", marginLeft: "5px", marginTop: "1px", color: "#bababa"}}>distance courses,</p>
-                                    <p style={{fontStyle: "italic", marginLeft: "7px", marginTop: "1px", color: "#bababa"}}>{courses.filter(course=>(course.year===year.year&&course.restriction===0)).length}</p><p style={{fontStyle: "italic", marginLeft: "5px", marginTop: "1px", color: "#bababa"}}>presence courses</p>
+                                    <p style={{fontStyle: "italic", marginLeft: "17px", marginTop: "1px", color: "#bababa"}}>{courses.filter(course=>(course.year===year.year&&course.restriction===1)).length}</p><p style={{fontStyle: "italic", marginLeft: "5px", marginTop: "1px", color: "#bababa"}}>remote courses,</p>
+                                    <p style={{fontStyle: "italic", marginLeft: "7px", marginTop: "1px", color: "#bababa"}}>{courses.filter(course=>(course.year===year.year&&course.restriction===0)).length}</p><p style={{fontStyle: "italic", marginLeft: "5px", marginTop: "1px", color: "#bababa"}}>courses in presence</p>
                                 </div>
                             </Accordion.Toggle>
                             <Form.Check type="checkbox" style={{margin: "auto"}} checked={year.checked} onClick={()=>{handleCheck("y", year);}}/>
@@ -295,8 +295,8 @@ const CoursesSetup = () => {
                                                 <Accordion.Toggle as={Card.Header} onClick={(e) => { e.preventDefault(); }} eventKey="0" style={{width: "97%", backgroundColor: "#F7F7F7", borderStyle: "none", height: "48px"}}>
                                                     <div style={{ display: "flex", flexWrap: "nowrap", justifyContent: "flex-start"}}>
                                                         Semester 1
-                                                        <p style={{fontStyle: "italic", fontSize: "13px", marginLeft: "17px", color: "#bababa", marginTop: "2px"}}>{courses.filter(course=>(course.year===year.year&&course.semester===1&&course.restriction===1)).length}</p><p style={{fontStyle: "italic", fontSize: "13px", marginLeft: "5px", color: "#bababa", marginTop: "2px"}}>distance courses,</p>
-                                                        <p style={{fontStyle: "italic", fontSize: "13px", marginLeft: "7px", color: "#bababa", marginTop: "2px"}}>{courses.filter(course=>(course.year===year.year&&course.semester===1&&course.restriction===0)).length}</p><p style={{fontStyle: "italic", fontSize: "13px", marginLeft: "5px", color: "#bababa", marginTop: "2px"}}>presence courses</p>
+                                                        <p style={{fontStyle: "italic", fontSize: "13px", marginLeft: "17px", color: "#bababa", marginTop: "2px"}}>{courses.filter(course=>(course.year===year.year&&course.semester===1&&course.restriction===1)).length}</p><p style={{fontStyle: "italic", fontSize: "13px", marginLeft: "5px", color: "#bababa", marginTop: "2px"}}>remote courses,</p>
+                                                        <p style={{fontStyle: "italic", fontSize: "13px", marginLeft: "7px", color: "#bababa", marginTop: "2px"}}>{courses.filter(course=>(course.year===year.year&&course.semester===1&&course.restriction===0)).length}</p><p style={{fontStyle: "italic", fontSize: "13px", marginLeft: "5px", color: "#bababa", marginTop: "2px"}}>courses in presence</p>
                                                     </div>
                                                 </Accordion.Toggle>
                                                 <Form.Check checked={year.semesters[0]} onClick={()=>{handleCheck("s", { year: year.year, semester: 0 });}} type="checkbox" style={{margin: "auto"}}/>
@@ -307,7 +307,7 @@ const CoursesSetup = () => {
                                                         <thead>
                                                             <tr>
                                                                 <th>Course</th>
-                                                                <th>Distance course</th>
+                                                                <th>Bookable</th>
                                                                 <th></th>
                                                             </tr>
                                                         </thead>
@@ -315,7 +315,7 @@ const CoursesSetup = () => {
                                                             {courses.filter(course=>{return course.year===year.year&&course.semester===1}).map(course=>
                                                                 <tr>
                                                                     <td>{course.name+" ("+course.courseId+")"}</td>
-                                                                    <td>{course.restriction===1?"Yes":"No"}</td>
+                                                                    <td>{course.restriction===1?"No":"Yes"}</td>
                                                                     <td style={{width: "15px"}}><Form.Check checked={course.checked} onClick={()=>{handleCheck("c", course);}} style={{marginLeft: "4px"}} type="checkbox"/></td>
                                                                 </tr>
                                                             )}
@@ -333,8 +333,8 @@ const CoursesSetup = () => {
                                                 <Accordion.Toggle as={Card.Header} onClick={(e) => { e.preventDefault(); }} eventKey="0" style={{width: "97%", backgroundColor: "#F7F7F7", borderStyle: "none", height: "48px"}}>
                                                     <div style={{ display: "flex", flexWrap: "nowrap", justifyContent: "flex-start" }}>
                                                         Semester 2
-                                                        <p style={{fontStyle: "italic", fontSize: "13px", marginLeft: "17px", color: "#bababa", marginTop: "2px"}}>{courses.filter(course=>(course.year===year.year&&course.semester===2&&course.restriction===1)).length}</p><p style={{fontStyle: "italic", fontSize: "13px", marginLeft: "5px", color: "#bababa", marginTop: "2px"}}>distance courses,</p>
-                                                        <p style={{fontStyle: "italic", fontSize: "13px", marginLeft: "7px", color: "#bababa", marginTop: "2px"}}>{courses.filter(course=>(course.year===year.year&&course.semester===2&&course.restriction===0)).length}</p><p style={{fontStyle: "italic", fontSize: "13px", marginLeft: "5px", color: "#bababa", marginTop: "2px"}}>presence courses</p>                                                    </div>
+                                                        <p style={{fontStyle: "italic", fontSize: "13px", marginLeft: "17px", color: "#bababa", marginTop: "2px"}}>{courses.filter(course=>(course.year===year.year&&course.semester===2&&course.restriction===1)).length}</p><p style={{fontStyle: "italic", fontSize: "13px", marginLeft: "5px", color: "#bababa", marginTop: "2px"}}>remote courses,</p>
+                                                        <p style={{fontStyle: "italic", fontSize: "13px", marginLeft: "7px", color: "#bababa", marginTop: "2px"}}>{courses.filter(course=>(course.year===year.year&&course.semester===2&&course.restriction===0)).length}</p><p style={{fontStyle: "italic", fontSize: "13px", marginLeft: "5px", color: "#bababa", marginTop: "2px"}}>courses in presence</p>                                                    </div>
                                                 </Accordion.Toggle>
                                                 <Form.Check checked={year.semesters[1]} onClick={()=>{handleCheck("s", { year: year.year, semester: 1 });}} type="checkbox" style={{margin: "auto"}}/>
                                             </div>
@@ -344,7 +344,7 @@ const CoursesSetup = () => {
                                                     <thead>
                                                             <tr>
                                                                 <th>Course</th>
-                                                                <th>Distance course</th>
+                                                                <th>Bookable</th>
                                                                 <th></th>
                                                             </tr>
                                                         </thead>
@@ -352,7 +352,7 @@ const CoursesSetup = () => {
                                                             {courses.filter(course=>{return course.year===year.year&&course.semester===2}).map(course=>
                                                                 <tr>
                                                                     <td>{course.name+" ("+course.courseId+")"}</td>
-                                                                    <td>{course.restriction===1?"Yes":"No"}</td>
+                                                                    <td>{course.restriction===1?"No":"Yes"}</td>
                                                                     <td style={{width: "15px"}}><Form.Check checked={course.checked} onClick={()=>{handleCheck("c", course);}} style={{marginLeft: "4px"}} type="checkbox"/></td>
                                                                 </tr>
                                                             )}
