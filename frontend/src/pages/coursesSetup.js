@@ -12,7 +12,6 @@ export default function CoursesSetupView() {
         <>
             <br/>
             <h2 className="page-title">Courses setup</h2>
-
             <CoursesSetup/>
         </>
     )
@@ -126,12 +125,12 @@ const CoursesSetup = () => {
         }));
     }
 
-    const reset = () => {        
+    const reset = () => {// selection reset function 
         setCourses(courses.map(course=>{
-            course.checked=false;
+            course.checked=false;// turn all courses checkboxes to unchecked
             return course
         }));
-        setYearsChecked(yearsChecked.map(y=>{
+        setYearsChecked(yearsChecked.map(y=>{// turn all year/semester checkboxes to unchecked
                 y.checked=false;
                 y.semesters[0]=false;
                 y.semesters[1]=false;
@@ -140,8 +139,8 @@ const CoursesSetup = () => {
     }
 
     return(
-        <>  
-            <div style={{display: "flex", wrap: "nowrap", justifyContent: "space-between"}}>
+        <div style={{width: "99%", margin: "auto"}}>
+            <div style={{display: "flex", wrap: "nowrap", justifyContent: "space-between", marginTop: "37px", marginBottom: "7px"}}>
                 <div/>
                 <div>
                     <Button variant="info" style={{margin:"5px"}}>Turn to distance type</Button>
@@ -151,7 +150,7 @@ const CoursesSetup = () => {
                 </div>
             </div>
             {yearsChecked.map(year =>
-                <Accordion key={year.year}>
+                <Accordion key={year.year} style={{marginBottom: "2px"}}>
                     <Card>
                         <div className="accordion-custom-setup-1">
                             <Accordion.Toggle as={Card.Header} onClick={(e) => {e.preventDefault();}} eventKey="0" style={{width: "97%", backgroundColor: "#F7F7F7", borderStyle: "none"}}>
@@ -224,7 +223,7 @@ const CoursesSetup = () => {
                     </Card>
                 </Accordion>
             )}
-        </>
+        </div>
     )
 }
 
