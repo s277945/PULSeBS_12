@@ -114,7 +114,7 @@ const UploadFileButton = ({disabled, uploaded, setUploaded, Name, listType, type
 
             // Create data table (remove first elem bcs it's the the csv headers)
             contents.shift()
-            const data = contents.map((line, index) => {
+            const data = contents.map((line) => {
                 const res = {}
 
                 // clean \r or other unwanted symbol
@@ -160,11 +160,11 @@ const UploadFileButton = ({disabled, uploaded, setUploaded, Name, listType, type
                 newuploaded[type]={fileName: file.name, fileType: type, lastUpdate: moment()}
                 setUploaded(newuploaded);
             })
-            .catch(e => {
-                console.log(e);
-                if(typeof(e.response)==="undefined") toast.error("Server error: error sending data to server");
-                else if(e.response.status===500){// check error response status
-                    if(e.response.data.errno===19) toast.error("Server error: database constraint violation")// check for sql contraint violation
+            .catch(err1 => {
+                console.log(err1);
+                if(typeof(err1.response)==="undefined") toast.error("Server error: error sending data to server");
+                else if(err1.response.status===500){// check error response status
+                    if(err1.response.data.errno===19) toast.error("Server error: database constraint violation")// check for sql contraint violation
                     else toast.error("Server error: error sending data to server")
                 }
                 /*else{

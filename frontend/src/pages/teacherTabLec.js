@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import Table from 'react-bootstrap/Table'
 import Button from 'react-bootstrap/Button'
 import Modal from 'react-bootstrap/Modal'
-import {update, updateTeacher} from './update.js'
+import {updateTeacher} from './update.js'
 import { cancelLecture, lectreTurnToDistance } from '../api/api'
 import moment from 'moment'
 moment().format();

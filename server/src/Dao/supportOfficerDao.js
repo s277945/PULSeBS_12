@@ -5,7 +5,10 @@ const moment = require('moment');
 //students, courses, teachers, lectures, and classes
 
 exports.uploadStudents=function(list, fileName){
-    const lenght = list.length;
+
+    let lenght;
+    if(list!=undefined)
+        lenght= list.length;
     const password = "$2a$10$Uoatm1KqMfPsesdIcOm8a.yTYzUQAvEkfhZNOIh.1BFt.hY4jv8yq"
     let i = 0;
     return new Promise((resolve, reject) => {

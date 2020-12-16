@@ -5,10 +5,7 @@ import Button from 'react-bootstrap/Button'
 import Modal from 'react-bootstrap/Modal'
 import jsPDF from "jspdf";
 import "jspdf-autotable";
-import Parser from "json2csv"
-import CsvDownload from 'react-json-to-csv'
 import * as FileSaver from 'file-saver';
-import * as XLSX from 'xlsx';
 export class BookingManagerReport extends Component {
 
     state = { posStudents: [], modal: false, searchField: "", searchedStudent: "", modalResult: ""}
@@ -111,11 +108,11 @@ export class BookingManagerReport extends Component {
             const tableRows = [];
 
             // for each student pass all its data into an array
-            report.forEach(student => {
+            report.forEach(student1 => {
                 const studentData = [
-                    `${student.name} ${student.surname}`,
-                    student.birthday,
-                    student.ssn,
+                    `${student1.name} ${student1.surname}`,
+                    student1.birthday,
+                    student1.ssn,
                 ];
                 // push each student's info into a row
                 tableRows.push(studentData);

@@ -12,12 +12,12 @@ export default function CoursesSetupView() {
         <>
             <br/>
             <h2 className="page-title">Courses setup</h2>
-            <CoursesSetup/>
+            <CoursesSetupView/>
         </>
     )
 }
 
-const CoursesSetup = () => {
+const CoursesSetupView = () => {
     const [courses, setCourses] = useState([]);
     const [yearsChecked, setYearsChecked] = useState([]);// init years array
 

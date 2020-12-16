@@ -15,18 +15,18 @@ const url='http://localhost:3001';
 describe('TEST SUPPORT OFFICER', function () {
     before(async() => {
         let res = await chai.request(url).post('/api/login').send({
-            userName: 'c123456',
+            userName: 'so123456',
             password: 'scimmia'
         })
         cookie = res.headers['set-cookie'];
-        student.push({"userID": "900000", "Name": "Ambra", "Surname":"Ferri",
-            "City": "Poggio Ferro", "email":	"s900000@students.politu.it",
+        student=({"userID": "900000", "Name": "Ambra", "Surname":"Ferri",
+            "City": "Poggio Ferro", "email":"s900000@students.politu.it",
             "birthday": "1991-11-04", "ssn": "MK97060783"});
-        teacher.push({"userID": "d9000", "Name": "Ines", "Surname":"Beneventi", "email":"Ines.Beneventi@politu.it",
+        teacher=({"userID": "d9000", "Name": "Ines", "Surname":"Beneventi", "email":"Ines.Beneventi@politu.it",
             "ssn": "XT6141393"});
-        course.push({"courseId": "XY1211", "year": 1, "name": "Metodi di finanziamento delle imprese", "semester": 1, "teacherId": "d9000"});
-        enrollment.push({"courseId":"XY1211", "studentId": "900000"});
-        schedule.push({"courseId": "XY1211","room": 1, "day": "Mon", "seats": 120, "time": "8:30-11:30"});
+        course=({"courseId": "XY1211", "year": 1, "name": "Metodi di finanziamento delle imprese", "semester": 1, "teacherId": "d9000"});
+        enrollment=({"courseId":"XY1211", "studentId": "900000"});
+        schedule=({"courseId": "XY1211","room": 1, "day": "Mon", "seats": 120, "time": "8:30-11:30"});
     })
     describe('insert a student inside table', function () {
         it('should insert correctly a student', function () {
