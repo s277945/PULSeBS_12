@@ -20,7 +20,6 @@ export default function CoursesSetupView() {
 
 const CoursesSetup = () => {
     const [courses, setCourses] = useState([]);
-    const [years, setYears] = useState([]);// init years array
     const [yearsChecked, setYearsChecked] = useState([]);// init years array
 
     useEffect(() => {// fetch data from server
@@ -36,9 +35,8 @@ const CoursesSetup = () => {
                 }
                 for (let  index in ytemp){
                     yctemp.push({ year: ytemp[index], checked: false, semesters: [false, false] });
-                }
-                setYears(ytemp);// set new years array state       
-                setYearsChecked(yctemp);// set new years checked array state            
+                }       
+                setYearsChecked(yctemp);// set new years array state            
             })
             .catch(/* istanbul ignore next */err => {
                 console.log(err);
@@ -128,8 +126,30 @@ const CoursesSetup = () => {
         }));
     }
 
+    const reset = () => {        
+        setCourses(courses.map(course=>{
+            course.checked=false;
+            return course
+        }));
+        setYearsChecked(yearsChecked.map(y=>{
+                y.checked=false;
+                y.semesters[0]=false;
+                y.semesters[1]=false;
+            return y
+        }));
+    }
+
     return(
-        <>
+        <>  
+            <div style={{display: "flex", wrap: "nowrap", justifyContent: "space-between"}}>
+                <div/>
+                <div>
+                    <Button variant="info" style={{margin:"5px"}}>Turn to distance type</Button>
+                    <Button style={{margin:"5px"}}>Turn to presence type</Button>
+                    <Button variant="secondary" style={{margin:"5px"}}>Invert type</Button>
+                    <Button variant="danger" style={{margin:"5px"}} onClick={() => {reset()}}>Reset selection</Button>
+                </div>
+            </div>
             {yearsChecked.map(year =>
                 <Accordion key={year.year}>
                     <Card>
