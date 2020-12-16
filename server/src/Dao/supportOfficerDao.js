@@ -25,7 +25,7 @@ exports.uploadStudents=function(list, fileName){
                     if (lenght === i) {
                         const date = moment().format("YYYY-MM-DD HH:mm:ss")
                         const sql2='UPDATE File SET FileName=? , LastUpdate=? WHERE FileType=0'
-                        db.run(sql2, [fileName, date], (err) => {
+                        db.run(sql2, [fileName, date], (err1) => {
                             resolve(true);
                         })
                     }
@@ -52,7 +52,7 @@ exports.uploadTeachers=function(list, fileName){
                     if (lenght === i) {
                         const date = moment().format("YYYY-MM-DD HH:mm:ss")
                         const sql2='UPDATE File SET FileName=? , LastUpdate=? WHERE FileType=1'
-                        db.run(sql2, [fileName, date], (err) => {
+                        db.run(sql2, [fileName, date], (err1) => {
                             resolve(true);
                         })
                     }
@@ -77,7 +77,7 @@ exports.uploadCourses=function(list, fileName){
                     if (lenght === i) {
                         const date = moment().format("YYYY-MM-DD HH:mm:ss")
                         const sql2='UPDATE File SET FileName=? , LastUpdate=? WHERE FileType=2'
-                        db.run(sql2, [fileName, date], (err) => {
+                        db.run(sql2, [fileName, date], (err1) => {
                             resolve(true);
                         })
                     }
@@ -102,7 +102,7 @@ exports.uploadEnrollment=function(list, fileName){
                     if (lenght === i) {
                         const date = moment().format("YYYY-MM-DD HH:mm:ss")
                         const sql2='UPDATE File SET FileName=? , LastUpdate=? WHERE FileType=3'
-                        db.run(sql2, [fileName, date], (err) => {
+                        db.run(sql2, [fileName, date], (err1) => {
                             resolve(true);
                         })
                     }
@@ -138,8 +138,8 @@ exports.uploadSchedule=function(list, fileName){
                                         i++
                                         if(i === listLectures.length) {
                                             const date = moment().format("YYYY-MM-DD HH:mm:ss")
-                                            const sql2='UPDATE File SET FileName=? , LastUpdate=? WHERE FileType=4'
-                                            db.run(sql2, [fileName, date], (err) => {
+                                            const sql3='UPDATE File SET FileName=? , LastUpdate=? WHERE FileType=4'
+                                            db.run(sql3, [fileName, date], (err3) => {
                                                 resolve(true);
                                             })
                                         }
@@ -186,11 +186,12 @@ function getListLectures(schedule){
                 switch (semester){
                     case 1:
                         startDate = moment([currentYear, 9, 1]).startOf('isoWeek').add(nDay, 'day');
-                        endDate = moment([currentYear+1, 0, 31]).startOf('isoWeek').add(nDay, 'day');;
+                        endDate = moment([currentYear+1, 0, 31]).startOf('isoWeek').add(nDay, 'day');
+
                         break;
                     case 2:
-                        startDate = moment([currentYear + 1, 2, 1]).startOf('isoWeek').add(nDay, 'day');;
-                        endDate = moment([currentYear + 1, 5, 30]).startOf('isoWeek').add(nDay, 'day');;
+                        startDate = moment([currentYear + 1, 2, 1]).startOf('isoWeek').add(nDay, 'day');
+                        endDate = moment([currentYear + 1, 5, 30]).startOf('isoWeek').add(nDay, 'day');
                         break;
                     /* istanbul ignore next */
                     default:
@@ -269,7 +270,7 @@ exports.modifyBookableLectures=function(list){
                     else{
                         updateLectures(list).then(result =>{
                             resolve(result);
-                        }).catch(err => reject(err));  
+                        }).catch(err1 => reject(err1));
                     }
                 })
             }

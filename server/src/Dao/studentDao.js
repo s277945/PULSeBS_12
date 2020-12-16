@@ -167,7 +167,7 @@ exports.deleteSeat=function(userId, courseId, date){
                     if(check > 0){
                         addFromWaitingList(courseId, date).then((user) => {
                             resolve(user);
-                        }).catch(/* istanbul ignore next */err=>reject(err));
+                        }).catch(/* istanbul ignore next */err1=>reject(err1));
                     }else{
                         const sql2='UPDATE Lecture SET BookedSeats = BookedSeats - 1, UnbookedSeats = UnbookedSeats + 1 WHERE Course_Ref=? AND Date=?';
                         db.run(sql2, [courseId, date], (err2) => {
@@ -176,7 +176,7 @@ exports.deleteSeat=function(userId, courseId, date){
                             else resolve("NoUser");
                         });
                     }
-                }).catch(/* istanbul ignore next */err=>reject(err));
+                }).catch(/* istanbul ignore next */err3=>reject(err3));
             }
         })
     });
