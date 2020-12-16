@@ -56,6 +56,7 @@ export default function BookingManagerHome() {
     const contentSelect = () => {
         if (show === 0) return (
             <div className="app-background"><br></br><h1 className="page-title">System monitoring</h1><br></br>
+                <h5 style={{marginLeft: "17px", fontWeight: "bold", marginBottom: "15px"}}>Select by course: </h5>
                 {courses.map(course =>
                     <Accordion key={course.Name}>
                         <Card>

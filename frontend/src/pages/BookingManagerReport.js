@@ -152,7 +152,7 @@ export class BookingManagerReport extends Component {
 
         //Return Table
         return (
-            <Table striped bordered hover style={{ backgroundColor: "#fff" }}>
+            <Table striped bordered hover style={{ backgroundColor: "#fff" , width: "98%", margin: "auto"}}>
                 <thead>
                     <tr>
                         <th>Name Surname</th>
@@ -242,8 +242,8 @@ export class BookingManagerReport extends Component {
 
         return (
             <div ><br></br><h1 className="page-title">Positive students and reports</h1><br></br>
-
-                <Button data-testid="addSSN" style={{ marginLeft: "13px", marginBottom: "13px" }} onClick={(e) => { e.preventDefault(); this.setState({ modal: true }) }}>Add New Student</Button>
+            <br/>
+                <Button data-testid="addSSN" style={{ marginLeft: "1vw", marginBottom: "13px" }} onClick={(e) => { e.preventDefault(); this.setState({ modal: true }) }}>Add New Student</Button>
                 {this.renderPosStudents()}
 
                 {this.rednerModal()}
