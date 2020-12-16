@@ -212,7 +212,7 @@ exports.getCoursesData=function(){
                 reject(err);
             else {
                 for(let row of rows){
-                    list.push({"courseId":row.CourseID, "year":row.Year, "name":row.Name, "semester":row.Semester});
+                    list.push({"courseId":row.CourseID, "year":row.Year, "name":row.Name, "semester":row.Semester, "restriction":row.Restriction});
                 }
                 resolve(list);
             }

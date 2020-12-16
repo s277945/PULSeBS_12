@@ -178,9 +178,17 @@ const CoursesSetup = () => {
                                                 <Card.Body>
                                                     <Table data-testid={year.year+'courses'+"s1"} striped bordered hover style={{ backgroundColor: "#fff" }}>
                                                         <thead>
+                                                            <tr>
+                                                                <th>Course</th>
+                                                                <th>Distance course</th>
+                                                                <th></th>
+                                                            </tr>
+                                                        </thead>
+                                                        <thead>
                                                             {courses.filter(course=>{return course.year===year.year&&course.semester===1}).map(course=>
                                                                 <tr>
                                                                     <td>{course.name+" ("+course.courseId+")"}</td>
+                                                                    <td>{course.restriction?"Yes":"No"}</td>
                                                                     <td style={{width: "15px"}}><Form.Check checked={course.checked} onClick={()=>{handleCheck("c", course);}} style={{marginLeft: "4px"}} type="checkbox"/></td>
                                                                 </tr>
                                                             )}
