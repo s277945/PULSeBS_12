@@ -133,24 +133,24 @@ export function getStudentReport(ssn){
     return axiosInst.get(`http://localhost:3001/api/reports/${ssn}`, { withCredentials: true });
 }
 
-export function uploadStudents(studentList){
-    return axiosInst.post(`http://localhost:3001/api/uploadStudents`, studentList, { withCredentials: true, credentials: 'include' });
+export function uploadStudents(studentList, filename){
+    return axiosInst.post(`http://localhost:3001/api/uploadStudents`, { data: studentList, fileName: filename}, { withCredentials: true, credentials: 'include' });
 }
 
-export function uploadTeachers(data){
-    return axiosInst.post(`http://localhost:3001/api/uploadTeachers`, data, { withCredentials: true, credentials: 'include' });
+export function uploadTeachers(data, filename){
+    return axiosInst.post(`http://localhost:3001/api/uploadTeachers`, { data: data, fileName: filename}, { withCredentials: true, credentials: 'include' });
 }
 
-export function uploadCourses(data){
-    return axiosInst.post(`http://localhost:3001/api/uploadCourses`, data, { withCredentials: true, credentials: 'include' });
+export function uploadCourses(data, filename){
+    return axiosInst.post(`http://localhost:3001/api/uploadCourses`, { data: data, fileName: filename}, { withCredentials: true, credentials: 'include' });
 }
 
-export function uploadEnrollment(data){
-    return axiosInst.post(`http://localhost:3001/api/uploadEnrollment`, data, { withCredentials: true, credentials: 'include' });
+export function uploadEnrollment(data, filename){
+    return axiosInst.post(`http://localhost:3001/api/uploadEnrollment`, { data: data, fileName: filename}, { withCredentials: true, credentials: 'include' });
 }
 
-export function uploadSchedule(data){
-    return axiosInst.post(`http://localhost:3001/api/uploadSchedule`, data, { withCredentials: true, credentials: 'include' });
+export function uploadSchedule(data, filename){
+    return axiosInst.post(`http://localhost:3001/api/uploadSchedule`, { data: data, fileName: filename}, { withCredentials: true, credentials: 'include' });
 }
 
 export function getCoursesData(){
@@ -161,6 +161,11 @@ export function getCoursesData(){
 export function postCoursesType(coursesData){// receives array of { coursesId: "CID", restriction: 0/1 }
     // post list of courses of which to update type for support officer selection from server
     return axiosInst.post(`http://localhost:3001/api/lecturesBookable`, coursesData, { withCredentials: true });
+}
+
+export function getFileData(){
+    // get uploaded files info from server
+    return axiosInst.get(`http://localhost:3001/api/fileData`, { withCredentials: true });
 }
 
 export async function login (userName, password){

@@ -9,7 +9,6 @@ app.disable("x-powered-by");
 // use */10 * * * * * for test
 //1 * * * * *
 const job=cron.schedule('*/10 * * * * *', function() {
-    console.log('sto per essere eseguito');
     const date=moment().format('YYYY-MM-DD HH:mm:ss');
     teacherDao.checkDeadline(date)
         .then((list) => {

@@ -3,26 +3,54 @@ import Table from 'react-bootstrap/Table'
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 import bsCustomFileInput from 'bs-custom-file-input'
-import {uploadStudents, uploadTeachers, uploadCourses, uploadEnrollment, uploadSchedule} from '../api/api';
+import {uploadStudents, uploadTeachers, uploadCourses, uploadEnrollment, uploadSchedule, getFileData} from '../api/api';
 import { toast } from 'react-toastify';
 import Spinner  from 'react-bootstrap/Spinner'
 
 export default function SystemSetupView() {
+    const [uploaded, setUploaded] = useState([0,0,0,0,0]);
+    useEffect(() => {
+        getFileData().then(response => {
+            let newuploaded=[];
+            if(response.data) {
+                let studentsFile=response.data.filter(f=>f.fileType===0);
+                let professorsFile=response.data.filter(f=>f.fileType===1);
+                let coursesFile=response.data.filter(f=>f.fileType===2);
+                let enrollmentFile=response.data.filter(f=>f.fileType===3);
+                let scheduleFile=response.data.filter(f=>f.fileType===4);
+                if(studentsFile.length>0) newuploaded.push(studentsFile[0])
+                else newuploaded.push({fileType: null, fileName: null, fileDate: null})
+                if(professorsFile.length>0) newuploaded.push(professorsFile[0])
+                else newuploaded.push({fileType: null, fileName: null, fileDate: null})
+                if(coursesFile.length>0) newuploaded.push(coursesFile[0])
+                else newuploaded.push({fileType: null, fileName: null, fileDate: null})
+                if(enrollmentFile.length>0) newuploaded.push(enrollmentFile[0])
+                else newuploaded.push({fileType: null, fileName: null, fileDate: null})
+                if(scheduleFile.length>0) newuploaded.push(scheduleFile[0])
+                else newuploaded.push({fileType: null, fileName: null, fileDate: null})
+            }
+            console.log(response);
+            setUploaded(newuploaded);
+        })
+        .catch(/* istanbul ignore next */err => {
+            console.log(err);
+        })
+    }, []);
     return(
         <div style={{minWidth: "1000px"}}>
             <br/>
             <h2 className="page-title">Upload data</h2>
-
-            <UploadComponent Name={"Student list"} listType="student"/>
-            <UploadComponent Name={"Professor list"} listType="professor"/>
-            <UploadComponent Name={"Course list"} listType="course"/>
-            <UploadComponent Name={"Enrollment list"} listType="enrollment"/>
-            <UploadComponent Name={"Schedule list"} listType="schedule"/>
+            <UploadComponent filename={uploaded[0].fileName} filedate={uploaded[0].fileDate} Name={"Student list"} listType="student"/>
+            <UploadComponent filename={uploaded[1].fileName} filedate={uploaded[1].fileDate} Name={"Professor list"} listType="professor"/>
+            <UploadComponent filename={uploaded[2].fileName} filedate={uploaded[2].fileDate} Name={"Course list"} listType="course"/>
+            <UploadComponent filename={uploaded[3].fileName} filedate={uploaded[3].fileDate} Name={"Enrollment list"} listType="enrollment"/>
+            <UploadComponent filename={uploaded[4].fileName} filedate={uploaded[4].fileDate} Name={"Schedule list"} listType="schedule"/>
         </div>
     )
 }
 
-const UploadComponent = ({Name, listType}) => {
+const UploadComponent = ({filename, filedate, Name, listType}) => {
+    
     return(
         <div className="d-flex justify-content-center mt-5">
             <Table className="w-75 table-bordered">
@@ -35,8 +63,8 @@ const UploadComponent = ({Name, listType}) => {
             </thead>
             <tbody>
             <tr>
-                <td>Student.csv</td>
-                <td>2020-09 14:05</td>
+                <td>{filename?filename:"/"}</td>
+                <td>{filedate?filedate:"/"}</td>
                 <td style={{width: "35vw"}}><UploadFileButton Name={Name} listType={listType}/></td>
             </tr>
             </tbody>
@@ -57,7 +85,7 @@ const UploadFileButton = ({Name, listType}) => {
     const sendFile = () => {
         let file = files[0];
         if(!file) return;
-
+        console.log(file);
         setUploading(true)
 
         const reader = new FileReader();
@@ -123,7 +151,7 @@ const UploadFileButton = ({Name, listType}) => {
                 lbuffer+=elems.length;
                 datasentlength.push(lbuffer);// set upload percentage values
                 requests.push(() => {
-                    return apiCall(elems)
+                    return apiCall(elems, )
                 })
             }
             let br=false;
@@ -143,7 +171,8 @@ const UploadFileButton = ({Name, listType}) => {
             })
             .catch(e => {
                 console.log(e);
-                if(e.response.status===500){// check error response status
+                if(typeof(e.response)==="undefined") toast.error("Server error: error sending data to server");
+                else if(e.response.status===500){// check error response status
                     if(e.response.data.errno===19) toast.error("Server error: database constraint violation")// check for sql contraint violation
                     else toast.error("Server error: error sending data to server")
                 }

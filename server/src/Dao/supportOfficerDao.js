@@ -194,21 +194,25 @@ function getListLectures(schedule){
                         break;
                 }
 
+                let date = moment()
                 let start = moment(startDate)
                 let end = moment(endDate)
                 let i = 0
                 while(start.isBefore(end)){
-                    i++
                     if(time[0].length === 4)
                         time[0] = "0"+time[0]
 
                     let startLecture = start.format("YYYY-MM-DD").concat(" " + time[0] + ":00")
                     let deadline = moment(startLecture).subtract(1, 'day').format("YYYY-MM-DD").concat(" 23:00:00")
                     let endLecture = start.format("YYYY-MM-DD").concat(" " + time[1] + ":00")
-
+                    i++;
+                    console.log(i)
+                    let mailsent;
+                    if(start.isAfter(date)) mailsent=0;
+                    else mailsent=1;
                     let obj = {
                             "Course_Ref": schedule.courseId,
-                            "Name": courseName + "Les:" + i,
+                            "Name": courseName + " Les:" + i,
                             "Capacity": schedule.seats,
                             "Date": startLecture,
                             "EndDate": endLecture,
@@ -216,8 +220,9 @@ function getListLectures(schedule){
                             "BookedSeats": 0,
                             "UnbookedSeats": 0,
                             "Type": "p",
-                            "EmailSent": 0
+                            "EmailSent": mailsent
                     }
+                    console.log(obj)
                     list.push(obj)
 
                     start.add(7, 'day')
