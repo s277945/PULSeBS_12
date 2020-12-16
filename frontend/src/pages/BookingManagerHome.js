@@ -55,7 +55,7 @@ export default function BookingManagerHome() {
 
     const contentSelect = () => {
         if (show === 0) return (
-            <div className="app-background">
+            <div className="app-background"><br></br><h1 className="page-title">System monitoring</h1><br></br>
                 {courses.map(course =>
                     <Accordion key={course.Name}>
                         <Card>
@@ -92,14 +92,14 @@ export default function BookingManagerHome() {
 
     return (
         <>
-            <NavBarBooking setShowNav={setShowNav} />
+            <NavBarBooking show={show} setShowNav={setShowNav} />
             {contentSelect()}
 
         </>
     )
 }
 
-const NavBarBooking = ({setShowNav}) => {
+const NavBarBooking = ({show, setShowNav}) => {
     const auth = useAuth();
 
     const showSysMon = () => {setShowNav(0)}
@@ -110,8 +110,8 @@ const NavBarBooking = ({setShowNav}) => {
         <Navbar bg="dark" variant="dark">
             <Navbar.Brand>PULSeBS - SystemActivity</Navbar.Brand>
             <Nav className="mr-auto">
-                <Nav.Link data-testid="sysMon" href="#sysMon" onSelect={showSysMon}>System Monitoring</Nav.Link>
-                <Nav.Link data-testid="report" href="#report" onSelect={showReport}>Students Report</Nav.Link>
+                <Nav.Link data-testid="sysMon" href="#sysMon" active={show===0} onSelect={showSysMon}>System Monitoring</Nav.Link>
+                <Nav.Link data-testid="report" href="#report" active={show===1} onSelect={showReport}>Students Report</Nav.Link>
             </Nav>
             <Nav.Link data-testid="logout" onClick={() => auth.signout()}>Logout</Nav.Link>
         </Navbar>
