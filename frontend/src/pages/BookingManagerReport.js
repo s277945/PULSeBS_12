@@ -243,11 +243,7 @@ export class BookingManagerReport extends Component {
         return (
             <div ><br></br><h1 className="page-title">Positive students and reports</h1><br></br>
 
-                <Button data-testid="addSSN" style={{ marginLeft: "5px" }} onClick={(e) => { e.preventDefault(); this.setState({ modal: true }) }}>Add New Student</Button>
-
-                <br/>
-                <br/>
-
+                <Button data-testid="addSSN" style={{ marginLeft: "13px", marginBottom: "13px" }} onClick={(e) => { e.preventDefault(); this.setState({ modal: true }) }}>Add New Student</Button>
                 {this.renderPosStudents()}
 
                 {this.rednerModal()}
