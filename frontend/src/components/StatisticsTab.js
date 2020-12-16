@@ -11,21 +11,18 @@ export class StatisticsTab extends Component {
     //GB Lectures as first option
     state = { selected: [], lectures: [], week: [], month: [], groupBy: "Lectures" }
      substring=(array)=>{
-        let tmp=[];
-         console.log(array);
-        array.map((lecture,index)=>{
+         let tmp = array.map(lecture=>{
             let el;
             //lectureName
-            tmp[index]=lecture;
-            console.log("lecture: "+lecture)
+            let name;      
             if(lecture.lectureName!=undefined){
-                el=tmp[index].lectureName.indexOf('Les');
-                tmp[index].lectureName=tmp[index].lectureName.substr(el);
+                el=lecture.lectureName.indexOf('Les');
+                name=lecture.lectureName.substr(el);
+                return {date: lecture.date, lectureName: name, nBooked: lecture.nBooked};
             }
-
-
-        })
-        return tmp;
+            else return lecture;
+        });
+        return tmp; 
     }
     componentDidMount() {
 
@@ -105,12 +102,12 @@ export class StatisticsTab extends Component {
                         {this.state.week.map((w)=>{ // map each week to a possible table
                             let beginning = moment(w.startDate, "YYYY/MM/DD");// read week beginning date
                             let end = moment(w.endDate, "YYYY/MM/DD");//read week end beginning date
-                        let lectures = this.state.lectures.filter((lecture)=>{return moment(lecture.date).isSameOrAfter(beginning)&&moment(lecture.date).isSameOrBefore(end)})// get lectures within week
+                            let lectures = this.state.lectures.filter((lecture)=>{return moment(lecture.date).isSameOrAfter(beginning)&&moment(lecture.date).isSameOrBefore(end)})// get lectures within week
                             if (Array.isArray(lectures)&&lectures.length>0) return (// check if there are lectures, otherwise nothing is returned
                                 <Table striped bordered hover style={{backgroundColor: "#fff"}} key={w.weekName}>
                                 <thead>
                                     <tr>
-                                        <th style={{textAlign: "center", maxWidth: "48px"}}>{beginning.format("DD/MM")+"-"+end.format("DD/MM")}</th>
+                                        <th style={{textAlign: "center", width: "48px"}}>{beginning.format("DD/MM")+"-"+end.format("DD/MM")}</th>
                                         <th>Lecture name</th>
                                         <th>Date and time</th>
                                         <th>Booked seats</th>
@@ -176,7 +173,7 @@ export class StatisticsTab extends Component {
                             <Table striped bordered hover style={{backgroundColor: "#fff"}} key={monthdate}>
                             <thead>
                                 <tr>
-                                    <th style={{textAlign: "center", maxWidth: "48px"}}>{monthdate.format("MM/YYYY")}</th>
+                                    <th style={{textAlign: "center", width: "48px"}}>{monthdate.format("MM/YYYY")}</th>
                                     <th>Lecture name</th>
                                     <th>Date and time</th>
                                     <th>Booked seats</th>
