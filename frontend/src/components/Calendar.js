@@ -23,7 +23,7 @@ var stringToColour = function(str) {
 export default function Calendar({lectures,courses}){
     const events = lectures.map(lecture => {
         //generate a color based on hash
-        let course=courses.filter(courses=>courses.CourseID===lecture.Course_Ref)[0];
+        let course=courses.filter(course1=>course1.CourseID===lecture.Course_Ref)[0];
 
         let color=stringToColour(course.Name);
         return{

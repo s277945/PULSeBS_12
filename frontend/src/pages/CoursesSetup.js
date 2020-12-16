@@ -6,13 +6,13 @@ import { getCoursesData, postCoursesType } from '../api/api';
 import Accordion from 'react-bootstrap/Accordion'
 import Card from 'react-bootstrap/Card'
 
-export default function CoursesSetupView() {
+export default function CoursesSetup() {
     
     return(
         <>
             <br/>
             <h2 className="page-title">Courses setup</h2>
-            <CoursesSetupView/>
+            <CoursesSetup/>
         </>
     )
 }

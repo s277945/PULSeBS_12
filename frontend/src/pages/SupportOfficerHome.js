@@ -2,8 +2,8 @@ import React, { useState }  from 'react';
 import Navbar  from 'react-bootstrap/Navbar'
 import Nav from 'react-bootstrap/Nav'
 import {useAuth} from '../components/Authsystem'
-import SystemSetupView from './SystemSetupView'
-import CoursesSetupView  from './CoursesSetupView'
+import SystemSetup from './SystemSetup'
+import CoursesSetup  from './CoursesSetup'
 
 export default function BookingManagerHome(){
     const [show, setShow] = useState(0);// element render selection state
@@ -11,7 +11,7 @@ export default function BookingManagerHome(){
         <>
             <NavBarOfficer show={show} setShow={setShow}/>
             <div className="app-element-background-2">
-                {show===0?<SystemSetupView/>:<CoursesSetupView/>}
+                {show===0?<SystemSetup/>:<CoursesSetup/>}
             </div>
         </>
     )

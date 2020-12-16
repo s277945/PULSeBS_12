@@ -186,7 +186,7 @@ const LectureTableInfo = ({ lectureStats, selectedLecture }) => {
     if (!lectureStats || !selectedLecture)
         return <></>
 
-    const lecture = lectureStats.find((lecture) => lecture.lectureName === selectedLecture)
+    const lecture = lectureStats.find((lec) => lec.lectureName === selectedLecture)
     /* istanbul ignore if */
     if (!lecture)
         return <></>;

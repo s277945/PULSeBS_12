@@ -8,7 +8,7 @@ import { toast } from 'react-toastify';
 import Spinner  from 'react-bootstrap/Spinner'
 import moment from 'moment';
 
-export default function SystemSetupView() {
+export default function SystemSetup() {
     const [uploaded, setUploaded] = useState([0,0,0,0,0]);
     useEffect(() => {
         getFileData().then(response => {
@@ -156,7 +156,7 @@ const UploadFileButton = ({disabled, uploaded, setUploaded, Name, listType, type
                 toast.info(Name + " correctly uploaded")
                 setUploading(false);
                 setPercentage(0);// reset percentage
-                let newuploaded = uploaded.map(e=>e);  
+                let newuploaded = uploaded.map(e1=>e1);
                 newuploaded[type]={fileName: file.name, fileType: type, lastUpdate: moment()}
                 setUploaded(newuploaded);
             })

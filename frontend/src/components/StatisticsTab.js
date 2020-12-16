@@ -37,7 +37,8 @@ export class StatisticsTab extends Component {
         getWeekStats(this.props.course.CourseID)
             .then(res => {
                 this.setState({ week: res.data });
-                let neweek = this.state.week.sort((w1,w2)=>{
+                let neweek = [];
+                neweek=this.state.week.sort((w1,w2)=>{
                     let a = moment(w1.startDate, "YYYY/MM/DD");
                     let b = moment(w2.startDate, "YYYY/MM/DD");
                     return a.diff(b, 'days');
@@ -53,7 +54,8 @@ export class StatisticsTab extends Component {
         getMonthStats(this.props.course.CourseID)
             .then(res => {
                 this.setState({ month: res.data });
-                let newmonth = this.state.month.sort((m1,m2)=>{
+                let newmonth = [];
+                newmonth=this.state.month.sort((m1,m2)=>{
                     let a = moment(m1.month+"/"+m1.year, "MMMM/YYYY");
                     let b = moment(m2.month+"/"+m2.year, "MMMM/YYYY");
                     return a.diff(b, 'days');
