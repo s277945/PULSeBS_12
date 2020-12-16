@@ -37,7 +37,7 @@ const UploadComponent = ({Name, listType}) => {
             <tr>
                 <td>Student.csv</td>
                 <td>2020-09 14:05</td>
-                <td><UploadFileButton Name={Name} listType={listType}/></td>
+                <td style={{width: "35vw"}}><UploadFileButton Name={Name} listType={listType}/></td>
             </tr>
             </tbody>
         </Table>
@@ -48,7 +48,7 @@ const UploadComponent = ({Name, listType}) => {
 const UploadFileButton = ({Name, listType}) => {
     const [files, setFiles] = useState([]);
     const [uploading, setUploading] = useState(false);
-
+    const [ percentage, setPercentage] = useState(0);
 
     useEffect(() => {
         bsCustomFileInput.init();
@@ -113,25 +113,43 @@ const UploadFileButton = ({Name, listType}) => {
 
                 return res
             })
-
+            let datalength=data.length;// init data lenght variable
+            let lbuffer=0;// init current data lenght counter
+            let index=0;// init array index
+            let datasentlength=[];// init progress values array
             const requests = []
             while(data.length){
-                const elems = data.splice(0, 200);
-                requests.push(() => apiCall(elems))
+                const elems = data.splice(0, 200);                
+                lbuffer+=elems.length;
+                datasentlength.push(lbuffer);// set upload percentage values
+                requests.push(() => {
+                    return apiCall(elems)
+                })
             }
-
-            Promise.all(requests.map(fn => fn())).then(response => {
+            let br=false;
+            Promise.all(requests.map(fn => {
+                return new Promise((resolve, reject) => {// return a promise
+                    fn()
+                        .then((response)=>{
+                            setPercentage(Math.round((datasentlength[index++]/datalength)*100));// update upload percentage value
+                            resolve(response);// resolve if all is good
+                        })
+                        .catch(err=>{reject(err)})// else reject
+            })}))
+            .then(response => {
                 toast.info(Name + " correctly uploaded")
-                setUploading(false)
-
+                setUploading(false);
+                setPercentage(0);// reset percentage
             })
             .catch(e => {
-                if(e.message.search("500")){
-                    toast.error("Server error. Probably wrong file format or data duplication")
+                console.log(e);
+                if(e.response.status===500){// check error response status
+                    if(e.response.data.errno===19) toast.error("Server error: database constraint violation")// check for sql contraint violation
+                    else toast.error("Server error: error sending data to server")
                 }
-                else{
+                /*else{
                     toast.error("Error sending data to server")
-                }
+                }*/
                 setUploading(false)
             })
         };
@@ -153,8 +171,9 @@ const UploadFileButton = ({Name, listType}) => {
         </Form>
         <Button disabled={uploading} className="ml-3" variant="primary" onClick={() => sendFile()}>
             {!uploading && <div>Send</div>}
-            {uploading && <div><Spinner as="span" animation="grow" size="sm" role="status" aria-hidden="true"/> Uploading...</div>}
+            {uploading && <div><Spinner as="span" animation="grow" size="sm" role="status" aria-hidden="true" style={{marginRight: "5px", marginBottom: "1px"}}/>Uploading...</div>}
         </Button>
+            {uploading?<h3 style={{marginTop: "3px", marginLeft: "10px", color: "grey"}}>{percentage}%</h3>:<div/>}
     </div>
     )
 }
