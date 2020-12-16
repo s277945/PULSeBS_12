@@ -50,17 +50,25 @@ const CoursesSetup = () => {
         switch(type){
             case "y":
                 for(let index in courses) {
-                    if(courses[index].year===selection&&!courses[index].checked) {
+                    if(courses[index].year===selection.year&&!courses[index].checked) {
                         newchecked=true;
                         break;
                     }
                 }
                 setCourses(courses.map(course=>{
-                    if(course.year===selection) course.checked=newchecked;
+                    if(course.year===selection.year) course.checked=newchecked;
                     return course
                 }));
-                semesterSetChecked(selection, 0);
-                semesterSetChecked(selection, 1);
+                if(newchecked) {
+                    if(!selection.semesters[0]) semesterSetChecked(selection.year, 0);
+                    if(!selection.semesters[1]) semesterSetChecked(selection.year, 1);
+                }
+                else {
+                    if(selection.semesters[0]) semesterSetChecked(selection.year, 0);
+                    if(selection.semesters[1]) semesterSetChecked(selection.year, 1);
+                }
+                
+                
             break;
             case "s":
                 for(let index in courses) {
@@ -104,24 +112,15 @@ const CoursesSetup = () => {
         }
     }
 
-    const yearSetChecked = (year) => {
-        setYearsChecked(yearsChecked.map(y=>{
-            if(y.year===year&&!y.checked) y.checked=true;
-            else if(y.year===year&&y.checked) y.checked=false;
-            return y
-        }));
-    }
-    
-
     const semesterSetChecked = (year, semester) => {
         let s1courses = courses.filter(course=>{return course.year===year&&course.semester===1}).length>0;
         let s2courses = courses.filter(course=>{return course.year===year&&course.semester===2}).length>0;
-        setYearsChecked(yearsChecked.map(y=>{
+        if(s1courses&&semester===0||s2courses&&semester===1) setYearsChecked(yearsChecked.map(y=>{
             if(y.year===year&&!y.semesters[semester]) {
                 y.semesters[semester]=true;
                 if((!s1courses||y.semesters[0])&&(!s2courses||y.semesters[1])) y.checked=true;
             }
-            else if(y.year===year&&y.semesters[semester]) {
+            else if(y.year===year) {
                 y.semesters[semester]=false;
                 y.checked=false;
             } 
@@ -140,7 +139,7 @@ const CoursesSetup = () => {
                                     <div style={{display: "flex",  flexWrap: "nowrap"}}><p style={{marginRight: "5px"}}>Year </p>{year.year}</div>
                                 </div>
                             </Accordion.Toggle>
-                            <Form.Check type="checkbox" style={{margin: "auto"}} checked={year.checked} onChange={()=>{handleCheck("y", year.year);}}/>
+                            <Form.Check type="checkbox" style={{margin: "auto"}} checked={year.checked} onClick={()=>{handleCheck("y", year);}}/>
                         </div>
                         <Accordion.Collapse eventKey="0">
                             <Card.Body>
@@ -153,7 +152,7 @@ const CoursesSetup = () => {
                                                         Semester 1
                                                     </div>
                                                 </Accordion.Toggle>
-                                                <Form.Check checked={year.semesters[0]} onChange={()=>{handleCheck("s", { year: year.year, semester: 0 });}} type="checkbox" style={{margin: "auto"}}/>
+                                                <Form.Check checked={year.semesters[0]} onClick={()=>{handleCheck("s", { year: year.year, semester: 0 });}} type="checkbox" style={{margin: "auto"}}/>
                                             </div>
                                             <Accordion.Collapse eventKey="0">
                                                 <Card.Body>
@@ -162,7 +161,7 @@ const CoursesSetup = () => {
                                                             {courses.filter(course=>{return course.year===year.year&&course.semester===1}).map(course=>
                                                                 <tr>
                                                                     <td>{course.name+" ("+course.courseId+")"}</td>
-                                                                    <td style={{width: "15px"}}><Form.Check checked={course.checked} onChange={()=>{handleCheck("c", course);}} style={{marginLeft: "4px"}} type="checkbox"/></td>
+                                                                    <td style={{width: "15px"}}><Form.Check checked={course.checked} onClick={()=>{handleCheck("c", course);}} style={{marginLeft: "4px"}} type="checkbox"/></td>
                                                                 </tr>
                                                             )}
                                                         </thead>
@@ -181,7 +180,7 @@ const CoursesSetup = () => {
                                                         Semester 2
                                                     </div>
                                                 </Accordion.Toggle>
-                                                <Form.Check checked={year.semesters[1]} onChange={()=>{handleCheck("s", { year: year.year, semester: 1 });}} type="checkbox" style={{margin: "auto"}}/>
+                                                <Form.Check checked={year.semesters[1]} onClick={()=>{handleCheck("s", { year: year.year, semester: 1 });}} type="checkbox" style={{margin: "auto"}}/>
                                             </div>
                                             <Accordion.Collapse eventKey="0">
                                                 <Card.Body>
@@ -190,7 +189,7 @@ const CoursesSetup = () => {
                                                             {courses.filter(course=>{return course.year===year.year&&course.semester===2}).map(course=>
                                                                 <tr>
                                                                     <td>{course.name+" ("+course.courseId+")"}</td>
-                                                                    <td style={{width: "15px"}}><Form.Check checked={course.checked} onChange={()=>{handleCheck("c", course);}} style={{marginLeft: "4px"}} type="checkbox"/></td>
+                                                                    <td style={{width: "15px"}}><Form.Check checked={course.checked} onClick={()=>{handleCheck("c", course);}} style={{marginLeft: "4px"}} type="checkbox"/></td>
                                                                 </tr>
                                                             )}
                                                         </thead>
