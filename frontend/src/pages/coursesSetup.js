@@ -242,22 +242,22 @@ const CoursesSetup = () => {
     }
 
     return(
-        <div className="accordion-container-1">
-            <div style={{display: "flex", wrap: "nowrap", justifyContent: "flex-start", marginTop: "12px", marginBottom: "14px"}}>
+        <div>
+            <div style={{display: "flex", wrap: "nowrap", justifyContent: "flex-start", marginTop: "4vh", marginBottom: "10px"}}>
                 <div/>
-                <div>
-                    <Button variant="info" style={{margin:"5px", marginLeft:"17px"}} disabled={distanceDisable()} onClick={() => {turnToDistance()}}>Turn to distance type</Button>
+                <div style={{display: "flex", wrap: "nowrap"}}>
+                    <Button variant="info" style={{margin:"5px", marginLeft:"27px"}} disabled={distanceDisable()} onClick={() => {turnToDistance()}}>Turn to distance type</Button>
                     <Button style={{margin:"5px"}} disabled={presenceDisable()} onClick={() => {turnToPresence()}}>Turn to presence type</Button>
                     <Button variant="secondary" style={{margin:"5px"}} disabled={invertDisable()} onClick={() => {invertType()}}>Invert type</Button>
                 </div>
                 <div style={{margin: "auto"}}></div>
-                <div>                    
+                <div  style={{display: "flex", wrap: "nowrap"}}>                    
                     <Button variant="secondary" style={{margin:"5px"}} disabled={selectAllDisable()} onClick={() => {selectAll()}}>Select all</Button>                    
                     <Button variant="secondary" style={{margin:"5px"}} disabled={invertDisable()} onClick={() => {invertSelection()}}>Invert selection</Button>
-                    <Button variant="danger" style={{margin:"5px", marginRight:"17px"}} disabled={invertDisable()} onClick={() => {reset()}}>Deselect all</Button>
+                    <Button variant="danger" style={{margin:"5px", marginRight:"27px"}} disabled={invertDisable()} onClick={() => {reset()}}>Deselect all</Button>
                 </div>
             </div>
-            <div>
+            <div className="accordion-container-1">
             {yearsChecked.map(year =>
                 <Accordion key={year.year} style={{margin: "3px"}}>
                     <Card>
