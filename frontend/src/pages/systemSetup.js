@@ -35,6 +35,11 @@ export default function SystemSetupView() {
 }
 
 const UploadComponent = ({uploaded, setUploaded, filename, filedate, type, Name, listType}) => {
+    const checkDisabled = () => {// check if there are missing file dependencies
+        if(type===4&&(!uploaded[2].fileName||uploaded[2].fileName==="/"||(typeof uploaded[2].fileName==="undefined"))) return true;
+        else if(type===3&&(!uploaded[2].fileName||!uploaded[0].fileName||uploaded[2].fileName==="/"||uploaded[0].fileName==="/"||(typeof uploaded[2].fileName==="undefined")||(typeof uploaded[0].fileName==="undefined"))) return true;
+        else return false;
+    }
     return(
         <div className="d-flex justify-content-center mt-5">
             <Table className="w-75 table-bordered">
@@ -49,7 +54,7 @@ const UploadComponent = ({uploaded, setUploaded, filename, filedate, type, Name,
             <tr>
                 <td><div className="d-flex mt-1">{filename?filename:"/"}</div></td>
                 <td><div className="d-flex mt-1">{(filedate&&filedate!=="/")?moment(filedate).format("DD/MM/YYYY HH:mm"):"/"}</div></td>
-                <td style={{width: "35vw"}}><UploadFileButton uploaded={uploaded} setUploaded={setUploaded} Name={Name} listType={listType} type={type}/></td>
+                <td style={{width: "35vw"}}><UploadFileButton disabled={checkDisabled()} uploaded={uploaded} setUploaded={setUploaded} Name={Name} listType={listType} type={type}/></td>
             </tr>
             </tbody>
         </Table>
@@ -57,7 +62,7 @@ const UploadComponent = ({uploaded, setUploaded, filename, filedate, type, Name,
     )
 }
 
-const UploadFileButton = ({uploaded, setUploaded, Name, listType, type}) => {
+const UploadFileButton = ({disabled, uploaded, setUploaded, Name, listType, type}) => {
     const [files, setFiles] = useState([]);
     const [uploading, setUploading] = useState(false);
     const [ percentage, setPercentage] = useState(0);
@@ -184,7 +189,7 @@ const UploadFileButton = ({uploaded, setUploaded, Name, listType, type}) => {
                 />
             </div>
         </Form>
-        <Button disabled={uploading} className="ml-3" variant="primary" onClick={() => sendFile()} style={{height: "38px"}}>
+        <Button disabled={uploading||disabled} className="ml-3" variant="primary" onClick={() => sendFile()} style={{height: "38px"}}>
             {!uploading && <div>Send</div>}
             {uploading && <div style={{minWidth: "105px"}}><Spinner as="span" animation="grow" size="sm" role="status" aria-hidden="true" style={{marginRight: "5px", marginBottom: "1.5px"}}/>Uploading...</div>}
         </Button>
