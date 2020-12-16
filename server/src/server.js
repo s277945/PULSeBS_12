@@ -540,7 +540,7 @@ app.get('/api/managerCoursesTotal/:courseId', (req, res) => {
 
 app.post('/api/uploadStudents', (req, res) => {
 
-    supportOfficerDao.uploadStudents(req.body)
+    supportOfficerDao.uploadStudents(req.body.data, req.body.fileName)
         .then((response) => {
             res.status(200).json({"inserted": response});
         })
@@ -561,7 +561,7 @@ app.post('/api/uploadStudents', (req, res) => {
 
 app.post('/api/uploadTeachers', (req, res) => {
 
-    supportOfficerDao.uploadTeachers(req.body)
+    supportOfficerDao.uploadTeachers(req.body.data, req.body.fileName)
         .then((response) => {
             res.status(200).json({"inserted": response});
         })
@@ -582,7 +582,7 @@ app.post('/api/uploadTeachers', (req, res) => {
 
 app.post('/api/uploadCourses', (req, res) => {
 
-    supportOfficerDao.uploadCourses(req.body)
+    supportOfficerDao.uploadCourses(req.body.data, req.body.fileName)
         .then((response) => {
             res.status(200).json({"inserted": response});
         })
@@ -602,7 +602,7 @@ app.post('/api/uploadCourses', (req, res) => {
 
 app.post('/api/uploadEnrollment', (req, res) => {
 
-    supportOfficerDao.uploadEnrollment(req.body)
+    supportOfficerDao.uploadEnrollment(req.body.data, req.body.fileName)
         .then((response) => {
             res.status(200).json({"inserted": response});
         })
@@ -623,7 +623,7 @@ app.post('/api/uploadEnrollment', (req, res) => {
 
 app.post('/api/uploadSchedule', (req, res) => {
 
-    supportOfficerDao.uploadSchedule(req.body)
+    supportOfficerDao.uploadSchedule(req.body.data, req.body.fileName)
         .then((response) => {
             res.status(200).json({"inserted": response});
         })
@@ -633,6 +633,44 @@ app.post('/api/uploadSchedule', (req, res) => {
 
 });
 
+/**
+ * GET /api/managerCoursesTotal/:courseId
+ *
+ * Retrieves stats of all courses of the University, grouped by courses
+ *
+ * Request params: courseId
+ *
+ */
+
+app.get('/api/fileData', (req, res) => {
+  supportOfficerDao.getFileData()
+      .then((response) => {
+          res.status(200).json(response);
+      })
+      .catch(/* istanbul ignore next */(err) => {
+          res.status(500).json(err);
+      })
+})
+
+/**
+ * POST api/uploadSchedule
+ *
+ * Uploads list of schedule
+ *
+ * body request: [{"courseId": "XY1211","room": 1, "day": "Mon", "seats": 120, "time": "8:30-11:30"}, ...]
+ */
+
+app.post('/api/fileData', (req, res) => {
+
+  supportOfficerDao.updateFileData(req.body)
+      .then((response) => {
+          res.status(200).json({"uploaded": response});
+      })
+      .catch(/* istanbul ignore next */(err) => {
+          res.status(500).json(err);
+      })
+
+});
 
 ////////////////////////
 // STORY 12 ENDPOINTS //

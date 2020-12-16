@@ -4,14 +4,14 @@ const moment = require('moment');
 
 //students, courses, teachers, lectures, and classes
 
-exports.uploadStudents=function(list){
+exports.uploadStudents=function(list, fileName){
     const lenght = list.length;
     const password = "$2a$10$Uoatm1KqMfPsesdIcOm8a.yTYzUQAvEkfhZNOIh.1BFt.hY4jv8yq"
     let i = 0;
     return new Promise((resolve, reject) => {
         const sql='INSERT INTO User(userID,Name,Surname,City,Email,Password,Birthday,SSN,UserType) VALUES(?,?,?,?,?,?,?,?,?)';
         for(let element of list) {
-            console.log("list element student:"+JSON.stringify(element))
+            //console.log("list element student:"+JSON.stringify(element))
             db.run(sql, [element.userID, element.Name, element.Surname, element.City, element.email, password,
                 element.birthday, element.ssn, "s"], (err) => {
                 /* istanbul ignore if */
@@ -19,14 +19,20 @@ exports.uploadStudents=function(list){
                     reject(err);
                 else {
                     i++;
-                    if (lenght === i) resolve(true);
+                    if (lenght === i) {
+                        const date = moment().format("YYYY-MM-DD HH:mm:ss")
+                        const sql2='UPDATE File SET FileName=? , LastUpdate=? WHERE FileType=0'
+                        db.run(sql2, [fileName, date], (err) => {
+                            resolve(true);
+                        })
+                    }
                 }
             })
         }
     });
 }
 
-exports.uploadTeachers=function(list){
+exports.uploadTeachers=function(list, fileName){
     const lenght = list.length;
     let i = 0;
     const password = "$2a$10$Uoatm1KqMfPsesdIcOm8a.yTYzUQAvEkfhZNOIh.1BFt.hY4jv8yq"
@@ -40,14 +46,20 @@ exports.uploadTeachers=function(list){
                     reject(err);
                 else {
                     i++;
-                    if (lenght === i) resolve(true);
+                    if (lenght === i) {
+                        const date = moment().format("YYYY-MM-DD HH:mm:ss")
+                        const sql2='UPDATE File SET FileName=? , LastUpdate=? WHERE FileType=1'
+                        db.run(sql2, [fileName, date], (err) => {
+                            resolve(true);
+                        })
+                    }
                 }
             })
         }
     });
 }
 
-exports.uploadCourses=function(list){
+exports.uploadCourses=function(list, fileName){
     const lenght = list.length;
     let i = 0;
     return new Promise((resolve, reject) => {
@@ -59,14 +71,20 @@ exports.uploadCourses=function(list){
                     reject(err);
                 else {
                     i++;
-                    if (lenght === i) resolve(true);
+                    if (lenght === i) {
+                        const date = moment().format("YYYY-MM-DD HH:mm:ss")
+                        const sql2='UPDATE File SET FileName=? , LastUpdate=? WHERE FileType=2'
+                        db.run(sql2, [fileName, date], (err) => {
+                            resolve(true);
+                        })
+                    }
                 }
             })
         }
     });
 }
 
-exports.uploadEnrollment=function(list){
+exports.uploadEnrollment=function(list, fileName){
     const lenght = list.length;
     let i = 0;
     return new Promise((resolve, reject) => {
@@ -78,14 +96,20 @@ exports.uploadEnrollment=function(list){
                     reject(err);
                 else {
                     i++;
-                    if (lenght === i) resolve(true);
+                    if (lenght === i) {
+                        const date = moment().format("YYYY-MM-DD HH:mm:ss")
+                        const sql2='UPDATE File SET FileName=? , LastUpdate=? WHERE FileType=3'
+                        db.run(sql2, [fileName, date], (err) => {
+                            resolve(true);
+                        })
+                    }
                 }
             })
         }
     });
 }
 
-exports.uploadSchedule=function(list){
+exports.uploadSchedule=function(list, fileName){
     let i = 0;
     return new Promise((resolve, reject) => {
         const sql='INSERT INTO Schedule(code, Room, Day, Seats, Time) VALUES(?,?,?,?,?)';
@@ -109,7 +133,13 @@ exports.uploadSchedule=function(list){
 
                                     else{
                                         i++
-                                        if(i === listLectures.length) resolve(true);
+                                        if(i === listLectures.length) {
+                                            const date = moment().format("YYYY-MM-DD HH:mm:ss")
+                                            const sql2='UPDATE File SET FileName=? , LastUpdate=? WHERE FileType=4'
+                                            db.run(sql2, [fileName, date], (err) => {
+                                                resolve(true);
+                                            })
+                                        }
                                     }
                                 })
                             }
@@ -258,5 +288,21 @@ function updateLectures(list){
                 }
             });
         }
+    });
+}
+
+exports.getFileData=function(){
+    let list = []; 
+    return new Promise((resolve, reject) => {
+        const sql='SELECT FileType, FileName, LastUpdate FROM File'
+        db.all(sql, [], (err, rows) => {
+            if(err) reject(err);
+            else{
+                for(el of list){
+                    list.push({"fileType": el.FileType, "fileName": el.FileName, "lastUpdate": el.LastUpdate});
+                }
+                resolve(list);
+            }
+        }).catch(err => reject(err));  
     });
 }
