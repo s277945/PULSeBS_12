@@ -155,8 +155,8 @@ const CoursesSetup = () => {
             })
     }
 
-    const invertSelection=()=>{
-        setYearsChecked(yearsChecked.map(y=>{
+    const invertSelection=()=>{// invert check selection
+        setYearsChecked(yearsChecked.map(y=>{//check all cases and update checked states for years/semesters
             let s1num = courses.filter(course=>{ return (course.year===y.year&&course.semester===1&&course.checked);}).length;
             let s2num = courses.filter(course=>{ return (course.year===y.year&&course.semester===2&&course.checked);}).length;
             console.log(s1num)
@@ -182,11 +182,16 @@ const CoursesSetup = () => {
                     y.semesters[0]=false;
                     y.semesters[1]=true;
                 }
+                else    {
+                    y.checked=false;
+                    y.semesters[0]=false;
+                    y.semesters[1]=false;
+                }
             }
 
             return y;
         }))
-        setCourses(courses.map(course=>{
+        setCourses(courses.map(course=>{//update checked states courses
             if(course.checked===true)
                 course.checked=false;
             else
