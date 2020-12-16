@@ -210,6 +210,12 @@ function getListLectures(schedule){
                     let mailsent;
                     if(start.isAfter(date)) mailsent=0;
                     else mailsent=1;
+
+                    let i_present = checkPresence(list, schedule.courseId)
+                    if(i_present !== null){
+                        i = i_present
+                    }
+
                     let obj = {
                             "Course_Ref": schedule.courseId,
                             "Name": courseName + " Les:" + i,
@@ -235,6 +241,17 @@ function getListLectures(schedule){
         })
     })
 
+}
+
+function checkPresence(list, courseId){
+    for(let el of list){
+        if(el.courseId === courseId){
+            let name = el.Name.split(":")
+            let i = name[1]
+            return Number(i) + 1
+        }
+    }
+    return null
 }
 
 exports.getCoursesData=function(){
