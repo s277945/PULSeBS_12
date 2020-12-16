@@ -124,7 +124,30 @@ const CoursesSetup = () => {
             return y
         }));
     }
+    const invert=()=>{
+        setCourses(courses.map(course=>{
+            if(course.checked===true)
+                course.checked=false;
+            else
+                course.checked=true;
+            return course;
+        }));
+        setYearsChecked(yearsChecked.map(y=>{
+            if(y.checked===true){
+                y.checked=false;
+                y.semesters[0]=false;
+                y.semesters[1]=false;
+            }
 
+            else{
+                y.checked=true;
+                y.semesters[0]=true;
+                y.semesters[1]=true;
+            }
+
+            return y;
+        }))
+    }
     const reset = () => {// selection reset function 
         setCourses(courses.map(course=>{
             course.checked=false;// turn all courses checkboxes to unchecked
@@ -145,7 +168,7 @@ const CoursesSetup = () => {
                 <div>
                     <Button variant="info" style={{margin:"5px"}}>Turn to distance type</Button>
                     <Button style={{margin:"5px"}}>Turn to presence type</Button>
-                    <Button variant="secondary" style={{margin:"5px"}}>Invert type</Button>
+                    <Button variant="secondary" style={{margin:"5px"}} onClick={()=>{invert()}}>Invert type</Button>
                     <Button variant="danger" style={{margin:"5px", marginRight:"17px"}} onClick={() => {reset()}}>Reset selection</Button>
                 </div>
             </div>
