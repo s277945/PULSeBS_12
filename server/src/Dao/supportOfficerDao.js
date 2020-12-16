@@ -303,13 +303,14 @@ exports.getFileData=function(){
     return new Promise((resolve, reject) => {
         const sql='SELECT FileType, FileName, LastUpdate FROM File'
         db.all(sql, [], (err, rows) => {
-            if(err) reject(err);
+            if(err) {console.log(err);reject(err);}
             else{
-                for(el of list){
-                    list.push({"fileType": el.FileType, "fileName": el.FileName, "lastUpdate": el.LastUpdate});
+                for(let row of rows){
+                    list.push({"fileType": row.FileType, "fileName": row.FileName, "lastUpdate": row.LastUpdate});
                 }
+                console.log(list);
                 resolve(list);
             }
-        }).catch(err => reject(err));  
+        }) 
     });
 }
