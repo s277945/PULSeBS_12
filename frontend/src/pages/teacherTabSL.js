@@ -4,6 +4,7 @@
  import Modal from 'react-bootstrap/Modal'
  import {update, updateTeacher} from './update.js'
  import { getStudentList } from '../api/api'
+ import moment from 'moment'
 
  export class TeacherTabSL extends Component {
 
@@ -55,7 +56,7 @@
              body.push(<tr key={k++}>
                  <td>{row.Course_Ref}</td>
                  <td>{row.Name}</td>
-                 <td>{row.Date}</td>
+                 <td>{moment(row.Date).format("DD/MM/YYYY HH:mm")}</td>
                  <td style={{display: "flex", justifyContent: "flex-start"}}><Button style={{marginLeft: "5px"}} data-testid={"showList_"+k++} onClick={(e) => { e.preventDefault(); this.showList(row) }}>SHOW LIST</Button></td>
              </tr>)
          });
