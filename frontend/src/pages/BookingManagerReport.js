@@ -10,7 +10,7 @@ import "jspdf-autotable";
 
 export class BookingManagerReport extends Component {
 
-    state = { posStudents: [], modal: false, searchField: "", searchedStudent: "", modalResult: "" }
+    state = { posStudents: [], modal: false, searchField: "", searchedStudent: "", modalResult: ""}
 
     componentDidMount() {
 
@@ -37,6 +37,8 @@ export class BookingManagerReport extends Component {
                 this.generatePDF(student, res.data)
             }).catch(/* istanbul ignore next */err => {
                 console.log(err);
+                //If we recive an error we generate a report saying that the student was not in contact with other students
+                this.generatePDF(student,[])
             });
     }
 
@@ -46,7 +48,7 @@ export class BookingManagerReport extends Component {
         const doc = new jsPDF();
 
         // table title. and  margin-left,margin-top
-        doc.text("PULSeBS Team 12", 100, 16, 'center');
+        doc.text("PULSeBS Student Report for COVID-19", 100, 16, 'center');
         doc.text("Report of COVID-19 positive for student:", 14, 32);
 
         // define the columns we want and their titles
@@ -60,11 +62,12 @@ export class BookingManagerReport extends Component {
 
         doc.autoTable(tableColumn, tableRowStudent, { startY: 40 });
 
-        //if the server returns empty array as a report []
+        doc.text("Report:", 14, 64);
 
+        //if the server returns empty array as a report []
         if (report.length === 0 ) {
 
-            doc.text("The mentioned student was not in contact with other students. ", 14, 64);
+            doc.text("The mentioned student was not in contact with other students. ", 14, 72);
          }
 
         else {
@@ -85,12 +88,12 @@ export class BookingManagerReport extends Component {
                 tableRows.push(studentData);
             });
 
-            doc.text("The following students participated in the same lectures of the mentioned ", 14, 64);
+            doc.text("The following students participated in the same lectures of the mentioned ", 14, 72);
 
-            doc.text("student:", 14, 72);
+            doc.text("student:", 14, 80);
 
             // startY is basically margin-top
-            doc.autoTable(tableColumn, tableRows, { startY: 80 });
+            doc.autoTable(tableColumn, tableRows, { startY: 88 });
 
         }
 
@@ -133,8 +136,8 @@ export class BookingManagerReport extends Component {
     }
 
     //Search student by ssn
-    searchBySSN = () => {
-        getStudentBySSN(this.state.searchField)
+    searchBySSN = (ssn) => {
+        getStudentBySSN(ssn)
             .then(res => {
                 this.setState({ searchedStudent: res.data });
             }).catch(/* istanbul ignore next */err => {
@@ -150,6 +153,8 @@ export class BookingManagerReport extends Component {
                 // After a succesful mark, update the table
                 this.updateReport()
                 this.setState({ modalResult: "Student added as positive." })
+                //update searched student, to get covid flag as 1 and disable the button
+                this.searchBySSN(ssn)
             }).catch(/* istanbul ignore next */err => {
                 console.log(err);
             });
@@ -169,7 +174,7 @@ export class BookingManagerReport extends Component {
                     <tr >
                         <td>{this.state.searchedStudent.name} {this.state.searchedStudent.surname}</td>
                         <td>{this.state.searchedStudent.birthday}</td>
-                        <td style={{ display: "flex", justifyContent: "flex-start" }}><Button data-testid="confirmButton" style={{ marginLeft: "5px" }} onClick={(e) => { e.preventDefault(); this.markSelectedStudent(this.state.searchedStudent.ssn) }}>Mark as Positive</Button></td>
+                        <td style={{ display: "flex", justifyContent: "flex-start" }}><Button data-testid="confirmButton" style={{ marginLeft: "5px" }} disabled={this.state.searchedStudent.covid===1?true:false} onClick={(e) => { e.preventDefault(); this.markSelectedStudent(this.state.searchedStudent.ssn) }}>{this.state.searchedStudent.covid===1?"Marked":"Mark as positive"}</Button></td>
                     </tr>
                 </tbody>
             </Table>
@@ -187,7 +192,7 @@ export class BookingManagerReport extends Component {
                     <p>Search by SSN:</p>
 
                     <input type="text" name="fname" placeholder="SSN" onChange={(e) => { this.setState({ searchField: e.target.value }) }} />
-                    <Button data-testid="search" style={{ marginLeft: "5px" }} onClick={(e) => { e.preventDefault(); this.setState({ modalResult: "" }); this.searchBySSN() }}>Search</Button>
+                    <Button data-testid="search" style={{ marginLeft: "5px" }} onClick={(e) => { e.preventDefault(); this.setState({ modalResult: "" }); this.searchBySSN(this.state.searchField) }}>Search</Button>
 
                     <br />
                     <br />

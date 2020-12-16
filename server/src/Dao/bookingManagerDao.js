@@ -94,12 +94,12 @@ exports.getPositiveStudents = function(){
 
 exports.searchStudentBySsn = function (ssn){
     return new Promise((resolve, reject) => {
-        const sql='SELECT Name, Surname, Birthday, SSN FROM User WHERE SSN=?';
+        const sql='SELECT Name, Surname, Birthday, SSN, Covid FROM User WHERE SSN=?';
         db.get(sql, [ssn], (err,row)=>{
             /* istanbul ignore if */if(err) reject(err);
             else{
                 if(row!=undefined)
-                    resolve({"name":row.Name, "surname":row.Surname, "birthday":row.Birthday, "ssn":row.SSN});
+                    resolve({"name":row.Name, "surname":row.Surname, "birthday":row.Birthday, "ssn":row.SSN,"covid":row.Covid});
                 else
                     reject(new Error({err: "Nothing to show"}))
             }
