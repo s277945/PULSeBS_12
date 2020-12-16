@@ -46,6 +46,10 @@
   background-color:  rgb(251, 251, 251);
 }
 
+.app-element-background-2 {
+  background-color:  rgb(253, 253, 253);
+}
+
 .modal-header {
   background-color:  rgb(249, 249, 249);
 }
@@ -132,12 +136,12 @@
 
 
   .accordion-container-1 {
+    background-color:  rgb(253, 253, 253);
     width: 99%;
     margin: auto;
     border-style: solid;
     border-width: 1px;
     border-color: #eeeeee;
-    min-height: 73vh;
   }
 
   .Toastify__toast-container {

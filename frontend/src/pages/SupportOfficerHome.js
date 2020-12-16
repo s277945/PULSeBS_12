@@ -10,7 +10,9 @@ export default function BookingManagerHome(){
     return(
         <>
             <NavBarOfficer show={show} setShow={setShow}/>
-            {show===0?<SystemSetupView/>:<CoursesSetupView/>}
+            <div className="app-element-background-2">
+                {show===0?<SystemSetupView/>:<CoursesSetupView/>}
+            </div>
         </>
     )
 }

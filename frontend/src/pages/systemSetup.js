@@ -42,7 +42,7 @@ const UploadComponent = ({uploaded, setUploaded, filename, filedate, type, Name,
     }
     return(
         <div className="d-flex justify-content-center mt-5">
-            <Table className="w-75 table-bordered">
+            <Table className="w-75 table-bordered" style={{background: "white"}}>
             <thead>
             <tr>
                 <th style={{width: "25vw"}}>{Name}</th>

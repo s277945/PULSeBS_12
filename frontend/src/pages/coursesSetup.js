@@ -303,7 +303,7 @@ const CoursesSetup = () => {
                                             </div>
                                             <Accordion.Collapse eventKey="0">
                                                 <Card.Body>
-                                                    <Table data-testid={year.year+'courses'+"s1"} striped bordered hover style={{ backgroundColor: "#fff" }}>
+                                                    <Table className="app-element-background-2" data-testid={year.year+'courses'+"s1"} striped bordered hover style={{ backgroundColor: "#fff" }}>
                                                         <thead>
                                                             <tr>
                                                                 <th>Course</th>
@@ -340,7 +340,7 @@ const CoursesSetup = () => {
                                             </div>
                                             <Accordion.Collapse eventKey="0">
                                                 <Card.Body>
-                                                    <Table data-testid={year.year+'courses'+"s2"} striped bordered hover style={{ backgroundColor: "#fff" }}>
+                                                    <Table className="app-element-background-2" data-testid={year.year+'courses'+"s2"} striped bordered hover style={{ backgroundColor: "#fff" }}>
                                                     <thead>
                                                             <tr>
                                                                 <th>Course</th>
