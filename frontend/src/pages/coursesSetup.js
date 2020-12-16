@@ -138,7 +138,7 @@ const CoursesSetup = () => {
         }));
     }
 
-    const invert = () => {
+    const invertType = () => {
         let newcourses = courses.map(course=>{// update internal state
             if(course.checked&&course.restriction===1) course.restriction=0;
             else if(course.checked&&course.restriction===0) course.restriction=1;
@@ -155,23 +155,106 @@ const CoursesSetup = () => {
             })
     }
 
+    const invertSelection=()=>{
+        setCourses(courses.map(course=>{
+            if(course.checked===true)
+                course.checked=false;
+            else
+                course.checked=true;
+            return course;
+        }));
+        setYearsChecked(yearsChecked.map(y=>{
+            if(y.checked===true){
+                y.checked=false;
+                y.semesters[0]=false;
+                y.semesters[1]=false;
+            }
+
+            else{
+                y.checked=true;
+                y.semesters[0]=true;
+                y.semesters[1]=true;
+            }
+
+            return y;
+        }))
+    }
+
     const invertDisable = () => {
         return courses.filter(course=>course.checked).length===0;
     }
 
+    const selectAll = () => {// select all courses function 
+        setCourses(courses.map(course=>{
+            course.checked=true;// turn all courses checkboxes to checked
+            return course
+        }));
+        setYearsChecked(yearsChecked.map(y=>{// turn all year/semester checkboxes to checked
+                y.checked=true;
+                y.semesters[0]=true;
+                y.semesters[1]=true;
+            return y
+        }));
+    }
+
+    const selectAllDisable = () => {// selectall disable function 
+        return courses.filter(course=>(!course.checked)).length===0;// check if all courses are selected
+    }
+
+    const turnToDistance = () => {
+        let newcourses=courses.map(course=>{// init new courses array
+            if(course.checked&&course.restriction===0) course.restriction=1;
+            return course;
+        })
+        let coursesData=newcourses.filter(course=>course.checked);//filter data to send
+        postCoursesType(coursesData)// send data to server
+            .then(res=>{
+                console.log(res);
+                setCourses(newcourses);// update state
+            })
+            .catch(/* istanbul ignore next */err => {
+                console.log(err);
+            })
+    }
+
     const distanceDisable = () => {
-        return courses.filter(course=>(course.checked&&course.restriction===0)).length===0;
+        return courses.filter(course=>(course.checked&&course.restriction===0)).length===0;// check if there are courses without restriction in selection
+    }
+
+    const turnToPresence = () => {
+         let newcourses=courses.map(course=>{// init new courses array
+            if(course.checked&&course.restriction===1) course.restriction=0;
+            return course;
+        })
+        let coursesData=newcourses.filter(course=>course.checked);//filter data to send
+        postCoursesType(coursesData)// send data to server
+            .then(res=>{
+                console.log(res);
+                setCourses(newcourses);// update state
+            })
+            .catch(/* istanbul ignore next */err => {
+                console.log(err);
+            })
+    }
+
+    const presenceDisable = () => {
+        return courses.filter(course=>(course.checked&&course.restriction===1)).length===0;// check if there are courses with restriction in selection
     }
 
     return(
         <div className="accordion-container-1">
-            <div style={{display: "flex", wrap: "nowrap", justifyContent: "space-between", marginTop: "12px", marginBottom: "14px"}}>
+            <div style={{display: "flex", wrap: "nowrap", justifyContent: "flex-start", marginTop: "12px", marginBottom: "14px"}}>
                 <div/>
                 <div>
-                    <Button variant="info" style={{margin:"5px"}} disabled={distanceDisable()}>Turn to distance type</Button>
-                    <Button style={{margin:"5px"}}>Turn to presence type</Button>
-                    <Button variant="secondary" style={{margin:"5px"}} disabled={invertDisable()} onClick={() => {invert()}}>Invert type</Button>
-                    <Button variant="danger" style={{margin:"5px", marginRight:"17px"}} disabled={invertDisable()} onClick={() => {reset()}}>Reset selection</Button>
+                    <Button variant="info" style={{margin:"5px", marginLeft:"17px"}} disabled={distanceDisable()} onClick={() => {turnToDistance()}}>Turn to distance type</Button>
+                    <Button style={{margin:"5px"}} disabled={presenceDisable()} onClick={() => {turnToPresence()}}>Turn to presence type</Button>
+                    <Button variant="secondary" style={{margin:"5px"}} disabled={invertDisable()} onClick={() => {invertType()}}>Invert type</Button>
+                </div>
+                <div style={{margin: "auto"}}></div>
+                <div>                    
+                    <Button variant="secondary" style={{margin:"5px"}} disabled={selectAllDisable()} onClick={() => {selectAll()}}>Select all</Button>                    
+                    <Button variant="secondary" style={{margin:"5px"}} disabled={invertDisable()} onClick={() => {invertSelection()}}>Invert selection</Button>
+                    <Button variant="danger" style={{margin:"5px", marginRight:"17px"}} disabled={invertDisable()} onClick={() => {reset()}}>Deselect all</Button>
                 </div>
             </div>
             <div>
@@ -243,10 +326,18 @@ const CoursesSetup = () => {
                                             <Accordion.Collapse eventKey="0">
                                                 <Card.Body>
                                                     <Table data-testid={year.year+'courses'+"s2"} striped bordered hover style={{ backgroundColor: "#fff" }}>
+                                                    <thead>
+                                                            <tr>
+                                                                <th>Course</th>
+                                                                <th>Distance course</th>
+                                                                <th></th>
+                                                            </tr>
+                                                        </thead>
                                                         <thead>
                                                             {courses.filter(course=>{return course.year===year.year&&course.semester===2}).map(course=>
                                                                 <tr>
                                                                     <td>{course.name+" ("+course.courseId+")"}</td>
+                                                                    <td>{course.restriction===1?"Yes":"No"}</td>
                                                                     <td style={{width: "15px"}}><Form.Check checked={course.checked} onClick={()=>{handleCheck("c", course);}} style={{marginLeft: "4px"}} type="checkbox"/></td>
                                                                 </tr>
                                                             )}
