@@ -10,7 +10,23 @@ export class StatisticsTab extends Component {
 
     //GB Lectures as first option
     state = { selected: [], lectures: [], week: [], month: [], groupBy: "Lectures" }
+     substring=(array)=>{
+        let tmp=[];
+         console.log(array);
+        array.map((lecture,index)=>{
+            let el;
+            //lectureName
+            tmp[index]=lecture;
+            console.log("lecture: "+lecture)
+            if(lecture.lectureName!=undefined){
+                el=tmp[index].lectureName.indexOf('Les');
+                tmp[index].lectureName=tmp[index].lectureName.substr(el);
+            }
 
+
+        })
+        return tmp;
+    }
     componentDidMount() {
 
         getCourseStats(this.props.course.CourseID)
@@ -65,6 +81,7 @@ export class StatisticsTab extends Component {
 
             case "Lectures":
                 console.log("case Lectures")
+                console.log(this.state.lectures)
                 this.setState({ selected: this.state.lectures })
                 break
 
@@ -263,9 +280,10 @@ export class StatisticsTab extends Component {
                             colors={{ scheme: "nivo" }}
 
                             // Chart options
-                            data={this.state.selected}
+                            data={this.substring(this.state.selected)}
                             keys={[keys]}
                             indexBy={indexBy}
+
                         />
                     </div>
                     <div style={{margin: "10px", marginLeft: "35px", marginRight: "37px"}}>
