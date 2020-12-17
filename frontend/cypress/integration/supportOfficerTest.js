@@ -78,6 +78,11 @@ describe('SUPPORT OFFICER TESTS', function () {
                 .should('be.visible')
                 .click()
             cy.wait(100)
+            cy.get('.card').eq(0).should('be.visible')
+                .click({force:true})
+                .within(()=>{
+                    cy.get('[data-testid="year"]').should('be.visible').click()
+                })
             cy.get('.btn.btn-secondary').eq(2).should('be.enabled').click()
             cy.wait(100)
         });
@@ -86,8 +91,42 @@ describe('SUPPORT OFFICER TESTS', function () {
                 .should('be.visible')
                 .click()
             cy.wait(100)
+            cy.get('.card').eq(0).should('be.visible')
+                .click({force:true})
+                .within(()=>{
+                    cy.get('[data-testid="year"]').should('be.visible').click()
+                })
             cy.get('.btn.btn-secondary').eq(0).should('be.enabled').click()
             cy.wait(100)
+        });
+        it('should click on semester', function () {
+            cy.get('[data-testid="updatebookable"]')
+                .should('be.visible')
+                .click()
+            cy.wait(100)
+            cy.get('.card').eq(0).should('be.visible')
+                .click()
+                .within(()=>{
+                    cy.get(".accordion-custom-setup-1").within(()=>{
+                        cy.get('.form-check-input').eq(1).check()
+                    })
+                    cy.wait(100)
+                })
+        });
+        it('should click on course', function () {
+            cy.get('[data-testid="updatebookable"]')
+                .should('be.visible')
+                .click()
+            cy.wait(100)
+            cy.get('.card').eq(0).should('be.visible')
+                .click()
+                .within(()=>{
+                    cy.get(".card-header").eq(1).click()
+                    cy.get(".card-body").eq(1).within(()=>{
+                        cy.get('.form-check-input').eq(2).check()
+                    })
+                    cy.wait(100)
+                })
         });
 
     });
