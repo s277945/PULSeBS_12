@@ -3,7 +3,7 @@ import Navbar  from 'react-bootstrap/Navbar'
 import Nav from 'react-bootstrap/Nav'
 import {useAuth} from '../components/Authsystem'
 import SystemSetup from './SystemSetup'
-import CoursesSetup  from './CoursesSetup'
+import CoursesSetup  from './coursesSetup'
 
 export default function BookingManagerHome(){
     const [show, setShow] = useState(0);// element render selection state

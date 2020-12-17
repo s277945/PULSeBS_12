@@ -6,7 +6,7 @@ import { getCoursesData, postCoursesType } from '../api/api';
 import Accordion from 'react-bootstrap/Accordion'
 import Card from 'react-bootstrap/Card'
 
-export default function CoursesSetup() {
+export default function coursesSetup() {
     
     return(
         <>
@@ -17,7 +17,7 @@ export default function CoursesSetup() {
     )
 }
 
-const CoursesSetupView = () => {
+const CoursesSetup = () => {
     const [courses, setCourses] = useState([]);
     const [yearsChecked, setYearsChecked] = useState([]);// init years array
 
