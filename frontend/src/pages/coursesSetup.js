@@ -149,6 +149,7 @@ const CoursesSetup = () => {
         postCoursesType(coursesData)// server post
             .then(response => {console.log(response);
                 setCourses(newcourses);
+                reset();
             })
             .catch(/* istanbul ignore next */err => {
                 console.log(err);
@@ -231,6 +232,7 @@ const CoursesSetup = () => {
             .then(res=>{
                 console.log(res);
                 setCourses(newcourses);// update state
+                reset();
             })
             .catch(/* istanbul ignore next */err => {
                 console.log(err);
@@ -251,6 +253,7 @@ const CoursesSetup = () => {
             .then(res=>{
                 console.log(res);
                 setCourses(newcourses);// update state
+                reset();
             })
             .catch(/* istanbul ignore next */err => {
                 console.log(err);
