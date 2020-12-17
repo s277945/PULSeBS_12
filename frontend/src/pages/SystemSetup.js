@@ -65,7 +65,7 @@ const UploadComponent = ({uploaded, setUploaded, filename, filedate, type, Name,
 const UploadFileButton = ({disabled, uploaded, setUploaded, Name, listType, type}) => {
     const [files, setFiles] = useState([]);
     const [uploading, setUploading] = useState(false);
-    const [ percentage, setPercentage] = useState(0);
+    const [percentage, setPercentage] = useState(0);
 
     useEffect(() => {
         bsCustomFileInput.init();
@@ -159,6 +159,7 @@ const UploadFileButton = ({disabled, uploaded, setUploaded, Name, listType, type
                 let newuploaded = uploaded.map(e1=>e1);
                 newuploaded[type]={fileName: file.name, fileType: type, lastUpdate: moment()}
                 setUploaded(newuploaded);
+                setFiles([]);
             })
             .catch(err1 => {
                 console.log(err1);
@@ -183,17 +184,19 @@ const UploadFileButton = ({disabled, uploaded, setUploaded, Name, listType, type
             <div className="d-flex">
                 <Form.File 
                     id="custom-file"
-                    label= {Name + " csv list file"}
+                    label= {Name + " .csv file"}
                     custom
                     onChange={(event) => setFiles(event.target.files)}
                 />
             </div>
         </Form>
-        <Button disabled={uploading||disabled} className="ml-3" variant="primary" onClick={() => sendFile()} style={{height: "38px"}}>
+        <Button disabled={uploading||disabled||!files[0]} className="ml-3" variant="primary" onClick={() => sendFile()} style={{height: "38px"}}>
             {!uploading && <div>Send</div>}
             {uploading && <div style={{minWidth: "105px"}}><Spinner as="span" animation="grow" size="sm" role="status" aria-hidden="true" style={{marginRight: "5px", marginBottom: "1.5px"}}/>Uploading...</div>}
         </Button>
             {uploading?<h3 style={{marginTop: "0px", marginLeft: "10px", color: "grey"}}>{percentage}%</h3>:<div/>}
+            {!files[0]?<div style={{margin: "auto", color: "#999999", fontStyle: "italic"}}>{"Select a valid .csv file to upload"}</div>:<div/>}
+            {disabled&&files[0]?<div style={{margin: "auto", color: "#999999", fontStyle: "italic"}}>{"Missing file dependencies"}</div>:<div/>}
     </div>
     )
 }
