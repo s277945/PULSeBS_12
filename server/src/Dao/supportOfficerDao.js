@@ -9,13 +9,12 @@ exports.uploadStudents=function(list, fileName){
     let lenght;
     if(list!=undefined)
         lenght= list.length;
-    const password = "$2a$10$Uoatm1KqMfPsesdIcOm8a.yTYzUQAvEkfhZNOIh.1BFt.hY4jv8yq"
     let i = 0;
     return new Promise((resolve, reject) => {
-        const sql='INSERT INTO User(userID,Name,Surname,City,Email,Password,Birthday,SSN,UserType) VALUES(?,?,?,?,?,?,?,?,?)';
+        const sql='INSERT INTO User(userID,Name,Surname,City,Email,Birthday,SSN,UserType) VALUES(?,?,?,?,?,?,?,?)';
         for(let element of list) {
             //console.log("list element student:"+JSON.stringify(element))
-            db.run(sql, [element.userID, element.Name, element.Surname, element.City, element.email, password,
+            db.run(sql, [element.userID, element.Name, element.Surname, element.City, element.email,
                 element.birthday, element.ssn, "s"], (err) => {
                 /* istanbul ignore if */
                 if (err)
