@@ -19,21 +19,21 @@ describe('TEST SUPPORT OFFICER', function () {
             password: 'scimmia'
         })
         cookie = res.headers['set-cookie'];
-        student=({"userID": "900000", "Name": "Ambra", "Surname":"Ferri",
+        student.push({"userID": "900000", "Name": "Ambra", "Surname":"Ferri",
             "City": "Poggio Ferro", "email":"s900000@students.politu.it",
             "birthday": "1991-11-04", "ssn": "MK97060783"});
-        teacher=({"userID": "d9000", "Name": "Ines", "Surname":"Beneventi", "email":"Ines.Beneventi@politu.it",
+        teacher.push({"userID": "d9000", "Name": "Ines", "Surname":"Beneventi", "email":"Ines.Beneventi@politu.it",
             "ssn": "XT6141393"});
-        course=({"courseId": "XY1211", "year": 1, "name": "Metodi di finanziamento delle imprese", "semester": 1, "teacherId": "d9000"});
-        enrollment=({"courseId":"XY1211", "studentId": "900000"});
-        schedule=({"courseId": "XY1211","room": 1, "day": "Mon", "seats": 120, "time": "8:30-11:30"});
+        course.push({"courseId": "XY1211", "year": 1, "name": "Metodi di finanziamento delle imprese", "semester": 1, "teacherId": "d9000"});
+        enrollment.push({"courseId":"XY1211", "studentId": "900000"});
+        schedule.push({"courseId": "XY1211","room": 1, "day": "Mon", "seats": 120, "time": "8:30-11:30"});
     })
     describe('insert a student inside table', function () {
         it('should insert correctly a student', function () {
             return chai.request(url)
                 .post('/api/uploadStudents')
                 .set("Cookie",cookie)
-                .send(student)
+                .send({data:student,fileName:'Students.csv'})
                 .then(res=>{
                     expect(res).to.have.status(200)
                     expect(res.body.inserted).to.equals(true)
@@ -43,7 +43,7 @@ describe('TEST SUPPORT OFFICER', function () {
             return chai.request(url)
                 .post('/api/uploadStudents')
                 .set("Cookie",cookie)
-                .send(student)
+                .send({data:student,fileName:'Students.csv'})
                 .then(res=>{
                     expect(res).to.have.status(500)
                 })
@@ -54,7 +54,7 @@ describe('TEST SUPPORT OFFICER', function () {
             return chai.request(url)
                 .post('/api/uploadTeachers')
                 .set("Cookie",cookie)
-                .send(teacher)
+                .send({data:teacher,fileName:'Students.csv'})
                 .then(res=>{
                     expect(res).to.have.status(200)
                     expect(res.body.inserted).to.equals(true)
@@ -64,7 +64,7 @@ describe('TEST SUPPORT OFFICER', function () {
             return chai.request(url)
                 .post('/api/uploadTeachers')
                 .set("Cookie",cookie)
-                .send(teacher)
+                .send({data:teacher,fileName:'Students.csv'})
                 .then(res=>{
                     expect(res).to.have.status(500)
                 })
@@ -75,7 +75,7 @@ describe('TEST SUPPORT OFFICER', function () {
             return chai.request(url)
                 .post('/api/uploadCourses')
                 .set("Cookie",cookie)
-                .send(course)
+                .send({data:course,fileName:'Students.csv'})
                 .then(res=>{
                     expect(res).to.have.status(200)
                     expect(res.body.inserted).to.equals(true)
@@ -85,7 +85,7 @@ describe('TEST SUPPORT OFFICER', function () {
             return chai.request(url)
                 .post('/api/uploadCourses')
                 .set("Cookie",cookie)
-                .send(course)
+                .send({data:course,fileName:'Students.csv'})
                 .then(res=>{
                     expect(res).to.have.status(500)
                 })
@@ -96,7 +96,7 @@ describe('TEST SUPPORT OFFICER', function () {
             return chai.request(url)
                 .post('/api/uploadEnrollment')
                 .set("Cookie",cookie)
-                .send(enrollment)
+                .send({data:enrollment,fileName:'Students.csv'})
                 .then(res=>{
                     expect(res).to.have.status(200)
                     expect(res.body.inserted).to.equals(true)
@@ -106,7 +106,7 @@ describe('TEST SUPPORT OFFICER', function () {
             return chai.request(url)
                 .post('/api/uploadEnrollment')
                 .set("Cookie",cookie)
-                .send(enrollment)
+                .send({data:enrollment,fileName:'Students.csv'})
                 .then(res=>{
                     expect(res).to.have.status(500)
                 })
@@ -117,7 +117,7 @@ describe('TEST SUPPORT OFFICER', function () {
             return chai.request(url)
                 .post('/api/uploadSchedule')
                 .set("Cookie",cookie)
-                .send(schedule)
+                .send({data:schedule,fileName:'Students.csv'})
                 .then(res=>{
                     expect(res).to.have.status(200)
                     expect(res.body.inserted).to.equals(true)
@@ -127,7 +127,7 @@ describe('TEST SUPPORT OFFICER', function () {
             return chai.request(url)
                 .post('/api/uploadSchedule')
                 .set("Cookie",cookie)
-                .send(schedule)
+                .send({data:schedule,fileName:'Students.csv'})
                 .then(res=>{
                     expect(res).to.have.status(500)
                 })
@@ -148,6 +148,37 @@ describe('TEST SUPPORT OFFICER', function () {
             await support.deleteRowsStudent(student).then(res=>{
                 expect(res).to.equals(true);
             })
+        });
+    });
+    describe('FileData', function () {
+        it('should get file data', function () {
+            return chai.request(url).get('/api/fileData')
+                .set('Cookie',cookie).send()
+                .then(res=>{
+                    expect(res).to.have.status(200)
+                    expect(res.body).to.be.an('array')
+                    expect(res.body).to.have.lengthOf(5)
+                })
+        });
+    });
+    describe('COURSE DATA', function () {
+        it('should return course data', function () {
+            return chai.request(url).get('/api/coursesData')
+                .set('Cookie',cookie).send()
+                .then(res=>{
+                    expect(res).to.have.status(200)
+                    expect(res.body).to.be.an('array')
+                    expect(res.body).to.be.not.empty
+                })
+        });
+        it('should post bookable lecture', function () {
+            return chai.request(url).post('/api/lecturesBookable')
+                .set('Cookie',cookie)
+                .send([{"courseId": "C4567","restriction": 0}])
+                .then(res=>{
+                    expect(res).to.have.status((200))
+                    expect(res.body).to.haveOwnProperty("modified")
+                })
         });
     });
 });
