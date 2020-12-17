@@ -289,7 +289,7 @@ const CoursesSetup = () => {
                                     <p style={{fontStyle: "italic", marginLeft: "7px", marginTop: "1px", color: "#bababa"}}>{courses.filter(course=>(course.year===year.year&&course.restriction===0)).length}</p><p style={{fontStyle: "italic", marginLeft: "5px", marginTop: "1px", color: "#bababa"}}>courses in presence</p>
                                 </div>
                             </Accordion.Toggle>
-                            <Form.Check type="checkbox" style={{margin: "auto"}} checked={year.checked} onClick={()=>{handleCheck("y", year);}}/>
+                            <Form.Check data-testid={"year"} type="checkbox" style={{margin: "auto"}} checked={year.checked} onClick={()=>{handleCheck("y", year);}}/>
                         </div>
                         <Accordion.Collapse eventKey="0">
                             <Card.Body>

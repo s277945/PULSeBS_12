@@ -15,6 +15,7 @@ describe('SUPPORT OFFICER TESTS', function () {
             cy.get('.page-title')
                 .should('contains.text','Upload data')
         });
+
     });
     describe('COURSE SETUP PAGE', function () {
         it('should render page', function () {
@@ -23,6 +24,70 @@ describe('SUPPORT OFFICER TESTS', function () {
                 .click()
             cy.wait(100)
 
+        });
+        it('should turn lecture into distance', function () {
+            cy.get('[data-testid="updatebookable"]')
+                .should('be.visible')
+                .click()
+            cy.wait(100)
+            cy.get('.card').eq(0).should('be.visible')
+                .click({force:true})
+                .within(()=>{
+                    cy.get('[data-testid="year"]').should('be.visible').click()
+                })
+            cy.get('.btn.btn-info').should('be.enabled').click()
+            cy.wait(100)
+        });
+        it('should turn lecture into presence', function () {
+            cy.get('[data-testid="updatebookable"]')
+                .should('be.visible')
+                .click()
+            cy.wait(100)
+            cy.get('.card').eq(0).should('be.visible')
+                .click({force:true})
+                .within(()=>{
+                    cy.get('[data-testid="year"]').should('be.visible').click()
+                })
+            cy.get('.btn.btn-primary').should('be.enabled').click()
+            cy.wait(100)
+        });
+        it('should reset', function () {
+            cy.get('[data-testid="updatebookable"]')
+                .should('be.visible')
+                .click()
+            cy.wait(100)
+            cy.get('.card').eq(0).should('be.visible')
+                .click({force:true})
+                .within(()=>{
+                    cy.get('[data-testid="year"]').should('be.visible').click()
+                })
+            cy.get('.btn.btn-danger').should('be.enabled').click()
+            cy.wait(100)
+            
+        });
+        it('should select all', function () {
+            cy.get('[data-testid="updatebookable"]')
+                .should('be.visible')
+                .click()
+            cy.wait(100)
+            cy.get('.btn.btn-secondary').eq(1).should('be.enabled').click()
+            cy.wait(100)
+        });
+        it('should invert selection', function () {
+            cy.get('[data-testid="updatebookable"]')
+                .should('be.visible')
+                .click()
+            cy.wait(100)
+            cy.get('.btn.btn-secondary').eq(2).should('be.enabled').click()
+            cy.wait(100)
+        });
+        it('should invert type', function () {
+            cy.get('[data-testid="updatebookable"]')
+                .should('be.visible')
+                .click()
+            cy.wait(100)
+            cy.get('.btn.btn-secondary').eq(0).should('be.enabled').click()
+            cy.wait(100)
         });
 
     });
