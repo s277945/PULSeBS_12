@@ -5,7 +5,7 @@ import {useAuth} from '../components/Authsystem'
 import SystemSetup from './SystemSetup'
 import CoursesSetup  from './coursesSetup'
 
-export default function BookingManagerHome(){
+export default function SupportOfficerHome(){
     const [show, setShow] = useState(0);// element render selection state
     return(
         <>

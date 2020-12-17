@@ -12,7 +12,7 @@ export class TeacherTabHist extends Component {
         getTeacherCourses()
              .then(res => {
                  console.log(res.data);
-                 courses = res.data;
+                 courses = res.data.filter(course=>course.Restriction===0);
                  console.log(courses);
                  this.setState({ tableData: courses });
              }).catch(/* istanbul ignore next */err=>{

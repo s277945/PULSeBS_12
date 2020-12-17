@@ -11,7 +11,7 @@ const moment = require('moment');
 exports.getCoursesByTeacherId=function(userId){
     console.log(userId)
     return new Promise((resolve, reject) => {
-        const sql='SELECT CourseID, Name FROM Course WHERE Teacher_Ref = ?';
+        const sql='SELECT CourseID, Name, Restriction FROM Course WHERE Teacher_Ref = ?';
         db.all(sql, [userId], (err,rows)=>{
             /* istanbul ignore if */
             if(err){
