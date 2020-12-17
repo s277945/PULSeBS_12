@@ -195,8 +195,8 @@ const UploadFileButton = ({disabled, uploaded, setUploaded, Name, listType, type
             {uploading && <div style={{minWidth: "105px"}}><Spinner as="span" animation="grow" size="sm" role="status" aria-hidden="true" style={{marginRight: "5px", marginBottom: "1.5px"}}/>Uploading...</div>}
         </Button>
             {uploading?<h3 style={{marginTop: "0px", marginLeft: "10px", color: "grey"}}>{percentage}%</h3>:<div/>}
-            {!files[0]?<div style={{margin: "auto", color: "#999999", fontStyle: "italic"}}>{"Select a valid .csv file to upload"}</div>:<div/>}
-            {disabled&&files[0]?<div style={{margin: "auto", color: "#999999", fontStyle: "italic"}}>{"Missing file dependencies"}</div>:<div/>}
+            {!files[0]?<div style={{margin: "auto", marginLeft: "13px", color: "#999999", fontStyle: "italic"}}>{"Select a valid .csv file to upload"}</div>:<div/>}
+            {disabled&&files[0]?<div style={{margin: "auto", marginLeft: "13px", color: "#999999", fontStyle: "italic"}}>{"Missing file dependencies"}</div>:<div/>}
     </div>
     )
 }
