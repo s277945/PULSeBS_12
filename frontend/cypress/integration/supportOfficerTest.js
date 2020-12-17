@@ -24,5 +24,6 @@ describe('SUPPORT OFFICER TESTS', function () {
             cy.wait(100)
 
         });
+
     });
 });
