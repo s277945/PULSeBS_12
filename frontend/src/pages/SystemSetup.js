@@ -52,8 +52,8 @@ const UploadComponent = ({uploaded, setUploaded, filename, filedate, type, Name,
             </thead>
             <tbody>
             <tr>
-                <td><div className="d-flex mt-1">{filename?filename:"/"}</div></td>
-                <td><div className="d-flex mt-1">{(filedate&&filedate!=="/")?moment(filedate).format("DD/MM/YYYY HH:mm"):"/"}</div></td>
+                <td><div className="d-flex mt-1" style={{minWidth: "120px"}}>{filename?filename:"/"}</div></td>
+                <td><div className="d-flex mt-1" style={{minWidth: "120px"}}>{(filedate&&filedate!=="/")?moment(filedate).format("DD/MM/YYYY HH:mm"):"/"}</div></td>
                 <td style={{width: "35vw"}}><UploadFileButton disabled={checkDisabled()} uploaded={uploaded} setUploaded={setUploaded} Name={Name} listType={listType} type={type}/></td>
             </tr>
             </tbody>
@@ -179,7 +179,7 @@ const UploadFileButton = ({disabled, uploaded, setUploaded, Name, listType, type
     }
 
     return(
-    <div style={{display: "flex", wrap: "nowrap"}}>
+    <div style={{display: "flex", wrap: "nowrap", minWidth: "550px"}}>
         <Form>
             <div className="d-flex">
                 <Form.File 
