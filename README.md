@@ -44,6 +44,7 @@
   
     sudo docker run -i -p 3000:3000 -p 3001:3001 -p 3002:3002 alebottisio/pulsebs_12:stable
 
+  then open the page at "http://localhost:3000/"
   **Windows:**
 
   clone git directory:
@@ -60,7 +61,7 @@
   
     docker run -i -p 3000:3000 -p 3001:3001 -p 3002:3002 alebottisio/pulsebs_12:stable
 
-
+  then open the page at "http://localhost:3000/"
 ## SONARSCANNER INSTRUCTIONS
   Just run the following command from the project's root folder
   
