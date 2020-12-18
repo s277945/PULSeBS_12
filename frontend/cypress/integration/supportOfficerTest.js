@@ -21,6 +21,13 @@ describe('SUPPORT OFFICER TESTS', function () {
 
         });
         it('should turn lecture into distance', function () {
+            cy.server()
+            cy.route({
+                method:'POST',
+                url:'/api/lecturesBookable',
+                status:200,
+                response:{"modified": true}
+            })
             cy.get('[data-testid="updatebookable"]')
                 .should('be.visible')
                 .click()
@@ -34,6 +41,13 @@ describe('SUPPORT OFFICER TESTS', function () {
             cy.wait(100)
         });
         it('should turn lecture into presence', function () {
+            cy.server()
+            cy.route({
+                method:'POST',
+                url:'/api/lecturesBookable',
+                status:200,
+                response:{"modified": true}
+            })
             cy.get('[data-testid="updatebookable"]')
                 .should('be.visible')
                 .click()

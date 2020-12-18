@@ -27,8 +27,13 @@
     "method": "GET",
     "data":{}
   },
-  {"url": "/api/reports/*",
+  {"url": "/api/reports/GRGEG",
     "method": "GET",
     "data":[{"name":"Fortunato Sabato","surname":"Sole","birthday":"18/08/1994","ssn":"WHTRWHRW"}]
+  },
+  {
+    "url": "/api/reports/*",
+    "method": "GET",
+    "data":[]
   }
 ]
