@@ -108,7 +108,7 @@ describe('TEACHER PAGE', function () {
                     .and('have.text','No')
                     .click()
             })
-        cy.get('tbody>tr').should('have.length',7)
+        cy.get('tbody>tr').should('have.length',4)
 
     });
     it('should press cancel lecture, but click on button No', function () {
@@ -177,7 +177,7 @@ describe('TEACHER PAGE', function () {
             })
         cy.wait(20)
         cy.get('tbody>tr')
-            .should('have.length',6)
+            .should('have.length',3)
     });
     it('should turn into distance lecture correctly', function () {
         cy.server()
@@ -210,7 +210,7 @@ describe('TEACHER PAGE', function () {
             })
         cy.wait(100)
         cy.get('tbody>tr')
-            .should('have.length',6)
+            .should('have.length',4)
 
     });
     it('should not cancel a lecture 60 minute before lecture', function () {
@@ -222,7 +222,7 @@ describe('TEACHER PAGE', function () {
             response:{error: "Delete lecture deadline expired"}
         })
         cy.get('tbody>tr')
-            .contains('td','PDS Les:0')
+            .contains('td','HCI Les:1')
             .siblings()
             .find('.btn.btn-primary')
             .should('have.text', 'SELECT')
@@ -238,7 +238,7 @@ describe('TEACHER PAGE', function () {
             }).click({force:true})
         cy.wait(20)
         cy.get('tbody>tr')
-            .should('have.length',6)
+            .should('have.length',4)
     });
     it('should not turn into distance lecture 30 minute before', function () {
         cy.server()
@@ -249,7 +249,7 @@ describe('TEACHER PAGE', function () {
             response:{error: "Cannot modify type of lecture after 30 minutes before scheduled time"}
         })
         cy.get('tbody>tr')
-            .contains('td','PDS Les:0')
+            .contains('td','HCI Les:1')
             .siblings()
             .find('.btn.btn-primary')
             .should('have.text', 'SELECT')
@@ -262,11 +262,12 @@ describe('TEACHER PAGE', function () {
 
             }).click({force:true})
         cy.get('tbody>tr')
-            .should('have.length',6)
+            .should('have.length',4)
     });
     it('should render teacher stats', function () {
         cy.get('[data-testid="history"]')
             .click()
+        cy.wait(200)
         cy.hash().should('include','#history')
         cy.get('.page-title')
             .should('have.text','Historical Data')
@@ -275,12 +276,14 @@ describe('TEACHER PAGE', function () {
     it('should show stats by week', function () {
         cy.get('[data-testid="history"]')
             .click()
+        cy.wait(200)
         cy.get('select').first()
             .select('Week')
     });
     it('should show stats by month', function () {
         cy.get('[data-testid="history"]')
             .click()
+        cy.wait(200)
         cy.get('select').first()
             .select('Month')
     });

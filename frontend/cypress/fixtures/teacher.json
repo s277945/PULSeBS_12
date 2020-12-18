@@ -17,12 +17,12 @@
       {"CourseID":"C8901","Name":"Human Computer Interaction"}]
   },
   {
-    "url": "/api/lectures/listStudents",
+    "url": "/api/lectures/listStudents*",
     "method": "GET",
     "data": [{"userId":"s266260","name":"Fortunato Sabato","surname":"Sole"}]
   },
   {
-    "url": "/api/courseStats/*",
+    "url": "/api/courseStats*",
     "method": "GET",
     "data": [
       {"lectureName":"DS Les:1","date":"2020-11-02 11:30:00","nBooked":47},
@@ -34,7 +34,7 @@
     ]
   },
   {
-    "url": "/api/monthStats/*",
+    "url": "/api/monthStats*",
     "method": "GET",
     "data": [
       {"month":"October","year":2020,"average":null},
@@ -43,7 +43,7 @@
       {"month":"January","year":2021,"average":null}]
   },
   {
-    "url": "/api/weekStats/*",
+    "url": "/api/weekStats*",
     "method": "GET",
     "data": [
       {"weekName":"10/05-10/10","startDate":"2020/10/05","endDate":"2020/10/10","average":null},
