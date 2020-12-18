@@ -1,0 +1,22 @@
+[
+  {"url": "/api/courses/all",
+  "method": "GET",
+  "data":[]
+  },
+  {"url": "/api/managerCourses/*",
+    "method": "GET",
+    "data":[]
+  },
+  {"url": "/api/managerCoursesTotal/*",
+    "method": "GET",
+    "data":[]
+  },
+  {"url": "/api/students/*",
+    "method": "GET",
+    "data":[]
+  },
+  {"url": "/api/reports/*",
+    "method": "GET",
+    "data":[]
+  }
+]

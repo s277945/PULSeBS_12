@@ -46,4 +46,27 @@ Cypress.Commands.add("login",(username,password,type)=>{
 
     cy.wait('@login')
 })
+Cypress.Commands.add("teacher",(username,password,type)=>{
+    cy.server()
+    cy.route({
+        method:'POST',
+        url:'/api/login',
+        status:200,
+        request:{userName:username,password:password},
+        response:{user:username,userType:type}
+    }).as('login')
+    cy.fixture('teacher.json').then((data)=>{
+        let length=data.length;
+        for(let i=0;i<length;i++){
+            cy.route(data[i].method,data[i].url,data[i].data);
+        }
+    })
+    cy.get('input:first').type('t987654').should('have.value','t987654')
+    cy.get('input:last').type('scimmia').should('have.value','scimmia')
+    cy.get('.btn.btn-primary')
+        .click()
+
+    cy.wait('@login')
+})
+
 //RENDER BASIC PAGE STUDENT

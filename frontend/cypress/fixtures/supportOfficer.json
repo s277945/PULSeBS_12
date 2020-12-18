@@ -1,0 +1,24 @@
+[
+  {
+    "url": "/api/fileData",
+    "method": "GET",
+    "data":[
+      {"fileType":"0","fileName":"Students.csv","lastUpdate":"2020-12-17 15:39:03"},
+      {"fileType":"1","fileName":null,"lastUpdate":null},
+      {"fileType":"2","fileName":null,"lastUpdate":"2020-12-16 17:12:06"},
+      {"fileType":"3","fileName":null,"lastUpdate":null},
+      {"fileType":"4","fileName":null,"lastUpdate":"2020-12-16 17:16:42"}
+          ]
+  },
+  {
+    "url": "/api/coursesData",
+    "method": "GET",
+    "data":[
+      {"courseId":"C4567","year":1,"name":"Data Science","semester":1,"restriction":0},
+      {"courseId":"C1357","year":1,"name":"Information System","semester":1,"restriction":0},
+      {"courseId":"C0123","year":2,"name":"Software Engineering II","semester":1,"restriction":0},
+      {"courseId":"C8901","year":2,"name":"Human Computer Interaction","semester":2,"restriction":0},
+      {"courseId":"C2468","year":2,"name":"Web Applications I","semester":2,"restriction":0}
+    ]
+  }
+]
