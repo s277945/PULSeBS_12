@@ -30,6 +30,7 @@
     "react-bootstrap": "^1.4.0",
     "react-csv": "^2.0.3",
     "react-dom": "^16.14.0",
+    "react-icons": "^4.1.0",
     "react-json-to-csv": "^1.0.4",
     "react-redux": "^7.2.1",
     "react-router-dom": "^5.2.0",
