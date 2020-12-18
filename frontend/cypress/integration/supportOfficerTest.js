@@ -10,6 +10,9 @@ describe('SUPPORT OFFICER TESTS', function () {
             cy.get('.page-title')
                 .should('contains.text','Upload data')
         });
+        it('should ', function () {
+            
+        });
 
     });
     describe('COURSE SETUP PAGE', function () {
@@ -96,6 +99,13 @@ describe('SUPPORT OFFICER TESTS', function () {
             cy.wait(100)
         });
         it('should invert type', function () {
+            cy.server()
+            cy.route({
+                method:'POST',
+                url:'/api/lecturesBookable',
+                status:200,
+                response:{"modified": true}
+            })
             cy.get('[data-testid="updatebookable"]')
                 .should('be.visible')
                 .click()
@@ -132,7 +142,7 @@ describe('SUPPORT OFFICER TESTS', function () {
                 .within(()=>{
                     cy.get(".card-header").eq(1).click()
                     cy.get(".card-body").eq(1).within(()=>{
-                        cy.get('.form-check-input').eq(2).check()
+                        cy.get('.form-check-input').eq(1).check()
                     })
                     cy.wait(100)
                 })

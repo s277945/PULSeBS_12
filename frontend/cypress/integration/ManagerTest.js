@@ -17,9 +17,10 @@ describe('TEST MANAGER PAGE', function () {
 
     it('should open accordion of a course', function () {
         cy.get('.accordion')
-            .eq(1)
+            .eq(0)
             .should('be.visible')
             .click()
+        cy.wait(100)
     });
     it('should change lecture inside select', function () {
         cy.get('.accordion')
@@ -105,6 +106,7 @@ describe('TEST MANAGER PAGE', function () {
                     cy.get('.btn.btn-primary')
                         .click()
                 })
+            cy.wait(100)
         });
         it('should not generate a report if a student is not enrolled in any lectures', function () {
             cy.get('[data-testid="report"]')
