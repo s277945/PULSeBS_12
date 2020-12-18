@@ -22,6 +22,11 @@
     "method": "GET",
     "data":{"name":"Fortunato Sabato","surname":"Sole","birthday":"18/08/1994","ssn":"WHTRWHRW","covid":0}
   },
+  {
+    "url": "/api/students/TODO",
+    "method": "GET",
+    "data":{}
+  },
   {"url": "/api/reports/*",
     "method": "GET",
     "data":[{"name":"Fortunato Sabato","surname":"Sole","birthday":"18/08/1994","ssn":"WHTRWHRW"}]

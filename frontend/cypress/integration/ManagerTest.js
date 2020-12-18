@@ -46,6 +46,13 @@ describe('TEST MANAGER PAGE', function () {
         cy.get('table').should('be.visible')
     });
     it('should add a new positive student', function () {
+        cy.server()
+        cy.route({
+            method:'POST',
+            url:'/api/students/*',
+            status:200,
+            response:{"setAsPositive": true}
+        })
         cy.get('[data-testid="report"]')
             .click()
         cy.get('[data-testid="addSSN"]').should('have.text', 'Add New Student')
