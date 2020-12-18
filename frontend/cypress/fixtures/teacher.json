@@ -1,0 +1,70 @@
+[
+  {
+    "url": "/api/teacherLectures",
+    "method": "GET",
+    "data": [
+              {"Course_Ref":"C4567","Name":"DS Les:5","Date":"2020-12-22 09:00:00","DateDeadline":"2020-12-21 23:00:00","EndDate":"2020-12-22 10:30:00","BookedSeats":70,"Capacity":70,"Type":"p"},
+              {"Course_Ref":"C4567","Name":"DS Les:6","Date":"2020-12-25 09:00:00","DateDeadline":"2020-12-24 23:00:00","EndDate":"2020-12-25 12:00:00","BookedSeats":2,"Capacity":70,"Type":"p"},
+              {"Course_Ref":"C8901","Name":"HCI Les:1","Date":"2021-03-02 15:00:00","DateDeadline":"2021-03-01 23:00:00","EndDate":"2021-03-02 18:00:00","BookedSeats":2,"Capacity":100,"Type":"p"},
+              {"Course_Ref":"C8901","Name":"HCI Les:2","Date":"2021-03-04 09:00:00","DateDeadline":"2021-03-03 23:00:00","EndDate":"2021-03-04 10:30:00","BookedSeats":1,"Capacity":80,"Type":"p"}]
+          },
+  {
+    "url": "/api/teacherCourses",
+    "method": "GET",
+    "data": [
+      {"CourseID":"C4567","Name":"Data Science"},
+      {"CourseID":"C1357","Name":"Information System"},
+      {"CourseID":"C8901","Name":"Human Computer Interaction"}]
+  },
+  {
+    "url": "/api/lectures/listStudents",
+    "method": "GET",
+    "data": [{"userId":"s266260","name":"Fortunato Sabato","surname":"Sole"}]
+  },
+  {
+    "url": "/api/courseStats/*",
+    "method": "GET",
+    "data": [
+      {"lectureName":"DS Les:1","date":"2020-11-02 11:30:00","nBooked":47},
+      {"lectureName":"DS Les:2","date":"2020-11-03 13:00:00","nBooked":23},
+      {"lectureName":"DS Les:3","date":"2020-12-14 11:30:00","nBooked":2},
+      {"lectureName":"DS Les:4","date":"2020-12-15 13:00:00","nBooked":3},
+      {"lectureName":"DS Les:5","date":"2020-12-22 09:00:00","nBooked":70},
+      {"lectureName":"DS Les:6","date":"2020-12-25 09:00:00","nBooked":2}
+    ]
+  },
+  {
+    "url": "/api/monthStats/*",
+    "method": "GET",
+    "data": [
+      {"month":"October","year":2020,"average":null},
+      {"month":"November","year":2020,"average":35},
+      {"month":"December","year":2020,"average":19.25},
+      {"month":"January","year":2021,"average":null}]
+  },
+  {
+    "url": "/api/weekStats/*",
+    "method": "GET",
+    "data": [
+      {"weekName":"10/05-10/10","startDate":"2020/10/05","endDate":"2020/10/10","average":null},
+      {"weekName":"10/26-10/31","startDate":"2020/10/26","endDate":"2020/10/31","average":null},
+      {"weekName":"10/19-10/24","startDate":"2020/10/19","endDate":"2020/10/24","average":null},
+      {"weekName":"11/02-11/07","startDate":"2020/11/02","endDate":"2020/11/07","average":35},
+      {"weekName":"11/16-11/21","startDate":"2020/11/16","endDate":"2020/11/21","average":null},
+      {"weekName":"11/23-11/28","startDate":"2020/11/23","endDate":"2020/11/28","average":null},
+      {"weekName":"10/12-10/17","startDate":"2020/10/12","endDate":"2020/10/17","average":null},
+      {"weekName":"11/30-12/05","startDate":"2020/11/30","endDate":"2020/12/05","average":null},
+      {"weekName":"12/07-12/12","startDate":"2020/12/07","endDate":"2020/12/12","average":null},
+      {"weekName":"12/21-12/26","startDate":"2020/12/21","endDate":"2020/12/26","average":36},
+      {"weekName":"11/09-11/14","startDate":"2020/11/09","endDate":"2020/11/14","average":null},
+      {"weekName":"12/28-01/02","startDate":"2020/12/28","endDate":"2021/01/02","average":null},
+      {"weekName":"01/04-01/09","startDate":"2021/01/04","endDate":"2021/01/09","average":null},
+      {"weekName":"01/11-01/16","startDate":"2021/01/11","endDate":"2021/01/16","average":null},
+      {"weekName":"09/28-10/03","startDate":"2020/09/28","endDate":"2020/10/03","average":null},
+      {"weekName":"01/18-01/23","startDate":"2021/01/18","endDate":"2021/01/23","average":null},
+      {"weekName":"12/14-12/19","startDate":"2020/12/14","endDate":"2020/12/19","average":2.5},
+      {"weekName":"01/25-01/30","startDate":"2021/01/25","endDate":"2021/01/30","average":null}
+    ]
+  }
+
+]

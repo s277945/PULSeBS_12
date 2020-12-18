@@ -3,10 +3,7 @@
 describe('TEACHER PAGE', function () {
     beforeEach(() => {
         cy.visit('http://localhost:3000/')
-        cy.get('input:first').type('t987654').should('have.value','t987654')
-        cy.get('input:last').type('scimmia').should('have.value','scimmia')
-        cy.get('.btn.btn-primary')
-            .click()
+        cy.teacher('t987654','scimmia','t')
         Cypress.Cookies.preserveOnce('token', 'value')
         Cypress.Cookies.debug(true)
     })
@@ -39,7 +36,7 @@ describe('TEACHER PAGE', function () {
         cy.get('[data-testid="teacherStudent"]').should('have.text', 'Student List')
             .should('have.attr', 'href', '#studentList')
             .click()
-        cy.get('tbody>tr').eq(1).find('.btn.btn-primary').should('have.text','SHOW LIST')
+        cy.get('tbody>tr').eq(0).find('.btn.btn-primary').should('have.text','SHOW LIST')
             .click()
         cy.wait(100)
         cy.get('[data-testid="studentsList"]').should('be.visible')
@@ -54,7 +51,7 @@ describe('TEACHER PAGE', function () {
         cy.get('[data-testid="teacherStudent"]').should('have.text', 'Student List')
             .should('have.attr', 'href', '#studentList')
             .click()
-        cy.get('tbody>tr').eq(1).find('.btn.btn-primary').should('have.text','SHOW LIST')
+        cy.get('tbody>tr').eq(0).find('.btn.btn-primary').should('have.text','SHOW LIST')
             .click()
         cy.wait(100)
         cy.get('[data-testid="studentsList"]').should('have.length', 1)
@@ -147,6 +144,13 @@ describe('TEACHER PAGE', function () {
             .should('be.visible')
     });
     it('should cancel correctly a lecture', function () {
+        cy.server()
+        cy.route({
+            method:'DELETE',
+            url:'/api/courseLectures/*',
+            status:204,
+            response:{lecture: "canceled"}
+        })
         cy.get('tbody>tr')
             .eq(1)
             .find('.btn.btn-primary')
@@ -176,6 +180,13 @@ describe('TEACHER PAGE', function () {
             .should('have.length',6)
     });
     it('should turn into distance lecture correctly', function () {
+        cy.server()
+        cy.route({
+            method:'PUT',
+            url:'/api/lectures',
+            status:200,
+            response:{response: true}
+        })
         cy.get('tbody>tr')
             .eq(1).find('.btn.btn-primary')
             .should('have.text', 'SELECT')
@@ -203,6 +214,13 @@ describe('TEACHER PAGE', function () {
 
     });
     it('should not cancel a lecture 60 minute before lecture', function () {
+        cy.server()
+        cy.route({
+            method:'DELETE',
+            url:'/api/courseLectures/*',
+            status:500,
+            response:{error: "Delete lecture deadline expired"}
+        })
         cy.get('tbody>tr')
             .contains('td','PDS Les:0')
             .siblings()
@@ -223,6 +241,13 @@ describe('TEACHER PAGE', function () {
             .should('have.length',6)
     });
     it('should not turn into distance lecture 30 minute before', function () {
+        cy.server()
+        cy.route({
+            method:'PUT',
+            url:'/api/lectures',
+            status:422,
+            response:{error: "Cannot modify type of lecture after 30 minutes before scheduled time"}
+        })
         cy.get('tbody>tr')
             .contains('td','PDS Les:0')
             .siblings()
@@ -239,7 +264,6 @@ describe('TEACHER PAGE', function () {
         cy.get('tbody>tr')
             .should('have.length',6)
     });
-
     it('should render teacher stats', function () {
         cy.get('[data-testid="history"]')
             .click()

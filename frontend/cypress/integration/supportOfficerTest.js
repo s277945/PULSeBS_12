@@ -1,12 +1,7 @@
 describe('SUPPORT OFFICER TESTS', function () {
     beforeEach(()=>{
         cy.visit('http://localhost:3000/')
-        cy.get('input:first').type('so123456')
-        cy.get('input:last').type('scimmia')
-        cy.intercept('POST', '/api/login').as('login')
-        cy.get('.btn.btn-primary')
-            .click()
-        cy.wait('@login')
+        cy.supportOfficer('so123456','scimmia','so')
         Cypress.Cookies.preserveOnce('token', 'value')
         Cypress.Cookies.debug(true)
     })
@@ -26,6 +21,13 @@ describe('SUPPORT OFFICER TESTS', function () {
 
         });
         it('should turn lecture into distance', function () {
+            cy.server()
+            cy.route({
+                method:'POST',
+                url:'/api/lecturesBookable',
+                status:200,
+                response:{"modified": true}
+            })
             cy.get('[data-testid="updatebookable"]')
                 .should('be.visible')
                 .click()
@@ -39,6 +41,13 @@ describe('SUPPORT OFFICER TESTS', function () {
             cy.wait(100)
         });
         it('should turn lecture into presence', function () {
+            cy.server()
+            cy.route({
+                method:'POST',
+                url:'/api/lecturesBookable',
+                status:200,
+                response:{"modified": true}
+            })
             cy.get('[data-testid="updatebookable"]')
                 .should('be.visible')
                 .click()

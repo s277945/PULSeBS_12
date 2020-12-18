@@ -18,6 +18,7 @@
     let lecList = [];
          getTeacherLectures()
               .then(res => {
+
                   console.log(res.data);
                   lecList = res.data;
                   console.log(lecList);

@@ -1,0 +1,39 @@
+[
+  {"url": "/api/courses/all",
+  "method": "GET",
+  "data":[
+    {"CourseID":"C4567","Name":"Data Science"}
+  ]
+  },
+  {"url": "/api/managerCourses/*",
+    "method": "GET",
+    "data":[{"lectureName":"DS Les:1","date":"2020-11-02 11:30:00","nBooked":70,"nAttendance":47,"nCancellations":23},{"lectureName":"DS Les:2","date":"2020-11-03 13:00:00","nBooked":30,"nAttendance":23,"nCancellations":7},{"lectureName":"DS Les:3","date":"2020-12-14 11:30:00","nBooked":7,"nAttendance":2,"nCancellations":5},{"lectureName":"DS Les:4","date":"2020-12-15 13:00:00","nBooked":7,"nAttendance":3,"nCancellations":4},{"lectureName":"DS Les:5","date":"2020-12-22 09:00:00","nBooked":75,"nAttendance":70,"nCancellations":5},{"lectureName":"DS Les:6","date":"2020-12-25 09:00:00","nBooked":3,"nAttendance":2,"nCancellations":1}]
+  },
+  {"url": "/api/managerCoursesTotal/*",
+    "method": "GET",
+    "data":{"courseName":"C4567","nBooked":192,"nAttendance":147,"nCancellations":45}
+  },
+  {"url": "/api/students/positiveStudents",
+    "method": "GET",
+    "data":[{"name":"Gabriel","surname":"Ceron","birthday":"12/03/1993","ssn":"afeg"},{"name":"Gianluca","surname":"Fasulo","birthday":"16/07/1995","ssn":"GRGEG"},{"name":"Hilderic","surname":"Sauret","birthday":"01/01/1994","ssn":"FWGWG"},{"name":"Francesco","surname":"Garau","birthday":"13/03/1996","ssn":"PROVA"}]
+  },
+  {
+    "url": "/api/students/WHTRWHRW",
+    "method": "GET",
+    "data":{"name":"Fortunato Sabato","surname":"Sole","birthday":"18/08/1994","ssn":"WHTRWHRW","covid":0}
+  },
+  {
+    "url": "/api/students/TODO",
+    "method": "GET",
+    "data":{}
+  },
+  {"url": "/api/reports/GRGEG",
+    "method": "GET",
+    "data":[{"name":"Fortunato Sabato","surname":"Sole","birthday":"18/08/1994","ssn":"WHTRWHRW"}]
+  },
+  {
+    "url": "/api/reports/*",
+    "method": "GET",
+    "data":[]
+  }
+]
