@@ -91,7 +91,8 @@ describe('STUDENT PAGE', function () {
         cy.route({
             method:'DELETE',
             url:'/api/lectures/*',
-            status:204
+            status:204,
+            response:{}
         })
         cy.wait(200)
         cy.get('.card')
@@ -144,7 +145,7 @@ describe('STUDENT PAGE', function () {
                     .click()
 
             })
-        cy.get('tbody>tr').eq(1).within(()=>{
+        cy.get('tbody>tr').eq(0).within(()=>{
             cy.get('.btn.btn-danger')
                 .should('be.enabled')
         })

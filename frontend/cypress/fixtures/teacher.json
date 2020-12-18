@@ -1,0 +1,33 @@
+[
+  {
+    "url": "/api/teacherLectures",
+    "method": "GET",
+    "data": []
+  },
+  {
+    "url": "/api/teacherCourses",
+    "method": "GET",
+    "data": []
+  },
+  {
+    "url": "/api/lectures/listStudents",
+    "method": "GET",
+    "data": []
+  },
+  {
+    "url": "/api/courseStats/:courseId",
+    "method": "GET",
+    "data": []
+  },
+  {
+    "url": "/api/monthStats/:courseId",
+    "method": "GET",
+    "data": []
+  },
+  {
+    "url": "/api/weekStats/:courseId",
+    "method": "GET",
+    "data": []
+  }
+
+]
