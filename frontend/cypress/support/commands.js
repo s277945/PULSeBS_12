@@ -23,3 +23,27 @@
 //
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
+//GENERIC COMMAND FOR LOGIN
+Cypress.Commands.add("login",(username,password,type)=>{
+    cy.server()
+    cy.route({
+        method:'POST',
+        url:'/api/login',
+        status:200,
+        request:{userName:username,password:password},
+        response:{user:username,userType:type}
+    }).as('login')
+    cy.fixture('students.json').then((data)=>{
+        let length=data.length;
+        for(let i=0;i<length;i++){
+            cy.route(data[i].method,data[i].url,data[i].data);
+        }
+    })
+    cy.get('input:first').type('s266260').should('have.value','s266260')
+    cy.get('input:last').type('scimmia').should('have.value','scimmia')
+    cy.get('.btn.btn-primary')
+        .click()
+
+    cy.wait('@login')
+})
+//RENDER BASIC PAGE STUDENT

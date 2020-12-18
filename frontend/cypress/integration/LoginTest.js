@@ -73,6 +73,13 @@ describe('LOGIN PAGE', function () {
     });
     it('should login teacher correctly', function () {
         cy.getCookies().should('be.empty')
+        cy.server()
+        cy.route({
+            method:'POST',
+            url:'/api/login',
+            status:200,
+            response:{user:"t987654",userType:'t'}
+        }).as('login')
         cy.get('input:first').type('t987654').should('have.value','t987654')
         cy.get('input:last').type('scimmia').should('have.value','scimmia')
         cy.get('.btn.btn-primary')
