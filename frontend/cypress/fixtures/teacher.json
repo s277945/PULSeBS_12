@@ -11,10 +11,12 @@
   {
     "url": "/api/teacherCourses",
     "method": "GET",
-    "data": [
-      {"CourseID":"C4567","Name":"Data Science"},
-      {"CourseID":"C1357","Name":"Information System"},
-      {"CourseID":"C8901","Name":"Human Computer Interaction"}]
+    "data":
+      [
+        {"CourseID":"C0123","Name":"Software Engineering II","Restriction":0},
+        {"CourseID":"C2468","Name":"Web Applications I","Restriction":0}
+      ]
+
   },
   {
     "url": "/api/lectures/listStudents*",
@@ -22,7 +24,7 @@
     "data": [{"userId":"s266260","name":"Fortunato Sabato","surname":"Sole"}]
   },
   {
-    "url": "/api/courseStats*",
+    "url": "/api/courseStats/*",
     "method": "GET",
     "data": [
       {"lectureName":"DS Les:1","date":"2020-11-02 11:30:00","nBooked":47},
@@ -34,7 +36,7 @@
     ]
   },
   {
-    "url": "/api/monthStats*",
+    "url": "/api/monthStats/*",
     "method": "GET",
     "data": [
       {"month":"October","year":2020,"average":null},
@@ -43,7 +45,7 @@
       {"month":"January","year":2021,"average":null}]
   },
   {
-    "url": "/api/weekStats*",
+    "url": "/api/weekStats/*",
     "method": "GET",
     "data": [
       {"weekName":"10/05-10/10","startDate":"2020/10/05","endDate":"2020/10/10","average":null},
