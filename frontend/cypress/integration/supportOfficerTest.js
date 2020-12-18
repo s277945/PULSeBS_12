@@ -1,12 +1,7 @@
 describe('SUPPORT OFFICER TESTS', function () {
     beforeEach(()=>{
         cy.visit('http://localhost:3000/')
-        cy.get('input:first').type('so123456')
-        cy.get('input:last').type('scimmia')
-        cy.intercept('POST', '/api/login').as('login')
-        cy.get('.btn.btn-primary')
-            .click()
-        cy.wait('@login')
+        cy.supportOfficer('so123456','scimmia','so')
         Cypress.Cookies.preserveOnce('token', 'value')
         Cypress.Cookies.debug(true)
     })

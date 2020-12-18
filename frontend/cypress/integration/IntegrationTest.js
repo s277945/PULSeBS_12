@@ -3,10 +3,7 @@
 describe('TEACHER PAGE', function () {
     beforeEach(() => {
         cy.visit('http://localhost:3000/')
-        cy.get('input:first').type('t987654').should('have.value','t987654')
-        cy.get('input:last').type('scimmia').should('have.value','scimmia')
-        cy.get('.btn.btn-primary')
-            .click()
+        cy.teacher('t987654','scimmia','t')
         Cypress.Cookies.preserveOnce('token', 'value')
         Cypress.Cookies.debug(true)
     })

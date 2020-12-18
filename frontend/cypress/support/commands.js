@@ -68,5 +68,48 @@ Cypress.Commands.add("teacher",(username,password,type)=>{
 
     cy.wait('@login')
 })
+Cypress.Commands.add("supportOfficer",(username,password,type)=>{
+    cy.server()
+    cy.route({
+        method:'POST',
+        url:'/api/login',
+        status:200,
+        request:{userName:username,password:password},
+        response:{user:username,userType:type}
+    }).as('login')
+    cy.fixture('supportOfficer.json').then((data)=>{
+        let length=data.length;
+        for(let i=0;i<length;i++){
+            cy.route(data[i].method,data[i].url,data[i].data);
+        }
+    })
+    cy.get('input:first').type('so123456').should('have.value','so123456')
+    cy.get('input:last').type('scimmia').should('have.value','scimmia')
+    cy.get('.btn.btn-primary')
+        .click()
 
+    cy.wait('@login')
+})
+Cypress.Commands.add("bookingManager",(username,password,type)=>{
+    cy.server()
+    cy.route({
+        method:'POST',
+        url:'/api/login',
+        status:200,
+        request:{userName:username,password:password},
+        response:{user:username,userType:type}
+    }).as('login')
+    cy.fixture('bookingManager.json').then((data)=>{
+        let length=data.length;
+        for(let i=0;i<length;i++){
+            cy.route(data[i].method,data[i].url,data[i].data);
+        }
+    })
+    cy.get('input:first').type('b123456').should('have.value','b123456')
+    cy.get('input:last').type('scimmia').should('have.value','scimmia')
+    cy.get('.btn.btn-primary')
+        .click()
+
+    cy.wait('@login')
+})
 //RENDER BASIC PAGE STUDENT
