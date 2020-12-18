@@ -7,6 +7,7 @@ import {uploadStudents, uploadTeachers, uploadCourses, uploadEnrollment, uploadS
 import { toast } from 'react-toastify';
 import Spinner  from 'react-bootstrap/Spinner'
 import moment from 'moment';
+import { MdErrorOutline } from "react-icons/md";
 
 export default function SystemSetup() {
     const [uploaded, setUploaded] = useState([0,0,0,0,0]);
@@ -196,7 +197,10 @@ const UploadFileButton = ({disabled, uploaded, setUploaded, Name, listType, type
         </Button>
             {uploading?<h3 style={{marginTop: "0px", marginLeft: "10px", color: "grey"}}>{percentage}%</h3>:<div/>}
             {!files[0]?<div style={{margin: "auto", marginLeft: "13px", color: "#999999", fontStyle: "italic"}}>{"Select a valid .csv file to upload"}</div>:<div/>}
-            {disabled&&files[0]?<div style={{margin: "auto", marginLeft: "13px", color: "#999999", fontStyle: "italic"}}>{"Missing file dependencies"}</div>:<div/>}
+            {disabled&&files[0]?<div style={{margin: "auto", marginLeft: "13px", color: "#999999", fontStyle: "italic"}}>
+                    <MdErrorOutline style={{marginRight: "5px", marginBottom: "2pt"}}/>
+                    {"Missing file dependencies"}
+                </div>:<div/>}
     </div>
     )
 }
