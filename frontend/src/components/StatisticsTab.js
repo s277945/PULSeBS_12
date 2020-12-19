@@ -226,17 +226,17 @@ export class StatisticsTab extends Component {
         switch (this.state.groupBy) {
 
             case "Week":
-                keys = "average"
+                keys = ["Average booked seats", "Average attendees"]
                 indexBy = "weekName"
                 break
 
             case "Lectures":
-                keys = "nBooked"
+                keys = ["Booked seats", "Attendees"]
                 indexBy = "lectureName"
                 break
 
             case "Month":
-                keys = "average"
+                keys = ["Average booked seats", "Average attendees"]
                 indexBy = "month"
                 break
 
@@ -279,10 +279,15 @@ export class StatisticsTab extends Component {
                             //set colors
                             colorBy="index"
                             colors={{ scheme: "nivo" }}
-
+                            groupMode="grouped"
                             // Chart options
-                            data={this.substring(this.state.selected)}
-                            keys={[keys]}
+                            data={this.state.selected.map(e=>{
+                                if(typeof e.month !=="undefined") return {"Average booked seats": e.average, "Average attendees": e.averageAtt, "month": e.month};
+                                else if(typeof e.endDate !=="undefined") return {"Average booked seats": e.average, "Average attendees": e.averageAtt, "weekName": e.weekName};
+                                else if(typeof e.date !=="undefined"){ console.log({"date": e.date, "lectureName": e.lectureName, "Booked seats": e.nBooked, "Attendees": e.nAttendance}); return {"date": e.date, "lectureName": e.lectureName, "Booked seats": e.nBooked, "Attendees": e.nAttendance};}
+                                else return e;
+                            })}
+                            keys={keys}
                             indexBy={indexBy}
 
                         />
