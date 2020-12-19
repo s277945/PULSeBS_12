@@ -118,7 +118,7 @@ export class StatisticsTab extends Component {
                                     {lectures.map((lecture)=>{ return (    // map lecture to table row                        
                                         <tr>
                                             <td></td>
-                                            <td>{lecture.lectureName}</td>
+                                            <td>{lecture.lectureName.substr(lecture.lectureName.indexOf('Les'))}</td>
                                             <td>{moment(lecture.date).format("DD/MM/YYYY HH:mm")}</td>
                                             <td>{lecture.nBooked}</td>
                                             <td>{lecture.nAttendance}</td>
@@ -153,7 +153,7 @@ export class StatisticsTab extends Component {
                         <tbody>
                         {this.state.lectures.map((lecture)=>{ return (    // map lecture to table row                               
                             <tr>
-                                <td>{lecture.lectureName}</td>
+                                <td>{lecture.lectureName.substr(lecture.lectureName.indexOf('Les'))}</td>
                                 <td>{moment(lecture.date).format("DD/MM/YYYY HH:mm")}</td>
                                 <td>{lecture.nBooked}</td>
                                 <td>{lecture.nAttendance}</td>
@@ -184,7 +184,7 @@ export class StatisticsTab extends Component {
                                 {lectures.map((lecture)=>{ return (    // map lecture to table row                        
                                     <tr>
                                         <td></td>
-                                        <td>{lecture.lectureName}</td>
+                                        <td>{lecture.lectureName.substr(lecture.lectureName.indexOf('Les'))}</td>
                                         <td>{moment(lecture.date).format("DD/MM/YYYY HH:mm")}</td>
                                         <td>{lecture.nBooked}</td>
                                         <td>{lecture.nAttendance}</td>
