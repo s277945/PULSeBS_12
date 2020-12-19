@@ -213,57 +213,6 @@ describe('TEACHER PAGE', function () {
             .should('have.length',4)
 
     });
-    it('should not cancel a lecture 60 minute before lecture', function () {
-        cy.server()
-        cy.route({
-            method:'DELETE',
-            url:'/api/courseLectures/*',
-            status:500,
-            response:{error: "Delete lecture deadline expired"}
-        })
-        cy.get('tbody>tr')
-            .contains('td','HCI Les:1')
-            .siblings()
-            .find('.btn.btn-primary')
-            .should('have.text', 'SELECT')
-            .should('be.visible')
-            .click();
-        cy.get('.modal')
-            .should('be.visible')
-            .within(()=>{
-                cy.get('.btn.btn-danger')
-                    .should('have.text','CANCEL LECTURE')
-                    .should('be.disabled')
-                cy.wait(100);
-            }).click({force:true})
-        cy.wait(20)
-        cy.get('tbody>tr')
-            .should('have.length',4)
-    });
-    it('should not turn into distance lecture 30 minute before', function () {
-        cy.server()
-        cy.route({
-            method:'PUT',
-            url:'/api/lectures',
-            status:422,
-            response:{error: "Cannot modify type of lecture after 30 minutes before scheduled time"}
-        })
-        cy.get('tbody>tr')
-            .contains('td','HCI Les:1')
-            .siblings()
-            .find('.btn.btn-primary')
-            .should('have.text', 'SELECT')
-            .should('be.visible')
-            .click();
-        cy.get('.modal').should('be.visible')
-            .within(()=>{
-                cy.get('.btn.btn-info')
-                    .should('be.disabled')
-
-            }).click({force:true})
-        cy.get('tbody>tr')
-            .should('have.length',4)
-    });
     it('should render teacher stats', function () {
         cy.get('[data-testid="history"]')
             .click()
@@ -289,11 +238,18 @@ describe('TEACHER PAGE', function () {
     });
 
     it('should logout', function () {
+        cy.server()
+        cy.route({
+            method:'POST',
+            url:'/api/logout',
+            status:200,
+            response:{}
+        }).as('logout')
         cy.location('pathname').should('include','/teacherHome')
         cy.get('[data-testid="logout"]')
             .click()
+        cy.wait('@logout')
         cy.location('pathname').should('include','/')
-        cy.wait(1000)
         cy.getCookies().should('be.empty')
     });
     it('should redirect if i am using an expired cookie', function () {
@@ -305,6 +261,85 @@ describe('TEACHER PAGE', function () {
     });
 
 
+});
+describe('TEST BEHAVIOUR OF CANCEL OR TURN INTO DISTANCE A LECTURE WITHIN 30-60MINUTES', function () {
+    beforeEach(()=>{
+        cy.visit('http://localhost:3000')
+        let date=Cypress.moment().subtract('minutes',59).format('YYYY-MM-DD HH:mm');
+        let date1=Cypress.moment().subtract('minutes',29).format('YYYY-MM-DD HH:mm');
+        cy.server()
+        cy.route({
+            method:'POST',
+            url:'/api/login',
+            status:200,
+            request:{userName:'t987654',password:'scimmia'},
+            response:{user:'t987654',userType:'t'}
+        }).as('login')
+        cy.route({
+            url: "/api/teacherLectures",
+            method: "GET",
+            response:[
+                {"Course_Ref":"C8901","Name":"HCI Les:1","Date":date,"DateDeadline":"2021-03-01 23:00:00","EndDate":date,"BookedSeats":2,"Capacity":100,"Type":"p"},
+                {"Course_Ref":"C8901","Name":"HCI Les:2","Date":date1,"DateDeadline":"2021-03-03 23:00:00","EndDate":date1,"BookedSeats":1,"Capacity":80,"Type":"p"}]
+        }).as('lectures')
+        cy.get('input:first').type('t987654').should('have.value','t987654')
+        cy.get('input:last').type('scimmia').should('have.value','scimmia')
+        cy.get('.btn.btn-primary')
+            .click()
+
+        cy.wait('@login')
+    })
+    it('should not cancel a lecture 60 minute before lecture', function () {
+        cy.server()
+        cy.route({
+            method:'DELETE',
+            url:'/api/courseLectures/*',
+            status:500,
+            response:{error: "Delete lecture deadline expired"}
+        })
+        cy.get('tbody>tr')
+            .contains('td','HCI Les:1')
+            .siblings()
+            .find('.btn.btn-primary')
+            .should('have.text', 'SELECT')
+            .should('be.visible')
+            .click();
+        cy.get('.modal')
+            .should('be.visible')
+            .within(()=>{
+                cy.get('.btn.btn-danger')
+                    .should('have.text','CANCEL LECTURE')
+                    .should('be.disabled')
+                cy.wait(100);
+            }).click({force:true})
+        cy.wait(20)
+        cy.get('tbody>tr')
+            .should('have.length',2)
+    });
+    it('should not turn into distance lecture 30 minute before', function () {
+        cy.server()
+        cy.route({
+            method:'PUT',
+            url:'/api/lectures',
+            status:422,
+            response:{error: "Cannot modify type of lecture after 30 minutes before scheduled time"}
+        })
+        cy.get('tbody>tr')
+            .contains('td','HCI Les:2')
+            .siblings()
+            .find('.btn.btn-primary')
+            .should('have.text', 'SELECT')
+            .should('be.visible')
+            .click();
+        cy.get('.modal').should('be.visible')
+            .within(()=>{
+                cy.get('.btn.btn-info')
+                    .should('be.disabled')
+
+            }).click({force:true})
+        cy.get('tbody>tr')
+            .should('have.length',2)
+    });
 });
 
 
