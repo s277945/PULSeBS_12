@@ -284,7 +284,7 @@ export class StatisticsTab extends Component {
                                     if (d.value!==0) 
                                         return  <tspan>
                                                     <tspan>{d.value}</tspan>
-                                                    <tspan text-anchor="middle" y={ -5 } dx={-19+c}>{ this.state.labels?d.id.toLowerCase():"" }</tspan>
+                                                    <tspan text-anchor="middle" y={ -5 } dx={-19+c}>{ this.state.labels&&this.state.width>=970?d.id.toLowerCase():"" }</tspan>
                                                 </tspan>;
                                     else return;
                                 }
@@ -292,13 +292,13 @@ export class StatisticsTab extends Component {
                                     let substr=d.id.split(" ");
                                     if (d.value!==0&&Math.floor(d.value)!==d.value) 
                                         return  <tspan>
-                                                    <tspan>{d.value}</tspan><tspan text-anchor="middle" y={ -15 } dx={-35+c}>{ this.state.labels?substr[0].toLowerCase():"" }</tspan>
-                                                    <tspan text-anchor="middle" y={ -5 } dx={substr[2]?(-46+c):(-54+c)}>{this.state.labels?(substr[2]?substr[1]+" "+substr[2]:substr[1]):""}</tspan>
+                                                    <tspan>{d.value}</tspan><tspan text-anchor="middle" y={ -15 } dx={-35+c}>{ this.state.labels&&this.state.width>=970?substr[0].toLowerCase():"" }</tspan>
+                                                    <tspan text-anchor="middle" y={ -5 } dx={substr[2]?(-46+c):(-54+c)}>{this.state.labels&&this.state.width>=970?(substr[2]?substr[1]+" "+substr[2]:substr[1]):""}</tspan>
                                                 </tspan>;
                                     else if(d.value!==0&&Math.floor(d.value)===d.value) 
                                         return  <tspan>
-                                                    <tspan>{d.value}</tspan><tspan text-anchor="middle" y={ -15 } dx={-19+c}>{ this.state.labels?substr[0].toLowerCase():"" }</tspan>
-                                                    <tspan text-anchor="middle" y={ -5 } dx={substr[2]?(-46+c):(-40+c)}>{this.state.labels?(substr[2]?substr[1]+" "+substr[2]:substr[1]):""}</tspan>
+                                                    <tspan>{d.value}</tspan><tspan text-anchor="middle" y={ -15 } dx={-19+c}>{ this.state.labels&&this.state.width>=970?substr[0].toLowerCase():"" }</tspan>
+                                                    <tspan text-anchor="middle" y={ -5 } dx={substr[2]?(-46+c):(-40+c)}>{this.state.labels&&this.state.width>=970?(substr[2]?substr[1]+" "+substr[2]:substr[1]):""}</tspan>
                                                 </tspan>;
                                     else return;
                                 }
@@ -318,7 +318,7 @@ export class StatisticsTab extends Component {
 
                         />
                     </div>
-                    {this.state.width>=970?(this.state.groupBy!=="Week"?
+                    {this.state.width>=(970*this.state.selected.length/4.3)&&this.state.width>=970?(this.state.groupBy!=="Week"?
                         <div style={{display:"flex", justifyContent:"flex-end", marginBottom: "20px", color: "#222222"}}>
                             <Checkbox style={{marginRight: "5px", marginBottom:"1px"}} id={`label-checkbox`} checked={this.state.labels} onClick={()=>{this.setState({labels: !this.state.labels})}}/>
                             <div style={{fontSize:"14px", marginRight: "63px"}}>enable labels</div>
