@@ -301,12 +301,13 @@ export class StatisticsTab extends Component {
                                 else if(typeof e.date !=="undefined"){return {"date": e.date, "lectureName": e.lectureName, "Booked seats": e.nBooked, "Attendees": e.nAttendance};}
                                 else return e;
                             })}
+                            margin={{bottom: 35, left: 60, right: 60, top: 50}}
                             keys={keys}
                             indexBy={indexBy}
 
                         />
                     </div>
-                    <div style={{display:"flex", justifyContent:"flex-end", marginBottom: "10px", color: "#222222"}}>
+                    <div style={{display:"flex", justifyContent:"flex-end", marginBottom: "30px", color: "#222222"}}>
                         <Checkbox style={{marginRight: "5px", marginBottom:"1px"}} id={`label-checkbox`} checked={this.state.labels} onClick={()=>{this.setState({labels: !this.state.labels})}}/>
                         <div style={{fontSize:"14px", marginRight: "63px"}}>enable labels</div>
                     </div>
