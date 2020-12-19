@@ -49,8 +49,8 @@ describe('SUPPORT OFFICER TESTS', function () {
                 .click()
             cy.wait('@student')
             cy.get('tbody>tr').eq(0).within(()=>{
-                cy.get('td').eq(0).should('have.text','Students.csv')
-                cy.get('td').eq(1).should('not.have.text',date)
+                cy.get('td').eq(0).should('have.text','/')
+                cy.get('td').eq(1).should('have.text','/')
             })
             cy.get('.Toastify__toast-container--top-right')
                 .should('contains.text',"Server error: error sending data to server")
@@ -99,7 +99,24 @@ describe('SUPPORT OFFICER TESTS', function () {
             })
 
         });
+        it('should not upload file of schedule or enrollment if missing dependencies ', function () {
+            const date=Cypress.moment().format('DD/MM/YYYY HH:mm')
+            cy.server()
+            cy.route({
+                method:'POST',
+                url:'/api/uploadSchedule',
+                status:200,
+                response:{inserted:true}
+            }).as('courses')
+            cy.get('.custom-file-input').eq(3)
+                .attachFile('Schedule.csv')
+            cy.get('.btn.btn-primary').eq(3)
+                .should('not.be.enabled')
+            cy.get('tbody>tr').eq(3).within(()=>{
+                cy.get('td').eq(2).should('contains.text','Missing file dependencies')
+            })
 
+        });
 
     });
     describe('COURSE SETUP PAGE', function () {
