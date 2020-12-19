@@ -100,7 +100,6 @@ describe('SUPPORT OFFICER TESTS', function () {
 
         });
         it('should not upload file of schedule or enrollment if missing dependencies ', function () {
-            const date=Cypress.moment().format('DD/MM/YYYY HH:mm')
             cy.server()
             cy.route({
                 method:'POST',
@@ -116,6 +115,86 @@ describe('SUPPORT OFFICER TESTS', function () {
                 cy.get('td').eq(2).should('contains.text','Missing file dependencies')
             })
 
+        });
+        it('should upload correctly all the files', function () {
+            const date=Cypress.moment().format('DD/MM/YYYY HH:mm')
+            cy.server()
+            cy.route({
+                method:'POST',
+                url:'/api/uploadStudents',
+                status:200,
+                response:{inserted:true}
+            }).as('student')
+            cy.route({
+                method:'POST',
+                url:'/api/uploadTeachers',
+                status:200,
+                response:{inserted:true}
+            }).as('teacher')
+            cy.route({
+                method:'POST',
+                url:'/api/uploadCourses',
+                status:200,
+                response:{inserted:true}
+            }).as('courses')
+            cy.route({
+                method:'POST',
+                url:'/api/uploadSchedule',
+                status:200,
+                response:{inserted:true}
+            }).as('schedule')
+            cy.route({
+                method:'POST',
+                url:'/api/uploadEnrollment',
+                status:200,
+                response:{inserted:true}
+            }).as('enrollment')
+            //insert all the files inside the fields and press button
+            cy.get('.custom-file-input').eq(0)
+                .attachFile('Students.csv')
+            cy.get('.custom-file-input').eq(1)
+                .attachFile('Professors.csv')
+            cy.get('.custom-file-input').eq(2)
+                .attachFile('Courses.csv')
+            cy.get('.custom-file-input').eq(3)
+                .attachFile('Enrollment.csv')
+            cy.get('.custom-file-input').eq(4)
+                .attachFile('Schedule.csv')
+            cy.get('.btn.btn-primary').eq(0)
+                .should('be.enabled')
+                .click()
+            cy.wait('@student')
+            cy.get('.btn.btn-primary').eq(1)
+                .should('be.enabled')
+                .click()
+            cy.wait('@teacher')
+            cy.get('.btn.btn-primary').eq(2)
+                .should('be.enabled')
+                .click()
+            cy.wait('@courses')
+            cy.get('.btn.btn-primary').eq(3)
+                .should('be.enabled')
+                .click()
+            cy.wait('@enrollment')
+            cy.get('.btn.btn-primary').eq(4)
+                .should('be.enabled')
+                .click()
+            cy.wait('@schedule')
+            cy.get('tbody>tr')
+                .then(($lis) => {
+                    expect($lis).to.have.length(5)
+                    expect($lis.eq(0)).to.contain('Students.csv')
+                    expect($lis.eq(1)).to.contain('Professors.csv')
+                    expect($lis.eq(2)).to.contain('Courses.csv')
+                    expect($lis.eq(3)).to.contain('Enrollment.csv')
+                    expect($lis.eq(4)).to.contain('Schedule.csv')
+                    expect($lis.eq(0)).to.contain(date)
+                    expect($lis.eq(1)).to.contain(date)
+                    expect($lis.eq(2)).to.contain(date)
+                    expect($lis.eq(3)).to.contain(date)
+                    expect($lis.eq(4)).to.contain(date)
+
+                })
         });
 
     });
