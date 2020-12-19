@@ -308,12 +308,12 @@ export class StatisticsTab extends Component {
                         />
                     </div>
                     {this.state.width>=970?(this.state.groupBy!=="Week"?
-                        <div style={{display:"flex", justifyContent:"flex-end", marginBottom: "30px", color: "#222222"}}>
+                        <div style={{display:"flex", justifyContent:"flex-end", marginBottom: "20px", color: "#222222"}}>
                             <Checkbox style={{marginRight: "5px", marginBottom:"1px"}} id={`label-checkbox`} checked={this.state.labels} onClick={()=>{this.setState({labels: !this.state.labels})}}/>
                             <div style={{fontSize:"14px", marginRight: "63px"}}>enable labels</div>
                         </div>
                         :
-                        <div style={{display:"flex", justifyContent:"flex-end", marginBottom: "30px", color: "#a2a2a2"}}>
+                        <div style={{display:"flex", justifyContent:"flex-end", marginBottom: "20px", color: "#a2a2a2"}}>
                             <Checkbox disabled style={{marginRight: "5px", marginBottom:"1px"}} id={`label-checkbox`} checked={this.state.labels} onClick={()=>{this.setState({labels: !this.state.labels})}}/>
                             <div style={{fontSize:"14px", marginRight: "63px"}}>enable labels</div>
                         </div>)
