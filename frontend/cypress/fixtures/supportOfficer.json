@@ -3,11 +3,11 @@
     "url": "/api/fileData",
     "method": "GET",
     "data":[
-      {"fileType":"0","fileName":"Students.csv","lastUpdate":"2020-12-17 15:39:03"},
+      {"fileType":"0","fileName":null,"lastUpdate":null},
       {"fileType":"1","fileName":null,"lastUpdate":null},
-      {"fileType":"2","fileName":null,"lastUpdate":"2020-12-16 17:12:06"},
+      {"fileType":"2","fileName":null,"lastUpdate":null},
       {"fileType":"3","fileName":null,"lastUpdate":null},
-      {"fileType":"4","fileName":null,"lastUpdate":"2020-12-16 17:16:42"}
+      {"fileType":"4","fileName":null,"lastUpdate":null}
           ]
   },
   {

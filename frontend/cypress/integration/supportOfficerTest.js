@@ -10,9 +10,96 @@ describe('SUPPORT OFFICER TESTS', function () {
             cy.get('.page-title')
                 .should('contains.text','Upload data')
         });
-        it('should ', function () {
-            
+        it('should upload list student', function () {
+            const date=Cypress.moment().format('DD/MM/YYYY HH:mm')
+            cy.server()
+            cy.route({
+                method:'POST',
+                url:'/api/uploadStudents',
+                status:200,
+                response:{inserted:true}
+            }).as('student')
+            cy.get('#custom-file').eq(0)
+                .attachFile('Students.csv')
+            cy.wait(200)
+            cy.get('.btn.btn-primary').eq(0)
+                .should('be.enabled')
+                .click()
+            cy.wait('@student')
+            cy.get('tbody>tr').eq(0).within(()=>{
+                cy.get('td').eq(0).should('have.text','Students.csv')
+                cy.get('td').eq(1).should('have.text',date)
+            })
+
         });
+        it('should not upload a file, and returns an error', function () {
+            const date=Cypress.moment().format('DD/MM/YYYY HH:mm')
+            cy.server()
+            cy.route({
+                method:'POST',
+                url:'/api/uploadStudents',
+                status:500,
+                response:{}
+            }).as('student')
+            cy.get('#custom-file').eq(0)
+                .attachFile('Students.csv')
+            cy.wait(200)
+            cy.get('.btn.btn-primary').eq(0)
+                .should('be.enabled')
+                .click()
+            cy.wait('@student')
+            cy.get('tbody>tr').eq(0).within(()=>{
+                cy.get('td').eq(0).should('have.text','Students.csv')
+                cy.get('td').eq(1).should('not.have.text',date)
+            })
+            cy.get('.Toastify__toast-container--top-right')
+                .should('contains.text',"Server error: error sending data to server")
+        });
+        it('should upload teacher', function () {
+            const date=Cypress.moment().format('DD/MM/YYYY HH:mm')
+            cy.server()
+            cy.route({
+                method:'POST',
+                url:'/api/uploadTeachers',
+                status:200,
+                response:{inserted:true}
+            }).as('teacher')
+            cy.get('.custom-file-input').eq(1)
+                .attachFile('Professors.csv')
+            cy.wait(200)
+            cy.get('.btn.btn-primary').eq(1)
+                .should('be.enabled')
+                .click()
+            cy.wait('@teacher')
+            cy.get('tbody>tr').eq(1).within(()=>{
+                cy.get('td').eq(0).should('have.text','Professors.csv')
+                cy.get('td').eq(1).should('have.text',date)
+            })
+            cy.get('.Toastify__toast-container--top-right')
+                .should('contains.text',"Professor list correctly uploaded")
+        });
+        it('should upload Courses', function () {
+            const date=Cypress.moment().format('DD/MM/YYYY HH:mm')
+            cy.server()
+            cy.route({
+                method:'POST',
+                url:'/api/uploadCourses',
+                status:200,
+                response:{inserted:true}
+            }).as('courses')
+            cy.get('.custom-file-input').eq(2)
+                .attachFile('Courses.csv')
+            cy.get('.btn.btn-primary').eq(2)
+                .should('be.enabled')
+                .click()
+            cy.wait('@courses')
+            cy.get('tbody>tr').eq(2).within(()=>{
+                cy.get('td').eq(0).should('have.text','Courses.csv')
+                cy.get('td').eq(1).should('have.text',date)
+            })
+
+        });
+
 
     });
     describe('COURSE SETUP PAGE', function () {
