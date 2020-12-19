@@ -1,4 +1,5 @@
 # PULSeBS_12
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=s277945_PULSeBS_12&metric=alert_status)](https://sonarcloud.io/dashboard?id=s277945_PULSeBS_12)
 [![Bugs](https://sonarcloud.io/api/project_badges/measure?project=s277945_PULSeBS_12&metric=bugs)](https://sonarcloud.io/dashboard?id=s277945_PULSeBS_12)
 [![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=s277945_PULSeBS_12&metric=code_smells)](https://sonarcloud.io/dashboard?id=s277945_PULSeBS_12)
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=s277945_PULSeBS_12&metric=coverage)](https://sonarcloud.io/dashboard?id=s277945_PULSeBS_12)
