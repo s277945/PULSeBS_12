@@ -33,10 +33,9 @@ export class StatisticsTab extends Component {
                     let b = moment(w2.startDate, "YYYY/MM/DD");
                     return a.diff(b, 'days');
                 }).map((w)=>{
-                    if(w.average&&w.averageAtt) return { average: w.average.toFixed(2), averageAtt: w.averageAtt.toFixed(2), weekName: w.weekName, startDate: w.startDate, endDate: w.endDate};// truncate floating point to second digit
-                    else if(w.average&&!w.averageAtt) return { average: w.average.toFixed(2), averageAtt: w.averageAtt, weekName: w.weekName, startDate: w.startDate, endDate: w.endDate};// truncate floating point to second digit
-                    else if(!w.average&&w.averageAtt) return { average: w.average, averageAtt: w.averageAtt.toFixed(2), weekName: w.weekName, startDate: w.startDate, endDate: w.endDate};// truncate floating point to second digit
-                    else return w;
+                    return { average: w.average?(Math.floor(w.average)===w.average?Math.floor(w.average):w.average.toFixed(2)):w.average,
+                             averageAtt: w.averageAtt?(Math.floor(w.averageAtt)===w.averageAtt?Math.floor(w.averageAtt):w.averageAtt.toFixed(2)):w.averageAtt, 
+                             weekName: w.weekName, startDate: w.startDate, endDate: w.endDate };// truncate floating point to second digit
                 });
                 this.setState({ week: neweek });
             }).catch(/* istanbul ignore next */err => {
@@ -51,10 +50,9 @@ export class StatisticsTab extends Component {
                     let b = moment(m2.month+"/"+m2.year, "MMMM/YYYY");
                     return a.diff(b, 'days');
                 }).map((m)=>{
-                    if(m.average&&m.averageAtt) return { average: m.average.toFixed(2), averageAtt: m.averageAtt.toFixed(2), month: m.month, year: m.year};// truncate floating point to second digit
-                    else if(m.average&&!m.averageAtt) return { average: m.average.toFixed(2), averageAtt: m.averageAtt, month: m.month, year: m.year};// truncate floating point to second digit
-                    else if(!m.average&&m.averageAtt) return { average: m.average, averageAtt: m.averageAtt.toFixed(2), month: m.month, year: m.year};// truncate floating point to second digit
-                    else return m;
+                    return { average: m.average?(Math.floor(m.average)===m.average?Math.floor(m.average):m.average.toFixed(2)):m.average,
+                        averageAtt: m.averageAtt?(Math.floor(m.averageAtt)===m.averageAtt?Math.floor(m.averageAtt):m.averageAtt.toFixed(2)):m.averageAtt, 
+                        month: m.month, year: m.year };// truncate floating point to second digit
                 });
                 this.setState({ month: newmonth });
             }).catch(/* istanbul ignore next */err => {
@@ -288,7 +286,8 @@ export class StatisticsTab extends Component {
                                 }
                                 else if((d.id==="Average booked seats"||d.id==="Average attendees")){
                                     let substr=d.id.split(" ");
-                                    if (d.value!==0) return <tspan><tspan>{d.value}</tspan><tspan text-anchor="middle" y={ -15 } dx={-35+c}>{ this.state.labels?substr[0].toLowerCase():"" }</tspan><tspan text-anchor="middle" y={ -5 } dx={substr[2]?(-45+c):(-55+c)}>{this.state.labels?(substr[2]?substr[1]+" "+substr[2]:substr[1]):""}</tspan></tspan>;
+                                    if (d.value!==0&&Math.floor(d.value)!==d.value) return <tspan><tspan>{d.value}</tspan><tspan text-anchor="middle" y={ -15 } dx={-35+c}>{ this.state.labels?substr[0].toLowerCase():"" }</tspan><tspan text-anchor="middle" y={ -5 } dx={substr[2]?(-46+c):(-54+c)}>{this.state.labels?(substr[2]?substr[1]+" "+substr[2]:substr[1]):""}</tspan></tspan>;
+                                    else if(d.value!==0&&Math.floor(d.value)===d.value) return <tspan><tspan>{d.value}</tspan><tspan text-anchor="middle" y={ -15 } dx={-20+c}>{ this.state.labels?substr[0].toLowerCase():"" }</tspan><tspan text-anchor="middle" y={ -5 } dx={substr[2]?(-46+c):(-40+c)}>{this.state.labels?(substr[2]?substr[1]+" "+substr[2]:substr[1]):""}</tspan></tspan>;
                                     else return;
                                 }
                                 else return d.value;
