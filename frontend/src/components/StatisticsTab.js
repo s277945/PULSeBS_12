@@ -9,23 +9,14 @@ import { Checkbox } from 'pretty-checkbox-react';
 export class StatisticsTab extends Component {
 
     //GB Lectures as first option
-    state = { selected: [], lectures: [], week: [], month: [], groupBy: "Lectures", labels: true }
-     substring=(array)=>{
-         let tmp = array.map(lecture=>{
-            let el;
-            //lectureName
-            let name;      
-            if(lecture.lectureName!=undefined){
-                el=lecture.lectureName.indexOf('Les');
-                name=lecture.lectureName.substr(el);
-                return {date: lecture.date, lectureName: name, nBooked: lecture.nBooked};
-            }
-            else return lecture;
-        });
-        return tmp; 
+    constructor() {
+        super();
+        this.state = { selected: [], lectures: [], week: [], month: [], groupBy: "Lectures", labels: true, width: window.innerWidth}
+        this.handleResize = this.handleResize.bind(this);
     }
+    
     componentDidMount() {
-
+        window.addEventListener("resize", this.handleResize);
         getCourseStats(this.props.course.CourseID)
             .then(res => {
                 //We update selected data as CourseStats (Lectures) is the first option
@@ -70,6 +61,15 @@ export class StatisticsTab extends Component {
                 console.log(err);
             });
 
+    }
+
+    componentWillUnmount() {
+        window.addEventListener("resize", null);
+    }
+    
+    handleResize(WindowSize, event) {
+        console.log(window.innerWidth);
+        this.setState({width: window.innerWidth})
     }
 
     updateSelected = () => {
@@ -242,7 +242,7 @@ export class StatisticsTab extends Component {
 
 
         return (
-            <div>
+            <div ref={this.myInput}>
                 <div style={{display: "flex", wrap: "nowrap", justifyContent: "space-between"}}>
 
                     <div data-testid={"courseStat"} style={{display: "flex", wrap: "nowrap", marginLeft: "10px"}}>
@@ -298,18 +298,27 @@ export class StatisticsTab extends Component {
                             data={this.state.selected.map(e=>{
                                 if(typeof e.month !=="undefined") return {"Average booked seats": e.average, "Average attendees": e.averageAtt, "month": e.month};
                                 else if(typeof e.endDate !=="undefined") return {"Average booked seats": e.average, "Average attendees": e.averageAtt, "weekName": e.weekName};
-                                else if(typeof e.date !=="undefined"){return {"date": e.date, "lectureName": e.lectureName, "Booked seats": e.nBooked, "Attendees": e.nAttendance};}
+                                else if(typeof e.date !=="undefined"){return {"date": e.date, "lectureName": e.lectureName.substr(e.lectureName.indexOf('Les')), "Booked seats": e.nBooked, "Attendees": e.nAttendance};}
                                 else return e;
                             })}
+                            margin={{bottom: 35, left: 60, right: 60, top: 50}}
                             keys={keys}
                             indexBy={indexBy}
 
                         />
                     </div>
-                    <div style={{display:"flex", justifyContent:"flex-end", marginBottom: "10px", color: "#222222"}}>
-                        <Checkbox style={{marginRight: "5px", marginBottom:"1px"}} id={`label-checkbox`} checked={this.state.labels} onClick={()=>{this.setState({labels: !this.state.labels})}}/>
-                        <div style={{fontSize:"14px", marginRight: "63px"}}>enable labels</div>
-                    </div>
+                    {this.state.width>=970?(this.state.groupBy!=="Week"?
+                        <div style={{display:"flex", justifyContent:"flex-end", marginBottom: "20px", color: "#222222"}}>
+                            <Checkbox style={{marginRight: "5px", marginBottom:"1px"}} id={`label-checkbox`} checked={this.state.labels} onClick={()=>{this.setState({labels: !this.state.labels})}}/>
+                            <div style={{fontSize:"14px", marginRight: "63px"}}>enable labels</div>
+                        </div>
+                        :
+                        <div style={{display:"flex", justifyContent:"flex-end", marginBottom: "20px", color: "#a2a2a2"}}>
+                            <Checkbox disabled style={{marginRight: "5px", marginBottom:"1px"}} id={`label-checkbox`} checked={this.state.labels} onClick={()=>{this.setState({labels: !this.state.labels})}}/>
+                            <div style={{fontSize:"14px", marginRight: "63px"}}>enable labels</div>
+                        </div>)
+                        :<div style={{marginBottom: "10px"}}/>
+                    }
                     <div style={{margin: "10px", marginLeft: "35px", marginRight: "37px"}}>
                         {this.renderTable()}
                     </div>
