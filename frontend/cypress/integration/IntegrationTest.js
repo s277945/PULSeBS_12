@@ -222,6 +222,17 @@ describe('TEACHER PAGE', function () {
             .should('have.text','Historical Data')
 
     });
+    it('should reload teacher stats', function () {
+        cy.get('[data-testid="history"]')
+            .click()
+        cy.wait(200)
+        cy.hash().should('include','#history')
+        cy.get('.page-title')
+            .should('have.text','Historical Data')
+        cy.reload()
+        cy.get('.page-title')
+            .should('have.text','Historical Data')
+    });
     it('should show stats by week', function () {
         cy.get('[data-testid="history"]')
             .click()
@@ -236,6 +247,7 @@ describe('TEACHER PAGE', function () {
         cy.get('select').first()
             .select('Month')
     });
+
 
     it('should logout', function () {
         cy.server()
@@ -336,9 +348,30 @@ describe('TEST BEHAVIOUR OF CANCEL OR TURN INTO DISTANCE A LECTURE WITHIN 30-60M
                 cy.get('.btn.btn-info')
                     .should('be.disabled')
 
-            }).click({force:true})
+            })
+        cy.wait(100)
+
         cy.get('tbody>tr')
             .should('have.length',2)
+    });
+    it('should not show anything in Student List popup', function () {
+        cy.server()
+        cy.route({
+            method:"GET",
+            url:"/api/lectures/listStudents*",
+            status:500,
+            response:{
+                errors: [{ 'param': 'Server', 'msg': "Server Error" }]
+            }
+        }).as('list')
+        cy.get('[data-testid="teacherStudent"]').should('have.text', 'Student List')
+            .should('have.attr', 'href', '#studentList')
+            .click()
+        cy.get('tbody>tr').eq(0).find('.btn.btn-primary').should('have.text','SHOW LIST')
+            .click()
+        cy.wait('@list')
+        cy.get('[data-testid="studentsList"]').should('have.length', 1)
+        cy.get('.modal').should('be.visible')
     });
 });
 
