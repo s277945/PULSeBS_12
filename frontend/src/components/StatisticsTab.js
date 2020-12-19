@@ -277,7 +277,12 @@ export class StatisticsTab extends Component {
 
                             //set colors
                             animate={true}
-                            colorBy="index"
+                            colorBy={d=>{
+                                console.log(d); 
+                                if(d.id==="Booked seats") return d.indexValue;
+                                if(d.id==="Average attendees") return d.index;
+                                return d.value;
+                            }}
                             colors={{ scheme: "nivo" }}
                             groupMode="grouped"
                             label={d =>{
