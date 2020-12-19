@@ -76,18 +76,14 @@ export class StatisticsTab extends Component {
         switch (this.state.groupBy) {
 
             case "Week":
-                console.log("case Week")
                 this.setState({ selected: this.state.week })
                 break
 
             case "Lectures":
-                console.log("case Lectures")
-                console.log(this.state.lectures)
                 this.setState({ selected: this.state.lectures })
                 break
 
             case "Month":
-                console.log("case Month")
                 this.setState({ selected: this.state.month })
                 break
 
@@ -278,7 +274,6 @@ export class StatisticsTab extends Component {
                             //set colors
                             animate={true}
                             colorBy={d=>{
-                                console.log(d); 
                                 if(d.id==="Booked seats") return d.indexValue;
                                 if(d.id==="Average attendees") return d.index;
                                 return d.value;
@@ -303,7 +298,7 @@ export class StatisticsTab extends Component {
                             data={this.state.selected.map(e=>{
                                 if(typeof e.month !=="undefined") return {"Average booked seats": e.average, "Average attendees": e.averageAtt, "month": e.month};
                                 else if(typeof e.endDate !=="undefined") return {"Average booked seats": e.average, "Average attendees": e.averageAtt, "weekName": e.weekName};
-                                else if(typeof e.date !=="undefined"){ console.log({"date": e.date, "lectureName": e.lectureName, "Booked seats": e.nBooked, "Attendees": e.nAttendance}); return {"date": e.date, "lectureName": e.lectureName, "Booked seats": e.nBooked, "Attendees": e.nAttendance};}
+                                else if(typeof e.date !=="undefined"){return {"date": e.date, "lectureName": e.lectureName, "Booked seats": e.nBooked, "Attendees": e.nAttendance};}
                                 else return e;
                             })}
                             keys={keys}
