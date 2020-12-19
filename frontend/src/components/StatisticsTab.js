@@ -3,13 +3,13 @@ import { getCourseStats, getWeekStats, getMonthStats } from '../api/api'
 import { ResponsiveBar } from "@nivo/bar";
 import Table from 'react-bootstrap/Table'
 import moment from 'moment'
-
+import { Checkbox } from 'pretty-checkbox-react';
 
 
 export class StatisticsTab extends Component {
 
     //GB Lectures as first option
-    state = { selected: [], lectures: [], week: [], month: [], groupBy: "Lectures" }
+    state = { selected: [], lectures: [], week: [], month: [], groupBy: "Lectures", labels: true }
      substring=(array)=>{
          let tmp = array.map(lecture=>{
             let el;
@@ -264,9 +264,8 @@ export class StatisticsTab extends Component {
                         </select>
                     </div>
                 </div>
-                
                 <div >
-                    <div style={{ height: "400px" }}>
+                    <div style={{ height: "400px"}}>
                         <ResponsiveBar
                             // margin needed to show axis labels
                             margin={{
@@ -277,9 +276,24 @@ export class StatisticsTab extends Component {
                             }}
 
                             //set colors
+                            animate={true}
                             colorBy="index"
                             colors={{ scheme: "nivo" }}
                             groupMode="grouped"
+                            label={d =>{
+                                let c=14/Math.ceil(Math.log(d.value + 1) / Math.LN10);
+                                if((d.id==="Booked seats"||d.id==="Attendees")){
+                                    if (d.value!==0) return <tspan><tspan>{d.value}</tspan><tspan text-anchor="middle" y={ -5 } dx={-20+c}>{ this.state.labels?d.id.toLowerCase():"" }</tspan></tspan>;
+                                    else return;
+                                }
+                                else if((d.id==="Average booked seats"||d.id==="Average attendees")){
+                                    let substr=d.id.split(" ");
+                                    if (d.value!==0) return <tspan><tspan>{d.value}</tspan><tspan text-anchor="middle" y={ -15 } dx={-35+c}>{ this.state.labels?substr[0].toLowerCase():"" }</tspan><tspan text-anchor="middle" y={ -5 } dx={substr[2]?(-45+c):(-55+c)}>{this.state.labels?(substr[2]?substr[1]+" "+substr[2]:substr[1]):""}</tspan></tspan>;
+                                    else return;
+                                }
+                                else return d.value;
+                            }}
+                            labelSkipWidth={85}
                             // Chart options
                             data={this.state.selected.map(e=>{
                                 if(typeof e.month !=="undefined") return {"Average booked seats": e.average, "Average attendees": e.averageAtt, "month": e.month};
@@ -291,6 +305,10 @@ export class StatisticsTab extends Component {
                             indexBy={indexBy}
 
                         />
+                    </div>
+                    <div style={{display:"flex", justifyContent:"flex-end", marginBottom: "10px", color: "#222222"}}>
+                        <Checkbox style={{marginRight: "5px", marginBottom:"1px"}} id={`label-checkbox`} checked={this.state.labels} onClick={()=>{this.setState({labels: !this.state.labels})}}/>
+                        <div style={{fontSize:"14px", marginRight: "63px"}}>enable labels</div>
                     </div>
                     <div style={{margin: "10px", marginLeft: "35px", marginRight: "37px"}}>
                         {this.renderTable()}
