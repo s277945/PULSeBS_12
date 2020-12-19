@@ -318,7 +318,7 @@ export class StatisticsTab extends Component {
 
                         />
                     </div>
-                    {this.state.width>=(970*this.state.selected.length/4.3)&&this.state.width>=970?(this.state.groupBy!=="Week"?
+                    {((this.state.groupBy==="Week"||this.state.width>=(970*this.state.selected.length/4.3))&&this.state.width>=970)?(this.state.groupBy!=="Week"?
                         <div style={{display:"flex", justifyContent:"flex-end", marginBottom: "20px", color: "#222222"}}>
                             <Checkbox style={{marginRight: "5px", marginBottom:"1px"}} id={`label-checkbox`} checked={this.state.labels} onClick={()=>{this.setState({labels: !this.state.labels})}}/>
                             <div style={{fontSize:"14px", marginRight: "63px"}}>enable labels</div>
