@@ -281,13 +281,25 @@ export class StatisticsTab extends Component {
                             label={d =>{
                                 let c=14/Math.ceil(Math.log(d.value + 1) / Math.LN10);
                                 if((d.id==="Booked seats"||d.id==="Attendees")){
-                                    if (d.value!==0) return <tspan><tspan>{d.value}</tspan><tspan text-anchor="middle" y={ -5 } dx={-19+c}>{ this.state.labels?d.id.toLowerCase():"" }</tspan></tspan>;
+                                    if (d.value!==0) 
+                                        return  <tspan>
+                                                    <tspan>{d.value}</tspan>
+                                                    <tspan text-anchor="middle" y={ -5 } dx={-19+c}>{ this.state.labels?d.id.toLowerCase():"" }</tspan>
+                                                </tspan>;
                                     else return;
                                 }
                                 else if((d.id==="Average booked seats"||d.id==="Average attendees")){
                                     let substr=d.id.split(" ");
-                                    if (d.value!==0&&Math.floor(d.value)!==d.value) return <tspan><tspan>{d.value}</tspan><tspan text-anchor="middle" y={ -15 } dx={-35+c}>{ this.state.labels?substr[0].toLowerCase():"" }</tspan><tspan text-anchor="middle" y={ -5 } dx={substr[2]?(-46+c):(-54+c)}>{this.state.labels?(substr[2]?substr[1]+" "+substr[2]:substr[1]):""}</tspan></tspan>;
-                                    else if(d.value!==0&&Math.floor(d.value)===d.value) return <tspan><tspan>{d.value}</tspan><tspan text-anchor="middle" y={ -15 } dx={-19+c}>{ this.state.labels?substr[0].toLowerCase():"" }</tspan><tspan text-anchor="middle" y={ -5 } dx={substr[2]?(-46+c):(-40+c)}>{this.state.labels?(substr[2]?substr[1]+" "+substr[2]:substr[1]):""}</tspan></tspan>;
+                                    if (d.value!==0&&Math.floor(d.value)!==d.value) 
+                                        return  <tspan>
+                                                    <tspan>{d.value}</tspan><tspan text-anchor="middle" y={ -15 } dx={-35+c}>{ this.state.labels?substr[0].toLowerCase():"" }</tspan>
+                                                    <tspan text-anchor="middle" y={ -5 } dx={substr[2]?(-46+c):(-54+c)}>{this.state.labels?(substr[2]?substr[1]+" "+substr[2]:substr[1]):""}</tspan>
+                                                </tspan>;
+                                    else if(d.value!==0&&Math.floor(d.value)===d.value) 
+                                        return  <tspan>
+                                                    <tspan>{d.value}</tspan><tspan text-anchor="middle" y={ -15 } dx={-19+c}>{ this.state.labels?substr[0].toLowerCase():"" }</tspan>
+                                                    <tspan text-anchor="middle" y={ -5 } dx={substr[2]?(-46+c):(-40+c)}>{this.state.labels?(substr[2]?substr[1]+" "+substr[2]:substr[1]):""}</tspan>
+                                                </tspan>;
                                     else return;
                                 }
                                 else return d.value;
