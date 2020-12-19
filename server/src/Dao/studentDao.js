@@ -60,7 +60,7 @@ exports.addSeat=function(userId, courseId, date, endDate){
             if(res){
                 controlCapacity(courseId, date).then((check)=>{
                     if(check){
-                        const sql='INSERT INTO Booking VALUES(?,?,?,?)';
+                        const sql='INSERT INTO Booking VALUES(?,?,?,?,0)';
                         db.run(sql, [courseId, date, userId, endDate], function(err){
                             if(err) reject(err);
                             else{
