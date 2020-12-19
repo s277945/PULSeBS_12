@@ -51,15 +51,15 @@ exports.getLecturesByTeacherId=function(userId){
 
 /**
 * Input: Course_Ref, Date
-* Output: List of Student_Ref
+* Output: List of Student_Ref, Name, Surname, Attendance
 * Description: Retrieve the list of students booked to the selected lecture
 */
 
 exports.getStudentList=function(courseId, date){
     let list=[];
     return new Promise((resolve, reject) => {
-        const sql='SELECT userID, Name, Surname FROM User WHERE userID IN ('+
-            'SELECT Student_Ref FROM Booking WHERE Course_Ref=? AND Date_Ref=?)';
+        const sql='SELECT User.userID, User.Name, User.Surname, Booking.Attendance FROM User, Booking '+
+            'WHERE Course_Ref=? AND Date_Ref=? AND User.userID==Booking.Student_Ref';            
         db.all(sql,[courseId,date],(err,rows)=>{
             /* istanbul ignore if */
             if(err){
@@ -68,7 +68,7 @@ exports.getStudentList=function(courseId, date){
             else{
 
                 rows.forEach((row)=>{
-                    list.push({"userId":row.userID, "name":row.Name, "surname": row.Surname})
+                    list.push({"userId":row.userID, "name":row.Name, "surname": row.Surname, "attendance": row.Attendance});
                 });
                 resolve(list);
 
@@ -272,13 +272,13 @@ function getTeacherEmail(courseId){
 exports.getCourseStats = function (courseId){
     let list = [];
     return new Promise((resolve, reject) => {
-        const sql='SELECT Name, Date, BookedSeats FROM Lecture WHERE Course_Ref=? AND Type="p"';
+        const sql='SELECT Name, Date, BookedSeats, Attendees FROM Lecture WHERE Lecture.Course_Ref=? AND Lecture.Type="p" '
         db.all(sql,[courseId], (err,rows)=>{
             /* istanbul ignore if */
             if(err) reject(err);
             else{
                 rows.forEach((row)=>{
-                    list.push({"lectureName":row.Name, "date":row.Date, "nBooked": row.BookedSeats})
+                    list.push({"lectureName":row.Name, "date":row.Date, "nBooked": row.BookedSeats, "nAttendance": row.Attendees})
                 });
                 resolve(list);
             }
@@ -366,7 +366,7 @@ function retrieveWeekStats(courseId, semester){
     let weeks = computeWeeks(startWeek, endWeek);
     let n = weeks.length;
 
-    const sql = 'SELECT AVG(BookedSeats) AS average FROM Lecture WHERE Course_Ref=? AND Date>=? AND Date<=?';
+    const sql = 'SELECT AVG(BookedSeats) AS average, AVG(Attendees) AS averageAtt FROM Lecture WHERE Course_Ref=? AND Date>=? AND Date<=?';
     return new Promise((resolve, reject) => {
         for(let week of weeks) {
             let startDate = moment(week["startDate"]).format('YYYY-MM-DD HH:mm:ss');
@@ -376,7 +376,7 @@ function retrieveWeekStats(courseId, semester){
                 if(err) reject(err);
                 else {
                     let weekName = moment(startDate).format('MM/DD') + "-" + moment(endDate).format('MM/DD');
-                    list.push({"weekName": weekName, "startDate": moment(startDate).format('YYYY/MM/DD'), "endDate": moment(endDate).format('YYYY/MM/DD'), "average": row.average});
+                    list.push({"weekName": weekName, "startDate": moment(startDate).format('YYYY/MM/DD'), "endDate": moment(endDate).format('YYYY/MM/DD'), "average": row.average, "averageAtt": row.averageAtt});
                     i++;
                 }
                 if (i===n) resolve(list);
@@ -446,7 +446,7 @@ function retrieveMonthStats(courseId, semester){
             break;
     }
     let i = 0;
-    const sql = 'SELECT AVG(BookedSeats) AS average FROM Lecture WHERE Course_Ref=? AND Date>=? AND Date<=? ORDER BY Date';
+    const sql = 'SELECT AVG(BookedSeats) AS average, AVG(Attendees) AS averageAtt FROM Lecture WHERE Course_Ref=? AND Date>=? AND Date<=? ORDER BY Date';
     return new Promise((resolve, reject) => {
         for(let month of months) {
             let monthYear;
@@ -462,7 +462,7 @@ function retrieveMonthStats(courseId, semester){
                 else {
                     let monthName = startDate.format('MMMM');
                     console.log(monthName+" "+monthYear);
-                    list.push({"month": monthName, "year": monthYear, "average": row.average});
+                    list.push({"month": monthName, "year": monthYear, "average": row.average, "averageAtt": row.averageAtt});
                     i++;
                 }
                 if (i===4) resolve(list);

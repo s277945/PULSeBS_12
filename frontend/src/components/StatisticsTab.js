@@ -42,7 +42,9 @@ export class StatisticsTab extends Component {
                     let b = moment(w2.startDate, "YYYY/MM/DD");
                     return a.diff(b, 'days');
                 }).map((w)=>{
-                    if(w.average) return { average: w.average.toFixed(2), weekName: w.weekName, startDate: w.startDate, endDate: w.endDate};// truncate floating point to second digit
+                    if(w.average&&w.averageAtt) return { average: w.average.toFixed(2), averageAtt: w.averageAtt.toFixed(2), weekName: w.weekName, startDate: w.startDate, endDate: w.endDate};// truncate floating point to second digit
+                    else if(w.average&&!w.averageAtt) return { average: w.average.toFixed(2), averageAtt: w.averageAtt, weekName: w.weekName, startDate: w.startDate, endDate: w.endDate};// truncate floating point to second digit
+                    else if(!w.average&&w.averageAtt) return { average: w.average, averageAtt: w.averageAtt.toFixed(2), weekName: w.weekName, startDate: w.startDate, endDate: w.endDate};// truncate floating point to second digit
                     else return w;
                 });
                 this.setState({ week: neweek });
@@ -58,7 +60,9 @@ export class StatisticsTab extends Component {
                     let b = moment(m2.month+"/"+m2.year, "MMMM/YYYY");
                     return a.diff(b, 'days');
                 }).map((m)=>{
-                    if(m.average) return { average: m.average.toFixed(2), month: m.month, year: m.year};// truncate floating point to second digit
+                    if(m.average&&m.averageAtt) return { average: m.average.toFixed(2), averageAtt: m.averageAtt.toFixed(2), month: m.month, year: m.year};// truncate floating point to second digit
+                    else if(m.average&&!m.averageAtt) return { average: m.average.toFixed(2), averageAtt: m.averageAtt, month: m.month, year: m.year};// truncate floating point to second digit
+                    else if(!m.average&&m.averageAtt) return { average: m.average, averageAtt: m.averageAtt.toFixed(2), month: m.month, year: m.year};// truncate floating point to second digit
                     else return m;
                 });
                 this.setState({ month: newmonth });
@@ -121,7 +125,7 @@ export class StatisticsTab extends Component {
                                             <td>{lecture.lectureName}</td>
                                             <td>{moment(lecture.date).format("DD/MM/YYYY HH:mm")}</td>
                                             <td>{lecture.nBooked}</td>
-                                            <td>/</td>
+                                            <td>{lecture.nAttendance}</td>
                                         </tr>                                
                                     )})}
                                     <tr>
@@ -129,7 +133,7 @@ export class StatisticsTab extends Component {
                                             <td></td>
                                             <th>Average</th>
                                             <td>{w.average}</td>
-                                            <td>/</td>
+                                            <td>{w.averageAtt}</td>
                                         </tr>    
                                 </tbody>
                             </Table>
@@ -156,7 +160,7 @@ export class StatisticsTab extends Component {
                                 <td>{lecture.lectureName}</td>
                                 <td>{moment(lecture.date).format("DD/MM/YYYY HH:mm")}</td>
                                 <td>{lecture.nBooked}</td>
-                                <td>/</td>
+                                <td>{lecture.nAttendance}</td>
                             </tr>                                
                         )})}
                         </tbody>
@@ -187,7 +191,7 @@ export class StatisticsTab extends Component {
                                         <td>{lecture.lectureName}</td>
                                         <td>{moment(lecture.date).format("DD/MM/YYYY HH:mm")}</td>
                                         <td>{lecture.nBooked}</td>
-                                        <td>/</td>
+                                        <td>{lecture.nAttendance}</td>
                                     </tr>                                
                                 )})}
                                 <tr>
@@ -195,7 +199,7 @@ export class StatisticsTab extends Component {
                                     <td></td>
                                     <th>Average</th>
                                     <td>{m.average}</td>
-                                    <td>/</td>
+                                    <td>{m.averageAtt}</td>
                                 </tr>
                             </tbody>
                         </Table>
@@ -222,17 +226,17 @@ export class StatisticsTab extends Component {
         switch (this.state.groupBy) {
 
             case "Week":
-                keys = "average"
+                keys = ["Average booked seats", "Average attendees"]
                 indexBy = "weekName"
                 break
 
             case "Lectures":
-                keys = "nBooked"
+                keys = ["Booked seats", "Attendees"]
                 indexBy = "lectureName"
                 break
 
             case "Month":
-                keys = "average"
+                keys = ["Average booked seats", "Average attendees"]
                 indexBy = "month"
                 break
 
@@ -275,10 +279,15 @@ export class StatisticsTab extends Component {
                             //set colors
                             colorBy="index"
                             colors={{ scheme: "nivo" }}
-
+                            groupMode="grouped"
                             // Chart options
-                            data={this.substring(this.state.selected)}
-                            keys={[keys]}
+                            data={this.state.selected.map(e=>{
+                                if(typeof e.month !=="undefined") return {"Average booked seats": e.average, "Average attendees": e.averageAtt, "month": e.month};
+                                else if(typeof e.endDate !=="undefined") return {"Average booked seats": e.average, "Average attendees": e.averageAtt, "weekName": e.weekName};
+                                else if(typeof e.date !=="undefined"){ console.log({"date": e.date, "lectureName": e.lectureName, "Booked seats": e.nBooked, "Attendees": e.nAttendance}); return {"date": e.date, "lectureName": e.lectureName, "Booked seats": e.nBooked, "Attendees": e.nAttendance};}
+                                else return e;
+                            })}
+                            keys={keys}
                             indexBy={indexBy}
 
                         />
