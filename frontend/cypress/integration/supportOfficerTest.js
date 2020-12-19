@@ -213,7 +213,7 @@ describe('SUPPORT OFFICER TESTS', function () {
                 url:'/api/lecturesBookable',
                 status:200,
                 response:{"modified": true}
-            })
+            }).as('bookable')
             cy.get('[data-testid="updatebookable"]')
                 .should('be.visible')
                 .click()
@@ -224,7 +224,8 @@ describe('SUPPORT OFFICER TESTS', function () {
                     cy.get('[data-testid="year"]').should('be.visible').click()
                 })
             cy.get('.btn.btn-info').should('be.enabled').click()
-            cy.wait(100)
+            cy.wait('@bookable')
+            cy.get('.card').eq(0).should('contains.text','2remote courses,0courses in presence')
         });
         it('should turn lecture into presence', function () {
             cy.server()
@@ -233,7 +234,7 @@ describe('SUPPORT OFFICER TESTS', function () {
                 url:'/api/lecturesBookable',
                 status:200,
                 response:{"modified": true}
-            })
+            }).as('bookable')
             cy.get('[data-testid="updatebookable"]')
                 .should('be.visible')
                 .click()
@@ -244,7 +245,8 @@ describe('SUPPORT OFFICER TESTS', function () {
                     cy.get('[data-testid="year"]').should('be.visible').click()
                 })
             cy.get('.btn.btn-primary').should('be.enabled').click()
-            cy.wait(100)
+            cy.wait('@bookable')
+            cy.get('.card').eq(0).should('contains.text','0remote courses,2courses in presence')
         });
         it('should reset', function () {
             cy.get('[data-testid="updatebookable"]')
@@ -257,7 +259,7 @@ describe('SUPPORT OFFICER TESTS', function () {
                     cy.get('[data-testid="year"]').should('be.visible').click()
                 })
             cy.get('.btn.btn-danger').should('be.enabled').click()
-            cy.wait(100)
+            cy.get('[data-testid="year"]').should('not.be.checked')
             
         });
         it('should select all', function () {
