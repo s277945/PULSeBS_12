@@ -8,8 +8,14 @@ const server=require('../src/server');
 const expect=chai.expect;
 let cookie;
 const url='http://localhost:3001';
-
+const db=require('../src/db')
 describe('TEST SUITE MANAGER FUNCTION', function () {
+    beforeEach(()=>{
+        db.run("BEGIN")
+    })
+    afterEach(()=>{
+        db.run("ROLLBACK")
+    })
     before(async() => {
         let res = await chai.request(url).post('/api/login').send({
             userName: 'b123456',

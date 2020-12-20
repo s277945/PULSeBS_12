@@ -12,9 +12,15 @@ const url='http://localhost:3001';
 const date='2021-03-08 15:00:00';
 const course_id='C2468';
 let capacity;
-
+const db=require('../src/db')
 
 describe('********STUDENT TEST******', function () {
+    beforeEach(()=>{
+        db.run("BEGIN")
+    })
+    afterEach(()=>{
+        db.run("ROLLBACK")
+    })
     describe('method POST/login', function () {
         it('should return status 401 when password is incorrect', async function () {
             let res = await chai.request(url).post('/api/login').send({
@@ -132,6 +138,9 @@ describe('********STUDENT TEST******', function () {
 
     });
     describe('/api/lectures/waiting', function () {
+        before(()=>{
+            //addWaiting
+        })
         it('should return the list of all the courses in which i am in waiting list', function () {
             return chai.request(url)
                 .get('/api/lectures/waiting')
@@ -152,7 +161,7 @@ describe('********STUDENT TEST******', function () {
         before(async()=>{
             //update course capacity, add a booking and then add a waiting list before testing
             await supportFunc.updateCourseCapacity('C2468','2021-03-05 11:00:00',1).then(async res=>{
-                if(res.equals(true)){
+                if(res==true){
                     await studDao.addSeat('s266260','C2468','2021-03-05 11:00:00','2021-03-05 14:00:00')
                         .then(async res=>{
                             await studDao.addSeat('s267348','C2468','2021-03-05 11:00:00','2021-03-05 14:00:00').then(
@@ -176,12 +185,6 @@ describe('********STUDENT TEST******', function () {
                 })
 
         });
-        before(async()=>{
-            await supportFunc.updateCourseCapacity('C2468','2021-03-05 11:00:00',70).then(
-                res=>console.log('ok')
-            )
-        })
-
         it('should delete an user and there is no one in waiting list',async function () {
             let res=await chai.request(url).delete('/api/lectures/C4567?date=2020-12-25 09:00:00').set('Cookie',cookie).send()
             expect(res.status).to.equal(204);

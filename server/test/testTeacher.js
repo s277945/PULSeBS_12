@@ -10,9 +10,15 @@ const expect=chai.expect;
 let cookie;
 const url='http://localhost:3001';
 const supportFunc=require('./supportFunction');
-
+const db=require('../src/db')
 describe('TEACHER TESTING', function () {
     //login teacher and saves its session before to do other stuffs
+    beforeEach(()=>{
+        db.run("BEGIN")
+    })
+    afterEach(()=>{
+        db.run("ROLLBACK")
+    })
     before(async() => {
         let res = await chai.request(url).post('/api/login').send({
             userName: 't987654',
@@ -188,18 +194,4 @@ describe('TEACHER TESTING', function () {
 
         });
     });
-    after(async()=>{
-        const course_id='C4567';
-        let date='2020-12-22 09:00:00';
-        await supportFunc.restoreTypeLecture(course_id,date);
-        const course_Ref='C4567';
-        const userId='s266260';
-        date='2020-12-25 09:00:00';
-        const deadline='2020-12-24 23:00:00';
-        const name='DS Les:6';
-        const capacity=70;
-        await supportFunc.insertDeletedRow(course_Ref,name,date,deadline,capacity);
-        await dao.addSeat(userId,course_id,date);
-        let res=await chai.request(url).post('/api/logout').set('Cookie',cookie).send();
-    })
 });

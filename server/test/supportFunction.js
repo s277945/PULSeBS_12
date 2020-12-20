@@ -15,8 +15,8 @@ exports.getCourseCapacity= function(id,date){
 }
 exports.updateCourseCapacity= function (id,date,capacity){
     return new Promise((resolve, reject) => {
-        const sql='UPDATE Lecture SET Capacity=? WHERE Course_Ref=? AND Date=?';
-        db.run(sql,[capacity,id,date],function (err){
+        const sql='UPDATE Lecture SET Capacity=? AND BookedSeats=? WHERE Course_Ref=? AND Date=?';
+        db.run(sql,[capacity,capacity,id,date],function (err){
             if(err)
                 reject(err);
             else

@@ -12,7 +12,14 @@ let course=[];
 let enrollment=[];
 let schedule=[];
 const url='http://localhost:3001';
+const db=require('../src/db')
 describe('TEST SUPPORT OFFICER', function () {
+    beforeEach(()=>{
+        db.run("BEGIN")
+    })
+    afterEach(()=>{
+        db.run("ROLLBACK")
+    })
     before(async() => {
         let res = await chai.request(url).post('/api/login').send({
             userName: 'so123456',
@@ -39,15 +46,6 @@ describe('TEST SUPPORT OFFICER', function () {
                     expect(res.body.inserted).to.equals(true)
                 })
         });
-        it('should not insert a student already in table', function () {
-            return chai.request(url)
-                .post('/api/uploadStudents')
-                .set("Cookie",cookie)
-                .send({data:student,fileName:'Students.csv'})
-                .then(res=>{
-                    expect(res).to.have.status(500)
-                })
-        });
     });
     describe('UPLOAD TEACHER', function () {
         it('should upload teacher', function () {
@@ -58,15 +56,6 @@ describe('TEST SUPPORT OFFICER', function () {
                 .then(res=>{
                     expect(res).to.have.status(200)
                     expect(res.body.inserted).to.equals(true)
-                })
-        });
-        it('should not upload teacher', function () {
-            return chai.request(url)
-                .post('/api/uploadTeachers')
-                .set("Cookie",cookie)
-                .send({data:teacher,fileName:'Students.csv'})
-                .then(res=>{
-                    expect(res).to.have.status(500)
                 })
         });
     });
@@ -81,15 +70,6 @@ describe('TEST SUPPORT OFFICER', function () {
                     expect(res.body.inserted).to.equals(true)
                 })
         });
-        it('should not upload list courses', function () {
-            return chai.request(url)
-                .post('/api/uploadCourses')
-                .set("Cookie",cookie)
-                .send({data:course,fileName:'Students.csv'})
-                .then(res=>{
-                    expect(res).to.have.status(500)
-                })
-        });
     });
     describe('UPLOAD ENROLLMENT', function () {
         it('should upload list enrollment', function () {
@@ -102,52 +82,25 @@ describe('TEST SUPPORT OFFICER', function () {
                     expect(res.body.inserted).to.equals(true)
                 })
         });
-        it('should not upload list enrollment', function () {
-            return chai.request(url)
-                .post('/api/uploadEnrollment')
-                .set("Cookie",cookie)
-                .send({data:enrollment,fileName:'Students.csv'})
-                .then(res=>{
-                    expect(res).to.have.status(500)
-                })
-        });
+
     });
     describe('UPLOAD schedule', function () {
+        before(()=>{
+            return chai.request(url)
+                .post('/api/uploadCourses')
+                .set("Cookie",cookie)
+                .send({data:course,fileName:'Students.csv'})
+                .then(res=>expect(res).to.have.status(200))
+        })
         it('should upload list schedule', function () {
             return chai.request(url)
                 .post('/api/uploadSchedule')
                 .set("Cookie",cookie)
-                .send({data:schedule,fileName:'Students.csv'})
+                .send({data:schedule,fileName:'Schedule.csv'})
                 .then(res=>{
                     expect(res).to.have.status(200)
                     expect(res.body.inserted).to.equals(true)
                 })
-        });
-        it('should not upload list schedule', function () {
-            return chai.request(url)
-                .post('/api/uploadSchedule')
-                .set("Cookie",cookie)
-                .send({data:schedule,fileName:'Students.csv'})
-                .then(res=>{
-                    expect(res).to.have.status(500)
-                })
-        });
-        it('should reset', async function () {
-            await support.deleteRowsSchedule(schedule).then(res=>{
-                expect(res).to.equals(true);
-            })
-            await support.deleteRowsEnrollment(enrollment).then(res=>{
-                expect(res).to.equals(true);
-            })
-            await support.deleteRowsCourse(course).then(res=>{
-                expect(res).to.equals(true);
-            })
-            await support.deleteRowsTeacher(teacher).then(res=>{
-                expect(res).to.equals(true);
-            })
-            await support.deleteRowsStudent(student).then(res=>{
-                expect(res).to.equals(true);
-            })
         });
     });
     describe('FileData', function () {
