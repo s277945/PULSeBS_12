@@ -93,14 +93,15 @@ describe('********STUDENT TEST******', function () {
             expect(res.status).to.equal(422);
         });
         it('should return 0 seats available status 500',async function () {
+            let supp=await supportFunc.updateCourseCapacity(course_id,date,0,0).then(res=>{
+                console.log(res)
                 return chai.request(url).post('/api/lectures').set('Cookie',cookie)
                     .send({lectureId: "C2468", date: "2021-03-08 15:00:00",endDate:"2021-03-08 18:00:00"})
                     .then(res=>{
-                        expect(JSON.stringify(res)).to.equals('a')
-                        expect(res).to.have.status(500)
+                        expect(res).to.have.status(201)
                         expect(res.body.operation).to.equals('waiting')
                     })
-
+            })
         });
         it('should return status 201 ', async function () {
             let res=await chai.request(url).post('/api/lectures').set('Cookie',cookie).send({lectureId: "C4567", date: "2020-12-25 09:00:00",endDate:"2020-12-25 12:00:00"})
@@ -136,7 +137,7 @@ describe('********STUDENT TEST******', function () {
     });
     describe('DELETE', function () {
         it('should delete an user and there is someone else in waiting list', async function () {
-            await supportFunc.updateCourseCapacity('C2468','2021-03-05 11:00:00',1).then(async res=>{
+            await supportFunc.updateCourseCapacity('C2468','2021-03-05 11:00:00',1,0).then(async res=>{
                 if(res==true){
                     await studDao.addSeat('s266260','C2468','2021-03-05 11:00:00','2021-03-05 14:00:00')
                         .then(async res=>{
@@ -150,7 +151,7 @@ describe('********STUDENT TEST******', function () {
                                         .then(res=>{
                                             expect(res).to.have.status(204)
                                             expect(res.body).to.haveOwnProperty('Student_Ref')
-                                            expect(res.body.Student_Ref).to.match(/s[0-9]{6}/)
+                                            expect(res.body.Student_Ref).to.equals('s267348')
 
                                         })
                                 }

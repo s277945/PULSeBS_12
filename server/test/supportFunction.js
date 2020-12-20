@@ -15,10 +15,10 @@ exports.getCourseCapacity= function(id,date){
         })
     });
 }
-exports.updateCourseCapacity= function (id,date,capacity){
+exports.updateCourseCapacity= function (id,date,capacity,seats){
     return new Promise((resolve, reject) => {
         const sql='UPDATE Lecture SET Capacity=? AND BookedSeats=? WHERE Course_Ref=? AND Date=?';
-        db.run(sql,[capacity,capacity,id,date],function (err){
+        db.run(sql,[capacity,seats,id,date],function (err){
             if(err)
                 reject(err);
             else

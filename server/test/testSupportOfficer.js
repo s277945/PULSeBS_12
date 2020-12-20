@@ -134,5 +134,14 @@ describe('TEST SUPPORT OFFICER', function () {
                     expect(res.body).to.haveOwnProperty("modified")
                 })
         });
+        it('should post not bookable lecture', function () {
+            return chai.request(url).post('/api/lecturesBookable')
+                .set('Cookie',cookie)
+                .send([{"courseId": "C4567","restriction": 1}])
+                .then(res=>{
+                    expect(res).to.have.status((200))
+                    expect(res.body).to.haveOwnProperty("modified")
+                })
+        });
     });
 });

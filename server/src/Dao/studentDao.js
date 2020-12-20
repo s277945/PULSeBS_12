@@ -218,7 +218,7 @@ function addFromWaitingList(courseId, date){
                 reject(err);
             else {
                 console.log("Student_Ref "+row.Student_Ref);
-                const sql2='INSERT INTO Booking VALUES (?,?,?,?)';
+                const sql2='INSERT INTO Booking VALUES (?,?,?,?,0)';
                 db.run(sql2, [courseId, date, row.Student_Ref, row.EndDate_Ref], (err2) => {
                     /* istanbul ignore if */
                     if(err2) reject(err2);
