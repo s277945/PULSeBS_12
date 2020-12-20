@@ -95,14 +95,14 @@ describe('********STUDENT TEST******', function () {
         it('should return 0 seats available status 500',async function () {
             let supp=await supportFunc.updateCourseCapacity(course_id,date,1).then(res=>{
                 console.log(res)
+                return chai.request(url).post('/api/lectures').set('Cookie',cookie)
+                    .send({lectureId: "C2468", date: "2021-03-08 15:00:00",endDate:"2021-03-08 18:00:00"})
+                    .then(res=>{
+                        expect(JSON.stringify(res)).to.equals('a')
+                        expect(res).to.have.status(500)
+                        expect(res.body.operation).to.equals('waiting')
+                    })
             })
-            return chai.request(url).post('/api/lectures').set('Cookie',cookie)
-                .send({lectureId: "C2468", date: "2021-03-08 15:00:00",endDate:"2021-03-08 18:00:00"})
-                .then(res=>{
-                    expect(res).to.have.status(500)
-                    expect(res.body.operation).to.equals('waiting')
-            })
-            //expect(res.body.errors.msg).to.be.equals('0 seats available')
         });
         it('should return status 201 ', async function () {
             let res=await chai.request(url).post('/api/lectures').set('Cookie',cookie).send({lectureId: "C4567", date: "2020-12-25 09:00:00",endDate:"2020-12-25 12:00:00"})
@@ -118,7 +118,7 @@ describe('********STUDENT TEST******', function () {
     });
     describe('/api/lectures/waiting', function () {
         it('should return the list of all the courses in which i am in waiting list', async function () {
-            await supportFunc.addWaitingList('s2662260','C4567','2020-12-25 09:00:00','2020-12-25 12:00:00').then(res=>{
+            await supportFunc.addWaitingList('s266260','C4567','2020-12-25 09:00:00','2020-12-25 12:00:00').then(res=>{
                 return chai.request(url)
                     .get('/api/lectures/waiting')
                     .set('Cookie',cookie)
@@ -143,28 +143,30 @@ describe('********STUDENT TEST******', function () {
                     await studDao.addSeat('s266260','C2468','2021-03-05 11:00:00','2021-03-05 14:00:00')
                         .then(async res=>{
                             await studDao.addSeat('s267348','C2468','2021-03-05 11:00:00','2021-03-05 14:00:00').then(
-                                res=>console.log('success')
+                                res=>{
+                                    console.log('success')
+                                    return  chai.request(url)
+                                        .delete('/api/lectures/C2468?date=2021-03-05 11:00:00')
+                                        .set('Cookie',cookie)
+                                        .send()
+                                        .then(res=>{
+                                            expect(res).to.have.status(204)
+                                            expect(res.body).to.haveOwnProperty('Student_Ref')
+                                            expect(res.body.Student_Ref).to.match(/s[0-9]{6}/)
+
+                                        })
+                                }
                             )
                         })
 
                 }
             })
-            return  chai.request(url)
-                .delete('/api/lectures/C2468?date=2021-03-08 15:00:00')
-                .set('Cookie',cookie)
-                .send()
-                .then(res=>{
-                    expect(res).to.have.status(204)
-                    expect(res.body).to.haveOwnProperty('Student_Ref')
-                    expect(res.body.Student_Ref).to.match(/s[0-9]{6}/)
 
-                })
 
         });
         it('should delete an user and there is no one in waiting list',async function () {
             let res=await chai.request(url).delete('/api/lectures/C8901?date=2021-03-02 15:00:00').set('Cookie',cookie).send()
             expect(res.status).to.equal(204);
-            expect(res.body.operation).to.equals("NoUser")
         });
     });
 

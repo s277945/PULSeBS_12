@@ -85,22 +85,22 @@ describe('TEST SUPPORT OFFICER', function () {
 
     });
     describe('UPLOAD schedule', function () {
-        before(()=>{
-            return chai.request(url)
+        it('should upload list schedule', async function () {
+            let result=await chai.request(url)
                 .post('/api/uploadCourses')
                 .set("Cookie",cookie)
                 .send({data:course,fileName:'Students.csv'})
-                .then(res=>expect(res).to.have.status(200))
-        })
-        it('should upload list schedule', function () {
-            return chai.request(url)
-                .post('/api/uploadSchedule')
-                .set("Cookie",cookie)
-                .send({data:schedule,fileName:'Schedule.csv'})
                 .then(res=>{
-                    expect(JSON.stringify(res)).to.equals('a')
-                    expect(res).to.have.status(200)
-                    expect(res.body.inserted).to.equals(true)
+                    if(res){
+                        return chai.request(url)
+                            .post('/api/uploadSchedule')
+                            .set("Cookie",cookie)
+                            .send({data:schedule,fileName:'Schedule.csv'})
+                            .then(res=>{
+                                expect(res).to.have.status(200)
+                                expect(res.body.inserted).to.equals(true)
+                            })
+                    }
                 })
         });
     });

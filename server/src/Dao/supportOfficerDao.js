@@ -124,9 +124,9 @@ exports.uploadSchedule=function(list, fileName){
                     getListLectures(element)
                         .then((listLectures) => {
                             for (let el of listLectures ){
-                                let sql2 = 'INSERT INTO Lecture VALUES(?,?,?,?,?,?,?,?,?,?)';
+                                let sql2 = 'INSERT INTO Lecture VALUES(?,?,?,?,?,?,?,?,?,?,?)';
                                 db.run(sql2, [el.Course_Ref, el.Name, el.Capacity, el.Date, el.EndDate, el.DateDeadline,
-                                    el.BookedSeats, el.UnbookedSeats, el.Type, el.EmailSent], (err2) => {
+                                    el.BookedSeats, el.UnbookedSeats, el.Type, el.EmailSent,0], (err2) => {
 
                                     if(err2){
                                         console.log("fail");

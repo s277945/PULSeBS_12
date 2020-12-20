@@ -2,6 +2,8 @@ const db = require('../src/db');
 const csv=require('csvtojson')
 const fs = require('fs');
 const dao = require("../src/Dao/supportOfficerDao");
+const moment = require('moment');
+
 exports.getCourseCapacity= function(id,date){
     return new Promise((resolve, reject) => {
         const sql='SELECT Capacity FROM Lecture WHERE Course_Ref=? AND Date=?';
