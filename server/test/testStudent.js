@@ -175,11 +175,6 @@ describe('********STUDENT TEST******', function () {
             expect(res.headers['set-cookies']).to.be.undefined;
         });
     });
-    describe('GET api/checkEmails', function () {
-        it('should ', async function () {
-            let res=await chai.request(url).get('/api/checkEmails').set('Cookie',cookie).send();
-            expect(res.status).to.equal(200);
-        });
-    });
+
 
 })

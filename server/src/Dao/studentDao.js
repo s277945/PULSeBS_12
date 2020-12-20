@@ -62,13 +62,13 @@ exports.addSeat=function(userId, courseId, date, endDate){
                     if(check){
                         const sql='INSERT INTO Booking VALUES(?,?,?,?,0)';
                         db.run(sql, [courseId, date, userId, endDate], function(err){
-                            if(err) reject(err);
+                            /* istanbul ignore if */if(err) reject(err);
                             else{
                                 const sql2 ='UPDATE Lecture SET BookedSeats=BookedSeats+1 WHERE Course_Ref=? AND Date=?'
                                 db.run(sql2, [courseId, date], function(err2){
                                     /* istanbul ignore if */
                                     if(err2) reject(err2);
-                                    else resolve("booked");
+                                    /* istanbul ignore else */ else resolve("booked");
                                 });
                             }
 

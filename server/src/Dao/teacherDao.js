@@ -94,7 +94,6 @@ exports.checkDeadline=function(dateD){
                 reject(err);
             }
             else{
-                console.log("rows: "+JSON.stringify(rows));
                 for(let row of rows){
 
                     await countStudent(row.Course_Ref, row.Date).then(async(n) => {
@@ -134,6 +133,7 @@ exports.deleteLecture=function(courseId, date){
                             resolve(emails);}
                     });
                 }
+                /* istanbul ignore else */
             });
         });
     });
@@ -346,9 +346,11 @@ function retrieveWeekStats(courseId, semester){
 
     if(thisDate.isAfter(moment(6, 'M')))
         currentYear = moment().year();
-    /* istanbul ignore next */
-    else
+    /* istanbul ignore else */
+    else{
         currentYear =  moment().year() - 1;
+    }
+
 
     switch(semester){
         case 1:
@@ -429,10 +431,10 @@ function retrieveMonthStats(courseId, semester){
     let currentYear;
     if(thisDate.isAfter(moment(6, 'M')))
         currentYear = moment().year();
-    /* istanbul ignore next */
-    else
+    /* istanbul ignore else */
+    else{
         currentYear =  moment().year() - 1;
-
+    }
     switch(semester){
         case 1:
             months = [9, 10, 11, 0];

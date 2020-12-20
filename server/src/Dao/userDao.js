@@ -31,6 +31,7 @@ exports.checkUserPwd = function (username, password) {
                     }
                 })
             }
+            /* istanbul ignore else */
 
         });
     });

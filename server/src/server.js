@@ -44,16 +44,16 @@ app.use(cors({ origin: true, credentials: true }));
  *
  */
 
- app.get('/api/checkEmails', (req, res) => {
+ /*app.get('/api/checkEmails', (req, res) => {
    let date = moment().format('YYYY-MM-DD HH:mm:ss');
    dao.checkDeadline(date)
     .then((list) => {
       res.status(200).json(list);
     })
-    .catch(/* istanbul ignore next */(err) => {
+    .catch(/* istanbul ignore next (err) => {
       res.status(500).json({"errors": err});
     })
- })
+ })*/
 
 //login route
 app.post('/api/login', (req, res) => {
@@ -216,7 +216,9 @@ app.get('/api/teacherCourses', (req, res) => {
                         subject: 'Lecture waiting list',
                         text: `Dear ${user}, you have been inserted in a waiting list for a seat of Course ${req.body.lectureId} for lecture on ${date}`
                     };
-                } else {
+                }
+                /* istanbul ignore else */
+                else {
                     return;
                 }
 
@@ -725,7 +727,7 @@ app.post('/api/students/:studentSsn', (req, res) => {
         .then((response)=>{
             res.status(200).json({"setAsPositive": response})
         })
-        .catch((err) => {
+        .catch(/* istanbul ignore next */(err) => {
             res.status(500).json(err)
         })
 });
