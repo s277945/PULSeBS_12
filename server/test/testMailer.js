@@ -1,6 +1,13 @@
 const {expect} = require("chai");
 const mailer = require("../src/mail_mod");
+const db=require('../src/db')
 describe('TEST MAIL MODULE', function () {
+    beforeEach(()=>{
+        db.run("BEGIN")
+    })
+    afterEach(()=>{
+        db.run("ROLLBACK")
+    })
     it('should not be null', function () {
         expect(mailer).to.not.be.null;
     });
@@ -10,7 +17,7 @@ describe('TEST MAIL MODULE', function () {
         job.start();
         await setTimeout(function () {
             expect(job.getStatus()).to.be.equal('running');
-        },60000)
+        },600)
     });
 
 });

@@ -94,6 +94,7 @@ exports.checkDeadline=function(dateD){
                 reject(err);
             }
             else{
+                console.log("rows: "+JSON.stringify(rows));
                 for(let row of rows){
 
                     await countStudent(row.Course_Ref, row.Date).then(async(n) => {
