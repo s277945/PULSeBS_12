@@ -16,6 +16,7 @@ export default function SystemSetup() {
             if(response.data) {console.log(response.data);
             setUploaded(response.data);
             }
+            /* istanbul ignore else */
             
         })
         .catch(/* istanbul ignore next */err => {
@@ -75,6 +76,7 @@ const UploadFileButton = ({disabled, uploaded, setUploaded, Name, listType, type
     const sendFile = () => {
         let file = files[0];
         if(!file) return;
+        /* istanbul ignore else */
         console.log(file);
         setUploading(true)
 
@@ -107,7 +109,8 @@ const UploadFileButton = ({disabled, uploaded, setUploaded, Name, listType, type
                 case "schedule":
                     apiCall = uploadSchedule
                     headers = "courseId,room,day,seats,time".split(',')
-                break; 
+                break;
+                /* istanbul ignore next */
                 default :
                     console.error("Incorrect list type")
                 break;
@@ -162,7 +165,7 @@ const UploadFileButton = ({disabled, uploaded, setUploaded, Name, listType, type
                 setUploaded(newuploaded);
                 setFiles([]);
             })
-            .catch(err1 => {
+            .catch(/* istanbul ignore next */err1 => {
                 console.log(err1);
                 if(typeof(err1.response)==="undefined") toast.error("Server error: error sending data to server");
                 else if(err1.response.status===500){// check error response status

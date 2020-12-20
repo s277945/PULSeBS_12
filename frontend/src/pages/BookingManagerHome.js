@@ -85,10 +85,12 @@ export default function BookingManagerHome() {
         )
 
         /* istanbul ignore else */
-        else return (
+        else{
+            return (
             <div>
             </div>
         )
+        }
     }
 
     return (

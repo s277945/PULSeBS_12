@@ -40,7 +40,7 @@ export class BookingManagerReport extends Component {
             });
     }
      convertToCSV=(objArray)=> {
-        let array = typeof objArray != 'object' ? JSON.parse(objArray) : objArray;
+        let array = typeof objArray != 'object' ? JSON.parse(objArray)/* istanbul ignore else */ : objArray;
         let str = '';
 
         for (let i = 0; i < array.length; i++) {

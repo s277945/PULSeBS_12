@@ -106,9 +106,11 @@ export class TeacherTabLec extends Component {
             this.popupClose();// then close popup
 
         }
+        /* istanbul ignore if */
         if(this.state.popup.message==="cancel this lecture"&&moment(this.state.selectedLec.Date).diff(moment(), 'minutes', true)<=60.00&&this.state.popup.show==1) { this.popupClose(); return;} // check if popup can open
+        /* istanbul ignore if */
         if(this.state.popup.message!=="cancel this lecture"&&moment(this.state.selectedLec.Date).diff(moment(), 'minutes', true)<=30.00&&this.state.popup.show==1) { this.popupClose(); return;}
-
+        /* istanbul ignore else */
         return (
             <Modal data-testid="popup" show={this.state.popup.show} onHide={this.popupClose} style={{marginTop: "25vh", marginLeft: "5px"}}>
                 <Modal.Header class="app-element-background" closeButton style={{minWidth: "498px"}}>

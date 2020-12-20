@@ -77,7 +77,7 @@ exports.addSeat=function(userId, courseId, date, endDate){
                     else{
                         addWaitingList(userId, courseId, date, endDate).then((check2)=>{
                             if(check2) resolve("waiting");
-                            else reject(err);
+                            /* istanbul ignore else */else reject(err);
                         }).catch(/* istanbul ignore next */err=>reject(err));
                     }
                 }).catch(/* istanbul ignore next */err=>reject(err));

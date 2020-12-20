@@ -44,11 +44,13 @@ export class TeacherHome extends Component {
             </div>
         )
         /* istanbul ignore else */
-        else return (
-            <div>
+        else{
+            return (
+                <div>
 
-            </div>
-        )
+                </div>
+            )
+        }
     }
 
     render() {
