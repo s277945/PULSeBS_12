@@ -98,6 +98,7 @@ describe('TEST SUPPORT OFFICER', function () {
                 .set("Cookie",cookie)
                 .send({data:schedule,fileName:'Schedule.csv'})
                 .then(res=>{
+                    expect(JSON.stringify(res)).to.equals('a')
                     expect(res).to.have.status(200)
                     expect(res.body.inserted).to.equals(true)
                 })

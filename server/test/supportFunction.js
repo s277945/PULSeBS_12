@@ -215,3 +215,17 @@ exports.setNotPositive=function(userId){
         })
     })
 }
+
+exports.addWaitingList=function (userId, courseId, date, endDate){
+    return new Promise((resolve, reject) => {
+        let bookingDate = moment().format('YYYY-MM-DD HH:mm:ss');
+        console.log(bookingDate);
+        const sql='INSERT INTO WaitingList VALUES (?,?,?,?,?)';
+        db.run(sql,[courseId, date, userId, endDate, bookingDate],(err) => {
+            /* istanbul ignore if */
+            if(err)
+                reject(err);
+            else resolve(true);
+        })
+    });
+}
