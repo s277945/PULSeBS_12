@@ -96,7 +96,8 @@ app.use(
 
 //unauthorized access management
 app.use((err, req, res, next) => {
-  if (err.name === 'UnauthorizedError') {
+    /* istanbul ignore else */
+    if (err.name === 'UnauthorizedError') {
       res.status(401).json(authErrorObj);
   }
     /* istanbul ignore else */
