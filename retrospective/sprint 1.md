@@ -53,7 +53,7 @@
 + \# of members who worked on it: **3**
 + Average time on task per member: **20 mins**
 + Distribution of time:
-    + Each member worked for **30 mins.**, of which
+    + Each member worked for **30 mins**, of which
         + actual development of project: 1 h/member
         + testing: 0.5 h/member
     + In total: 30 mins * 3 members = **1.5 hours**
