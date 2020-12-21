@@ -202,6 +202,7 @@ app.get('/api/teacherCourses', (req, res) => {
           studentDao.getStudentEmail(user)
             .then((email) => {
                 let mailOptions;
+                /* istanbul ignore else */
                 if(response === "booked"){
                     mailOptions = {
                         from: mailer.email,

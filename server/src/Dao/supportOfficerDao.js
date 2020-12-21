@@ -187,6 +187,7 @@ function getListLectures(schedule){
                 let time = schedule.time.split("-")
                 let thisDate = moment();
                 let currentYear
+                /* istanbul ignore else */
                 if (thisDate.isAfter(moment(6, 'M')))
                     currentYear = moment().year();
                 /* istanbul ignore else */

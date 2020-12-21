@@ -11,7 +11,7 @@ exports.checkUserPwd = function (username, password) {
         var sql = 'SELECT userID, Password FROM User WHERE userID = ?'; // sql query to select user entry from database
 
         db.get(sql, [username], (err, row) => {
-            /* istanbul ignore if */
+            /* istanbul ignore if *//* istanbul ignore else */
             if (err) reject(err); // error handling
             else if (typeof row === 'undefined') reject(new Error('User does not exist')); // no entry found
             else if (typeof row !== 'undefined') { // username found

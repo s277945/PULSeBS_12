@@ -121,6 +121,7 @@ exports.deleteLecture=function(courseId, date){
     return new Promise((resolve, reject) => {
         getStudentEmails(courseId, date).then(emails =>{
             deleteBookings(courseId, date).then(n =>{
+                /* istanbul ignore else */
                 if(n){
                     const sql='DELETE FROM Lecture WHERE Course_Ref=? AND Date=?';
                     db.run(sql, [courseId, date], (err) => {
@@ -343,7 +344,7 @@ function retrieveWeekStats(courseId, semester){
     let thisDate = moment();
     let currentYear;
     let i = 0;
-
+    /* istanbul ignore else */
     if(thisDate.isAfter(moment(6, 'M')))
         currentYear = moment().year();
     /* istanbul ignore else */
@@ -429,6 +430,7 @@ function retrieveMonthStats(courseId, semester){
     let months;
     let thisDate = moment();
     let currentYear;
+    /* istanbul ignore else */
     if(thisDate.isAfter(moment(6, 'M')))
         currentYear = moment().year();
     /* istanbul ignore else */

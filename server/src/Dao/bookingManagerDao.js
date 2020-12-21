@@ -146,12 +146,13 @@ exports.generateReport = function(ssn){
                                                 "ssn": row.SSN
                                             }
                                             let cond = list.includes(obj)
-
+                                            /* istanbul ignore else */
                                             if(!cond)
                                                 list.push(obj)
                                             /* istanbul ignore else */
                                         })
                                     }
+                                    /* istanbul ignore else */
                                     if(iterator === lectures.length) resolve(list)
                                     /* istanbul ignore else */
                                 })
