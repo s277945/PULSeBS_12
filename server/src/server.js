@@ -818,5 +818,24 @@ app.post('/api/:courseId/:date/attendees', (req, res) => {
   }else res.status(500).json("Lecture date is out of modification range");
 });
 
+/**
+ * GET api/teacherPastLectures
+ *
+ * Returns list of past lectures for a given teacher
+ *
+ * userId => userId
+ */
+
+app.get('/api/teacherPastLectures', (req, res) => {
+  const user = req.user && req.user.user;
+    teacherDao.getPastLecturesByTeacherId(user)
+      .then((lectures) => {
+        res.status(200).json(lectures);
+      })
+      .catch(/* istanbul ignore next */(err) => {
+        res.status(500).json({errors: [{'msg': err}]});
+      });
+ });
+
 //activate server
 app.listen(port, () => console.log(`Server ready at port: ${port}`));

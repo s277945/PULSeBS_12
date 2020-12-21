@@ -506,3 +506,27 @@ exports.setPresentStudents = function (courseId, date, list){
         })
     })
 }
+
+/**
+ * Input: userID
+ * Output: List of lectures (Course_ref, Name, Date)
+ * Description: Retrieve the list of lectures from the courses in which the teacher is enrolled in
+ */
+
+exports.getPastLecturesByTeacherId=function(userId){
+    return new Promise((resolve, reject) => {
+        const date=moment().format('YYYY-MM-DD HH:mm:ss');
+        const sql='SELECT Course_Ref, Name, Date, DateDeadline, EndDate, BookedSeats, Capacity, Type, Attendees FROM  Lecture  WHERE Date <= ? AND Course_Ref IN (' +
+            'SELECT CourseID FROM Course WHERE Teacher_Ref=?)';
+        db.all(sql, [date, userId], (err,rows)=>{
+            /* istanbul ignore if */
+            if(err){
+                reject(err);
+            }
+            else{
+                console.log("lectures: " + rows + " userId " + userId);
+                resolve(rows);
+            }
+        });
+    });
+}
