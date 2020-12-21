@@ -74,16 +74,20 @@
 
 ## Feedback from Sprint #2
 + About:
-    + 
-    + 
-+ \# of tasks committed: ** **
-+ \# of tasks completed: ** **
-+ \# of members who worked on it: ** **
-+ Time spent: ** hours**
+    + Remove seconds from dates
+    + Virtual lecture fix
+    + Student lecture page fix
+    + Student lecture view change
+    + Historical data chart fix
+    + Tables in historical data page
++ \# of tasks committed: **6**
++ \# of tasks completed: **6**
++ \# of members who worked on it: **2**
++ Time spent: **4 hours**
 
 ## Docker
 + \# of members who worked on it: **1**
-+ Time spent: **5 hours**
++ Time spent: **7 hours**
 
 ## Scrum meetings
 + \# of members who worked on it: **7**
@@ -91,15 +95,14 @@
 + In total: (0.5 hours * 7 members) * 2 weeks = **7 hours**
 
 ## Overall improvements
-+ \# of members who worked on it: **1**
++ \# of members who worked on it: **2**
 + Time spent: **6 hours**
 
 ## Final results
 
 + Time spent per member for the sprint: **12 hours**
 + Total time spent for the sprint: **~84 hours**
-+ Percentage of delay: %
++ Percentage of delay: 7%
 
 ## Future improvements for this sprint
-+ 
-+ 
++ Add internal deadlines for task completion before bug fixing and testing

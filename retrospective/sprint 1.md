@@ -61,7 +61,7 @@
 ## Use cases
 + (no task creation for this)
 + \# of members who worked on it: **2**
-+ Time spent: **6 hours**
++ Time spent: **10 hours**
 
 ## Scrum meetings
 + \# of members who worked on it: **7**
@@ -70,7 +70,7 @@
 
 ## Final results
 
-+ Time spent per member for the sprint: **12 hours**
++ Time spent per member for the sprint: **~10 hours**
 + Total time spent for the sprint: **75 hours**
 + Percentage of delay: 5%
 

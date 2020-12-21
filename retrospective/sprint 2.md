@@ -5,7 +5,7 @@
 + \# of tasks committed: **2**
 + \# of tasks completed: **2**
 + \# of members who worked on it: **1**
-+ Average time on task per member: **1.5 hours**
++ Average time on task per member: **1.5 hour**
 + Distribution of time:
     + Member worked for **3 hours**, of which  
         + actual development of project: 2.5 h  
@@ -30,7 +30,7 @@
 + \# of members who worked on it: **2**
 + Average time on task per member: **~0.5 hour**
 + Distribution of time:
-    + Each member worked for **30 minss**, of which
+    + Each member worked for **30 mins**, of which
         + actual development of project: 0.5 h/member
         + testing: 0.5 h/member 
     + In total: 0.5 hour * 2 members = **1 hour**
@@ -39,12 +39,12 @@
 + \# of tasks committed: **5**
 + \# of tasks completed: **5**
 + \# of members who worked on it: **3**
-+ Average time on task per member: **50 mins.**
++ Average time on task per member: **50 mins**
 + Distribution of time:
     + Each member worked for **50 mins**, of which
         + actual development of project: 0.5 h/member
         + testing: 0.3 h/member
-    + In total: ~0.8 hour * 3 members = ** 2.5 hours**
+    + In total: ~0.8 hour * 3 members = **2.5 hours**
 
 ## Story #10
 + \# of tasks committed: **5**
@@ -73,27 +73,27 @@
     + Suggestion on the GUI
     + More data shown on the student list
     + Adding confimation dialog for booking and canceling the booking 
-+ \# of tasks committed: ** 3 **
-+ \# of tasks completed: ** 3 **
-+ \# of members who worked on it: ** 2 **
-+ Time spent: ** hours**
++ \# of tasks committed: **3**
++ \# of tasks completed: **3**
++ \# of members who worked on it: **2**
++ Time spent: **2 hours**
 
 ## Docker
-+ \# of members who worked on it: **1**
-+ Time spent: **5 hours**
++ \# of members who worked on it: **2**
++ Time spent: **7 hours**
 
 ## Scrum meetings
 + \# of members who worked on it: **7**
 + Each member worked for **1 hour**
-+ In total: (1 hours * 7 members) * 2 weeks = **14 hours**
++ In total: (1 hour * 7 members) * 2 weeks = **14 hours**
 
 ## Overall improvements
-+ \# of members who worked on it: **1**
-+ Time spent: **4 hours**
++ \# of members who worked on it: **2**
++ Time spent: **8 hours**
 
 ## Final results
 
-+ Time spent per member for the sprint: **12 hours**
++ Time spent per member for the sprint: **~11 hours**
 + Total time spent for the sprint: **~81 hours**
 + Percentage of delay: 1%
 
