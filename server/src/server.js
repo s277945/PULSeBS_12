@@ -796,5 +796,24 @@ app.post('/api/lecturesBookable', (req, res) => {
 
 });
 
+/**
+ * POST api/:courseId/:date/attendees
+ *
+ * Set the attendance of the students to a lecture
+ *
+ * body request: [{"studentId": "s267348"}, ...]
+ */
+
+app.post('/api/:courseId/:date/attendees', (req, res) => {
+  teacherDao.setPresentStudents(req.params.courseId, req.params.date, req.body) 
+      .then((response) => {
+          res.status(200).json({"modified": response});
+      })
+      .catch(/* istanbul ignore next */(err) => {
+          res.status(500).json(err);
+      })
+
+});
+
 //activate server
 app.listen(port, () => console.log(`Server ready at port: ${port}`));

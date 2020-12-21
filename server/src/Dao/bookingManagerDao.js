@@ -33,14 +33,14 @@ exports.getManagerCourseStats = function (courseId){
     let list = [];
     let booking = 0;
     return new Promise((resolve, reject) => {
-        const sql='SELECT Name, Date, BookedSeats, UnbookedSeats FROM Lecture WHERE Course_Ref=? AND Type="p"';
+        const sql='SELECT Name, Date, BookedSeats, UnbookedSeats, Attendees FROM Lecture WHERE Course_Ref=? AND Type="p"';
         db.all(sql,[courseId], (err,rows)=>{
             /* istanbul ignore if */if(err) reject(err);
             else{
                 rows.forEach((row)=>{
                     booking = row.BookedSeats+row.UnbookedSeats;
                     list.push({"lectureName":row.Name, "date":row.Date, "nBooked": booking,
-                        "nAttendance": row.BookedSeats, "nCancellations":row.UnbookedSeats});
+                        "nAttendance": row.Attendees, "nCancellations":row.UnbookedSeats});
                 });
                 resolve(list);
             }
@@ -59,13 +59,13 @@ exports.getManagerCourseStatsTotal = function (courseId){
     let attendance = 0;
     let cancellation = 0;
     return new Promise((resolve, reject) => {
-        const sql='SELECT Name, Date, BookedSeats, UnbookedSeats FROM Lecture WHERE Course_Ref=? AND Type="p"';
+        const sql='SELECT Name, Date, BookedSeats, UnbookedSeats, Attendees FROM Lecture WHERE Course_Ref=? AND Type="p"';
         db.all(sql,[courseId], (err,rows)=>{
             /* istanbul ignore if */if(err) reject(err);
             else{
                 rows.forEach((row)=>{
                     booking += row.BookedSeats+row.UnbookedSeats;
-                    attendance += row.BookedSeats;
+                    attendance += row.Attendees;
                     cancellation += row.UnbookedSeats;
                 });
 
@@ -129,11 +129,11 @@ exports.generateReport = function(ssn){
                                 reject(new Error('Student was not in any class'))
                             const date = moment().format("YYYY-MM-DD HH:mm:ss")
                             const sql = 'SELECT Name, Surname, Birthday, SSN FROM User WHERE UserID != ? AND UserID IN ('+
-                                'SELECT Student_Ref FROM Booking WHERE Course_Ref=? AND Date_Ref=? AND Date_Ref<?)'
+                                'SELECT Student_Ref FROM Booking WHERE Course_Ref=? AND Date_Ref=? AND Date_Ref<? AND Attendance=?)'
                             let iterator = 0;
                             for(let lecture of lectures){
                                 iterator++
-                                db.all(sql, [userId, lecture.course, lecture.date, date], (err, rows) => {
+                                db.all(sql, [userId, lecture.course, lecture.date, date, 1], (err, rows) => {
                                     /* istanbul ignore if */
                                     if(err)
                                         reject(err)

@@ -475,7 +475,36 @@ function retrieveMonthStats(courseId, semester){
         }
 
     })
+}
 
+/**
+ * Input: List of studentID, courseID, date
+ * Output: True or false
+ * Description: Set the attendance for all the student present to a lecture
+ */
 
-
+exports.setPresentStudents = function (courseId, date, list){
+    let i = 0;
+    console.log(list.length);
+    return new Promise((resolve, reject) => {
+        const sql = 'UPDATE Lecture SET Attendees=? WHERE Course_Ref=? AND Date=?';
+        db.run(sql, [list.length, courseId, date], (err) => {
+            /* istanbul ignore if */
+            if(err) reject(err);
+            else{
+                const sql2='UPDATE Booking SET Attendance=? WHERE Course_Ref=? AND Date_Ref=? AND Student_Ref=?'
+                    for(let el of list){
+                        console.log("student"+el.studentId);
+                        db.run(sql2, [1, courseId, date, el.studentId], (err) => {
+                            /* istanbul ignore if */
+                            if(err) reject(err);
+                            else{
+                                i++;
+                                if(i===list.length) resolve(true);
+                            }
+                        })
+                    }
+            }
+        })
+    })
 }
