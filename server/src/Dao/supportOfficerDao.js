@@ -7,6 +7,7 @@ const moment = require('moment');
 exports.uploadStudents=function(list, fileName){
 
     let lenght;
+    /* istanbul ignore else */
     if(list!=undefined)
         lenght= list.length;
     /* istanbul ignore else */
@@ -22,6 +23,7 @@ exports.uploadStudents=function(list, fileName){
                     reject(err);
                 else {
                     i++;
+                    /* istanbul ignore else */
                     if (lenght === i) {
                         const date = moment().format("YYYY-MM-DD HH:mm:ss")
                         const sql2='UPDATE File SET FileName=? , LastUpdate=? WHERE FileType=0'
@@ -50,6 +52,7 @@ exports.uploadTeachers=function(list, fileName){
                     reject(err);
                 else {
                     i++;
+                    /* istanbul ignore else */
                     if (lenght === i) {
                         const date = moment().format("YYYY-MM-DD HH:mm:ss")
                         const sql2='UPDATE File SET FileName=? , LastUpdate=? WHERE FileType=1'
@@ -76,6 +79,7 @@ exports.uploadCourses=function(list, fileName){
                     reject(err);
                 else {
                     i++;
+                    /* istanbul ignore else */
                     if (lenght === i) {
                         const date = moment().format("YYYY-MM-DD HH:mm:ss")
                         const sql2='UPDATE File SET FileName=? , LastUpdate=? WHERE FileType=2'
@@ -102,6 +106,7 @@ exports.uploadEnrollment=function(list, fileName){
                     reject(err);
                 else {
                     i++;
+                    /* istanbul ignore else */
                     if (lenght === i) {
                         const date = moment().format("YYYY-MM-DD HH:mm:ss")
                         const sql2='UPDATE File SET FileName=? , LastUpdate=? WHERE FileType=3'
@@ -172,6 +177,7 @@ function getListLectures(schedule){
     return new Promise((resolve, reject) => {
         const sql = 'SELECT Name, Semester FROM Course WHERE CourseID=?'
         db.get(sql, [schedule.courseId], (err, row) => {
+            /* istanbul ignore else */
             if (!err) {
                 let courseName = row.Name
                 let semester = row.Semester
@@ -291,6 +297,7 @@ function updateLectures(list){
     return new Promise((resolve, reject) => {
         const sql='UPDATE Lecture SET Type=? WHERE Course_Ref=? AND Date > ?';
         for(let el of list){
+            /* istanbul ignore else */
             if(el.restriction===0)
                 type = "p";
             else if(el.restriction===1)
@@ -302,6 +309,7 @@ function updateLectures(list){
                     reject(err);
                 else {
                     i++;
+                    /* istanbul ignore else */
                     if(i === list.length)
                         resolve(true);
                     /* istanbul ignore else */

@@ -1,6 +1,6 @@
  import { getLectures, getTeacherLectures } from '../api/api'
 
- function update(component) {
+ /*function update(component) {
    let lecList = [];
         getLectures()
              .then(res => {
@@ -8,11 +8,11 @@
                  lecList = res.data;
                  console.log(lecList);
                  component.setState({ tableData: lecList });
-             }).catch(/* istanbul ignore next */err=>{
+             }).catch(err=>{
                  console.log(err);
               });
 
- }
+ }*/
 
  function updateTeacher(component) {
     let lecList = [];
@@ -29,4 +29,4 @@
  
   }
  
- export {update, updateTeacher};
+ export {/*update,*/ updateTeacher};
