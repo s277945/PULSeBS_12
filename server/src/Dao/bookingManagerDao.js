@@ -2,6 +2,10 @@
 const db = require('../db');
 const moment = require('moment');
 
+//////////////////////////////////////////////////
+//////////////////////STORY11/////////////////////
+//////////////////////////////////////////////////
+
 /**
  * Input:
  * Output: List of all the existent courses on the university
@@ -76,6 +80,16 @@ exports.getManagerCourseStatsTotal = function (courseId){
     })
 }
 
+//////////////////////////////////////////////////
+//////////////////////STORY16/////////////////////
+//////////////////////////////////////////////////
+
+/**
+ * Input: 
+ * Output: List of positive students
+ * Descrtiption: Return the list of the students marked positive
+ */
+
 exports.getPositiveStudents = function(){
     let list = [];
     return new Promise((resolve, reject) => {
@@ -92,6 +106,12 @@ exports.getPositiveStudents = function(){
     })
 }
 
+/**
+ * Input: SSN
+ * Output: Name, Surname, Birthday, Ssn, Covid
+ * Descrtiption: Return the student searched with SSN or nothing if not present
+ */
+
 exports.searchStudentBySsn = function (ssn){
     return new Promise((resolve, reject) => {
         const sql='SELECT Name, Surname, Birthday, SSN, Covid FROM User WHERE SSN=?';
@@ -107,6 +127,12 @@ exports.searchStudentBySsn = function (ssn){
     })
 }
 
+/**
+ * Input: SSN
+ * Output: True of False
+ * Descrtiption: Change the covid status of a student from false to true
+ */
+
 exports.setPositiveStudent = function (ssn){
     return new Promise((resolve, reject) => {
         const sql='UPDATE User SET Covid = 1 WHERE SSN=?';
@@ -117,6 +143,11 @@ exports.setPositiveStudent = function (ssn){
     })
 }
 
+/**
+ * Input: SSN
+ * Output: List of students
+ * Descrtiption: Return the list of students that had a contact with the selected one
+ */
 
 exports.generateReport = function(ssn){
     let list = []

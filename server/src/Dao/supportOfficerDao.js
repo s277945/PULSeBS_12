@@ -2,7 +2,15 @@
 const db = require('../db');
 const moment = require('moment');
 
-//students, courses, teachers, lectures, and classes
+//////////////////////////////////////////////////
+//////////////////////STORY12/////////////////////
+//////////////////////////////////////////////////
+
+/**
+* Input: List of students, Filename
+* Output: True or False
+* Description: Get the list of students to insert into the db
+*/
 
 exports.uploadStudents=function(list, fileName){
 
@@ -38,6 +46,12 @@ exports.uploadStudents=function(list, fileName){
     });
 }
 
+/**
+* Input: List of teachers, Filename
+* Output: True or False
+* Description: Get the list of teachers to insert into the db
+*/
+
 exports.uploadTeachers=function(list, fileName){
     const lenght = list.length;
     let i = 0;
@@ -67,6 +81,12 @@ exports.uploadTeachers=function(list, fileName){
     });
 }
 
+/**
+* Input: List of students, Filename
+* Output: True or False
+* Description: Get the list of courses to insert into the db
+*/
+
 exports.uploadCourses=function(list, fileName){
     const lenght = list.length;
     let i = 0;
@@ -93,6 +113,12 @@ exports.uploadCourses=function(list, fileName){
         }
     });
 }
+
+/**
+* Input: List of students, Filename
+* Output: True or False
+* Description: Get the list of enrollments to insert into the db
+*/
 
 exports.uploadEnrollment=function(list, fileName){
     const lenght = list.length;
@@ -257,6 +283,39 @@ function getListLectures(schedule){
 
 }
 
+/**
+* Input: //
+* Output: FileType, FileName, LastUpdate
+* Description: Get the data of the selected file
+*/
+
+exports.getFileData=function(){
+    let list = []; 
+    return new Promise((resolve, reject) => {
+        const sql='SELECT FileType, FileName, LastUpdate FROM File'
+        db.all(sql, [], (err, rows) => {
+            /* istanbul ignore if */if(err) {console.log(err);reject(err);}
+            else{
+                for(let row of rows){
+                    list.push({"fileType": row.FileType, "fileName": row.FileName, "lastUpdate": row.LastUpdate});
+                }
+                console.log(list);
+                resolve(list);
+            }
+        }) 
+    });
+}
+
+//////////////////////////////////////////////////
+//////////////////////STORY17/////////////////////
+//////////////////////////////////////////////////
+
+/**
+* Input: //
+* Output: CourseID, Year, Name, Semestern Restriction
+* Description: Get all the courses with all the data about them
+*/
+
 exports.getCoursesData=function(){
     let list = [];
     return new Promise((resolve, reject) => {
@@ -275,12 +334,19 @@ exports.getCoursesData=function(){
     });
 }
 
+/**
+* Input: List of courses
+* Output: True or False
+* Description: Change the restriction status of a course accordingly to the command required
+*/
+
 exports.modifyBookableLectures=function(list){ 
     return new Promise((resolve, reject) => {
         const sql='UPDATE Course SET Restriction=? WHERE CourseID=?'
             for(let el of list){
                 db.run(sql, [el.restriction, el.courseId], (err) => {
-                    /* istanbul ignore if */if(err) reject(err);
+                    /* istanbul ignore if */
+                    if(err) reject(err);
                     else{
                         updateLectures(list).then(result =>{
                             resolve(result);
@@ -317,22 +383,5 @@ function updateLectures(list){
                 }
             });
         }
-    });
-}
-
-exports.getFileData=function(){
-    let list = []; 
-    return new Promise((resolve, reject) => {
-        const sql='SELECT FileType, FileName, LastUpdate FROM File'
-        db.all(sql, [], (err, rows) => {
-            /* istanbul ignore if */if(err) {console.log(err);reject(err);}
-            else{
-                for(let row of rows){
-                    list.push({"fileType": row.FileType, "fileName": row.FileName, "lastUpdate": row.LastUpdate});
-                }
-                console.log(list);
-                resolve(list);
-            }
-        }) 
     });
 }
