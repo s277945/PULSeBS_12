@@ -663,7 +663,7 @@ app.get('/api/fileData', (req, res) => {
  *
  * body request: [{"courseId": "XY1211","room": 1, "day": "Mon", "seats": 120, "time": "8:30-11:30"}, ...]
  */
-
+/* istanbul ignore next */
 app.post('/api/fileData', (req, res) => {
 
   supportOfficerDao.updateFileData(req.body)
