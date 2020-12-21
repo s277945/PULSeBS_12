@@ -5,10 +5,7 @@ describe('TEST AXIOS INTERCEPTOR', function () {
     })
     it('should setup next test', function () {
         cy.visit('http://localhost:3000/')
-        cy.get('input:first').type('t987654').should('have.value','t987654')
-        cy.get('input:last').type('scimmia').should('have.value','scimmia')
-        cy.get('.btn.btn-primary')
-            .click()
+        cy.teacher('t987654','scimmia','t')
         cy.location('pathname').should('include','/teacherHome')
         cy.get('[data-testid="teacherStudent"]').should('have.text', 'Student List')
             .should('have.attr', 'href', '#studentList')
@@ -18,6 +15,13 @@ describe('TEST AXIOS INTERCEPTOR', function () {
         cy.location('pathname').should('include','/teacherHome')
     });
     it('should return 401', function () {
+        cy.server()
+        cy.route({
+            method:'GET',
+            url:'/api/lectures/listStudents*',
+            status:401,
+            response:{}
+        })
         cy.get('tbody>tr').eq(0).within(()=>{
             cy.get('.btn.btn-primary')
                 .click()

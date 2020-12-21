@@ -304,10 +304,17 @@ describe('STUDENT PAGE', function () {
 
     });
     it('should logout', function () {
+        cy.server()
+        cy.route({
+            method:'POST',
+            url:'/api/logout',
+            status:200,
+            response:{}
+        }).as('logout')
         cy.location('pathname').should('include','/studentHome')
         cy.get('[data-testid="logout"]').should('be.visible')
             .click()
-        cy.wait(1000)
+        cy.wait('@logout')
         cy.getCookies().should('be.empty')
         cy.location('pathname').should('include','/')
     });

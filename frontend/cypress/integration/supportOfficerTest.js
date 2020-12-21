@@ -332,6 +332,20 @@ describe('SUPPORT OFFICER TESTS', function () {
                     cy.wait(100)
                 })
         });
+        it('should logout', function () {
+            cy.server()
+            cy.route({
+                method:'POST',
+                url:'/api/logout',
+                status:200,
+                response:{}
+            }).as('logout')
+            cy.get('[data-testid="logout"]').should('be.visible')
+                .click()
+            cy.wait('@logout')
+            cy.getCookies().should('be.empty')
+            cy.location('pathname').should('include','/')
+        });
 
     });
 });

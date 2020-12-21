@@ -177,8 +177,17 @@ describe('TEST MANAGER PAGE', function () {
                 })
         });
         it('should logout', function () {
+            cy.server()
+            cy.route({
+                method:'POST',
+                url:'/api/logout',
+                status:200,
+                response:{}
+            }).as('logout')
             cy.get('[data-testid="logout"]')
                 .click()
-
+            cy.wait('@logout')
+            cy.location('pathname').should('include','/')
+            cy.getCookies().should('be.empty')
         });
     });
