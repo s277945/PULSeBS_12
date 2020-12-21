@@ -9,7 +9,9 @@
   {
     "url": "/api/lectures/waiting",
     "method": "GET",
-    "data": []
+    "data": [
+      {"Course_Ref":"C8901","Date_Ref":"2021-03-02 15:00:00","EndDate":"2021-03-02 18:00:00"}
+    ]
   },
   {
     "url": "/api/lectures",

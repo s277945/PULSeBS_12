@@ -37,7 +37,7 @@ export class TeacherHome extends Component {
                 <TeacherTabSL history={this.props.history}></TeacherTabSL>
             </div>
         )
-
+        /* istanbul ignore else */
         if (this.state.show === 2) return (
             <div className="app-background">
                 <TeacherTabHist history={this.props.history}></TeacherTabHist>

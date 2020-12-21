@@ -84,6 +84,7 @@ export class StudentHome extends Component {
                 const index = this.state.lectures.findIndex(lecture =>
                     lecture.Course_Ref === bookedLecture.Course_Ref && lecture.Date === bookedLecture.Date_Ref
                 )
+                /* istanbul ignore else */
                 if(index!==-1)newLectureArray[index].alreadyBooked = true;
                 return index;
             })
@@ -134,6 +135,7 @@ export class StudentHome extends Component {
                 )
                 if(response.data.operation==="booked") {
                     newLectures[index].BookedSeats++;// increase booked seats number if successful booking
+                    /* istanbul ignore else */
                     if(newLectures[index].BookedSeats>newLectures[index].Capacity) newLectures[index].BookedSeats=newLectures[index].Capacity; //check booking number constraint
                     newLectures[index].alreadyBooked = true// set booking state to true
                 }
@@ -146,6 +148,7 @@ export class StudentHome extends Component {
             }).catch(err=>{
                 console.log(err);
                 if (err.response.status===500) {
+                    /* istanbul ignore else */
                     if (err.response.data.errors[0].msg==="0 seats available") this.setPopup("Your booking request was not successful: there are no more seats available for this lecture");
                     else this.setPopup("Your booking request was not successful: server error");
                     this.modalClose();// then close modal
@@ -161,6 +164,7 @@ export class StudentHome extends Component {
                 const index = this.state.lectures.findIndex(lecture => //get lecture index in state array
                     lecture.Course_Ref === lectureId && lecture.Date === date
                 )
+                /* istanbul ignore else */
                 if(newLectures[index].alreadyBooked) {//check if student was booked
                     newLectures[index].alreadyBooked = false// set booking requested state to false
                     newLectures[index].BookedSeats--;// decrease booked seats number if successful canceling
@@ -297,6 +301,7 @@ export class StudentHome extends Component {
                         <Card key={course.Name}>
                             <Accordion.Toggle as={Card.Header}  eventKey={course.Name} onClick={(e)=> {// set accordion selection state
                                 e.preventDefault();
+                                /* istanbul ignore if */
                                 if (this.state.togglecourse===e.target.innerText) {
                                     this.setState({togglecourse: null});// if already open close
                                     sessionStorage.removeItem("togglecourse");// remove accordion session data
@@ -400,7 +405,7 @@ export class StudentHome extends Component {
             </div>
         )
     }
-
+    /* istanbul ignore next */
     renderContent = () => {
         if(!this.state.lectures){
             return(
@@ -413,6 +418,7 @@ export class StudentHome extends Component {
                                                 <h1 className="page-title">Lectures</h1>
                                                 <br/>{this.renderTodayLectureTables()}{this.renderLectureTables()}
                                             </>);
+        /* istanbul ignore else */
         if(this.state.show === 1) return(this.renderCalendar())
     }
 
