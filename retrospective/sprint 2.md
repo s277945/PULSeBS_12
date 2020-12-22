@@ -71,7 +71,10 @@ Sprint 2 retrospective (team 12)
 - What lessons did you learn (both positive and negative) in this sprint?
     - not keeping good code documentation may lead people trying to fix/change things to lose time
     
-- Stakeholder feedback improvements from the previous sprint: 
+- Which improvement goals set in the previous retrospective were you able to achieve?
+    - We put more effort to organize better code documentation
+    
+- Feedback improvements from the previous sprint: 
     - Suggestion on the GUI
     - More data shown on the student list
     - Adding confimation dialog for booking and canceling the booking 
