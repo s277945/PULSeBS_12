@@ -95,9 +95,21 @@ export class SupportOfficerSchedule extends Component{
         setNewSchedule(body)
             .then(res=>{
                 //it should update the schedule table before closing modal
+                let newSchedule=this.state.listSchedule.map(row=>{
+                    if(row.courseId===this.state.elemModal.courseId && row.day===this.state.elemModal.day){
+                        row.day=(this.state.day==="")?this.state.elemModal.day:this.state.day;
+                        row.time=(time==="")?this.state.elemModal.time:time;
+                        row.room=(this.state.room==="")?this.state.elemModal.room:this.state.room;
+                        row.seats=(this.state.seats==="")?this.state.elemModal.seats:this.state.seats;
+                    }
+                    return row;
+
+                });
+                this.setState({listSchedule:newSchedule,modal:false});
             })
             .catch(err=>{
                 console.log(err);
+                this.setState({modal:false});
             })
     }
     handleReset=()=>{
