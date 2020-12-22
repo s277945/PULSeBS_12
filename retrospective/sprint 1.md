@@ -67,6 +67,8 @@ Sprint 1 retrospective (team 12)
     - In general our estimations were pretty accurate, in fact our task estimation error ratio is just 1.03
 	
 - What lessons did you learn (both positive and negative) in this sprint?
+- comunication/coordination between ALL team members is crucial
+
 - Which improvement goals set in the previous retrospective were you able to achieve? 
     - We spent more time in the beginning to carefully design the database, so that we didn't need to modify the db schema during the sprint
     - We managed to improve our time estimation
