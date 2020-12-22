@@ -13,8 +13,8 @@ Sprint 2 retrospective (team 12)
     - 6 stories committed
     - 6 stories done
 - Total points committed vs done
-    - 88 points committed
-    - 88 points done
+    - 75 points committed
+    - 75 points done
 - Nr of hours planned vs spent (as a team)
     - 83 hours planned
     - 80h 50m done
