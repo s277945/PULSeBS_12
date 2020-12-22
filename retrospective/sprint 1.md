@@ -83,4 +83,5 @@ Sprint 1 retrospective (team 12)
      - Improve code documentation
 
 - One thing you are proud of as a Team!!
-    - We managed to complete all planned stories with a mostly clean code
+    - We managed to complete all planned stories with a mostly clean code    
+    - nice page styling
