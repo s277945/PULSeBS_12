@@ -34,7 +34,7 @@ Sprint 2 retrospective (team 12)
 
 - Hours per task (average, standard deviation):
     - Average: 6.2 hrs per task
-    - Standard deviation: 1.5 hrs
+    - Standard deviation: 2.86 hrs
 
 - Total task estimation error ratio: sum of total hours estimation / sum of total hours spent from previous table:
     -  83 / 80.50 =  1.03
