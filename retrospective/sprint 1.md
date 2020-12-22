@@ -68,15 +68,16 @@ Sprint 1 retrospective (team 12)
 	
 - What lessons did you learn (both positive and negative) in this sprint?
 - Which improvement goals set in the previous retrospective were you able to achieve? 
-    - We spent more time in the beginning to carefully design the database, so that we didn't need to modify the db schema during the sprint.
+    - We spent more time in the beginning to carefully design the database, so that we didn't need to modify the db schema during the sprint
+    - We managed to improve our time estimation
+    - Better work assignment for the various project parts
 
 - Which ones you were not able to achieve? Why?
 
 
 - Improvement goals for the next sprint and how to achieve them (technical tasks, team coordination, etc.)
-     - Better time estimation
      - Distribution of the working hours per week
-     - Communication issue in team
+     - Communication issues in team
 
 - One thing you are proud of as a Team!!
     
