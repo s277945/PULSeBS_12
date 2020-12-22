@@ -44,8 +44,6 @@ Sprint 1 retrospective (team 12)
   - Total hours spent: 10h 10m
   - Nr of automated unit test cases: 16
   - Coverage (overall): 81%
-<br>
-
 - E2E testing:
   - Total hours estimated: 6h 
   - Total hours spent 5h 10m
@@ -58,7 +56,6 @@ Sprint 1 retrospective (team 12)
   - Hours estimated for remediation by SonarQube: 1h 15m
   - Hours spent on remediation: -
   - debt ratio (as reported by SonarQube under "Measures-Maintainability"): 0%
-  - rating for each quality characteristic reported in SonarQube under "Measures" (namely reliability, security, maintainability )
   - rating for each quality characteristic reported in SonarQube under "Measures"
     - reliability: A
     - security: A
