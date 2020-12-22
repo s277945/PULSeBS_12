@@ -1,3 +1,92 @@
+Sprint 2 retrospective (team 12)
+=====================================
+
+- [process measures](#process-measures)
+- [quality measures](#quality-measures)
+- [general assessment](#assessment)
+
+## PROCESS MEASURES 
+
+### Macro statistics
+
+- Number of stories committed vs done  
+    - 6 stories committed
+    - 6 stories done
+- Total points committed vs done
+    - 88 points committed
+    - 88 points done
+- Nr of hours planned vs spent (as a team)
+    - 83 hours planned
+    - 80h 50m done
+
+
+### Detailed statistics
+
+| Story  | # Tasks | Points | Hours est. | Hours actual |
+|--------|---------|--------|------------|--------------|
+| _#7_       |    5     |   5     |      3h 10m      |       3h 20m       |
+| _#8_      |     2    |    5    |     1h 40m    |       2h 45m        |
+| _#9_      |     5    |    2    |     2h 45m       |        2h 35m       |
+| _#10_      |     5    |    21    |           |              |
+| _#11_       |    5     |    34    |      6h 30m      |      7h 22m        |
+| _#12_       |    8     |    21   |           |             |
+
+- Hours per task (average, standard deviation):
+    - Average:  hrs per task
+    - Standard deviation: 1.5 hrs
+
+- Total task estimation error ratio: sum of total hours estimation / sum of total hours spent from previous table:
+    -  83 / 80.50 =  1.03
+
+## QUALITY MEASURES 
+
+- Unit and E2E Testing:
+  - Total hours estimated
+    - 12h
+  - Total hours spent
+    - 8h 10m
+  - Nr of automated unit test cases 
+    - 56
+  - Coverage (if available)
+    - 46.8 %
+- Technical Debt management:
+  - Total hours estimated 
+    - N/A
+  - Total hours spent
+    -  20m
+  - Hours estimated for remediation by SonarQube
+    - 2h
+  - Hours spent on remediation
+    - 20m
+  - debt ratio
+    - 0.2 %
+  - rating for each quality characteristic reported in SonarQube under "Measures"
+    - reliability: A
+    - security: A
+    - maintainability: A
+
+## ASSESSMENT
+
+- What caused your errors in estimation (if any)?
+    - In general our estimations were pretty accurate, in fact our task estimation error ratio is just 1.02; the worst estimation was on the first story, because we overestimated by around 4 hrs.
+
+- What lessons did you learn (both positive and negative) in this sprint?
+    - We spent more time on tests than in the prevoius project, but still not enough (only 47 % coverage). 
+    - We experimented with new technologies to make the project better, as opposed to sticking with what we know. For example with the process of automatically sending out emails.
+
+- Feedback improvements from the previous sprint: 
+    - Suggestion on the GUI
+    - More data shown on the student list
+    - Adding confimation dialog for booking and canceling the booking 
+
+- Improvement goals for the next sprint and how to achieve them (technical tasks, team coordination, etc.)
+    - Prioritize stories over issue based on visual upgrades
+    - Code documentation improvements 
+
+- One thing you are proud of as a Team!!
+    - 
+    
+    
 # Estimation - Sprint #2
 
 ## Story #6
