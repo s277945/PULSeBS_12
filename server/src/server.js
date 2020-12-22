@@ -857,5 +857,22 @@ app.get('/api/schedules', (req, res) => {
         })
 });
 
+/**
+ * GET api/schedules
+ *
+ *
+ *
+ */
+
+app.get('/api/schedulesxdlolasd', (req, res) => {
+    supportOfficerDao.updateSchedules(req.body)
+        .then((list) =>{
+            res.status(200).json(list)
+        })
+        .catch(/* istanbul ignore next*/(err) => {
+            res.status(500).json({errors: [{'msg': err}]});
+        })
+});
+
 //activate server
 app.listen(port, () => console.log(`Server ready at port: ${port}`));
