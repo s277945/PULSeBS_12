@@ -39,7 +39,7 @@
              .then(res => {
                 console.log(res)
                 if(num===1) this.setState({ modalTableData: res.data, modalLecture: element});// if future/past modal is to be rendered
-                if(num===2) this.setState({ modalTableData: res.data.map(e=>{return {...e, checked: false}}), modalLecture: element })// if attendance setting modal is to be rendered
+                if(num===2) this.setState({ modalTableData: res.data.map(e=>{return {attendance: e.attendance, name: e.name, surname: e.surname, userId: e.userId, checked: false}}), modalLecture: element })// if attendance setting modal is to be rendered
                 sessionStorage.setItem("element", JSON.stringify(element)); // update session data
                 this.handleShow(num);
              }).catch(err=>{
@@ -151,7 +151,7 @@
                          <Modal.Title><div style={{marginLeft: "17px", textAlign: "center"}}>{this.state.modalLecture&&moment().diff(moment(this.state.modalLecture.Date), 'days') <= 1 ? "Set student attendance for lecture ":"Student attendance data for lecture "}</div><div style={{ marginLeft: "17px", textAlign: "center"}}>{this.state.modalLecture?this.state.modalLecture.Name:""}</div></Modal.Title>
                      </Modal.Header>
                      <Modal.Body className="app-element-background">{
-                         this.state.element ?
+                         this.state.modalLecture ?
                              <Table striped bordered hover>
                                  <thead>
                                      <tr>
@@ -159,7 +159,7 @@
                                          <th>Student ID</th>
                                          <th>Name</th>
                                          <th>Surname</th>
-                                         <th>Presence</th>
+                                         <th>Attendance</th>
                                      </tr>
                                  </thead>
                                  <tbody data-testid={"studentsList"}>
@@ -170,13 +170,13 @@
                                                  <td>{element.userId}</td>
                                                  <td>{element.name}</td>
                                                  <td>{element.surname}</td>
-                                                 <td>{element.attendance}</td>
-                                                 <td><Checkbox checked={element.checked} onClick={this.setState({
+                                                 <td style={{textAlign:"center"}}>{element.attendance===1?"Yes":"No"}</td>
+                                                 <td style={{margin: "auto"}}><Checkbox checked={element.checked} onClick={()=>{this.setState({
                                                      modalTableData: this.state.modalTableData.map(e => {
                                                          if (e.userId === element.userId) return { userId: e.userId, name: e.name, surname: e.surname, attendance: e.attendance, checked: !e.checked }
                                                          else return e;
                                                      })
-                                                 })} /></td>
+                                                 })}} /></td>
                                              </tr>)
                                          }) :
                                          this.state.modalTableData.map((element, i) => {
@@ -185,7 +185,7 @@
                                                  <td>{element.userId}</td>
                                                  <td>{element.name}</td>
                                                  <td>{element.surname}</td>
-                                                 <td>{element.attendance}</td>
+                                                 <td style={{textAlign:"center"}}>{element.attendance===1?"Yes":"No"}</td>
                                              </tr>)
                                          })}
                                  </tbody>
