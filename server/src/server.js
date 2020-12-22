@@ -837,5 +837,23 @@ app.get('/api/teacherPastLectures', (req, res) => {
       });
  });
 
+
+/**
+ * GET api/schedules
+ *
+ * Returns list of the schedules
+ *
+ */
+
+app.get('/api/schedules', (req, res) => {
+    supportOfficerDao.getSchedule()
+        .then((list) =>{
+            res.status(200).json(list)
+        })
+        .catch(/* istanbul ignore next*/(err) => {
+            res.status(500).json({errors: [{'msg': err}]});
+        })
+});
+
 //activate server
 app.listen(port, () => console.log(`Server ready at port: ${port}`));

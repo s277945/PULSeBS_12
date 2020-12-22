@@ -385,3 +385,46 @@ function updateLectures(list){
         }
     });
 }
+
+
+
+/**
+* Input: empty
+* Output: list of schedule
+* Description: retrieves list of schedule
+*/
+
+
+exports.getSchedule = function(){
+    let list = []
+    let i = 0
+    return new Promise((resolve, reject) => {
+        const sql = 'SELECT Code, Room, Day, Seats, Time FROM Schedule'
+        db.all(sql, [], (err, rows) => {
+            if(err)
+                reject(err)
+            else{
+                for(let row of rows){
+                    const sql_2 = 'SELECT Name FROM Course WHERE CourseID = ?'
+                    db.get(sql_2, [row.Code], (err_2, row_2) =>{
+                        if(err_2)
+                            reject(err_2)
+                        else{
+                            i++
+                            let obj = {
+                                "courseId": row.Code,
+                                "courseName": row_2.Name,
+                                "room": row.Room,
+                                "day": row.Day,
+                                "seats": row.Seats,
+                                "time": row.Time
+                            }
+                            list.push(obj)
+                            if(i === rows.length) resolve(list)
+                        }
+                    })
+                }
+            }
+        })
+    })
+}
