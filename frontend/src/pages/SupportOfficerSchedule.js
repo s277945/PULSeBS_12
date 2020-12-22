@@ -1,6 +1,7 @@
 import React, {Component} from 'react'
 import Table from 'react-bootstrap/Table'
 import Button from 'react-bootstrap/Button'
+import{getAllSchedule} from "../api/api";
 import Modal from 'react-bootstrap/Modal'
 
 export class SupportOfficerSchedule extends Component{
@@ -39,8 +40,8 @@ export class SupportOfficerSchedule extends Component{
             <Table striped bordered hover style={{ backgroundColor: "#fff" , width: "98%", margin: "auto"}}>
                 <thead>
                 <tr>
-                    <th>Course Name</th>
                     <th>CourseID</th>
+                    <th>CourseName</th>
                     <th>Room</th>
                     <th>Day</th>
                     <th>Seats</th>
@@ -61,7 +62,6 @@ export class SupportOfficerSchedule extends Component{
         return(
             <div ><br></br><h1 className="page-title">Update schedule lectures</h1><br></br>
                 <br/>
-                <Button data-testid="addSSN" style={{ marginLeft: "1vw", marginBottom: "13px" }} onClick={(e) => { e.preventDefault(); this.setState({ modal: true }) }}>Add New Student</Button>
                 {this.renderSchedule()}
 
                 {this.renderModalSchedule()}
