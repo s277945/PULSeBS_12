@@ -69,12 +69,12 @@ Sprint 3 retrospective (team 12)
 ## ASSESSMENT
 
 - What caused your errors in estimation (if any)?
-    - In general our estimations were pretty accurate, in fact our task estimation error ratio is just 1.02; the worst estimation was on the first story, because we overestimated by around 4 hrs.
+    - 
+   
 
 - What lessons did you learn (both positive and negative) in this sprint?
-    - We spent more time on tests than in the prevoius project, but still not enough (only 47 % coverage). 
-    - We experimented with new technologies to make the project better, as opposed to sticking with what we know. For example with the process of automatically sending out emails.
-
+    - 
+    
 - Feedback improvements from the previous sprint:
     - Remove seconds from dates
     - Virtual lecture fix
@@ -84,13 +84,13 @@ Sprint 3 retrospective (team 12)
     - Tables in historical data page
   
 - Which ones you were not able to achieve? Why?
-     - We feel like we got better at logging our work, but still we weren't precise enough: for example, we didn't separately log time spent on code review.
-
+     - 
+     
 - Improvement goals for the next sprint and how to achieve them (technical tasks, team coordination, etc.)
      - Add internal deadlines for task completion before bug fixing and testing
 
 - One thing you are proud of as a Team!!
-    - We were able to deliver a stable and working product in a short time.
+    - 
     
 # Estimation - Sprint #3
 
