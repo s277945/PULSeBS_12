@@ -24,13 +24,13 @@ Sprint 2 retrospective (team 12)
 
 | Story  | # Tasks | Points | Hours est. | Hours actual |
 |--------|---------|--------|------------|--------------|
-| _#6_       |    2     |    8    |      3h 30m      |      3h 20m        |
-| _#7_       |    5     |   5     |      3h 10m      |       3h 20m       |
-| _#8_      |     2    |    5    |     1h 40m    |       2h 45m        |
-| _#9_      |     5    |    2    |     2h 45m       |        2h 35m       |
-| _#10_      |     5    |    21    |           |              |
-| _#11_       |    5     |    34    |      6h 30m      |      7h 22m        |
-| _#12_       |    8     |    21   |           |             |
+| _#6_   |    2     |    8  | 3h 30m     | 3h 20m       |
+| _#7_   |    5     |   5   | 3h 10m     | 3h 20m       |
+| _#8_   |     2    |    5  | 1h 40m     | 2h 45m       |
+| _#9_   |     5    |    2  | 2h 45m     | 2h 35m       |
+| _#10_  |     5    |    21 | 18h 30m    | 19h          |
+| _#11_  |    5     |    34 | 6h 30m     | 7h 22m       |
+| _#12_  |    8     |    21 | 12h 30m    |  22h 55m     |
 
 - Hours per task (average, standard deviation):
     - Average:  hrs per task
