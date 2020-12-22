@@ -807,12 +807,13 @@ app.post('/api/lecturesBookable', (req, res) => {
 app.post('/api/:courseId/:date/attendees', (req, res) => {
   const today = moment();
   const date = req.params.date;
-  if(today.diff(date, "day")<=1){
+  if(today.diff(moment(date), "day")<=1){
     teacherDao.setPresentStudents(req.params.courseId, date, req.body) 
         .then((response) => {
             res.status(200).json({"modified": response});
         })
         .catch(/* istanbul ignore next */(err) => {
+          console.log(err);
             res.status(500).json(err);
         })
   }else res.status(500).json("Lecture date is out of modification range");
@@ -833,6 +834,7 @@ app.get('/api/teacherPastLectures', (req, res) => {
         res.status(200).json(lectures);
       })
       .catch(/* istanbul ignore next */(err) => {
+        console.log(err);
         res.status(500).json({errors: [{'msg': err}]});
       });
  });

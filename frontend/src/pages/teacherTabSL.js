@@ -187,7 +187,7 @@
                                                  <td>{element.name}</td>
                                                  <td>{element.surname}</td>
                                                  <td style={{textAlign:"center"}}>{element.attendance===1?"Yes":"No"}</td>
-                                                 <td style={{margin: "auto"}}><Checkbox checked={element.checked} onClick={()=>{this.setState({
+                                                 <td style={{margin: "auto"}}><Checkbox disabled={element.attendance===1} checked={element.checked&&element.attendance!==1} onClick={()=>{this.setState({
                                                      modalTableData: this.state.modalTableData.map(e => {
                                                          if (e.userId === element.userId) return { userId: e.userId, name: e.name, surname: e.surname, attendance: e.attendance, checked: !e.checked }
                                                          else return e;
