@@ -80,6 +80,7 @@ Sprint 1 retrospective (team 12)
 - Improvement goals for the next sprint and how to achieve them (technical tasks, team coordination, etc.)
      - Distribution of the working hours per week
      - Communication issues in team
+     - Improve code documentation
 
 - One thing you are proud of as a Team!!
     - We managed to complete all planned stories with a mostly clean code
