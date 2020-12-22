@@ -44,6 +44,11 @@ export function getTeacherLectures(){
     return axiosInst.get(`http://localhost:3001/api/teacherLectures`, { withCredentials: true });
 }
 
+export function getTeacherPastLectures(){
+    // get list of lectures for student from server
+    return axiosInst.get(`http://localhost:3001/api/teacherPastLectures`, { withCredentials: true });
+}
+
 export function getCourses(){
     // get list of lectures for student from server
     return axiosInst.get(`http://localhost:3001/api/courses`, { withCredentials: true });
