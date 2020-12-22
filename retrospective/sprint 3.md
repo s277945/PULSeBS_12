@@ -33,7 +33,7 @@ Sprint 3 retrospective (team 12)
 
 
 - Hours per task (average, standard deviation):
-    - Average:  hrs per task
+    - Average:  7.5 hrs per task
     - Standard deviation: 1.5 hrs
 
 - Total task estimation error ratio: sum of total hours estimation / sum of total hours spent from previous table:
