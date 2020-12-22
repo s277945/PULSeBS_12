@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import Table from 'react-bootstrap/Table'
 import Button from 'react-bootstrap/Button'
-import{getAllSchedule} from "../api/api";
+import{getAllSchedule,setNewSchedule} from "../api/api";
 import Modal from 'react-bootstrap/Modal'
 import Form from 'react-bootstrap/Form'
 import Col from 'react-bootstrap/Col'
@@ -17,7 +17,7 @@ export class SupportOfficerSchedule extends Component{
         endDate:"",
         day:"",
         room:"",
-        error:false
+        seats:""
     }
     componentDidMount() {
         this.updateSchedule();
@@ -36,16 +36,19 @@ export class SupportOfficerSchedule extends Component{
             console.log("IF START DATE")
         }
         else{
+            date=moment('25/12/2020', "DD/MM/YYYY").utcOffset(1).add(date, 'seconds').format("HH:mm")
             this.setState({startDate:date});
         }
 
         console.log('value: '+date);
     }
     handleChangeEndTime=(date)=>{
+        console.log(moment('25/12/2020', "DD/MM/YYYY").utcOffset(1).add(date, 'seconds').format("HH:mm"))
         if(date<this.state.startDate){
             console.log('IF ENDDATE');
         }
         else{
+            date=moment('25/12/2020', "DD/MM/YYYY").utcOffset(1).add(date, 'seconds').format("HH:mm")
             this.setState({endDate:date});
         }
 
@@ -60,10 +63,55 @@ export class SupportOfficerSchedule extends Component{
         console.log(e.target.value)
         this.setState({day:e.target.value})
     }
+    handleChangeSeats=(e)=>{
+        if(e.target.value.toString().match(/[a-zA-Z]+/)){
+            console.log('error')
+        }
+        else
+            this.setState({seats:e.target.value});
+    }
+    /*When confirm button is pressed, first of all it should be created
+        a body for PUT request, inside it there are old and new values of
+        request*/
+    handleConfirm=()=>{
+        let body;
+        let time;
+        if(this.state.startDate===""||this.state.endDate===""){
+            time="";
+        }
+        else{
+            time=this.state.startDate+"-"+this.state.endDate;
+        }
+        body={
+            courseId:this.state.elemModal.courseId,
+            oldDay:this.state.elemModal.day,
+            newDay:(this.state.day==="")?this.state.elemModal.day:this.state.day,
+            oldTime:this.state.elemModal.time,
+            newTime:(this.state.startDate===""||this.state.endDate==="")?this.state.elemModal.time:time,
+            oldRoom:this.state.elemModal.room,
+            newRoom:(this.state.room==="")?this.state.elemModal.room:this.state.room,
+            oldSeats:this.state.elemModal.seats,
+            newSeats:(this.state.seats==="")?this.state.elemModal.seats:this.state.seats}
+        setNewSchedule(body)
+            .then(res=>{
+                //it should update the schedule table before closing modal
+            })
+            .catch(err=>{
+                console.log(err);
+            })
+    }
+    handleReset=()=>{
+        this.setState({
+            modal:false,
+            elemModal:[],
+            startDate:"",
+            endDate:"",
+            day:"",
+            room:""
+        })
+    }
 
     renderModalSchedule=()=>{
-        console.log(JSON.stringify());
-        console.log("modal show: "+this.state.modal);
         return(
             <Modal data-testid="modalSSN" show={this.state.modal} onHide={() => { /* When the modal is closed clear the response message and the searched student */ this.setState({ modal: false,day:"",startDate:"",endDate:"",room:"",elemModal:[] });}}>
                 <Modal.Header data-testid={"close"} closeButton>
@@ -92,6 +140,10 @@ export class SupportOfficerSchedule extends Component{
                                 <Form.Control value={this.state.room} data-testid={"username"} type="text" placeholder={this.state.elemModal.room} onChange={this.handleChangeRoom}/>
                             </Form.Group>
                             <Form.Group controlId="formBasicEmail">
+                                <Form.Label style={{display: "block", textAlign: "center"}}>Seats</Form.Label>
+                                <Form.Control value={this.state.seats} data-testid={"username"} type="text" placeholder={this.state.elemModal.seats} onChange={this.handleChangeSeats}/>
+                            </Form.Group>
+                            <Form.Group controlId="formBasicEmail">
                                 <Form.Label style={{display: "block", textAlign: "center"}}>Day</Form.Label>
                                 <Form.Control value={this.state.day} data-testid={"username"} as={"select"} defaultValue={this.state.elemModal.day} onChange={this.handleChangeDay}>
                                     <option>Mon</option>
@@ -115,10 +167,10 @@ export class SupportOfficerSchedule extends Component{
                                 }
                             </Form.Group>
                             <div style={{display: "flex", flexWrap: "nowrap",  justifyContent: "center"}}>
-                                <Button data-testid={"submit"} variant="primary" type="submit" style={{marginRight: "25px", paddingRight: "17px", paddingLeft: "17px"}}>
+                                <Button data-testid={"submit"} variant="primary" style={{marginRight: "25px", paddingRight: "17px", paddingLeft: "17px"}} onClick={this.handleConfirm}>
                                     Confirm
                                 </Button>
-                                <Button data-testid={"reset"} variant="secondary" type="submit">
+                                <Button data-testid={"reset"} variant="danger" onClick={this.handleReset}>
                                     Cancel
                                 </Button>
                             </div>
