@@ -37,29 +37,28 @@ Sprint 1 retrospective (team 12)
 
 - Total task estimation error ratio: sum of total hours estimation / sum of total hours spent from previous table:
     -  77 / 74.55 =  1.03
-
 ## QUALITY MEASURES 
 
-- Unit and E2E Testing:
-  - Total hours estimated
-    - 12h
-  - Total hours spent
-    - 8h 10m
-  - Nr of automated unit test cases 
-    - 56
-  - Coverage (if available)
-    - 46.8 %
-- Technical Debt management:
-  - Total hours estimated 
-    - N/A
-  - Total hours spent
-    -  20m
-  - Hours estimated for remediation by SonarQube
-    - 2h
-  - Hours spent on remediation
-    - 20m
-  - debt ratio
-    - 0.2 %
+- Unit Testing:
+  - Total hours estimated: 7h
+  - Total hours spent: 10h 10m
+  - Nr of automated unit test cases: 16
+  - Coverage (overall): 81%
+<br>
+
+- E2E testing:
+  - Total hours estimated: 6h 
+  - Total hours spent 5h 10m
+- Code review 
+  - Total hours estimated: 4h 45m
+  - Total hours spent: 6h
+- Technical Debt management
+  - Total hours estimated: 1h
+  - Total hours spent: 20m
+  - Hours estimated for remediation by SonarQube: 1h 15m
+  - Hours spent on remediation: -
+  - debt ratio (as reported by SonarQube under "Measures-Maintainability"): 0%
+  - rating for each quality characteristic reported in SonarQube under "Measures" (namely reliability, security, maintainability )
   - rating for each quality characteristic reported in SonarQube under "Measures"
     - reliability: A
     - security: A
@@ -68,16 +67,17 @@ Sprint 1 retrospective (team 12)
 ## ASSESSMENT
 
 - What caused your errors in estimation (if any)?
-    - In general our estimations were pretty accurate, in fact our task estimation error ratio is just 1.03
+    - In general our estimations were pretty accurate, in fact our task estimation error ratio is just 1.02; the worst estimation was on the first story, because we overestimated by around 4 hrs.
 
 - What lessons did you learn (both positive and negative) in this sprint?
-    - 
-    
+    - We spent more time on tests than in the prevoius project, but still not enough (only 47 % coverage). 
+    - We experimented with new technologies to make the project better, as opposed to sticking with what we know. For example with the process of automatically sending out emails.
+
 - Which improvement goals set in the previous retrospective were you able to achieve? 
     - We spent more time in the beginning to carefully design the database, so that we didn't need to modify the db schema during the sprint.
   
 - Which ones you were not able to achieve? Why?
-     - 
+     - We feel like we got better at logging our work, but still we weren't precise enough: for example, we didn't separately log time spent on code review.
 
 - Improvement goals for the next sprint and how to achieve them (technical tasks, team coordination, etc.)
      - Better time estimation
@@ -85,7 +85,7 @@ Sprint 1 retrospective (team 12)
      - Communication issue in team
 
 - One thing you are proud of as a Team!!
-    - 
+    - We were able to deliver a stable and working product in a short time.
     
 # Estimation - Sprint #1
 
