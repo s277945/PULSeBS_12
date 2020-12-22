@@ -167,6 +167,14 @@ export function getFileData(){
     // get uploaded files info from server
     return axiosInst.get(`http://localhost:3001/api/fileData`, { withCredentials: true });
 }
+export function getAllSchedule(){
+    //get all schedules of SupportOfficer page from server
+    return axiosInst.get('http://localhost:3001/api/schedules',{withCredentials:true});
+}
+export function setNewSchedule(body){
+    //update schedule and send the new schedule of a given course to the server, one element at time
+    return axiosInst.put('http://localhost:3001/api/schedules',body,{withCredentials:true});
+}
 
 export async function login (userName, password){
     return axios.post(`http://localhost:3001/api/login`, { userName: userName, password: password}, {withCredentials: true})
