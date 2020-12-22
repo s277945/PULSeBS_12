@@ -55,7 +55,7 @@ Sprint 1 retrospective (team 12)
   - Total hours spent: 20m
   - Hours estimated for remediation by SonarQube: 1h 15m
   - Hours spent on remediation: -
-  - debt ratio (as reported by SonarQube under "Measures-Maintainability"): 0%
+  - debt ratio: 0%
   - rating for each quality characteristic reported in SonarQube under "Measures"
     - reliability: A
     - security: A
