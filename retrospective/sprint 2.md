@@ -66,7 +66,7 @@ Sprint 2 retrospective (team 12)
 ## ASSESSMENT
 
 - What caused your errors in estimation (if any)?
-    - Estimations were pretty much spot on
+    - We faced with some understimation of dependences between stories 
 
 - What lessons did you learn (both positive and negative) in this sprint?
     - not keeping good code documentation may lead people trying to fix/change things to lose time
