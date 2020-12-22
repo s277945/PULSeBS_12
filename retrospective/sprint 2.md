@@ -85,6 +85,6 @@ Sprint 2 retrospective (team 12)
     - Prioritize stories over issue based on visual upgrades
 
 - One thing you are proud of as a Team!!
-    - fast stakeholder issue solving
+    - nice page styling
     
   
