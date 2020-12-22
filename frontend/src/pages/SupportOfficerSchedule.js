@@ -56,8 +56,10 @@ export class SupportOfficerSchedule extends Component{
             </Table>
         )
     }
-    renderModalSchedule=(data)=>{
-        let obj=data;
+    renderModalSchedule=(row)=>{
+        console.log(JSON.stringify(row));
+        console.log("modal show: "+this.state.modal)
+        let obj=row;
         return(
             <Modal data-testid="modalSSN" show={this.state.modal} onHide={() => { /* When the modal is closed clear the response message and the searched student */ this.setState({ modal: false });}}>
                 <Modal.Header data-testid={"close"} closeButton>
@@ -75,7 +77,31 @@ export class SupportOfficerSchedule extends Component{
 
                 </Modal.Header>
                 <Modal.Body className="app-element-background">
-
+                    <div>
+                        <Table striped bordered hover style={{ backgroundColor: "#fff" , width: "98%", margin: "auto"}}>
+                            <thead>
+                            <tr>
+                                <th>CourseID</th>
+                                <th>CourseName</th>
+                                <th>Room</th>
+                                <th>Day</th>
+                                <th>Seats</th>
+                                <th>Time</th>
+                                <th>Update</th>
+                            </tr>
+                            </thead>
+                            <tbody data-testid={"modalScheduleTab"}>
+                                <tr>
+                                    <td>{row.courseId}</td>
+                                    <td>{row.courseName}</td>
+                                    <td>{row.room}</td>
+                                    <td>{row.day}</td>
+                                    <td>{row.seats}</td>
+                                    <td>{row.time}</td>
+                                </tr>
+                            </tbody>
+                        </Table>
+                    </div>
                 </Modal.Body>
             </Modal>
         )
@@ -86,7 +112,6 @@ export class SupportOfficerSchedule extends Component{
                 <br/>
                 {this.renderSchedule()}
 
-                {this.renderModalSchedule()}
             </div>
         )
     }
