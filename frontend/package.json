@@ -30,6 +30,7 @@
     "pretty-checkbox-react": "^3.1.0",
     "react": "^16.14.0",
     "react-bootstrap": "^1.4.0",
+    "react-bootstrap-time-picker": "^2.0.1",
     "react-csv": "^2.0.3",
     "react-dom": "^16.14.0",
     "react-icons": "^4.1.0",
