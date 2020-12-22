@@ -1,4 +1,4 @@
-Sprint 1 retrospective (team 11)
+Sprint 1 retrospective (team 12)
 =====================================
 
 - [process measures](#process-measures)
