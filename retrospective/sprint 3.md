@@ -13,30 +13,31 @@ Sprint 3 retrospective (team 12)
     - 6 stories committed
     - 6 stories done
 - Total points committed vs done
-    - 31 points committed
-    - 31 points done
+    - 55 points committed
+    - 55 points done
 - Nr of hours planned vs spent (as a team)
-    - 77 hours planned
-    - 74.55 hours done
+    - 84 hours planned
+    - 84h 30m done
 
 
 ### Detailed statistics
 
 | Story  | # Tasks | Points | Hours est. | Hours actual |
 |--------|---------|--------|------------|--------------|
-| _#1_       |    6     |   5     |      6h 45m      |       7h 55m       |
-| _#2_      |     7    |    5    |     6h 55m    |       7h        |
-| _#3_      |     4    |    8    |     1h 20m       |        5h       |
-| _#4_      |     1    |    3    |      1h 30m      |       1h 30m       |
-| _#5_       |    4     |    2    |      1h 50m      |      1h 45m        |
-| _#6_       |    2     |    8    |      3h 30m      |      3h 20m        |
+| _#12_  |    8    |    21   |           |             |
+| _#13_  |    4    |   2     |    4h 15m |  2h 30m     |
+| _#14_  |     1   |    5    | 1h        |      50m    |
+| _#15_  |     1   |    1    |      45m  |       20m   |
+| _#16_  |     6   |    21   |  2h       |             |
+| _#17_  |    6    |    5    |   4h 5m   |  7h 20m     |
+
 
 - Hours per task (average, standard deviation):
-    - Average: 4.25 hrs per task
+    - Average:  hrs per task
     - Standard deviation: 1.5 hrs
 
 - Total task estimation error ratio: sum of total hours estimation / sum of total hours spent from previous table:
-    -  77 / 74.55 =  1.03
+    -  84 / 84.30 =  0.99
 
 ## QUALITY MEASURES 
 
@@ -74,19 +75,23 @@ Sprint 3 retrospective (team 12)
     - We spent more time on tests than in the prevoius project, but still not enough (only 47 % coverage). 
     - We experimented with new technologies to make the project better, as opposed to sticking with what we know. For example with the process of automatically sending out emails.
 
-- Which improvement goals set in the previous retrospective were you able to achieve? 
-    - We spent more time in the beginning to carefully design the database, so that we didn't need to modify the db schema during the sprint.
+- Feedback improvements from the previous sprint:
+    - Remove seconds from dates
+    - Virtual lecture fix
+    - Student lecture page fix
+    - Student lecture view change
+    - Historical data chart fix
+    - Tables in historical data page
   
 - Which ones you were not able to achieve? Why?
      - We feel like we got better at logging our work, but still we weren't precise enough: for example, we didn't separately log time spent on code review.
 
 - Improvement goals for the next sprint and how to achieve them (technical tasks, team coordination, etc.)
-     - Better time estimation
-     - Distribution of the working hours per week
-     - Communication issue in team
+     - Add internal deadlines for task completion before bug fixing and testing
 
 - One thing you are proud of as a Team!!
     - We were able to deliver a stable and working product in a short time.
+    
 # Estimation - Sprint #3
 
 ## Story #12
