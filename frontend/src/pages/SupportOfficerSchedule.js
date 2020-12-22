@@ -3,6 +3,7 @@ import Table from 'react-bootstrap/Table'
 import Button from 'react-bootstrap/Button'
 import{getAllSchedule} from "../api/api";
 import Modal from 'react-bootstrap/Modal'
+import moment from "moment";
 
 export class SupportOfficerSchedule extends Component{
     state={
@@ -33,7 +34,7 @@ export class SupportOfficerSchedule extends Component{
                 <td>{row.day}</td>
                 <td>{row.seats}</td>
                 <td>{row.time}</td>
-                <td style={{ display: "flex", justifyContent: "flex-start" }}><Button style={{ marginLeft: "5px" }} data-testid={"showReport_" + k++} onClick={(e) => { e.preventDefault();}}>Modify Schedule</Button></td>
+                <td style={{ display: "flex", justifyContent: "flex-start" }}><Button style={{ marginLeft: "5px" }} data-testid={"showReport_" + k++} onClick={(e) => { e.preventDefault();this.setState({ modal: true });this.renderModalSchedule(row)}}>Modify Schedule</Button></td>
             </tr>)
         });
         return(
@@ -55,8 +56,29 @@ export class SupportOfficerSchedule extends Component{
             </Table>
         )
     }
-    renderModalSchedule=()=>{
+    renderModalSchedule=(data)=>{
+        let obj=data;
+        return(
+            <Modal data-testid="modalSSN" show={this.state.modal} onHide={() => { /* When the modal is closed clear the response message and the searched student */ this.setState({ modal: false });}}>
+                <Modal.Header data-testid={"close"} closeButton>
+                    <div>
+                        <Modal.Title>
+                            <div>
+                                Update Schedule
+                            </div>
+                        </Modal.Title>
+                        <div style={{display: "flex", flexWrap: "no-wrap", justifyContent: "flex-end", marginTop: "27px"}}>
+                            <Button variant="danger" style={{marginLeft: "27px", marginTop: "17px", marginBottom: "17px", paddingLeft: "11px", paddingRight: "11px" }} onClick={(e) => { e.preventDefault();}}>CONFIRM</Button>
+                            <Button variant="info" style={{marginLeft: "17px", marginTop: "17px", marginBottom: "17px", paddingLeft: "11px", paddingRight: "11px" }} onClick={(e) => { e.preventDefault();this.setState({modal:false})}}>CANCEL</Button>
+                        </div>
+                    </div>
 
+                </Modal.Header>
+                <Modal.Body className="app-element-background">
+
+                </Modal.Body>
+            </Modal>
+        )
     }
     render() {
         return(
