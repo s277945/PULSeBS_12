@@ -160,9 +160,9 @@ exports.uploadSchedule=function(list, fileName){
                     getListLectures(element)
                         .then((listLectures) => {
                             for (let el of listLectures ){
-                                let sql2 = 'INSERT INTO Lecture VALUES(?,?,?,?,?,?,?,?,?,?,?)';
+                                let sql2 = 'INSERT INTO Lecture VALUES(?,?,?,?,?,?,?,?,?,?,?,?)';
                                 db.run(sql2, [el.Course_Ref, el.Name, el.Capacity, el.Date, el.EndDate, el.DateDeadline,
-                                    el.BookedSeats, el.UnbookedSeats, el.Type, el.EmailSent,0], (err2) => {
+                                    el.BookedSeats, el.UnbookedSeats, el.Type, el.EmailSent,0, el.Day], (err2) => {
                                     /* istanbul ignore if */
                                     if(err2){
                                         console.log("fail");
@@ -264,7 +264,8 @@ function getListLectures(schedule){
                             "BookedSeats": 0,
                             "UnbookedSeats": 0,
                             "Type": "p",
-                            "EmailSent": mailsent
+                            "EmailSent": mailsent,
+                            "Day": schedule.day
                     }
                     //console.log(obj)
                     list.push(obj)
@@ -426,5 +427,75 @@ exports.getSchedule = function(){
                 }
             }
         })
+    })
+}
+
+/**
+ *
+ *
+ * */
+
+exports.updateSchedules = function(schedule){
+    let today = moment().format("YYYY-MM-DD HH:mm:ss")
+    return new Promise((resolve, reject) => {
+        const sql = 'SELECT Course_Ref, Date, Day FROM Lecture WHERE Course_Ref=? AND Date>=? AND Day=?'
+        db.all(sql, [schedule.courseId, today, schedule.oldDay], (err, rows)=> {
+            if(err)
+                reject(err)
+            else{
+                console.log("done")
+                console.log(rows)
+                updateGivenLectures(rows, schedule)
+                    .then((response) => {
+                        resolve(response)
+                    })
+                    .catch((err2) => {
+                        reject(err2)
+                    })
+            }
+
+        })
+    })
+
+}
+
+
+/**
+ * Updates given lectures
+ *
+ * */
+
+function updateGivenLectures(lectures, schedule){
+    let dayMap = {
+        "Mon": 1,
+        "Tue": 2,
+        "Wed": 3,
+        "Thu": 4,
+        "Fri": 5
+    }
+    let i = 0
+    return new Promise((resolve, reject)=> {
+        const sql = 'UPDATE Lecture SET Capacity=?, Date=?, EndDate=?, DateDeadline=?, Day=? WHERE Course_Ref=? AND Date=?'
+        if(lectures.length === 0) resolve("there are not lectures to be changed")
+        for(let lecture of lectures){
+            i++
+            console.log(lecture.Date)
+            let date = moment(lecture.Date)
+            let newDate = date.startOf('week').add(dayMap[schedule.newDay], 'day')
+            let endDate = newDate
+            let deadline = date.subtract(1, 'day').format("YYYY-MM-DD").concat(" 23:00:00")
+            let time = schedule.newTime.split("-")
+            newDate = (time[0] === 4) ? newDate.format("YYYY-MM-DD").concat(" 0"+time[0]+":00") : newDate.concat(" "+time[0]+":00")
+            endDate = (time[0] === 4) ? endDate.format("YYYY-MM-DD").concat(" 0"+time[1]+":00") : endDate.concat(" "+time[1]+":00")
+            db.run(sql, [schedule.newSeats, newDate, endDate, deadline, schedule.newDay, lecture.Course_Ref, lecture.Date],
+                (err) => {
+                    if(err)
+                        reject(err)
+                    else {
+                        if (i === lectures.length) resolve(true)
+                    }
+                })
+        }
+
     })
 }
