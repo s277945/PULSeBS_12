@@ -6,7 +6,7 @@
  import { getStudentList } from '../api/api'
  import moment from 'moment'
  import { Checkbox } from 'pretty-checkbox-react';
- import { getTeacherPastLectures } from '../api/api'
+ import { getTeacherPastLectures, setPresentStudents } from '../api/api'
 
  export class TeacherTabSL extends Component {
 
@@ -115,6 +115,22 @@
      }
      
      renderPastLectures() {
+        const resetChecks=(elem)=>{elem.setState({ 
+            modalTableData: this.state.modalTableData.map(e => {
+                return { userId: e.userId, name: e.name, surname: e.surname, attendance: e.attendance, checked: false }
+        })})}
+        const setPresence=(elem)=>{
+            setPresentStudents(elem.state.modalLecture.Course_Ref, elem.state.modalLecture.Date, elem.state.modalTableData.filter(e=>e.checked).map(e=>{return {studentId: e.userId}}))            
+            .then(res => {
+                console.log(res)
+                elem.setState({modalTableData: elem.state.modalTableData.map(e=>{
+                    return { userId: e.userId, name: e.name, surname: e.surname, attendance: e.checked?1:0, checked: false }
+                })})
+             }).catch(err=>{
+                 console.log(err);
+              });
+        }
+
         //Create main table body
          return (
             <div style={{width: "99%", margin: "auto"}}>
@@ -191,6 +207,12 @@
                                  </tbody>
                              </Table> :
                              <div />}
+                             {this.state.modalLecture&&moment().diff(moment(this.state.modalLecture.Date), 'days') <= 1 ?
+                             <div style={{display:"flex", justifyContent:"flex-end"}}>
+                                <Button style={{marginRight: "10px"}} disabled={this.state.modalTableData.filter(e=>e.checked).length<1} onClick={(e)=>{e.preventDefault(); setPresence(this);}}>Mark as present</Button>
+                                <Button variant="secondary" disabled={this.state.modalTableData.filter(e=>e.checked).length<1} onClick={(e)=>{e.preventDefault(); resetChecks(this);}}>Reset selection</Button>
+                             </div>
+                             :<div/>}
                      </Modal.Body>
                  </Modal>
              </div>

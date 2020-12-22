@@ -49,6 +49,11 @@ export function getTeacherPastLectures(){
     return axiosInst.get(`http://localhost:3001/api/teacherPastLectures`, { withCredentials: true });
 }
 
+export function setPresentStudents(cid, date, body){
+    // get list of lectures for student from server
+    return axiosInst.post(`http://localhost:3001/api/${cid}/${date}/attendees`, body, { withCredentials: true });
+}
+
 export function getCourses(){
     // get list of lectures for student from server
     return axiosInst.get(`http://localhost:3001/api/courses`, { withCredentials: true });

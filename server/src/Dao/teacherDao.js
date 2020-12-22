@@ -486,11 +486,11 @@ function retrieveMonthStats(courseId, semester){
 exports.setPresentStudents = function (courseId, date, list){
     let i = 0;
     return new Promise((resolve, reject) => {
-        const sql = 'UPDATE Lecture SET Attendees=? WHERE Course_Ref=? AND Date=?';
+        const sql = 'UPDATE Lecture SET Attendees=Attendees+? WHERE Course_Ref=? AND Date=?';
         db.run(sql, [list.length, courseId, date], (err) => {
             /* istanbul ignore if */
             if(err) reject(err);
-            else{
+            else{ console.log(list)
                 const sql2='UPDATE Booking SET Attendance=? WHERE Course_Ref=? AND Dat_Ref=? AND Student_Ref=?'
                     for(let el of list){
                         db.run(sql2, [1, courseId, date, el.studentId], (err) => {
