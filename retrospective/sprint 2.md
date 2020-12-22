@@ -76,7 +76,7 @@ Sprint 2 retrospective (team 12)
     - Distribution of the working hours per week
     - Communication issues in team
     
-- Feedback improvements from the previous sprint: 
+- Stakeholder feedback improvements from the previous sprint: 
     - Suggestion on the GUI
     - More data shown on the student list
     - Adding confimation dialog for booking and canceling the booking 
