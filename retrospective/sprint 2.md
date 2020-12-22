@@ -69,7 +69,7 @@ Sprint 2 retrospective (team 12)
     - 
 
 - What lessons did you learn (both positive and negative) in this sprint?
-    - 
+    - not keeping good code documentation may lead people trying to fix/change things to lose time
     
 - Feedback improvements from the previous sprint: 
     - Suggestion on the GUI
@@ -81,6 +81,6 @@ Sprint 2 retrospective (team 12)
     - Code documentation improvements 
 
 - One thing you are proud of as a Team!!
-    - 
+    - fast stakeholder issue solving
     
   
