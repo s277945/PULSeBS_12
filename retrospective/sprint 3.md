@@ -84,8 +84,9 @@ Sprint 3 retrospective (team 12)
     - Tables in historical data page
   
 - Which improvement goals set in the previous retrospective were you able to achieve?
--Prioritize stories over issue based on visual upgrades
--Code documentation improvements
+    
+    -Prioritize stories over issue based on visual upgrades
+    -Code documentation improvements
 
 - Which ones you were not able to achieve? Why?
      - none
