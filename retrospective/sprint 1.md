@@ -75,11 +75,11 @@ Sprint 1 retrospective (team 12)
     - Better work assignment for the various project parts
 
 - Which ones you were not able to achieve? Why?
-
+	- We managed to arrange code documentation, but it still need improvements for the next sprint
 
 - Improvement goals for the next sprint and how to achieve them (technical tasks, team coordination, etc.)
      - Distribution of the working hours per week
      - Communication issues in team
 
 - One thing you are proud of as a Team!!
-    
+    - We managed to complete all planned stories with a mostly clean code
