@@ -30,8 +30,8 @@
         getStudentList(element)
              .then(res => {
                 console.log(res)
-                if(num===1) this.setState({ modalTableData: res.data, element: element });// if future/past modal is to be rendered
-                if(num===2) this.setState({ modalTableData: res.data.map(e=>{return {...e, checked: false}}), element: element })// if attendance setting modal is to be rendered
+                if(num===1) this.setState({ modalTableData: res.data });// if future/past modal is to be rendered
+                if(num===2) this.setState({ modalTableData: res.data.map(e=>{return {...e, checked: false}}) })// if attendance setting modal is to be rendered
                 sessionStorage.setItem("element", JSON.stringify(element)); // update session data
                 this.handleShow(num);
              }).catch(err=>{
@@ -51,17 +51,7 @@
      }
 
      renderFutureLectures() {
-        //Create main table body
-         let body = []
-         let k=0;
-         this.state.tableData.forEach(row => {
-             body.push(<tr key={k++}>
-                 <td>{row.Course_Ref}</td>
-                 <td>{row.Name}</td>
-                 <td>{moment(row.Date).format("DD/MM/YYYY HH:mm")}</td>
-                 <td style={{display: "flex", justifyContent: "flex-start"}}><Button style={{marginLeft: "5px"}} data-testid={"showList_"+k++} onClick={(e) => { e.preventDefault(); this.showList(row, 1) }}>SHOW LIST</Button></td>
-             </tr>)
-         });
+        //Create main table body        
 
          return (
             <div style={{width: "99%", margin: "auto"}}>
@@ -75,53 +65,49 @@
                          </tr>
                      </thead>
                      <tbody data-testid={"listTabSL"}>
-                         {body}
+                         {this.state.tableData.map((row,i) => {
+                            return(<tr key={i}>
+                                        <td>{row.Course_Ref}</td>
+                                        <td>{row.Name}</td>
+                                        <td>{moment(row.Date).format("DD/MM/YYYY HH:mm")}</td>
+                                        <td style={{display: "flex", justifyContent: "flex-start"}}><Button style={{marginLeft: "5px"}} data-testid={"showList_"+i} onClick={(e) => { e.preventDefault(); this.showList(row, 1) }}>SHOW LIST</Button></td>
+                                        <Modal show={this.state.modal===1?true:false} onHide={this.handleClose}>
+                                            <Modal.Header data-testid={"close"}  closeButton>
+                                                <Modal.Title>Students</Modal.Title>
+                                            </Modal.Header>
+                                            <Modal.Body className="app-element-background">{
+                                                <Table striped bordered hover>
+                                                    <thead>
+                                                        <tr>
+                                                            <th>No</th>
+                                                            <th>Student ID</th>
+                                                            <th>Name</th>
+                                                            <th>Surname</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody data-testid={"studentsList"}>
+                                                        {this.state.modalTableData.map((element, i) => {
+                                                        return(<tr key={i}>
+                                                                    <td>{i + 1}</td>
+                                                                    <td>{element.userId}</td>
+                                                                    <td>{element.name}</td>
+                                                                    <td>{element.surname}</td>
+                                                                </tr>)
+                                                        })}
+                                                    </tbody>
+                                                </Table>}
+                                            </Modal.Body>
+                                        </Modal>
+                                    </tr>)
+                            })}
                      </tbody>
                  </Table>
-
-                 <Modal show={this.state.modal===1?true:false} onHide={this.handleClose}>
-                     <Modal.Header data-testid={"close"}  closeButton>
-                         <Modal.Title>Students</Modal.Title>
-                     </Modal.Header>
-                     <Modal.Body className="app-element-background">{
-                         <Table striped bordered hover>
-                             <thead>
-                                 <tr>
-                                     <th>No</th>
-                                     <th>Student ID</th>
-                                     <th>Name</th>
-                                     <th>Surname</th>
-                                 </tr>
-                             </thead>
-                             <tbody data-testid={"studentsList"}>
-                                 {this.state.modalTableData.map((element, i) => {
-                                 return(<tr key={i}>
-                                            <td>{i + 1}</td>
-                                            <td>{element.userId}</td>
-                                            <td>{element.name}</td>
-                                            <td>{element.surname}</td>
-                                        </tr>)
-                                 })}
-                             </tbody>
-                         </Table>}
-                     </Modal.Body>
-                 </Modal>
              </div>
          )
      }
      
      renderPastLectures() {
         //Create main table body
-         let body = []
-         let k=0;
-         this.state.pastTableData.forEach(row => {
-             body.push(<tr key={k++}>
-                 <td>{row.Course_Ref}</td>
-                 <td>{row.Name}</td>
-                 <td>{moment(row.Date).format("DD/MM/YYYY HH:mm")}</td>
-                 <td style={{display: "flex", justifyContent: "flex-start"}}><Button style={{marginLeft: "5px"}} data-testid={"showList_"+k++} onClick={(e) => { e.preventDefault(); this.showList(row,2) }}>{moment().diff(moment(row.Date), 'days')<=1?"SET STUDENT ATTENDANCE":"SHOW ATTENDANCE DATA"}</Button></td>
-             </tr>)
-         });
          return (
             <div style={{width: "99%", margin: "auto"}}>
                  <Table striped bordered hover style={{backgroundColor: "#fff"}}>
@@ -134,55 +120,62 @@
                          </tr>
                      </thead>
                      <tbody data-testid={"listTabSL"}>
-                         {body}
+                         {this.state.pastTableData.map((row,i) => {
+                            return (<tr key={i}>
+                                        <td>{row.Course_Ref}</td>
+                                        <td>{row.Name}</td>
+                                        <td>{moment(row.Date).format("DD/MM/YYYY HH:mm")}</td>
+                                        <td style={{display: "flex", justifyContent: "flex-start"}}><Button style={{marginLeft: "5px"}} data-testid={"showList_"+i} onClick={(e) => { e.preventDefault(); this.showList(row,2) }}>{moment().diff(moment(row.Date), 'days')<=1?"SET STUDENT ATTENDANCE":"SHOW ATTENDANCE DATA"}</Button></td>
+                                        <Modal show={this.state.modal === 2 ? true : false} onHide={this.handleClose}>
+                                            <Modal.Header data-testid={"close"} closeButton>
+                                                <Modal.Title>Students</Modal.Title>
+                                            </Modal.Header>
+                                            <Modal.Body className="app-element-background">{
+                                                this.state.element?
+                                                <Table striped bordered hover>
+                                                    <thead>
+                                                        <tr>
+                                                            <th>No</th>
+                                                            <th>Student ID</th>
+                                                            <th>Name</th>
+                                                            <th>Surname</th>
+                                                            <th>Presence</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody data-testid={"studentsList"}>
+                                                        {moment().diff(moment(row.Date), 'days') <= 1 ? //check if user must be able to input attendance data
+                                                            this.state.modalTableData.map((element, i) => {
+                                                            return( <tr key={i}>
+                                                                        <td>{i + 1}</td>
+                                                                        <td>{element.userId}</td>
+                                                                        <td>{element.name}</td>
+                                                                        <td>{element.surname}</td>
+                                                                        <td>{element.attendance}</td>
+                                                                        <td><Checkbox checked={element.checked} onClick={this.setState({modalTableData: this.state.modalTableData.map(e=>{
+                                                                            if (e.userId===element.userId) return {userId: e.userId, name: e.name, surname: e.surname, attendance: e.attendance, checked: !e.checked}
+                                                                            else return e;
+                                                                        })}) } /></td>
+                                                                    </tr>)
+                                                            }) :
+                                                            this.state.modalTableData.map((element, i) => {
+                                                            return (<tr key={i}>
+                                                                        <td>{i + 1}</td>
+                                                                        <td>{element.userId}</td>
+                                                                        <td>{element.name}</td>
+                                                                        <td>{element.surname}</td>
+                                                                        <td>{element.attendance}</td>
+                                                                    </tr>)
+                                                            })}
+                                                    </tbody>
+                                                </Table>:
+                                                <div/>}
+                                            </Modal.Body>
+                                        </Modal>
+                                    </tr>)
+                            })}
                      </tbody>
                  </Table>
 
-                 <Modal show={this.state.modal === 2 ? true : false} onHide={this.handleClose}>
-                     <Modal.Header data-testid={"close"} closeButton>
-                         <Modal.Title>Students</Modal.Title>
-                     </Modal.Header>
-                     <Modal.Body className="app-element-background">{
-                         this.state.element?
-                         <Table striped bordered hover>
-                             <thead>
-                                 <tr>
-                                     <th>No</th>
-                                     <th>Student ID</th>
-                                     <th>Name</th>
-                                     <th>Surname</th>
-                                     <th>Presence</th>
-                                 </tr>
-                             </thead>
-                             <tbody data-testid={"studentsList"}>
-                                 {moment().diff(moment(this.state.element.Date), 'days') <= 1 ? //check if user must be able to input attendance data
-                                     this.state.modalTableData.map((element, i) => {
-                                    return( <tr key={i}>
-                                                <td>{i + 1}</td>
-                                                <td>{element.userId}</td>
-                                                <td>{element.name}</td>
-                                                <td>{element.surname}</td>
-                                                <td>{element.attendance}</td>
-                                                <td><Checkbox checked={element.checked} onClick={this.setState({modalTableData: this.state.modalTableData.map(e=>{
-                                                    if (e.userId===element.userId) return {userId: e.userId, name: e.name, surname: e.surname, attendance: e.attendance, checked: !e.checked}
-                                                    else return e;
-                                                })}) } /></td>
-                                            </tr>)
-                                     }) :
-                                     this.state.modalTableData.map((element, i) => {
-                                    return (<tr key={i}>
-                                                <td>{i + 1}</td>
-                                                <td>{element.userId}</td>
-                                                <td>{element.name}</td>
-                                                <td>{element.surname}</td>
-                                                <td>{element.attendance}</td>
-                                            </tr>)
-                                     })}
-                             </tbody>
-                         </Table>:
-                         <div/>}
-                     </Modal.Body>
-                 </Modal>
              </div>
          )
      }
