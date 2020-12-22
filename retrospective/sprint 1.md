@@ -10,11 +10,11 @@ Sprint 1 retrospective (team 12)
 ### Macro statistics
 
 - Number of stories committed vs done  
-    - 6 stories committed
-    - 6 stories done
+    - 5 stories committed
+    - 5 stories done
 - Total points committed vs done
-    - 31 points committed
-    - 31 points done
+    - 23 points committed
+    - 23 points done
 - Nr of hours planned vs spent (as a team)
     - 77 hours planned
     - 74.55 hours done
@@ -29,10 +29,10 @@ Sprint 1 retrospective (team 12)
 | _#3_      |     4    |    8    |     1h 20m       |        5h       |
 | _#4_      |     1    |    3    |      1h 30m      |       1h 30m       |
 | _#5_       |    4     |    2    |      1h 50m      |      1h 45m        |
-| _#6_       |    2     |    8    |      3h 30m      |      3h 20m        |
+
 
 - Hours per task (average, standard deviation):
-    - Average: 4.25 hrs per task
+    - Average: 4.46 hrs per task
     - Standard deviation: 1.5 hrs
 
 - Total task estimation error ratio: sum of total hours estimation / sum of total hours spent from previous table:
