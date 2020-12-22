@@ -182,7 +182,6 @@
                                         <th><div style={{marginLeft: "3px", marginRight: "3px"}}>Name</div></th>
                                         <th><div style={{marginLeft: "3px", marginRight: "3px"}}>Surname</div></th>
                                         <th style={{width:"117px", textAlign: "center"}}>Attendance</th>
-                                        <th style={{width:"52px"}}></th>
                                     </tr>
                                 </thead>
                                  <tbody data-testid={"studentsList"}>
@@ -194,7 +193,7 @@
                                                  <td><div style={{marginLeft: "7px", marginRight: "7px"}}>{element.name}</div></td>
                                                  <td><div style={{marginLeft: "7px", marginRight: "7px"}}>{element.surname}</div></td>
                                                  <td style={{textAlign:"center"}}>{element.attendance===1?"Yes":"No"}</td>
-                                                 <td style={{margin: "auto"}}><Checkbox style={{ marginLeft: "7px", height: "15px" }} disabled={element.attendance===1} checked={element.checked&&element.attendance!==1} onClick={()=>{this.setState({
+                                                 <td style={{margin: "auto", width:"52px"}}><Checkbox style={{ marginLeft: "7px", marginTop: "1px", height: "15px" }} disabled={element.attendance===1} checked={element.checked&&element.attendance!==1} onClick={()=>{this.setState({
                                                      modalTableData: this.state.modalTableData.map(e => {
                                                          if (e.userId === element.userId) return { userId: e.userId, name: e.name, surname: e.surname, attendance: e.attendance, checked: !e.checked }
                                                          else return e;
