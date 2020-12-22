@@ -41,27 +41,24 @@ Sprint 2 retrospective (team 12)
 
 ## QUALITY MEASURES 
 
-- Unit and E2E Testing:
-  - Total hours estimated
-    - 12h
-  - Total hours spent
-    - 8h 10m
-  - Nr of automated unit test cases 
-    - 56
-  - Coverage (if available)
-    - 46.8 %
-- Technical Debt management:
-  - Total hours estimated 
-    - N/A
-  - Total hours spent
-    -  20m
-  - Hours estimated for remediation by SonarQube
-    - 2h
-  - Hours spent on remediation
-    - 20m
-  - debt ratio
-    - 0.2 %
-  - rating for each quality characteristic reported in SonarQube under "Measures"
+- Unit Testing:
+  - Total hours estimated: 9h
+  - Total hours spent: 9h 30m
+  - Nr of automated unit test cases: 16
+  - Coverage (overall): 97%
+- E2E testing:
+  - Total hours estimated: 6h
+  - Total hours spent 7h 30m
+- Code review 
+  - Total hours estimated: 7h
+  - Total hours spent: 5h
+- Technical Debt management
+  - Total hours estimated: 4h 45m
+  - Total hours spent: 1h 15m
+  - Hours estimated for remediation by SonarQube: 20m
+  - Hours spent on remediation: 20m
+  - debt ratio (as reported by SonarQube under "Measures-Maintainability"): 0%
+    - rating for each quality characteristic reported in SonarQube under "Measures"
     - reliability: A
     - security: A
     - maintainability: A
