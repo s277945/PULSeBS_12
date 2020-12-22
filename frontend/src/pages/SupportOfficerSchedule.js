@@ -125,7 +125,7 @@ export class SupportOfficerSchedule extends Component{
 
     renderModalSchedule=()=>{
         return(
-            <Modal data-testid="modalSSN" show={this.state.modal} onHide={() => { /* When the modal is closed clear the response message and the searched student */ this.setState({ modal: false,day:"",startDate:"",endDate:"",room:"",elemModal:[] });}}>
+            <Modal data-testid="modal" show={this.state.modal} onHide={() => { /* When the modal is closed clear the response message and the searched student */ this.setState({ modal: false,day:"",startDate:"",endDate:"",room:"",elemModal:[] });}}>
                 <Modal.Header data-testid={"close"} closeButton>
                     <div>
                         <Modal.Title>
@@ -141,23 +141,23 @@ export class SupportOfficerSchedule extends Component{
                         <Form>
                             <Form.Group controlId="formBasicEmail">
                                 <Form.Label style={{display: "block", textAlign: "center"}}>CourseID</Form.Label>
-                                <Form.Control data-testid={"username"} type="text" plaintext readOnly placeholder={this.state.elemModal.courseId}/>
+                                <Form.Control data-testid={"courseId"} type="text" plaintext readOnly placeholder={this.state.elemModal.courseId}/>
                             </Form.Group>
                             <Form.Group controlId="formBasicEmail">
                                 <Form.Label style={{display: "block", textAlign: "center"}}>Course Name</Form.Label>
-                                <Form.Control data-testid={"username"} type="text" plaintext readOnly placeholder={this.state.elemModal.courseName}/>
+                                <Form.Control data-testid={"name"} type="text" plaintext readOnly placeholder={this.state.elemModal.courseName}/>
                             </Form.Group>
                             <Form.Group controlId="formBasicEmail">
                                 <Form.Label style={{display: "block", textAlign: "center"}}>Room</Form.Label>
-                                <Form.Control value={this.state.room} data-testid={"username"} type="text" placeholder={this.state.elemModal.room} onChange={this.handleChangeRoom}/>
+                                <Form.Control  value={this.state.room} data-testid={"room"} type="text" placeholder={this.state.elemModal.room} onChange={this.handleChangeRoom}/>
                             </Form.Group>
                             <Form.Group controlId="formBasicEmail">
                                 <Form.Label style={{display: "block", textAlign: "center"}}>Seats</Form.Label>
-                                <Form.Control value={this.state.seats} data-testid={"username"} type="text" placeholder={this.state.elemModal.seats} onChange={this.handleChangeSeats}/>
+                                <Form.Control value={this.state.seats} data-testid={"seats"} type="text" placeholder={this.state.elemModal.seats} onChange={this.handleChangeSeats}/>
                             </Form.Group>
                             <Form.Group controlId="formBasicEmail">
                                 <Form.Label style={{display: "block", textAlign: "center"}}>Day</Form.Label>
-                                <Form.Control value={this.state.day} data-testid={"username"} as={"select"} defaultValue={this.state.elemModal.day} onChange={this.handleChangeDay}>
+                                <Form.Control value={this.state.day} data-testid={"day"} as={"select"} defaultValue={this.state.elemModal.day} onChange={this.handleChangeDay}>
                                     <option>Mon</option>
                                     <option>Tue</option>
                                     <option>Wed</option>

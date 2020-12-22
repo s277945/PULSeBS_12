@@ -332,6 +332,38 @@ describe('SUPPORT OFFICER TESTS', function () {
                     cy.wait(100)
                 })
         });
+        it('should modify a schedule', function () {
+            cy.server()
+            cy.route({
+                url:'/api/schedules',
+                method:'GET',
+                status:200,
+                response:[{"courseId":"XY1211","courseName":"Metodi di finanziamento delle imprese","room":"1","day":"Mon","seats":120,"time":"8:30-11:30"},{"courseId":"XY8221","courseName":"Basi di dati","room":"4","day":"Mon","seats":80,"time":"10:00-11:30"}]
+            })
+            cy.route({
+                method:'PUT',
+                url:'/api/schedules',
+                status:200,
+                response:{}
+            })
+            cy.get('[data-testid="schedule"]')
+                .should('be.visible')
+                .click()
+            cy.wait(100)
+            cy.get('tbody>tr').eq(0).should('be.visible')
+                .click()
+                .within(()=>{
+                    cy.get('.btn.btn-primary').click()
+                })
+            cy.get('[data-testid="modal"]')
+                .within(()=>{
+                    cy.get('[data-testid="room"]').should('be.visible')
+                        .type("170")
+                    cy.get('[data-testid="submit"]')
+                        .click()
+                })
+            cy.wait(500)
+        });
         it('should logout', function () {
             cy.server()
             cy.route({
