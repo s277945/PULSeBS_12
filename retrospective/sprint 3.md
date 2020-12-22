@@ -94,6 +94,5 @@ Sprint 3 retrospective (team 12)
 
 - One thing you are proud of as a Team!!
     - very fast stakeholder issues fixing
-    - nice page styling
 
     
