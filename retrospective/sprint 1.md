@@ -68,17 +68,16 @@ Sprint 1 retrospective (team 12)
 ## ASSESSMENT
 
 - What caused your errors in estimation (if any)?
-    - In general our estimations were pretty accurate, in fact our task estimation error ratio is just 1.02; the worst estimation was on the first story, because we overestimated by around 4 hrs.
+    - In general our estimations were pretty accurate, in fact our task estimation error ratio is just 1.03
 
 - What lessons did you learn (both positive and negative) in this sprint?
-    - We spent more time on tests than in the prevoius project, but still not enough (only 47 % coverage). 
-    - We experimented with new technologies to make the project better, as opposed to sticking with what we know. For example with the process of automatically sending out emails.
-
+    - 
+    
 - Which improvement goals set in the previous retrospective were you able to achieve? 
     - We spent more time in the beginning to carefully design the database, so that we didn't need to modify the db schema during the sprint.
   
 - Which ones you were not able to achieve? Why?
-     - We feel like we got better at logging our work, but still we weren't precise enough: for example, we didn't separately log time spent on code review.
+     - 
 
 - Improvement goals for the next sprint and how to achieve them (technical tasks, team coordination, etc.)
      - Better time estimation
@@ -86,7 +85,7 @@ Sprint 1 retrospective (team 12)
      - Communication issue in team
 
 - One thing you are proud of as a Team!!
-    - We were able to deliver a stable and working product in a short time.
+    - 
     
 # Estimation - Sprint #1
 
