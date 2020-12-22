@@ -81,7 +81,9 @@ Sprint 2 retrospective (team 12)
 
 - Improvement goals for the next sprint and how to achieve them (technical tasks, team coordination, etc.)
     - Prioritize stories over issue based on visual upgrades
-    - Code documentation improvements 
+    - Code documentation improvements
+    - Distribution of the working hours per week
+    - Communication issues in team
 
 - One thing you are proud of as a Team!!
     - fast stakeholder issue solving
