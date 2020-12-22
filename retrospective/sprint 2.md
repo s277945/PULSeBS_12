@@ -24,6 +24,7 @@ Sprint 2 retrospective (team 12)
 
 | Story  | # Tasks | Points | Hours est. | Hours actual |
 |--------|---------|--------|------------|--------------|
+| _#6_       |    2     |    8    |      3h 30m      |      3h 20m        |
 | _#7_       |    5     |   5     |      3h 10m      |       3h 20m       |
 | _#8_      |     2    |    5    |     1h 40m    |       2h 45m        |
 | _#9_      |     5    |    2    |     2h 45m       |        2h 35m       |
