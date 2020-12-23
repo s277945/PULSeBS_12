@@ -62,7 +62,7 @@
         //Create main table body        
 
          return (
-            <div style={{width: "99%", margin: "auto"}}>
+            <div style={{width: "95%", margin: "auto"}}>
                  <Table striped bordered hover style={{backgroundColor: "#fff"}}>
                      <thead>
                          <tr>
@@ -137,7 +137,7 @@
 
         //Create main table body
          return (
-            <div style={{width: "99%", margin: "auto"}}>
+            <div style={{width: "95%", margin: "auto"}}>
                  <Table striped bordered hover style={{backgroundColor: "#fff"}}>
                      <thead>
                          <tr>
@@ -234,10 +234,10 @@
                 <br />
                 <h1 className="page-title">Student list</h1>
                 <br />
-                <h4 style={{margin: "10px", marginLeft: "13px", marginBottom: "17px"}}>Programmed lectures info:</h4>
+                <h4 style={{margin: "10px", marginLeft: "2.7vw", marginBottom: "17px"}}>Programmed lectures info:</h4>
                 {this.renderFutureLectures()}
                 <div style={{marginBottom: "34px"}}/>
-                <h4 style={{margin: "10px", marginLeft: "13px", marginBottom: "17px"}}>Past and current lectures attendance:</h4>
+                <h4 style={{margin: "10px", marginLeft: "2.7vw", marginBottom: "17px"}}>Past and current lectures attendance:</h4>
                 {this.renderPastLectures()}
             </div>
          );

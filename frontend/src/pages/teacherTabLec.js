@@ -144,7 +144,7 @@ export class TeacherTabLec extends Component {
                 <br/>
                 <h1 className="page-title">Lectures</h1>
                 <br/>
-                <Table striped bordered hover style={{backgroundColor: "#fff"}}>
+                <Table striped bordered hover style={{backgroundColor: "#fff", width: "95%", margin: "auto"}}>
                     <thead>
                         <tr>
                             <th>Course</th>
