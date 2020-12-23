@@ -217,7 +217,7 @@ export class SupportOfficerSchedule extends Component{
                 <Modal.Header data-testid={"close"} closeButton>
                     <div>
                         <Modal.Title>
-                            <div>
+                            <div style={{marginLeft: "140px"}}>
                                 Update Schedule
                             </div>
                         </Modal.Title>
@@ -233,7 +233,7 @@ export class SupportOfficerSchedule extends Component{
                                         <Form.Label style={{display: "block", textAlign: "center"}}><b>CourseID</b></Form.Label>
                                         <Form.Control style={{display: "block", textAlign: "center"}} data-testid={"courseId"} type="text" plaintext readOnly placeholder={this.state.elemModal.courseId}/>
                                     </Col>
-                                    <Col xs={9}>
+                                    <Col xs={9} style={{borderLeft:"solid", borderWidth: "1px", borderColor: "#dddddd"}}>
                                         <Form.Label style={{display: "block", textAlign: "center"}}><b>Course Name</b></Form.Label>
                                         <Form.Control style={{display: "block", textAlign: "center"}} data-testid={"name"} type="text" plaintext readOnly placeholder={this.state.elemModal.courseName}/>
                                     </Col>
