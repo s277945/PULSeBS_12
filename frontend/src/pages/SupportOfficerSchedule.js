@@ -17,7 +17,8 @@ export class SupportOfficerSchedule extends Component{
         endDate:"",
         day:"",
         room:"",
-        seats:""
+        seats:"",
+        error:false
     }
     componentDidMount() {
         this.updateSchedule();
@@ -33,11 +34,11 @@ export class SupportOfficerSchedule extends Component{
     }
     handleChangeStartTime=(date)=> {
         date=moment('25/12/2020', "DD/MM/YYYY").utcOffset(1).add(date, 'seconds').format("HH:mm")
-        if(date>this.state.endDate&&this.state.endDate!=""){
+        if(date>this.state.endDate&&this.state.endDate!==""){
             console.log("IF START DATE")
         }
         else{
-            this.setState({startDate:date});
+            this.setState({startDate:date,error:false});
         }
 
         console.log("startDate:"+this.state.startDate);
@@ -45,7 +46,7 @@ export class SupportOfficerSchedule extends Component{
     }
     splitString=()=>{
         let tmp=[];
-        if(this.state.elemModal.time!=undefined){
+        if(this.state.elemModal.time!==undefined){
             tmp=this.state.elemModal.time.toString().split('-');
             console.log(JSON.stringify(tmp));
             if(tmp.length===1){
@@ -68,7 +69,7 @@ export class SupportOfficerSchedule extends Component{
             console.log('IF ENDDATE');
         }
         else{
-            this.setState({endDate:date});
+            this.setState({endDate:date,error:false});
         }
 
         console.log("startDate:"+this.state.startDate);
@@ -90,6 +91,9 @@ export class SupportOfficerSchedule extends Component{
         else
             this.setState({seats:e.target.value});
     }
+    handleDisabled=()=>{
+        return ((this.state.startDate===""&&this.state.endDate===""&&this.state.seats===""&&this.state.room===""&&this.state.day==="")||this.state.error)
+    }
     /*When confirm button is pressed, first of all it should be created
         a body for PUT request, inside it there are old and new values of
         request*/
@@ -104,7 +108,7 @@ export class SupportOfficerSchedule extends Component{
         if(this.state.startDate===""&&this.state.endDate===""){
             time="";
         }
-        else if(this.state.startDate!=""&&this.state.endDate===""){
+        else if(this.state.startDate!==""&&this.state.endDate===""){
             console.log("tmp1: "+tmp[1]);
             console.log("start: "+this.state.startDate);
             if(moment(this.state.startDate).isBefore(tmp[1])){
@@ -114,7 +118,7 @@ export class SupportOfficerSchedule extends Component{
 
         }
 
-        else if(this.state.startDate===""&&this.state.endDate!=""){
+        else if(this.state.startDate===""&&this.state.endDate!==""){
             console.log("tmp0: "+tmp[0]);
             console.log("end: "+this.state.endDate)
             if(moment(this.state.endDate).isAfter(tmp[0])){
@@ -125,7 +129,7 @@ export class SupportOfficerSchedule extends Component{
         else{
             time=this.state.startDate+"-"+this.state.endDate;
         }
-        if(time!=""||this.state.day!=""||this.state.room!=""||this.state.seats!=""){
+        if(time!=""||this.state.day!==""||this.state.room!==""||this.state.seats!==""){
             body={
                 courseId:this.state.elemModal.courseId,
                 oldDay:this.state.elemModal.day,
@@ -158,7 +162,8 @@ export class SupportOfficerSchedule extends Component{
                         endDate:"",
                         day:"",
                         room:"",
-                        seats:""
+                        seats:"",
+                        error:false
                     });
                 })
                 .catch(err=>{
@@ -171,7 +176,9 @@ export class SupportOfficerSchedule extends Component{
                         endDate:"",
                         day:"",
                         room:"",
-                        seats:""});
+                        seats:"",
+                        error:false
+                    });
                 })
         }
         else{
@@ -257,17 +264,18 @@ export class SupportOfficerSchedule extends Component{
                                 <Row>
                                     <Col>
                                         <Form.Label style={{display: "block", textAlign: "center"}}><b>Start Hour</b></Form.Label>
-                                        <TimePicker format={24} initialValue={tmp[0]} value={this.state.startDate} start={"8:30"} end={"21:00"} step={30} onChange={this.handleChangeStartTime} isInvalid={(this.state.startDate>this.state.endDate&&this.state.endDate!="")}>Start</TimePicker>
-                                        {   (moment(this.state.startDate).isAfter(this.state.endDate)&&this.state.endDate!="")
-                                            ? <><Form.Text style={{color: "red", paddingTop: "5px", paddingBottom: "5px"}}>Start date should not be greater than end date</Form.Text></>
+                                        <TimePicker format={24} initialValue={tmp[0]} value={this.state.startDate} start={"8:30"} end={"21:00"} step={30} onChange={this.handleChangeStartTime} isInvalid={(moment((this.state.startDate===""?tmp[0]:this.state.startDate)).isAfter((this.state.endDate===""?tmp[1]:this.state.endDate)))}>Start</TimePicker>
+                                        {   (moment((this.state.startDate===""?tmp[0]:this.state.startDate)).isAfter((this.state.endDate===""?tmp[1]:this.state.endDate)))
+                                            ?<><Form.Text style={{color: "red", paddingTop: "5px", paddingBottom: "5px"}}>Start date should not be greater than end date</Form.Text></>
                                             : null
                                         }
                                     </Col>
                                     <Col>
                                         <Form.Label style={{display: "block", textAlign: "center"}}><b>End Hour</b></Form.Label>
-                                        <TimePicker format={24} initialValue={tmp[1]} value={this.state.endDate} start={"8:30"} end={"21:00"} step={30} onChange={this.handleChangeEndTime} isInvalid={(this.state.endDate<this.state.startDate&&this.state.startDate!="")}>End</TimePicker>
-                                        {   (moment(this.state.endDate).isBefore(this.state.startDate)&&this.state.startDate!="")
-                                            ? <><Form.Text style={{color: "red", paddingTop: "5px", paddingBottom: "5px"}}>End date should not be less than start date</Form.Text></>
+                                        <TimePicker format={24} initialValue={tmp[1]} value={this.state.endDate} start={"8:30"} end={"21:00"} step={30} onChange={this.handleChangeEndTime} isInvalid={(moment((this.state.endDate===""?tmp[1]:this.state.endDate)).isBefore((this.state.startDate===""?tmp[0]:this.state.startDate)))}>End</TimePicker>
+                                        {   //case in which i already have both end and startDate. if it is the
+                                            (moment((this.state.endDate===""?tmp[1]:this.state.endDate)).isBefore((this.state.startDate===""?tmp[0]:this.state.startDate)))
+                                            ?<><Form.Text style={{color: "red", paddingTop: "5px", paddingBottom: "5px"}}>End date should not be less than start date</Form.Text></>
                                             : null
                                         }
                                     </Col>
@@ -295,11 +303,11 @@ export class SupportOfficerSchedule extends Component{
             table.push(<tr key={k++}>
                 <td>{row.courseId}</td>
                 <td>{row.courseName}</td>
-                <td>{row.room}</td>
-                <td>{row.day}</td>
-                <td>{row.seats}</td>
-                <td>{row.time}</td>
-                <td style={{ display: "flex", justifyContent: "flex-start" }}><Button style={{ marginLeft: "5px" }} data-testid={"showReport_" + k++} onClick={(e) => { e.preventDefault();this.setState({ modal:true,elemModal:row});}}>Modify Schedule</Button></td>
+                <td><div style={{ display: "flex", justifyContent: "center" }}>{row.room}</div></td>
+                <td><div style={{ display: "flex", justifyContent: "center" }}>{row.day}</div></td>
+                <td><div style={{ display: "flex", justifyContent: "center" }}>{row.seats}</div></td>
+                <td><div style={{ display: "flex", justifyContent: "center" }}>{row.time}</div></td>
+                <td style={{ display: "flex", justifyContent: "center" }}><Button style={{ marginLeft: "5px" }} data-testid={"showReport_" + k++} onClick={(e) => { e.preventDefault();this.setState({ modal:true,elemModal:row});}}>Modify Schedule</Button></td>
             </tr>)
         });
         return(
@@ -308,11 +316,11 @@ export class SupportOfficerSchedule extends Component{
                 <tr>
                     <th>CourseID</th>
                     <th>CourseName</th>
-                    <th>Room</th>
-                    <th>Day</th>
-                    <th>Seats</th>
-                    <th>Time</th>
-                    <th>Update</th>
+                    <th style={{width: "4%", textAlign: "center"}}>Room</th>
+                    <th style={{width: "6%", textAlign: "center"}}>Day</th>
+                    <th style={{width: "6%", textAlign: "center"}}>Seats</th>
+                    <th style={{width: "6%", textAlign: "center"}}>Time</th>
+                    <th style={{width: "12%", textAlign: "center"}}>Update</th>
                 </tr>
                 </thead>
                 <tbody data-testid={"listTabSL"}>
