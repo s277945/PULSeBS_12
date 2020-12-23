@@ -251,7 +251,7 @@ function getTeacherEmail(courseId){
             if(err)
                 reject(err);
             else {
-                resolve(row.Email);
+                if(row) resolve(row.Email);
             }
         });
     })

@@ -136,7 +136,7 @@ export class TeacherTabLec extends Component {
                 <td>{element.Course_Ref}</td>
                 <td>{element.Name}</td>
                 <td>{moment(element.Date).format('YYYY-MM-DD HH:mm')}</td>
-                <td style={{display: "flex", justifyContent: "flex-start"}}><Button style={{marginLeft: "15px"}} data-testid={"showCourse_"+k++} onClick={(e) => { e.preventDefault(); this.showModifications(element) }}>SELECT</Button></td>
+                <td style={{display: "flex", justifyContent: "center"}}><Button data-testid={"showCourse_"+k++} onClick={(e) => { e.preventDefault(); this.showModifications(element) }}>SELECT</Button></td>
             </tr>)
         });
         return (
@@ -144,13 +144,13 @@ export class TeacherTabLec extends Component {
                 <br/>
                 <h1 className="page-title">Lectures</h1>
                 <br/>
-                <Table striped bordered hover style={{backgroundColor: "#fff"}}>
+                <Table striped bordered hover style={{backgroundColor: "#fff", width: "95%", margin: "auto"}}>
                     <thead>
                         <tr>
                             <th>Course</th>
                             <th>Lecture name</th>
                             <th>Date and time</th>
-                            <th>Modifications</th>
+                            <th style={{width: "9%", textAlign: "center"}}>Modifications</th>
                         </tr>
                     </thead>
                     <tbody>

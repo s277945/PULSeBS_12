@@ -62,7 +62,7 @@
         //Create main table body        
 
          return (
-            <div style={{width: "99%", margin: "auto"}}>
+            <div style={{width: "95%", margin: "auto"}}>
                  <Table striped bordered hover style={{backgroundColor: "#fff"}}>
                      <thead>
                          <tr>
@@ -83,27 +83,27 @@
                             })}
                      </tbody>
                  </Table>
-                 <Modal show={this.state.modal === 1 ? true : false} onHide={this.handleClose}>
+                 <Modal show={this.state.modal === 1 ? true : false} dialogClassName="custom-modal-2" onHide={this.handleClose} size="lg" style={{marginTop: "10vh"}}>
                      <Modal.Header data-testid={"close"} closeButton>
-                         <Modal.Title><div style={{marginLeft: "7px"}}>Students</div></Modal.Title>
+                         <Modal.Title><div style={{marginLeft: "230px", fontWeight: "bold"}}>Students</div></Modal.Title>
                      </Modal.Header>
                      <Modal.Body className="app-element-background">{
-                         <Table striped bordered hover>
+                         <Table striped bordered hover style={{margin:"auto"}}>
                              <thead>
                                  <tr>
-                                     <th>No</th>
-                                     <th>Student ID</th>
-                                     <th>Name</th>
-                                     <th>Surname</th>
+                                     <th style={{width:"17px", textAlign: "center"}}>{"No"}</th>
+                                     <th style={{width:"110px", textAlign: "center"}}>Student ID</th>
+                                     <th><div style={{marginLeft: "3px", marginRight: "3px"}}>Name</div></th>
+                                     <th><div style={{marginLeft: "3px", marginRight: "3px"}}>Surname</div></th>
                                  </tr>
                              </thead>
                              <tbody data-testid={"studentsList"}>
                                  {this.state.modalTableData.map((element, i) => {
                                      return (<tr key={i}>
-                                         <td>{i + 1}</td>
-                                         <td>{element.userId}</td>
-                                         <td>{element.name}</td>
-                                         <td>{element.surname}</td>
+                                         <td style={{textAlign: "center"}}>{i + 1}</td>
+                                         <td style={{textAlign: "center"}}>{element.userId}</td>
+                                         <td><div style={{marginLeft: "7px", marginRight: "7px"}}>{element.name}</div></td>
+                                         <td><div style={{marginLeft: "7px", marginRight: "7px"}}>{element.surname}</div></td>
                                      </tr>)
                                  })}
                              </tbody>
@@ -137,7 +137,7 @@
 
         //Create main table body
          return (
-            <div style={{width: "99%", margin: "auto"}}>
+            <div style={{width: "95%", margin: "auto"}}>
                  <Table striped bordered hover style={{backgroundColor: "#fff"}}>
                      <thead>
                          <tr>
@@ -166,32 +166,34 @@
                             })}
                      </tbody>
                  </Table>
-                 <Modal show={this.state.modal === 2 ? true : false} onHide={this.handleClose}>
+                 <Modal show={this.state.modal === 2 ? true : false} onHide={this.handleClose}  dialogClassName="custom-modal" style={{marginTop: "15vh"}}>
                      <Modal.Header data-testid={"close2"} closeButton>
-                         <Modal.Title><div style={{marginLeft: "17px", textAlign: "center"}}>{this.state.modalLecture&&moment().diff(moment(this.state.modalLecture.Date), 'days') <= 1 ? "Set student attendance for lecture ":"Student attendance data for lecture "}</div><div style={{ marginLeft: "17px", textAlign: "center"}}>{this.state.modalLecture?this.state.modalLecture.Name:""}</div></Modal.Title>
+                         <Modal.Title>
+                             <div style={{marginLeft: this.state.modalLecture&&moment().diff(moment(this.state.modalLecture.Date), 'days') <= 1 ?"143px":"135px", textAlign: "center", fontWeight: "bold"}}>{this.state.modalLecture&&moment().diff(moment(this.state.modalLecture.Date), 'days') <= 1 ? "Set student attendance for lecture ":"Student attendance data for lecture "}</div>
+                             <div style={{marginLeft:  this.state.modalLecture&&moment().diff(moment(this.state.modalLecture.Date), 'days') <= 1 ?"143px":"135px", textAlign: "center", fontWeight: "bold"}}>{this.state.modalLecture?this.state.modalLecture.Name:""}</div></Modal.Title>
                      </Modal.Header>
                      <Modal.Body className="app-element-background">{
                          this.state.modalLecture ?
                              <Table striped bordered hover>
-                                 <thead>
-                                     <tr>
-                                         <th>No</th>
-                                         <th>Student ID</th>
-                                         <th>Name</th>
-                                         <th>Surname</th>
-                                         <th>Attendance</th>
-                                     </tr>
-                                 </thead>
+                                <thead>
+                                    <tr>
+                                        <th style={{width:"17px", textAlign: "center"}}>{"No"}</th>
+                                        <th style={{width:"110px", textAlign: "center"}}>Student ID</th>
+                                        <th><div style={{marginLeft: "3px", marginRight: "3px"}}>Name</div></th>
+                                        <th><div style={{marginLeft: "3px", marginRight: "3px"}}>Surname</div></th>
+                                        <th style={{width:"117px", textAlign: "center"}}>Attendance</th>
+                                    </tr>
+                                </thead>
                                  <tbody data-testid={"studentsList"}>
                                      {this.state.modalLecture&&moment().diff(moment(this.state.modalLecture.Date), 'days') <= 1 ? //check if user must be able to input attendance data
                                          this.state.modalTableData.map((element, i) => {
                                              return (<tr key={i}>
-                                                 <td>{i + 1}</td>
-                                                 <td>{element.userId}</td>
-                                                 <td>{element.name}</td>
-                                                 <td>{element.surname}</td>
+                                                 <td style={{textAlign: "center"}}>{i + 1}</td>
+                                                 <td style={{textAlign: "center"}}>{element.userId}</td>
+                                                 <td><div style={{marginLeft: "7px", marginRight: "7px"}}>{element.name}</div></td>
+                                                 <td><div style={{marginLeft: "7px", marginRight: "7px"}}>{element.surname}</div></td>
                                                  <td style={{textAlign:"center"}}>{element.attendance===1?"Yes":"No"}</td>
-                                                 <td style={{margin: "auto"}}><Checkbox disabled={element.attendance===1} checked={element.checked&&element.attendance!==1} onClick={()=>{this.setState({
+                                                 <td style={{margin: "auto", width:"52px"}}><Checkbox style={{ marginLeft: "7px", marginTop: "1px", height: "15px" }} disabled={element.attendance===1} checked={element.checked&&element.attendance!==1} onClick={()=>{this.setState({
                                                      modalTableData: this.state.modalTableData.map(e => {
                                                          if (e.userId === element.userId) return { userId: e.userId, name: e.name, surname: e.surname, attendance: e.attendance, checked: !e.checked }
                                                          else return e;
@@ -203,8 +205,8 @@
                                              return (<tr key={i}>
                                                  <td>{i + 1}</td>
                                                  <td>{element.userId}</td>
-                                                 <td>{element.name}</td>
-                                                 <td>{element.surname}</td>
+                                                 <td><div style={{marginLeft: "7px", marginRight: "7px"}}>{element.name}</div></td>
+                                                 <td><div style={{marginLeft: "7px", marginRight: "7px"}}>{element.surname}</div></td>
                                                  <td style={{textAlign:"center"}}>{element.attendance===1?"Yes":"No"}</td>
                                              </tr>)
                                          })}
@@ -232,10 +234,10 @@
                 <br />
                 <h1 className="page-title">Student list</h1>
                 <br />
-                <h5 style={{margin: "10px", marginBottom: "17px"}}>Programmed lectures info:</h5>
+                <h4 style={{margin: "10px", marginLeft: "2.7vw", marginBottom: "17px"}}>Programmed lectures info:</h4>
                 {this.renderFutureLectures()}
                 <div style={{marginBottom: "34px"}}/>
-                <h5 style={{margin: "10px", marginBottom: "17px"}}>Past and current lectures attendance:</h5>
+                <h4 style={{margin: "10px", marginLeft: "2.7vw", marginBottom: "17px"}}>Past and current lectures attendance:</h4>
                 {this.renderPastLectures()}
             </div>
          );

@@ -296,17 +296,36 @@ export class StatisticsTab extends Component {
                                 }
                                 else if((d.id==="Average booked seats"||d.id==="Average attendees")){
                                     let substr=d.id.split(" ");
-                                    if (d.value!==0&&Math.floor(d.value)!==d.value) 
-                                        return  <tspan>
-                                                    <tspan>{d.value}</tspan><tspan text-anchor="middle" y={ -15 } dx={-35+c}>{ this.state.labels&&this.state.width>=970?substr[0].toLowerCase():"" }</tspan>
-                                                    <tspan text-anchor="middle" y={ -5 } dx={substr[2]?(-46+c):(-54+c)}>{this.state.labels&&this.state.width>=970?(substr[2]?substr[1]+" "+substr[2]:substr[1]):""}</tspan>
-                                                </tspan>;
-                                    else if(d.value!==0&&Math.floor(d.value)===d.value) 
-                                        return  <tspan>
-                                                    <tspan>{d.value}</tspan><tspan text-anchor="middle" y={ -15 } dx={-19+c}>{ this.state.labels&&this.state.width>=970?substr[0].toLowerCase():"" }</tspan>
-                                                    <tspan text-anchor="middle" y={ -5 } dx={substr[2]?(-46+c):(-40+c)}>{this.state.labels&&this.state.width>=970?(substr[2]?substr[1]+" "+substr[2]:substr[1]):""}</tspan>
-                                                </tspan>;
+                                    if (d.value!==0&&Math.floor(d.value)!==d.value) {
+                                        if(d.value>4) return(<tspan>
+                                                                <tspan>{d.value}</tspan><tspan text-anchor="middle" y={ -15 } dx={-34+c}>{ this.state.labels&&this.state.width>=970?substr[0].toLowerCase():"" }</tspan>
+                                                                <tspan text-anchor="middle" y={ -5 } dx={substr[2]?(-46+c):(-54+c)}>{this.state.labels&&this.state.width>=970?(substr[2]?substr[1]+" "+substr[2]:substr[1]):""}</tspan>
+                                                            </tspan>);
+                                        else if(d.value<1) return(<tspan>
+                                                                <tspan>{d.value}</tspan><tspan text-anchor="middle" y={ -17-1/(2*d.value) } dx={-22+1/c}>{ this.state.labels&&this.state.width>=970?substr[0].toLowerCase():"" }</tspan>
+                                                                <tspan text-anchor="middle" y={ -7-1/(2*d.value) } dx={substr[2]?(-46+1/c):(-41+1/c)}>{this.state.labels&&this.state.width>=970?(substr[2]?substr[1]+" "+substr[2]:substr[1]):""}</tspan>
+                                                            </tspan>);
+                                        else            return(<tspan>
+                                                                    <tspan>{d.value}</tspan><tspan text-anchor="middle" y={ -17 } dx={-22+1/c}>{ this.state.labels&&this.state.width>=970?substr[0].toLowerCase():"" }</tspan>
+                                                                    <tspan text-anchor="middle" y={ -7 } dx={substr[2]?(-46+3*d.value+1/c):(-43+2*d.value+1/c)}>{this.state.labels&&this.state.width>=970?(substr[2]?substr[1]+" "+substr[2]:substr[1]):""}</tspan>
+                                                                </tspan>);   
+                                    }                 
+                                    else if(d.value!==0&&Math.floor(d.value)===d.value) {
+                                        if(d.value>4) return(<tspan>
+                                                                <tspan>{d.value}</tspan><tspan text-anchor="middle" y={ -15 } dx={-19+c}>{ this.state.labels&&this.state.width>=970?substr[0].toLowerCase():"" }</tspan>
+                                                                <tspan text-anchor="middle" y={ -5 } dx={substr[2]?(-46+c):(-54+c)}>{this.state.labels&&this.state.width>=970?(substr[2]?substr[1]+" "+substr[2]:substr[1]):""}</tspan>
+                                                             </tspan>);
+                                        else if(d.value===1) return(<tspan>
+                                                        <tspan>{d.value}</tspan><tspan text-anchor="middle" y={ -15 } dx={-19+c}>{ this.state.labels&&this.state.width>=970?substr[0].toLowerCase():"" }</tspan>
+                                                        <tspan text-anchor="middle" y={ -5 } dx={substr[2]?(-46+1/c):(-41+1/c)}>{this.state.labels&&this.state.width>=970?(substr[2]?substr[1]+" "+substr[2]:substr[1]):""}</tspan>
+                                                    </tspan>);
+                                         else            return(<tspan>
+                                            <tspan>{d.value}</tspan><tspan text-anchor="middle" y={ -15 } dx={-21+c}>{ this.state.labels&&this.state.width>=970?substr[0].toLowerCase():"" }</tspan>
+                                            <tspan text-anchor="middle" y={ -5 } dx={substr[2]?(-46+2*d.value+1/c):(-45+2*d.value+1/c)}>{this.state.labels&&this.state.width>=970?(substr[2]?substr[1]+" "+substr[2]:substr[1]):""}</tspan>
+                                        </tspan>);
+                                    }
                                     else return;
+
                                 }
                                 else return d.value;
                             }}
