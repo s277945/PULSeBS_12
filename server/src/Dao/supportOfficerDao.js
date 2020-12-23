@@ -479,14 +479,22 @@ function updateGivenLectures(lectures, schedule){
         if(lectures.length === 0) resolve("there are not lectures to be changed")
         for(let lecture of lectures){
             i++
-            console.log(lecture.Date)
+            //console.log(lecture.Date)
             let date = moment(lecture.Date)
-            let newDate = date.startOf('week').add(dayMap[schedule.newDay], 'day')
+            let nDay = Number(dayMap[schedule.newDay])
+            let newDate = moment(date).startOf('week').add(nDay, 'day')
+            //console.log("datasomma: "+ acca.add(2, 'day').format("YYYY-MM-DD"))
+            //console.log("scheduled "+ dayMap[schedule.newDay])
             let endDate = newDate
-            let deadline = date.subtract(1, 'day').format("YYYY-MM-DD").concat(" 23:00:00")
+            let deadline = newDate
+            deadline = moment(newDate).subtract(1, 'day').format("YYYY-MM-DD").concat(" 23:00:00")
             let time = schedule.newTime.split("-")
-            newDate = (time[0] === 4) ? newDate.format("YYYY-MM-DD").concat(" 0"+time[0]+":00") : newDate.concat(" "+time[0]+":00")
-            endDate = (time[0] === 4) ? endDate.format("YYYY-MM-DD").concat(" 0"+time[1]+":00") : endDate.concat(" "+time[1]+":00")
+            newDate = (time[0].length === 4) ? newDate.format("YYYY-MM-DD").concat(" 0"+time[0]+":00") :
+                                                newDate.format("YYYY-MM-DD").concat(" "+time[0]+":00")
+            endDate = (time[1].length === 4) ? endDate.format("YYYY-MM-DD").concat(" 0"+time[1]+":00") :
+                                                endDate.format("YYYY-MM-DD").concat(" "+time[1]+":00")
+            //console.log(newDate)
+            //console.log(endDate)
             db.run(sql, [schedule.newSeats, newDate, endDate, deadline, schedule.newDay, lecture.Course_Ref, lecture.Date],
                 (err) => {
                     if(err)
