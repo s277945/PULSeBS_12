@@ -32,9 +32,10 @@ export class SupportOfficerSchedule extends Component{
                 console.log(err);
             })
     }
-    handleChangeStartTime=(date)=> {
+    handleChangeStartTime=(date, endDate)=> {
         date=moment('25/12/2020', "DD/MM/YYYY").utcOffset(1).add(date, 'seconds').format("HH:mm")
-        if(date>this.state.endDate&&this.state.endDate!==""){
+        if(this.state.endDate!=="") endDate = this.state.endDate;
+        if(moment(date, "HH:mm").isSameOrAfter(moment(endDate, "HH:mm"))){
             console.log("IF START DATE")
         }
         else{
@@ -62,10 +63,11 @@ export class SupportOfficerSchedule extends Component{
         }
         return tmp;
     }
-    handleChangeEndTime=(date)=>{
+    handleChangeEndTime=(date, startDate)=>{
         date=moment('25/12/2020', "DD/MM/YYYY").utcOffset(1).add(date, 'seconds').format("HH:mm")
-        console.log(moment('25/12/2020', "DD/MM/YYYY").utcOffset(1).add(date, 'seconds').format("HH:mm"))
-        if(date<this.state.startDate){
+        console.log(moment('25/12/2020', "DD/MM/YYYY").utcOffset(1).add(date, 'seconds').format("HH:mm"))        
+        if(this.state.startDate!=="") startDate = this.state.startDate;
+        if(moment(date, "HH:mm").isSameOrBefore(moment(startDate, "HH:mm"))){
             console.log('IF ENDDATE');
         }
         else{
@@ -91,8 +93,8 @@ export class SupportOfficerSchedule extends Component{
         else
             this.setState({seats:e.target.value});
     }
-    handleDisabled=()=>{
-        return ((this.state.startDate===""&&this.state.endDate===""&&this.state.seats===""&&this.state.room===""&&this.state.day==="")||this.state.error)
+    handleDisabled=(elem)=>{
+        return ((elem.state.startDate===""&&elem.state.endDate===""&&elem.state.seats===""&&elem.state.room===""&&elem.state.day==="")||elem.state.error)
     }
     /*When confirm button is pressed, first of all it should be created
         a body for PUT request, inside it there are old and new values of
@@ -264,7 +266,7 @@ export class SupportOfficerSchedule extends Component{
                                 <Row>
                                     <Col>
                                         <Form.Label style={{display: "block", textAlign: "center"}}><b>Start Hour</b></Form.Label>
-                                        <TimePicker format={24} initialValue={tmp[0]} value={this.state.startDate} start={"8:30"} end={"21:00"} step={30} onChange={this.handleChangeStartTime} isInvalid={(moment((this.state.startDate===""?tmp[0]:this.state.startDate)).isAfter((this.state.endDate===""?tmp[1]:this.state.endDate)))}>Start</TimePicker>
+                                        <TimePicker format={24} initialValue={tmp[0]} value={this.state.startDate} start={"8:30"} end={"21:00"} step={30} onChange={e=>{this.handleChangeStartTime(e,tmp[1])}} isInvalid={(moment((this.state.startDate===""?tmp[0]:this.state.startDate)).isAfter((this.state.endDate===""?tmp[1]:this.state.endDate)))}>Start</TimePicker>
                                         {   (moment((this.state.startDate===""?tmp[0]:this.state.startDate)).isAfter((this.state.endDate===""?tmp[1]:this.state.endDate)))
                                             ?<><Form.Text style={{color: "red", paddingTop: "5px", paddingBottom: "5px"}}>Start date should not be greater than end date</Form.Text></>
                                             : null
@@ -272,7 +274,7 @@ export class SupportOfficerSchedule extends Component{
                                     </Col>
                                     <Col>
                                         <Form.Label style={{display: "block", textAlign: "center"}}><b>End Hour</b></Form.Label>
-                                        <TimePicker format={24} initialValue={tmp[1]} value={this.state.endDate} start={"8:30"} end={"21:00"} step={30} onChange={this.handleChangeEndTime} isInvalid={(moment((this.state.endDate===""?tmp[1]:this.state.endDate)).isBefore((this.state.startDate===""?tmp[0]:this.state.startDate)))}>End</TimePicker>
+                                        <TimePicker format={24} initialValue={tmp[1]} value={this.state.endDate} start={"8:30"} end={"21:00"} step={30} onChange={e=>{this.handleChangeEndTime(e,tmp[0])}} isInvalid={(moment((this.state.endDate===""?tmp[1]:this.state.endDate)).isBefore((this.state.startDate===""?tmp[0]:this.state.startDate)))}>End</TimePicker>
                                         {   //case in which i already have both end and startDate. if it is the
                                             (moment((this.state.endDate===""?tmp[1]:this.state.endDate)).isBefore((this.state.startDate===""?tmp[0]:this.state.startDate)))
                                             ?<><Form.Text style={{color: "red", paddingTop: "5px", paddingBottom: "5px"}}>End date should not be less than start date</Form.Text></>
@@ -282,7 +284,7 @@ export class SupportOfficerSchedule extends Component{
                                 </Row>
                             </Form.Group>
                             <div style={{display: "flex", flexWrap: "nowrap",  justifyContent: "center"}}>
-                                <Button data-testid={"submit"} variant="primary" style={{marginRight: "25px", paddingRight: "17px", paddingLeft: "17px"}} onClick={this.handleConfirm}>
+                                <Button disabled={this.handleDisabled(this)} data-testid={"submit"} variant="primary" style={{marginRight: "25px", paddingRight: "17px", paddingLeft: "17px"}} onClick={this.handleConfirm}>
                                     Confirm
                                 </Button>
                                 <Button data-testid={"reset"} variant="danger" onClick={this.handleReset}>
