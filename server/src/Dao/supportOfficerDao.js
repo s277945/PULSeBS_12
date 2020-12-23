@@ -443,20 +443,40 @@ exports.updateSchedules = function(schedule){
             if(err)
                 reject(err)
             else{
-                console.log("done")
-                console.log(rows)
-                updateGivenLectures(rows, schedule)
+                updateSingleSchedule(schedule)
                     .then((response) => {
-                        resolve(response)
+                        if(response){
+                            updateGivenLectures(rows, schedule)
+                                .then((response) => {
+                                    resolve(response)
+                                })
+                                .catch((err2) => {
+                                    reject(err2)
+                                })
+                        }
                     })
-                    .catch((err2) => {
-                        reject(err2)
+                    .catch((err3) => {
+                        reject(err3)
                     })
+
             }
 
         })
     })
 
+}
+
+function updateSingleSchedule(schedule){
+    return new Promise((resolve, reject) => {
+        const sql = 'UPDATE Schedule SET Room=?, Day=?, Seats=?, Time=? WHERE Code=? AND Day=?'
+        db.run(sql, [schedule.newRoom, schedule.newDay, schedule.newSeats, schedule.newTime,
+                    schedule.courseId, schedule.oldDay], (err) => {
+            if(err)
+                reject(err)
+            else
+                resolve(true)
+        })
+    })
 }
 
 

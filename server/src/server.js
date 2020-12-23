@@ -858,13 +858,13 @@ app.get('/api/schedules', (req, res) => {
 });
 
 /**
- * GET api/schedules
+ * PUT api/schedules
  *
- *
+ * Updates a schedule and associated lectures
  *
  */
 
-app.get('/api/schedulesxdlolasd', (req, res) => {
+app.put('/api/schedules', (req, res) => {
     supportOfficerDao.updateSchedules(req.body)
         .then((list) =>{
             res.status(200).json(list)
