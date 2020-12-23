@@ -7,7 +7,7 @@ import Form from 'react-bootstrap/Form'
 import TimePicker from 'react-bootstrap-time-picker';
 import moment from "moment";
 import { toast } from 'react-toastify';
-
+import {Row,Col} from 'react-bootstrap';
 export class SupportOfficerSchedule extends Component{
     state={
         listSchedule:[],
@@ -166,43 +166,59 @@ export class SupportOfficerSchedule extends Component{
                     <div>
                         <Form>
                             <Form.Group controlId="formBasicEmail">
-                                <Form.Label style={{display: "block", textAlign: "center"}}><b>CourseID</b></Form.Label>
-                                <Form.Control data-testid={"courseId"} type="text" plaintext readOnly placeholder={this.state.elemModal.courseId}/>
+                                <Row>
+                                    <Col>
+                                        <Form.Label style={{display: "block", textAlign: "center"}}><b>CourseID</b></Form.Label>
+                                        <Form.Control style={{display: "block", textAlign: "center"}} data-testid={"courseId"} type="text" plaintext readOnly placeholder={this.state.elemModal.courseId}/>
+                                    </Col>
+                                    <Col xs={9}>
+                                        <Form.Label style={{display: "block", textAlign: "center"}}><b>Course Name</b></Form.Label>
+                                        <Form.Control style={{display: "block", textAlign: "center"}} data-testid={"name"} type="text" plaintext readOnly placeholder={this.state.elemModal.courseName}/>
+                                    </Col>
+                                </Row>
+                                </Form.Group>
+                            <Form.Group controlId="formBasicField">
+                                <Row>
+                                    <Col>
+                                        <Form.Label style={{display: "block", textAlign: "center"}}><b>Room</b></Form.Label>
+                                        <Form.Control  value={this.state.room} data-testid={"room"} type="text" placeholder={this.state.elemModal.room} onChange={this.handleChangeRoom}/>
+                                    </Col>
+                                    <Col>
+                                        <Form.Label style={{display: "block", textAlign: "center"}}><b>Seats</b></Form.Label>
+                                        <Form.Control value={this.state.seats} data-testid={"seats"} type="text" placeholder={this.state.elemModal.seats} onChange={this.handleChangeSeats}/>
+                                    </Col>
+                                    <Col>
+                                        <Form.Label style={{display: "block", textAlign: "center"}}><b>Day</b></Form.Label>
+                                        <Form.Control value={this.state.day} data-testid={"day"} as={"select"} defaultValue={this.state.elemModal.day} onChange={this.handleChangeDay}>
+                                            <option>Mon</option>
+                                            <option>Tue</option>
+                                            <option>Wed</option>
+                                            <option>Thu</option>
+                                            <option>Fri</option>
+                                        </Form.Control>
+                                    </Col>
+
+                                </Row>
                             </Form.Group>
-                            <Form.Group controlId="formBasicEmail">
-                                <Form.Label style={{display: "block", textAlign: "center"}}><b>Course Name</b></Form.Label>
-                                <Form.Control data-testid={"name"} type="text" plaintext readOnly placeholder={this.state.elemModal.courseName}/>
-                            </Form.Group>
-                            <Form.Group controlId="formBasicEmail">
-                                <Form.Label style={{display: "block", textAlign: "center"}}><b>Room</b></Form.Label>
-                                <Form.Control  value={this.state.room} data-testid={"room"} type="text" placeholder={this.state.elemModal.room} onChange={this.handleChangeRoom}/>
-                            </Form.Group>
-                            <Form.Group controlId="formBasicEmail">
-                                <Form.Label style={{display: "block", textAlign: "center"}}><b>Seats</b></Form.Label>
-                                <Form.Control value={this.state.seats} data-testid={"seats"} type="text" placeholder={this.state.elemModal.seats} onChange={this.handleChangeSeats}/>
-                            </Form.Group>
-                            <Form.Group controlId="formBasicEmail">
-                                <Form.Label style={{display: "block", textAlign: "center"}}><b>Day</b></Form.Label>
-                                <Form.Control value={this.state.day} data-testid={"day"} as={"select"} defaultValue={this.state.elemModal.day} onChange={this.handleChangeDay}>
-                                    <option>Mon</option>
-                                    <option>Tue</option>
-                                    <option>Wed</option>
-                                    <option>Thu</option>
-                                    <option>Fri</option>
-                                </Form.Control>
-                            </Form.Group>
-                            <Form.Group controlId="formBasicEmail">
-                                <Form.Label style={{display: "block", textAlign: "center"}}><b>Hour</b></Form.Label>
-                                <TimePicker format={24} initialValue={tmp[0]} value={this.state.startDate} start={"8:30"} end={"21:00"} step={30} onChange={this.handleChangeStartTime} isInvalid={(this.state.startDate>this.state.endDate&&this.state.endDate!="")}>Start</TimePicker>
-                                {   (this.state.startDate>this.state.endDate&&this.state.endDate!="")
-                                    ? <><Form.Text style={{color: "red", paddingTop: "5px", paddingBottom: "5px"}}>Start date should not be greater than end date</Form.Text></>
-                                    : null
-                                }
-                                <TimePicker format={24} initialValue={tmp[1]} value={this.state.endDate} start={"8:30"} end={"21:00"} step={30} onChange={this.handleChangeEndTime} isInvalid={(this.state.endDate<this.state.startDate&&this.state.startDate!="")}>End</TimePicker>
-                                {   (this.state.endDate<this.state.startDate&&this.state.startDate!="")
-                                    ? <><Form.Text style={{color: "red", paddingTop: "5px", paddingBottom: "5px"}}>End date should not be less than start date</Form.Text></>
-                                    : null
-                                }
+                            <Form.Group controlId="formTime">
+                                <Row>
+                                    <Col>
+                                        <Form.Label style={{display: "block", textAlign: "center"}}><b>Start Hour</b></Form.Label>
+                                        <TimePicker format={24} initialValue={tmp[0]} value={this.state.startDate} start={"8:30"} end={"21:00"} step={30} onChange={this.handleChangeStartTime} isInvalid={(this.state.startDate>this.state.endDate&&this.state.endDate!="")}>Start</TimePicker>
+                                        {   (this.state.startDate>this.state.endDate&&this.state.endDate!="")
+                                            ? <><Form.Text style={{color: "red", paddingTop: "5px", paddingBottom: "5px"}}>Start date should not be greater than end date</Form.Text></>
+                                            : null
+                                        }
+                                    </Col>
+                                    <Col>
+                                        <Form.Label style={{display: "block", textAlign: "center"}}><b>End Hour</b></Form.Label>
+                                        <TimePicker format={24} initialValue={tmp[1]} value={this.state.endDate} start={"8:30"} end={"21:00"} step={30} onChange={this.handleChangeEndTime} isInvalid={(this.state.endDate<this.state.startDate&&this.state.startDate!="")}>End</TimePicker>
+                                        {   (this.state.endDate<this.state.startDate&&this.state.startDate!="")
+                                            ? <><Form.Text style={{color: "red", paddingTop: "5px", paddingBottom: "5px"}}>End date should not be less than start date</Form.Text></>
+                                            : null
+                                        }
+                                    </Col>
+                                </Row>
                             </Form.Group>
                             <div style={{display: "flex", flexWrap: "nowrap",  justifyContent: "center"}}>
                                 <Button data-testid={"submit"} variant="primary" style={{marginRight: "25px", paddingRight: "17px", paddingLeft: "17px"}} onClick={this.handleConfirm}>
