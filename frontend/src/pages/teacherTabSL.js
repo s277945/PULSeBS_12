@@ -234,10 +234,10 @@
                 <br />
                 <h1 className="page-title">Student list</h1>
                 <br />
-                <h5 style={{margin: "10px", marginBottom: "17px"}}>Programmed lectures info:</h5>
+                <h4 style={{margin: "10px", marginLeft: "13px", marginBottom: "17px"}}>Programmed lectures info:</h4>
                 {this.renderFutureLectures()}
                 <div style={{marginBottom: "34px"}}/>
-                <h5 style={{margin: "10px", marginBottom: "17px"}}>Past and current lectures attendance:</h5>
+                <h4 style={{margin: "10px", marginLeft: "13px", marginBottom: "17px"}}>Past and current lectures attendance:</h4>
                 {this.renderPastLectures()}
             </div>
          );
