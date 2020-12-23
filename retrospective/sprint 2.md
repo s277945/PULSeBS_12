@@ -44,7 +44,7 @@ Sprint 2 retrospective (team 12)
 - Unit Testing:
   - Total hours estimated: 9h
   - Total hours spent: 9h 30m
-  - Nr of automated unit test cases: 16
+  - Nr of automated unit test cases: 77
   - Coverage (overall): 97%
 - E2E testing:
   - Total hours estimated: 6h
