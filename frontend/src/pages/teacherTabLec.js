@@ -150,7 +150,7 @@ export class TeacherTabLec extends Component {
                             <th>Course</th>
                             <th>Lecture name</th>
                             <th>Date and time</th>
-                            <th style={{width: "10%", textAlign: "center"}}>Modifications</th>
+                            <th style={{width: "9%", textAlign: "center"}}>Modifications</th>
                         </tr>
                     </thead>
                     <tbody>
