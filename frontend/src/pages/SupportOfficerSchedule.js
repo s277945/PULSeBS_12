@@ -95,17 +95,33 @@ export class SupportOfficerSchedule extends Component{
         request*/
     handleConfirm=()=>{
         let body;
-        let time;
+        let time="";
         //i have to consider both the case in which I choose only one of the two dates:
         let tmp=[];
         tmp=this.splitString();
+        console.log("splitString: "+tmp);
+
         if(this.state.startDate===""&&this.state.endDate===""){
             time="";
         }
-        else if(this.state.startDate!=""&&this.state.endDate==="")
-            time=this.state.startDate+"-"+tmp[1];
-        else if(this.state.startDate===""&&this.state.endDate!="")
-            time=tmp[0]+"-"+this.state.endDate;
+        else if(this.state.startDate!=""&&this.state.endDate===""){
+            console.log("tmp1: "+tmp[1]);
+            console.log("start: "+this.state.startDate);
+            if(moment(this.state.startDate).isBefore(tmp[1])){
+                console.log("isBefore");
+                time=this.state.startDate+"-"+tmp[1];
+            }
+
+        }
+
+        else if(this.state.startDate===""&&this.state.endDate!=""){
+            console.log("tmp0: "+tmp[0]);
+            console.log("end: "+this.state.endDate)
+            if(moment(this.state.endDate).isAfter(tmp[0])){
+                console.log("isBefore");
+                time=tmp[0]+"-"+this.state.endDate;
+            }
+        }
         else{
             time=this.state.startDate+"-"+this.state.endDate;
         }
@@ -115,7 +131,7 @@ export class SupportOfficerSchedule extends Component{
                 oldDay:this.state.elemModal.day,
                 newDay:(this.state.day==="")?this.state.elemModal.day:this.state.day,
                 oldTime:this.state.elemModal.time,
-                newTime:(this.state.startDate===""||this.state.endDate==="")?this.state.elemModal.time:time,
+                newTime:(time==="")?this.state.elemModal.time:time,
                 oldRoom:this.state.elemModal.room,
                 newRoom:(this.state.room==="")?this.state.elemModal.room:this.state.room,
                 oldSeats:this.state.elemModal.seats,
@@ -134,18 +150,41 @@ export class SupportOfficerSchedule extends Component{
 
                     });
                     toast.info("Schedule of "+this.state.elemModal.courseName+" correctly modified")
-                    this.setState({listSchedule:newSchedule,modal:false});
+                    this.setState({
+                        listSchedule:newSchedule,
+                        modal:false,
+                        elemModal:[],
+                        startDate:"",
+                        endDate:"",
+                        day:"",
+                        room:"",
+                        seats:""
+                    });
                 })
                 .catch(err=>{
                     console.log(err);
                     toast.error("Server error: error sending data to server")
-                    this.setState({modal:false});
+                    this.setState({
+                        modal:false,
+                        elemModal:[],
+                        startDate:"",
+                        endDate:"",
+                        day:"",
+                        room:"",
+                        seats:""});
                 })
         }
         else{
             console.log("Nothing to modify");
             toast.info("Nothing to modify");
-            this.setState({modal:false});
+            this.setState({
+                modal:false,
+                elemModal:[],
+                startDate:"",
+                endDate:"",
+                day:"",
+                room:"",
+                seats:""});
         }
 
     }
@@ -219,7 +258,7 @@ export class SupportOfficerSchedule extends Component{
                                     <Col>
                                         <Form.Label style={{display: "block", textAlign: "center"}}><b>Start Hour</b></Form.Label>
                                         <TimePicker format={24} initialValue={tmp[0]} value={this.state.startDate} start={"8:30"} end={"21:00"} step={30} onChange={this.handleChangeStartTime} isInvalid={(this.state.startDate>this.state.endDate&&this.state.endDate!="")}>Start</TimePicker>
-                                        {   (this.state.startDate>this.state.endDate&&this.state.endDate!="")
+                                        {   (moment(this.state.startDate).isAfter(this.state.endDate)&&this.state.endDate!="")
                                             ? <><Form.Text style={{color: "red", paddingTop: "5px", paddingBottom: "5px"}}>Start date should not be greater than end date</Form.Text></>
                                             : null
                                         }
@@ -227,7 +266,7 @@ export class SupportOfficerSchedule extends Component{
                                     <Col>
                                         <Form.Label style={{display: "block", textAlign: "center"}}><b>End Hour</b></Form.Label>
                                         <TimePicker format={24} initialValue={tmp[1]} value={this.state.endDate} start={"8:30"} end={"21:00"} step={30} onChange={this.handleChangeEndTime} isInvalid={(this.state.endDate<this.state.startDate&&this.state.startDate!="")}>End</TimePicker>
-                                        {   (this.state.endDate<this.state.startDate&&this.state.startDate!="")
+                                        {   (moment(this.state.endDate).isBefore(this.state.startDate)&&this.state.startDate!="")
                                             ? <><Form.Text style={{color: "red", paddingTop: "5px", paddingBottom: "5px"}}>End date should not be less than start date</Form.Text></>
                                             : null
                                         }
