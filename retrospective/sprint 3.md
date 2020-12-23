@@ -44,7 +44,7 @@ Sprint 3 retrospective (team 12)
 - Unit Testing:
   - Total hours estimated: 7h 40m
   - Total hours spent: 8h
-  - Nr of automated unit test cases: 16
+  - Nr of automated unit test cases: 122
   - Coverage (overall): 87,5%
 - E2E testing:
   - Total hours estimated: 6h
