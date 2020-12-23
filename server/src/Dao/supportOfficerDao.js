@@ -1,7 +1,7 @@
 'use strict';
 const db = require('../db');
 const moment = require('moment');
-
+const mailer = require('../mailer');
 //////////////////////////////////////////////////
 //////////////////////STORY12/////////////////////
 //////////////////////////////////////////////////
@@ -493,18 +493,13 @@ function updateGivenLectures(lectures, schedule){
         "Thu": 4,
         "Fri": 5
     }
-    let i = 0
     return new Promise((resolve, reject)=> {
         const sql = 'UPDATE Lecture SET Capacity=?, Date=?, EndDate=?, DateDeadline=?, Day=? WHERE Course_Ref=? AND Date=?'
         if(lectures.length === 0) resolve("there are not lectures to be changed")
         for(let lecture of lectures){
-            i++
-            //console.log(lecture.Date)
             let date = moment(lecture.Date)
             let nDay = Number(dayMap[schedule.newDay])
             let newDate = moment(date).startOf('week').add(nDay, 'day')
-            //console.log("datasomma: "+ acca.add(2, 'day').format("YYYY-MM-DD"))
-            //console.log("scheduled "+ dayMap[schedule.newDay])
             let endDate = newDate
             let deadline = newDate
             deadline = moment(newDate).subtract(1, 'day').format("YYYY-MM-DD").concat(" 23:00:00")
@@ -513,17 +508,54 @@ function updateGivenLectures(lectures, schedule){
                                                 newDate.format("YYYY-MM-DD").concat(" "+time[0]+":00")
             endDate = (time[1].length === 4) ? endDate.format("YYYY-MM-DD").concat(" 0"+time[1]+":00") :
                                                 endDate.format("YYYY-MM-DD").concat(" "+time[1]+":00")
-            //console.log(newDate)
-            //console.log(endDate)
-            db.run(sql, [schedule.newSeats, newDate, endDate, deadline, schedule.newDay, lecture.Course_Ref, lecture.Date],
-                (err) => {
+
+            db.serialize(()=>{
+                db.run(sql, [schedule.newSeats, newDate, endDate, deadline, schedule.newDay,
+                        lecture.Course_Ref, lecture.Date], (err) => {
                     if(err)
                         reject(err)
-                    else {
-                        if (i === lectures.length) resolve(true)
+                })
+
+                const sql2 = 'UPDATE Booking SET Date_Ref=?, EndDate=? WHERE Course_Ref=? AND Date_Ref=?'
+                db.run(sql2, [newDate, endDate, lecture.Course_Ref, lecture.Date], (err) => {
+                    if(err)
+                        reject(err)
+                })
+
+                const sql3 = 'SELECT Email FROM User WHERE userID IN ('+
+                    'SELECT Student_Ref FROM Booking WHERE Course_Ref=? AND Date_Ref=?)'
+                db.all(sql3, [lecture.Course_Ref, newDate], (err, rows)=>{
+                    if(err)
+                        reject(err)
+                    else{
+                        for(let email of rows){
+                            sendBookingChangeNotification(email.Email, lecture.Date, newDate, endDate)
+                        }
                     }
                 })
+            })
+            resolve(true)
+
         }
 
+
     })
+}
+
+function sendBookingChangeNotification(email, oldDate, newDate, newEnd){
+    let mailOptions = {
+        from: mailer.email,
+        to: email,
+        subject: 'Booking Change Notification',
+        text: `Dear student, lecture on ${oldDate} has been moved on ${newDate} and will last until ${newEnd}`
+    };
+
+    mailer.transporter.sendMail(mailOptions, function(err, info){
+        /* istanbul ignore if */
+        if(err){
+            console.log(err);
+        } else {
+            console.log('Email sent: ' + info.response);
+        }
+    });
 }
