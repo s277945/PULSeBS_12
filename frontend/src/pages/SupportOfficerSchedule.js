@@ -303,11 +303,11 @@ export class SupportOfficerSchedule extends Component{
             table.push(<tr key={k++}>
                 <td>{row.courseId}</td>
                 <td>{row.courseName}</td>
-                <td>{row.room}</td>
-                <td>{row.day}</td>
-                <td>{row.seats}</td>
-                <td>{row.time}</td>
-                <td style={{ display: "flex", justifyContent: "flex-start" }}><Button style={{ marginLeft: "5px" }} data-testid={"showReport_" + k++} onClick={(e) => { e.preventDefault();this.setState({ modal:true,elemModal:row});}}>Modify Schedule</Button></td>
+                <td><div style={{ display: "flex", justifyContent: "center" }}>{row.room}</div></td>
+                <td><div style={{ display: "flex", justifyContent: "center" }}>{row.day}</div></td>
+                <td><div style={{ display: "flex", justifyContent: "center" }}>{row.seats}</div></td>
+                <td><div style={{ display: "flex", justifyContent: "center" }}>{row.time}</div></td>
+                <td style={{ display: "flex", justifyContent: "center" }}><Button style={{ marginLeft: "5px" }} data-testid={"showReport_" + k++} onClick={(e) => { e.preventDefault();this.setState({ modal:true,elemModal:row});}}>Modify Schedule</Button></td>
             </tr>)
         });
         return(
@@ -316,11 +316,11 @@ export class SupportOfficerSchedule extends Component{
                 <tr>
                     <th>CourseID</th>
                     <th>CourseName</th>
-                    <th>Room</th>
-                    <th>Day</th>
-                    <th>Seats</th>
-                    <th>Time</th>
-                    <th>Update</th>
+                    <th style={{width: "4%", textAlign: "center"}}>Room</th>
+                    <th style={{width: "6%", textAlign: "center"}}>Day</th>
+                    <th style={{width: "6%", textAlign: "center"}}>Seats</th>
+                    <th style={{width: "6%", textAlign: "center"}}>Time</th>
+                    <th style={{width: "12%", textAlign: "center"}}>Update</th>
                 </tr>
                 </thead>
                 <tbody data-testid={"listTabSL"}>
