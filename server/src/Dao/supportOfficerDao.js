@@ -447,8 +447,8 @@ exports.updateSchedules = function(schedule){
                     .then((response) => {
                         if(response){
                             updateGivenLectures(rows, schedule)
-                                .then((response) => {
-                                    resolve(response)
+                                .then((response2) => {
+                                    resolve(response2)
                                 })
                                 .catch((err2) => {
                                     reject(err2)
