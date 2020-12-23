@@ -32,27 +32,47 @@ export class SupportOfficerSchedule extends Component{
             })
     }
     handleChangeStartTime=(date)=> {
+        date=moment('25/12/2020', "DD/MM/YYYY").utcOffset(1).add(date, 'seconds').format("HH:mm")
         if(date>this.state.endDate&&this.state.endDate!=""){
             console.log("IF START DATE")
         }
         else{
-            date=moment('25/12/2020', "DD/MM/YYYY").utcOffset(1).add(date, 'seconds').format("HH:mm")
             this.setState({startDate:date});
         }
 
-        console.log('value: '+date);
+        console.log("startDate:"+this.state.startDate);
+        console.log("endDate:"+this.state.endDate);
+    }
+    splitString=()=>{
+        let tmp=[];
+        if(this.state.elemModal.time!=undefined){
+            tmp=this.state.elemModal.time.toString().split('-');
+            console.log(JSON.stringify(tmp));
+            if(tmp.length===1){
+                //separator is not - char, so i have to split the string by :
+                let array=[];
+                array=tmp=this.state.elemModal.time.toString().split(':');
+                console.log("array: "+JSON.stringify(array));
+                tmp=[];
+                tmp.push(array[0]+":"+array[1]);
+                tmp.push(array[2]+":"+array[3]);
+                console.log("tmp: "+tmp);
+            }
+        }
+        return tmp;
     }
     handleChangeEndTime=(date)=>{
+        date=moment('25/12/2020', "DD/MM/YYYY").utcOffset(1).add(date, 'seconds').format("HH:mm")
         console.log(moment('25/12/2020', "DD/MM/YYYY").utcOffset(1).add(date, 'seconds').format("HH:mm"))
         if(date<this.state.startDate){
             console.log('IF ENDDATE');
         }
         else{
-            date=moment('25/12/2020', "DD/MM/YYYY").utcOffset(1).add(date, 'seconds').format("HH:mm")
             this.setState({endDate:date});
         }
 
-        console.log(date);
+        console.log("startDate:"+this.state.startDate);
+        console.log("endDate:"+this.state.endDate);
 
     }
     handleChangeRoom=(e)=>{
@@ -76,9 +96,16 @@ export class SupportOfficerSchedule extends Component{
     handleConfirm=()=>{
         let body;
         let time;
-        if(this.state.startDate===""||this.state.endDate===""){
+        //i have to consider both the case in which I choose only one of the two dates:
+        let tmp=[];
+        tmp=this.splitString();
+        if(this.state.startDate===""&&this.state.endDate===""){
             time="";
         }
+        else if(this.state.startDate!=""&&this.state.endDate==="")
+            time=this.state.startDate+"-"+tmp[1];
+        else if(this.state.startDate===""&&this.state.endDate!="")
+            time=tmp[0]+"-"+this.state.endDate;
         else{
             time=this.state.startDate+"-"+this.state.endDate;
         }
@@ -136,20 +163,7 @@ export class SupportOfficerSchedule extends Component{
     renderModalSchedule=()=>{
         console.log("hour: "+this.state.elemModal.time);
         let tmp=[];
-        if(this.state.elemModal.time!=undefined){
-            tmp=this.state.elemModal.time.toString().split('-');
-            console.log(JSON.stringify(tmp));
-            if(tmp.length===1){
-                //separator is not - char, so i have to split the string by :
-                let array=[];
-                array=tmp=this.state.elemModal.time.toString().split(':');
-                console.log("array: "+JSON.stringify(array));
-                tmp=[];
-                tmp.push(array[0]+":"+array[1]);
-                tmp.push(array[2]+":"+array[3]);
-                console.log("tmp: "+tmp);
-            }
-        }
+        tmp=this.splitString();
         return(
             <Modal data-testid="modal" show={this.state.modal} onHide={() => { /* When the modal is closed clear the response message and the searched student */ this.setState({ modal: false,day:"",startDate:"",endDate:"",room:"",elemModal:[] });}}>
                 <Modal.Header data-testid={"close"} closeButton>
