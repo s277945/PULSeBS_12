@@ -114,7 +114,7 @@ const NavBarBooking = ({show, setShowNav}) => {
             <Navbar.Brand>PULSeBS - SystemActivity</Navbar.Brand>
             <Nav className="mr-auto">
                 <Nav.Link data-testid="sysMon" href="#sysMon" active={show===0} onSelect={showSysMon}>System Monitoring</Nav.Link>
-                <Nav.Link data-testid="report" href="#report" active={show===1} onSelect={showReport}>Students Report</Nav.Link>
+                <Nav.Link data-testid="report" href="#report" active={show===1} onSelect={showReport}>Positive Users Report</Nav.Link>
             </Nav>
             <Nav.Link data-testid="logout" onClick={() => auth.signout()}>Logout</Nav.Link>
         </Navbar>

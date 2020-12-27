@@ -690,11 +690,11 @@ app.post('/api/fileData', (req, res) => {
  * IMPORTANT: pass "positiveStudents" as parameter if you need list of positive students otherwise insert SSN of student
  */
 
-app.get('/api/students/:studentSsn', (req, res) => {
-    const param = req.params.studentSsn
+app.get('/api/users/:userSsn', (req, res) => {
+    const param = req.params.userSsn
     console.log(param)
 
-    if(param === "positiveStudents"){
+    if(param === "positiveUsers"){
         bookingManagerDao.getPositiveUsers()
             .then((list) => {
                 res.status(201).json(list)
@@ -722,8 +722,8 @@ app.get('/api/students/:studentSsn', (req, res) => {
  * body request: nothing
  */
 
-app.post('/api/students/:studentSsn', (req, res) => {
-    const ssn = req.params.studentSsn
+app.post('/api/users/:userSsn', (req, res) => {
+    const ssn = req.params.userSsn
 
     bookingManagerDao.setPositiveUser(ssn)
         .then((response)=>{
@@ -745,8 +745,8 @@ app.post('/api/students/:studentSsn', (req, res) => {
  *
  */
 
-app.get('/api/reports/:studentSsn', (req, res) => {
-    const param = req.params.studentSsn
+app.get('/api/reports/:userSsn', (req, res) => {
+    const param = req.params.userSsn
 
     bookingManagerDao.generateReport(param)
         .then((list) => {
