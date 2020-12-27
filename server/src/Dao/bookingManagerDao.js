@@ -150,70 +150,127 @@ exports.setPositiveUser = function (ssn){
  */
 
 exports.generateReport = function(ssn){
-    let list = []
     return new Promise ((resolve, reject) => {
         getUserId(ssn)
             .then((user) => {
-                    retrieveLectures(user.user, user.type)
-                        .then((lectures) => {
-                            if(lectures.length==0)
-                                reject(new Error('Student was not in any class'))
-                            const date = moment().format("YYYY-MM-DD HH:mm:ss")
-                            const sql = 'SELECT Name, Surname, Birthday, SSN FROM User WHERE UserID != ? AND UserID IN ('+
-                                'SELECT Student_Ref FROM Booking WHERE Course_Ref=? AND Date_Ref=? AND Date_Ref<? AND Attendance=?)'
-                            let iterator = 0;
-                            for(let lecture of lectures){
-                                iterator++
-                                db.all(sql, [user.user, lecture.course, lecture.date, date, 1], (err, rows) => {
-                                    /* istanbul ignore if */
-                                    if(err)
-                                        reject(err)
-                                    else{
-                                        rows.forEach((row) => {
-                                            let obj = {
-                                                "name": row.Name,
-                                                "surname": row.Surname,
-                                                "birthday": row.Birthday,
-                                                "ssn": row.SSN,
-                                                "type": row.UserType
-                                            }
-                                            let cond = list.includes(obj)
-                                            /* istanbul ignore else */
-                                            if(!cond)
-                                                list.push(obj)
-                                            /* istanbul ignore else */
+                retrieveLectures(user.id, user.type)
+                    .then((lectures) => {
+                        if(lectures.length==0)
+                            reject(new Error('User was not in any class'));
+                        retrieveStudents(user, lectures)
+                            .then((list) => {
+                                if(user.type === 's'){
+                                    retrieveTeachers(list, lectures)
+                                        .then((list) => {
+                                            resolve(list);
                                         })
-                                    }
-                                    /* istanbul ignore else */
-                                    if(iterator === lectures.length) resolve(list)
-                                    /* istanbul ignore else */
-                                })
-
-                            }
-                        })
-
+                                }else resolve(list);
+                        }).catch(err=>reject(err))
+                    }).catch(err=>reject(err))
             }).catch(err=>reject(err))
+    })
+}
 
+function retrieveTeachers(list, lectures){
+    return new Promise ((resolve, reject) => {
+        const sql='SELECT Name, Surname, Birthday, SSN, UserType FROM User WHERE UserID IN ('+
+                'SELECT Teacher_Ref FROM Course WHERE CourseID = ?)'
+        let iterator = 0;
+        for(let lecture of lectures){
+            iterator++;
+            db.get(sql, [lecture.course], (err,row) => {
+                if(err) reject(err);
+                else{
+                    let obj = {
+                        "name": row.Name,
+                        "surname": row.Surname,
+                        "birthday": row.Birthday,
+                        "ssn": row.SSN,
+                        "type": row.UserType
+                    }
+                    let cond = list.includes(obj)
+                    /* istanbul ignore else */
+                    if(!cond)
+                        list.push(obj)
+                    /* istanbul ignore else */
+                }
+                if(iterator === lectures.length) resolve(list)
+                /* istanbul ignore else */
+            })
+        }
+    })
+}
 
+function retrieveStudents(user, lectures){
+    let list = [];
+    const date = moment().format("YYYY-MM-DD HH:mm:ss");
+    return new Promise ((resolve, reject) => {
+        const sql = 'SELECT Name, Surname, Birthday, SSN, UserType FROM User WHERE UserID != ? AND UserID IN ('+
+            'SELECT Student_Ref FROM Booking WHERE Course_Ref=? AND Date_Ref=? AND Date_Ref<? AND Attendance=?)'
+        let iterator = 0;
+        for(let lecture of lectures){
+            iterator++
+            db.all(sql, [user.id, lecture.course, lecture.date, date, 1], (err, rows) => {
+                /* istanbul ignore if */
+                if(err)
+                    reject(err)
+                else{
+                    rows.forEach((row) => {
+                        let obj = {
+                            "name": row.Name,
+                            "surname": row.Surname,
+                            "birthday": row.Birthday,
+                            "ssn": row.SSN,
+                            "type": row.UserType
+                        }
+                        let cond = list.includes(obj)
+                        /* istanbul ignore else */
+                        if(!cond)
+                            list.push(obj)
+                        /* istanbul ignore else */
+                    })
+                }
+                /* istanbul ignore else */
+                if(iterator === lectures.length) resolve(list)
+                /* istanbul ignore else */
+            })
+        }
     })
 }
 
 function retrieveLectures(userId, userType){
     let list = []
     return new Promise((resolve, reject) =>{
-        const sql = 'SELECT Course_Ref, Date_Ref FROM Booking WHERE Student_Ref = ?'
-        db.all(sql, [userId], (err, rows) => {
-            /* istanbul ignore if */
-            if(err)
-                reject(err)
-            else{
-                rows.forEach((el) => {
-                    list.push({"course": el.Course_Ref, "date": el.Date_Ref})
-                })
-                resolve(list)
-            }
+        if(userType==='s'){
+            const sql = 'SELECT Course_Ref, Date_Ref FROM Booking WHERE Student_Ref = ? AND attendance = ?'
+            db.all(sql, [userId, 1], (err, rows) => {
+                /* istanbul ignore if */
+                if(err)
+                    reject(err)
+                else{
+                    rows.forEach((el) => {
+                        list.push({"course": el.Course_Ref, "date": el.Date_Ref})
+                    })
+                    resolve(list)
+                }
 
-        })
+            })
+        }else{
+            const sql = 'SELECT Course_Ref, Date_Ref FROM Booking WHERE Course_Ref IN ('+
+                    'SELECT CourseID FROM Course WHERE Teacher_Ref = ?)'
+            db.all(sql, [userId], (err, rows) => {
+                /* istanbul ignore if */
+                if(err)
+                    reject(err)
+                else{
+                    rows.forEach((el) => {
+                        list.push({"course": el.Course_Ref, "date": el.Date_Ref})
+                    })
+                    resolve(list)
+                }
+
+            })
+        }
     })
 }
 
@@ -226,7 +283,7 @@ function getUserId(ssn){
                 reject(err)
             else{
                 if(row!=undefined)
-                    resolve({"user":row.userID, "type":row.UserType})
+                    resolve({"id":row.userID, "type":row.UserType})
                 else
                     reject(new Error('User not found'))
             }

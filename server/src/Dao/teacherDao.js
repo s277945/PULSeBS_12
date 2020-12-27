@@ -490,7 +490,7 @@ exports.setPresentStudents = function (courseId, date, list){
         db.run(sql, [list.length, courseId, date], (err) => {
             /* istanbul ignore if */
             if(err) reject(err);
-            else{ console.log(list)
+            else{
                 const sql2='UPDATE Booking SET Attendance=? WHERE Course_Ref=? AND Date_Ref=? AND Student_Ref=?'
                     for(let el of list){
                         db.run(sql2, [1, courseId, date, el.studentId], (err) => {
