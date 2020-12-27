@@ -65,7 +65,9 @@ export class BookingManagerReport extends Component {
             console.log("csv: "+csvData);
             const header = ["Name","Surname", "Birthday", "SSN"];
             csvData.unshift(header);
-            let jsonObject = JSON.stringify(csvData);
+            let jsonObject = JSON.stringify(csvData.map(user=>{
+                return ({name: user.name, surname: user.surname, birthday: user.birthday, ssn: user.ssn, type: user.type==="s"?"student":(user.type==="t"?"teacher":"")});
+            }));
             const csv=this.convertToCSV(jsonObject);
             console.log('csv1: '+csv);
             let blob=new Blob([csv],{type: 'text/csv;charset=utf-8;'});
@@ -75,32 +77,40 @@ export class BookingManagerReport extends Component {
 
 
 
-    //Function to generate pdf report for certain student
-    generatePDF = (student, report) => {
+    //Function to generate pdf report for certain user
+    generatePDF = (user, report) => {
         // initialize jsPDF
         const doc = new jsPDF();
 
         // table title. and  margin-left,margin-top
-        doc.text("PULSeBS Student Report for COVID-19", 100, 16, 'center');
-        doc.text("Report of COVID-19 positive for student:", 14, 32);
+        if(user.type==="s") {
+            doc.text("PULSeBS Student Report for COVID-19", 100, 16, 'center');
+            doc.text("Report of COVID-19 positive for student:", 14, 32);
+        }
+        else if(user.type==="t") {
+            doc.text("PULSeBS Teacher Report for COVID-19", 100, 16, 'center');
+            doc.text("Report of COVID-19 positive for teacher:", 14, 32);           
+        }
+        
 
         // define the columns we want and their titles
         const tableColumn = ["Name", "Birthday", "SSN"];
 
-        const tableRowStudent = [[
-            `${student.name} ${student.surname}`,
-            student.birthday,
-            student.ssn
+        const tableRowUser = [[
+            `${user.name} ${user.surname}`,
+            user.birthday,
+            user.ssn
         ]];
 
-        doc.autoTable(tableColumn, tableRowStudent, { startY: 40 });
+        doc.autoTable(tableColumn, tableRowUser, { startY: 40 });
 
         doc.text("Report:", 14, 64);
 
         //if the server returns empty array as a report []
         if (report.length === 0 ) {
 
-            doc.text("The mentioned student was not in contact with other students. ", 14, 72);
+            if(user.type==="s") doc.text("The mentioned student was not in contact with other students. ", 14, 72);
+            else if(user.type==="t") doc.text("The mentioned teacher was not in contact with any students. ", 14, 72);
          }
 
         else {
@@ -121,17 +131,19 @@ export class BookingManagerReport extends Component {
                 tableRows.push(studentData);
             });
 
-            doc.text("The following students participated in the same lectures of the mentioned ", 14, 72);
+            if(user.type==="s") doc.text("The following students participated in the same lectures of the mentioned ", 14, 72);
+            else if(user.type==="t") doc.text("The following students participated in the lectures of the mentioned ", 14, 72);
 
-            doc.text("student:", 14, 80);
+            if(user.type==="s") doc.text("student:", 14, 80);
+            else if(user.type==="t") doc.text("teacher:", 14, 80);
 
             // startY is basically margin-top
             doc.autoTable(tableColumn, tableRows, { startY: 88 });
 
         }
         // we define the name of our PDF file.
-        doc.save(`report ${student.name} ${student.surname}.pdf`);
-        this.exportToCSV(report,student.surname)
+        doc.save(`report ${user.name} ${user.surname}.pdf`);
+        if (report.length > 0 ) this.exportToCSV(report,user.surname)
     }
 
     //Render list of positive students
@@ -146,7 +158,7 @@ export class BookingManagerReport extends Component {
                 <td>{row.birthday}</td>
                 {//button to generate report
                 }
-                <td style={{ display: "flex", justifyContent: "flex-start" }}><Button style={{ marginLeft: "5px" }} data-testid={"showReport_" + k++} onClick={(e) => { e.preventDefault(); this.createReport(row) }}>Create Report</Button></td>
+                <td style={{ display: "flex", justifyContent: "center"}}><Button style={{ marginLeft: "5px" }} data-testid={"showReport_" + k++} onClick={(e) => { e.preventDefault(); this.createReport(row) }}>Create Report</Button></td>
             </tr>)
         });
 
@@ -157,7 +169,7 @@ export class BookingManagerReport extends Component {
                     <tr>
                         <th>Full name</th>
                         <th>Date of birth</th>
-                        <th>Actions</th>
+                        <th style={{textAlign: "center", width: "11%"}}>Actions</th>
                     </tr>
                 </thead>
                 <tbody data-testid={"listTabSL"}>
@@ -178,7 +190,7 @@ export class BookingManagerReport extends Component {
                 <td>{row.birthday?row.birthday:"/"}</td>
                 {//button to generate report
                 }
-                <td style={{ display: "flex", justifyContent: "flex-start" }}><Button style={{ marginLeft: "5px" }} data-testid={"showReport_" + k++} onClick={(e) => { e.preventDefault(); this.createReport(row) }}>Create Report</Button></td>
+                <td style={{ display: "flex", justifyContent: "center" }}><Button style={{ marginLeft: "5px" }} data-testid={"showReport_" + k++} onClick={(e) => { e.preventDefault(); this.createReport(row) }}>Create Report</Button></td>
             </tr>)
         });
 
@@ -189,7 +201,7 @@ export class BookingManagerReport extends Component {
                     <tr>
                         <th>Full name</th>
                         <th>Date of birth</th>
-                        <th>Actions</th>
+                        <th style={{textAlign: "center", width: "11%"}}>Actions</th>
                     </tr>
                 </thead>
                 <tbody data-testid={"listTabTL"}>
@@ -210,7 +222,7 @@ export class BookingManagerReport extends Component {
             });
     }
 
-    markSelectedStudent = (ssn) => {
+    markSelectedUser = (ssn) => {
         postMarkUser(ssn)
             .then(res => {
                 console.log(res.data);
@@ -240,7 +252,7 @@ export class BookingManagerReport extends Component {
                         <td>{this.state.searchedUser.name} {this.state.searchedUser.surname}</td>
                         <td>{this.state.searchedUser.birthday?this.state.searchedUser.birthday:"/"}</td>
                         <td>{this.state.searchedUser.type==="s"?"Student":"Teacher"}</td>
-                        <td style={{ display: "flex", justifyContent: "flex-start" }}><Button data-testid="confirmButton" style={{ marginLeft: "5px" }} disabled={this.state.searchedUser.covid===1?true:false} onClick={(e) => { e.preventDefault(); this.markSelectedStudent(this.state.searchedUser.ssn) }}>{this.state.searchedUser.covid===1?"Marked":"Mark as positive"}</Button></td>
+                        <td style={{ display: "flex", justifyContent: "flex-start" }}><Button data-testid="confirmButton" style={{ marginLeft: "5px" }} disabled={this.state.searchedUser.covid===1?true:false} onClick={(e) => { e.preventDefault(); this.markSelectedUser(this.state.searchedUser.ssn) }}>{this.state.searchedUser.covid===1?"Marked":"Mark as positive"}</Button></td>
                     </tr>
                 </tbody>
             </Table>
