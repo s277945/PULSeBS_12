@@ -90,15 +90,15 @@ exports.getManagerCourseStatsTotal = function (courseId){
  * Descrtiption: Return the list of the students marked positive
  */
 
-exports.getPositiveStudents = function(){
+exports.getPositiveUsers = function(){
     let list = [];
     return new Promise((resolve, reject) => {
-        const sql='SELECT Name, Surname, Birthday, SSN FROM User WHERE Covid=?';
+        const sql='SELECT Name, Surname, Birthday, SSN, UserType FROM User WHERE Covid=?';
         db.all(sql,[1], (err,rows)=>{
             /* istanbul ignore if */if(err) reject(err);
             else{
                 rows.forEach((row)=>{
-                    list.push({"name":row.Name, "surname":row.Surname, "birthday":row.Birthday,"ssn":row.SSN});
+                    list.push({"name":row.Name, "surname":row.Surname, "birthday":row.Birthday, "ssn":row.SSN, "type":row.UserType});
                 });
                 resolve(list);
             }
@@ -112,14 +112,14 @@ exports.getPositiveStudents = function(){
  * Descrtiption: Return the student searched with SSN or nothing if not present
  */
 
-exports.searchStudentBySsn = function (ssn){
+exports.searchUserBySsn = function (ssn){
     return new Promise((resolve, reject) => {
-        const sql='SELECT Name, Surname, Birthday, SSN, Covid FROM User WHERE SSN=?';
+        const sql='SELECT Name, Surname, Birthday, SSN, Covid, UserType FROM User WHERE SSN=?';
         db.get(sql, [ssn], (err,row)=>{
             /* istanbul ignore if */if(err) reject(err);
             else{
                 if(row!=undefined)
-                    resolve({"name":row.Name, "surname":row.Surname, "birthday":row.Birthday, "ssn":row.SSN,"covid":row.Covid});
+                    resolve({"name":row.Name, "surname":row.Surname, "birthday":row.Birthday, "ssn":row.SSN, "covid":row.Covid, "type":row.UserType});
                 else
                     reject(new Error({err: "Nothing to show"}))
             }
@@ -133,7 +133,7 @@ exports.searchStudentBySsn = function (ssn){
  * Descrtiption: Change the covid status of a student from false to true
  */
 
-exports.setPositiveStudent = function (ssn){
+exports.setPositiveUser = function (ssn){
     return new Promise((resolve, reject) => {
         const sql='UPDATE User SET Covid = 1 WHERE SSN=?';
         db.run(sql, [ssn], (err) =>{
@@ -153,8 +153,8 @@ exports.generateReport = function(ssn){
     let list = []
     return new Promise ((resolve, reject) => {
         getUserId(ssn)
-            .then((userId) => {
-                    retrieveLectures(userId)
+            .then((user) => {
+                    retrieveLectures(user.user, user.type)
                         .then((lectures) => {
                             if(lectures.length==0)
                                 reject(new Error('Student was not in any class'))
@@ -164,7 +164,7 @@ exports.generateReport = function(ssn){
                             let iterator = 0;
                             for(let lecture of lectures){
                                 iterator++
-                                db.all(sql, [userId, lecture.course, lecture.date, date, 1], (err, rows) => {
+                                db.all(sql, [user.user, lecture.course, lecture.date, date, 1], (err, rows) => {
                                     /* istanbul ignore if */
                                     if(err)
                                         reject(err)
@@ -174,7 +174,8 @@ exports.generateReport = function(ssn){
                                                 "name": row.Name,
                                                 "surname": row.Surname,
                                                 "birthday": row.Birthday,
-                                                "ssn": row.SSN
+                                                "ssn": row.SSN,
+                                                "type": row.UserType
                                             }
                                             let cond = list.includes(obj)
                                             /* istanbul ignore else */
@@ -197,11 +198,11 @@ exports.generateReport = function(ssn){
     })
 }
 
-function retrieveLectures(studentId){
+function retrieveLectures(userId, userType){
     let list = []
     return new Promise((resolve, reject) =>{
         const sql = 'SELECT Course_Ref, Date_Ref FROM Booking WHERE Student_Ref = ?'
-        db.all(sql, [studentId], (err, rows) => {
+        db.all(sql, [userId], (err, rows) => {
             /* istanbul ignore if */
             if(err)
                 reject(err)
@@ -218,16 +219,16 @@ function retrieveLectures(studentId){
 
 function getUserId(ssn){
     return new Promise((resolve, reject) =>{
-        const sql = 'SELECT userID FROM User WHERE SSN = ?'
+        const sql = 'SELECT userID, UserType FROM User WHERE SSN = ?'
         db.get(sql, [ssn], (err, row) => {
             /* istanbul ignore if */
             if(err)
                 reject(err)
             else{
                 if(row!=undefined)
-                    resolve(row.userID)
+                    resolve({"user":row.userID, "type":row.UserType})
                 else
-                    reject(new Error('Student not found'))
+                    reject(new Error('User not found'))
             }
 
         })

@@ -695,7 +695,7 @@ app.get('/api/students/:studentSsn', (req, res) => {
     console.log(param)
 
     if(param === "positiveStudents"){
-        bookingManagerDao.getPositiveStudents()
+        bookingManagerDao.getPositiveUsers()
             .then((list) => {
                 res.status(201).json(list)
             })
@@ -703,7 +703,7 @@ app.get('/api/students/:studentSsn', (req, res) => {
                 res.status(500).json(err)
             })
     } else {
-        bookingManagerDao.searchStudentBySsn(param)
+        bookingManagerDao.searchUserBySsn(param)
             .then((student) => {
                 res.status(201).json(student)
             })
@@ -725,7 +725,7 @@ app.get('/api/students/:studentSsn', (req, res) => {
 app.post('/api/students/:studentSsn', (req, res) => {
     const ssn = req.params.studentSsn
 
-    bookingManagerDao.setPositiveStudent(ssn)
+    bookingManagerDao.setPositiveUser(ssn)
         .then((response)=>{
             res.status(200).json({"setAsPositive": response})
         })
