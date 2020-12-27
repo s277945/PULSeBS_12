@@ -681,13 +681,13 @@ app.post('/api/fileData', (req, res) => {
 ////////////////////////
 
 /**
- * GET /api/students/:studentSsn
+ * GET /api/users/:userSsn
  *
- * Retrieves list of positive students or a single
+ * Retrieves list of positive users or a single
  *
- * Request params: student
+ * Request params: user
  *
- * IMPORTANT: pass "positiveStudents" as parameter if you need list of positive students otherwise insert SSN of student
+ * IMPORTANT: pass "positiveusers" as parameter if you need list of positive users otherwise insert SSN of user
  */
 
 app.get('/api/users/:userSsn', (req, res) => {
@@ -704,8 +704,8 @@ app.get('/api/users/:userSsn', (req, res) => {
             })
     } else {
         bookingManagerDao.searchUserBySsn(param)
-            .then((student) => {
-                res.status(201).json(student)
+            .then((user) => {
+                res.status(201).json(user)
             })
             .catch(/* istanbul ignore next */(err) => {
                 res.status(500).json(err)
@@ -715,9 +715,9 @@ app.get('/api/users/:userSsn', (req, res) => {
 
 
 /**
- * POST api/students/:studentSsn
+ * POST api/users/:userSsn
  *
- * Sets a student as positive to covid
+ * Sets a user as positive to covid
  *
  * body request: nothing
  */
@@ -735,13 +735,13 @@ app.post('/api/users/:userSsn', (req, res) => {
 });
 
 /**
- * GET /api/reports/:studentSsn
+ * GET /api/reports/:userSsn
  *
- * Retrieves list of students that participated to the same lectures of a positive student
+ * Retrieves list of users that participated to the same lectures of a positive user
  *
  * Needed to create a report
  *
- * Request params: studentSsn
+ * Request params: userSsn
  *
  */
 
