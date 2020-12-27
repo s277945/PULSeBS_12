@@ -63,11 +63,12 @@ export class BookingManagerReport extends Component {
 
      exportToCSV = (csvData, fileName) => {
             console.log("csv: "+csvData);
-            const header = ["Name","Surname", "Birthday", "SSN"];
-            csvData.unshift(header);
-            let jsonObject = JSON.stringify(csvData.map(user=>{
+            csvData = csvData.map(user=>{
                 return ({name: user.name, surname: user.surname, birthday: user.birthday, ssn: user.ssn, type: user.type==="s"?"student":(user.type==="t"?"teacher":"")});
-            }));
+            });
+            const header = ["Name","Surname", "Birthday", "SSN", "Type"];
+            csvData.unshift(header);
+            let jsonObject = JSON.stringify(csvData);
             const csv=this.convertToCSV(jsonObject);
             console.log('csv1: '+csv);
             let blob=new Blob([csv],{type: 'text/csv;charset=utf-8;'});
