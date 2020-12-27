@@ -373,7 +373,7 @@ export class StudentHome extends Component {
                     </tr>
                     </thead>
                     <tbody>
-                    {this.state.lectures.filter(lecture=>moment(lecture.Date).diff(moment(), 'days')===0).map((lecture,index) =>
+                    {this.state.lectures.filter(lecture=>moment(lecture.Date).isSame(moment(), 'day')).map((lecture,index) =>
                         <tr key={index}>
                             <td>{lecture.Name}</td>
                             <td>{moment(lecture.Date).format('YYYY-MM-DD HH:mm')}</td>
