@@ -162,6 +162,8 @@ exports.generateReport = function(ssn){
                                 if(user.type === 's'){
                                     retrieveTeachers(list, lectures)
                                         .then((list) => {
+                                            for(let el of list){
+                                            }
                                             resolve(list);
                                         })
                                 }else resolve(list);
@@ -177,7 +179,6 @@ function retrieveTeachers(list, lectures){
                 'SELECT Teacher_Ref FROM Course WHERE CourseID = ?)'
         let iterator = 0;
         for(let lecture of lectures){
-            iterator++;
             db.get(sql, [lecture.course], (err,row) => {
                 if(err) reject(err);
                 else{
@@ -188,11 +189,13 @@ function retrieveTeachers(list, lectures){
                         "ssn": row.SSN,
                         "type": row.UserType
                     }
-                    let cond = list.includes(obj)
+                    
+                    let cond = list.filter(elem=>elem.ssn===obj.ssn).length>0;
                     /* istanbul ignore else */
                     if(!cond)
                         list.push(obj)
                     /* istanbul ignore else */
+                    iterator++;
                 }
                 if(iterator === lectures.length) resolve(list)
                 /* istanbul ignore else */
@@ -223,7 +226,7 @@ function retrieveStudents(user, lectures){
                             "ssn": row.SSN,
                             "type": row.UserType
                         }
-                        let cond = list.includes(obj)
+                        let cond = list.filter(elem=>elem.ssn===obj.ssn).length>0;
                         /* istanbul ignore else */
                         if(!cond)
                             list.push(obj)
