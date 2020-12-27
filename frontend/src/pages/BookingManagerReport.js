@@ -105,13 +105,14 @@ export class BookingManagerReport extends Component {
 
         doc.autoTable(tableColumn, tableRowUser, { startY: 40 });
 
-        doc.text("Report:", 14, 64);
+        doc.text("Report:", 14, 72);
 
+        console.log(report.length)
         //if the server returns empty array as a report []
         if (report.length === 0 ) {
 
-            if(user.type==="s") doc.text("The mentioned student was not in contact with other students. ", 14, 72);
-            else if(user.type==="t") doc.text("The mentioned teacher was not in contact with any students. ", 14, 72);
+            if(user.type==="s") doc.text("The mentioned student was not in contact with other students. ", 14, 80);
+            else if(user.type==="t") doc.text("The mentioned teacher was not in contact with any students. ", 14, 80);
          }
 
         else {
@@ -119,28 +120,35 @@ export class BookingManagerReport extends Component {
         // else print all the reported students in a table
 
             // define an empty array of rows
-            const tableRows = [];
-
+            const tableRowsStudents = [];
+            const tableRowsTeachers = [];
+            let numstudents = 0;
             // for each student pass all its data into an array
-            report.forEach(student1 => {
-                const studentData = [
-                    `${student1.name} ${student1.surname}`,
-                    student1.birthday,
-                    student1.ssn,
+            report.forEach(user => {
+                const userData = [
+                    `${user.name} ${user.surname}`,
+                    user.birthday,
+                    user.ssn,
                 ];
                 // push each student's info into a row
-                tableRows.push(studentData);
+                if (user.type==="s") { tableRowsStudents.push(userData); numstudents++; }
+                else if (user.type==="t") tableRowsTeachers.push(userData);
             });
 
-            if(user.type==="s") doc.text("The following students participated in the same lectures of the mentioned ", 14, 72);
-            else if(user.type==="t") doc.text("The following students participated in the lectures of the mentioned ", 14, 72);
+            if(user.type==="s") doc.text("The following students participated in the same lectures of the mentioned ", 14, 80);
+            else if(user.type==="t") doc.text("The following students participated in the lectures of the mentioned ", 14, 80);
 
-            if(user.type==="s") doc.text("student:", 14, 80);
-            else if(user.type==="t") doc.text("teacher:", 14, 80);
+            if(user.type==="s") doc.text("student:", 14, 88);
+            else if(user.type==="t") doc.text("teacher:", 14, 88);
 
             // startY is basically margin-top
-            doc.autoTable(tableColumn, tableRows, { startY: 88 });
+            doc.autoTable(tableColumn, tableRowsStudents, { startY: 96 });
 
+            if(user.type==="s") { 
+                doc.text("The mentioned student participated in the lectures of the following ", 14, 116 + 8*numstudents);
+                doc.text("teachers:", 14, 124 + 8*numstudents);
+                doc.autoTable(tableColumn, tableRowsTeachers, { startY:  130 + 8*numstudents});
+            }
         }
         // we define the name of our PDF file.
         doc.save(`report ${user.name} ${user.surname}.pdf`);
