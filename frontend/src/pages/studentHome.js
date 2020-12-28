@@ -359,7 +359,7 @@ export class StudentHome extends Component {
                 <br/>
                 <h3 className="page-subtitle-1">Today</h3>
                 <br/>
-                <Table data-testid={'lectures'} striped bordered hover style={{backgroundColor: "#fff"}}>
+                <Table data-testid={'lectures'} striped bordered hover style={{backgroundColor: "#fff", width:"98.5%", margin: "auto", marginBottom: "34px"}}>
                     <thead>
                     <tr>
                         <th>Lecture</th>
