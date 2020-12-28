@@ -165,7 +165,7 @@ exports.uploadSchedule=function(list, fileName){
                     getListLectures(element)
                         .then((listLectures) => {
                             i++;
-                            lecturesList=lecturesList.concat(listLectures.map(lecture=>{lecture.courseId=element.courseId; return lecture;}));
+                            lecturesList=lecturesList.concat(listLectures.map(lecture=>{lecture.courseId=element.courseId; return lecture;}));// add data to temp array
                             if(i===list.length){ //if last iteration  
                                 let index=0;
                                 lecturesList=lecturesList.sort((a,b)=>{//order by name then date
@@ -186,7 +186,7 @@ exports.uploadSchedule=function(list, fileName){
                                         }    
                                         else{
                                             console.log(el.Name+" "+el.courseId+" "+el.index+" su "+lecturesList.length);
-                                            if(el.index===lecturesList.length&&i===list.length) {
+                                            if(el.index===lecturesList.length&&i===list.length) {// update file data at last iteration
                                                 const date = moment().format("YYYY-MM-DD HH:mm:ss")
                                                 const sql3='UPDATE File SET FileName=? , LastUpdate=? WHERE FileType=4'
                                                 db.run(sql3, [fileName, date], (err3) => {
