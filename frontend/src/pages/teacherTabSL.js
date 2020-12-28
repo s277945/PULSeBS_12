@@ -171,8 +171,8 @@
                  <Modal show={this.state.modal === 2 ? true : false} onHide={this.handleClose}  dialogClassName="custom-modal" style={{marginTop: "15vh"}}>
                      <Modal.Header data-testid={"close2"} closeButton>
                          <Modal.Title>
-                             <div style={{marginLeft: this.state.modalLecture&&moment().diff(moment(this.state.modalLecture.Date), 'days') <= 1 ?"143px":"135px", textAlign: "center", fontWeight: "bold"}}>{this.state.modalLecture&&moment().diff(moment(this.state.modalLecture.Date), 'days') <= 1 ? "Set student attendance for lecture ":"Student attendance data for lecture "}</div>
-                             <div style={{marginLeft:  this.state.modalLecture&&moment().diff(moment(this.state.modalLecture.Date), 'days') <= 1 ?"143px":"135px", textAlign: "center", fontWeight: "bold"}}>{this.state.modalLecture?this.state.modalLecture.Name:""}</div></Modal.Title>
+                             <div style={{display: "flex", justifyContent: "center", width:"650px", textAlign: "center", fontWeight: "bold"}}><div style={{marginLeft: "28px"}}>{this.state.modalLecture&&moment().diff(moment(this.state.modalLecture.Date), 'days') <= 1 ? "Set student attendance for lecture ":"Student attendance data for lecture "}</div></div>
+                             <div style={{display: "flex", justifyContent: "center", width:"650px", textAlign: "center", fontWeight: "bold"}}><div style={{marginLeft: "28px"}}>{this.state.modalLecture?this.state.modalLecture.Name:""}</div></div></Modal.Title>
                      </Modal.Header>
                      <Modal.Body className="app-element-background">{
                          this.state.modalLecture ?
