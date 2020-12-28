@@ -236,7 +236,7 @@
                 <br />
                 <h1 className="page-title">Student list</h1>
                 <br />
-                <Accordion key="programmed-lectures" style={{width: "99%", margin: "auto"}}>
+                <Accordion key="programmed-lectures" style={{width: "99%", margin: "auto", marginTop: "17px"}}>
                     <Card>
                         <Accordion.Toggle as={Card.Header} eventKey="0">
                             <h4 style={{margin: "10px", marginLeft: "2.7vw", marginBottom: "17px", marginTop: "17px"}}>Programmed lectures info</h4>
@@ -252,7 +252,7 @@
                 <Accordion key="programmed-lectures" style={{width: "99%", margin: "auto"}}>
                     <Card>
                         <Accordion.Toggle as={Card.Header} eventKey="0">
-                            <h4 style={{margin: "10px", marginLeft: "2.7vw", marginBottom: "17px"}}>Past and current lectures attendance</h4>
+                            <h4 style={{margin: "10px", marginLeft: "2.7vw", marginBottom: "17px", marginTop: "17px"}}>Past and current lectures attendance</h4>
                         </Accordion.Toggle>
                         <Accordion.Collapse eventKey="0">
                             <Card.Body style={{backgroundColor: "rgba(0,0,0,.03)"}}>
