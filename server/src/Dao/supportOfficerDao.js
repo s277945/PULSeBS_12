@@ -148,38 +148,58 @@ exports.uploadEnrollment=function(list, fileName){
 }
 
 exports.uploadSchedule=function(list, fileName){
-    let i = 0;
     return new Promise((resolve, reject) => {
+        let i = 0;
         const sql='INSERT INTO Schedule(code, Room, Day, Seats, Time) VALUES(?,?,?,?,?)';
+        let lecturesList=[]; //temp lectures array of a course
+        let currentCourse=null;
+        list=list.sort((a,b)=>{return a.courseId===b.courseId?0:(a.courseId>b.courseId?1:-1)})// sort by courseId
         for(let element of list) {
             db.run(sql, [element.courseId, element.room, element.day, element.seats, element.time], (err) => {
                 /* istanbul ignore if */
-                if (err)
+                if (err){
+                    console.log(err);
                     reject(err);
-                else {
+                }
+                else {   
                     getListLectures(element)
                         .then((listLectures) => {
-                            for (let el of listLectures ){
-                                let sql2 = 'INSERT INTO Lecture VALUES(?,?,?,?,?,?,?,?,?,?,?,?)';
-                                db.run(sql2, [el.Course_Ref, el.Name, el.Capacity, el.Date, el.EndDate, el.DateDeadline,
-                                    el.BookedSeats, el.UnbookedSeats, el.Type, el.EmailSent,0, el.Day], (err2) => {
-                                    /* istanbul ignore if */
-                                    if(err2){
-                                        console.log("fail");
-                                        reject(err2)
-                                    }
-
-                                    else{
-                                        i++
-                                        if(i === listLectures.length) {
-                                            const date = moment().format("YYYY-MM-DD HH:mm:ss")
-                                            const sql3='UPDATE File SET FileName=? , LastUpdate=? WHERE FileType=4'
-                                            db.run(sql3, [fileName, date], (err3) => {
-                                                resolve(true);
-                                            })
+                            i++;
+                            lecturesList=lecturesList.concat(listLectures.map(lecture=>{lecture.courseId=element.courseId; return lecture;}));
+                            if(i===list.length){ //if last iteration  
+                                let index=0;
+                                lecturesList=lecturesList.sort((a,b)=>{//order by name then date
+                                    return a.courseId===b.courseId?moment(a.Date).diff(b.Date, "seconds"):(a.courseId>b.courseId?1:-1) }).map(lecture=>{
+                                        if(lecture.courseId!==currentCourse) {currentCourse=lecture.courseId; index=0;}
+                                        index++; lecture.Name=lecture.Name+index; return lecture});//add proper index to lecture
+                                index=0;
+                                for (let el of lecturesList ){
+                                    index++;
+                                    el.index=index;
+                                    let sql2 = 'INSERT INTO Lecture VALUES(?,?,?,?,?,?,?,?,?,?,?,?)'; //add lecture to db
+                                    db.run(sql2, [el.Course_Ref, el.Name, el.Capacity, el.Date, el.EndDate, el.DateDeadline,
+                                        el.BookedSeats, el.UnbookedSeats, el.Type, el.EmailSent,0, el.Day], (err2) => {
+                                        /* istanbul ignore if */
+                                        if(err2){
+                                            console.log("fail");
+                                            reject(err2)
+                                        }    
+                                        else{
+                                            console.log(el.Name+" "+el.courseId+" "+el.index+" su "+lecturesList.length);
+                                            if(el.index===lecturesList.length&&i===list.length) {
+                                                const date = moment().format("YYYY-MM-DD HH:mm:ss")
+                                                const sql3='UPDATE File SET FileName=? , LastUpdate=? WHERE FileType=4'
+                                                db.run(sql3, [fileName, date], (err3) => {
+                                                    if(err3){
+                                                        console.log("fail");
+                                                        reject(err3)
+                                                    }
+                                                    else resolve(true);
+                                                })
+                                            }
                                         }
-                                    }
-                                })
+                                    })
+                                }
                             }
                         })
                         .catch(/* istanbul ignore next */(err2) => {
@@ -239,7 +259,6 @@ function getListLectures(schedule){
                 let date = moment()
                 let start = moment(startDate)
                 let end = moment(endDate)
-                let i = 0
                 while(start.isBefore(end)){
                     if(time[0].length === 4)
                         time[0] = "0"+time[0]
@@ -247,8 +266,6 @@ function getListLectures(schedule){
                     let startLecture = start.format("YYYY-MM-DD").concat(" " + time[0] + ":00")
                     let deadline = moment(startLecture).subtract(1, 'day').format("YYYY-MM-DD").concat(" 23:00:00")
                     let endLecture = start.format("YYYY-MM-DD").concat(" " + time[1] + ":00")
-                    i++;
-                    console.log(i)
                     let mailsent;
                     if(start.isAfter(date)) mailsent=0;
                     else mailsent=1;
@@ -256,7 +273,7 @@ function getListLectures(schedule){
 
                     let obj = {
                             "Course_Ref": schedule.courseId,
-                            "Name": courseName + " Les:" + i,
+                            "Name": courseName + " Les:",
                             "Capacity": schedule.seats,
                             "Date": startLecture,
                             "EndDate": endLecture,
