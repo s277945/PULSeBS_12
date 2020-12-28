@@ -7,6 +7,8 @@
  import moment from 'moment'
  import { Checkbox } from 'pretty-checkbox-react';
  import { getTeacherPastLectures, setPresentStudents } from '../api/api'
+ import Accordion from 'react-bootstrap/Accordion'
+ import Card from 'react-bootstrap/Card'
 
  export class TeacherTabSL extends Component {
 
@@ -234,11 +236,31 @@
                 <br />
                 <h1 className="page-title">Student list</h1>
                 <br />
-                <h4 style={{margin: "10px", marginLeft: "2.7vw", marginBottom: "17px"}}>Programmed lectures info:</h4>
-                {this.renderFutureLectures()}
+                <Accordion key="programmed-lectures" style={{width: "99%", margin: "auto"}}>
+                    <Card>
+                        <Accordion.Toggle as={Card.Header} eventKey="0">
+                            <h4 style={{margin: "10px", marginLeft: "2.7vw", marginBottom: "17px", marginTop: "17px"}}>Programmed lectures info</h4>
+                        </Accordion.Toggle>
+                        <Accordion.Collapse eventKey="0">
+                            <Card.Body style={{backgroundColor: "rgba(0,0,0,.03)"}}>
+                                {this.renderFutureLectures()}  
+                            </Card.Body>
+                        </Accordion.Collapse>
+                    </Card>
+                </Accordion> 
                 <div style={{marginBottom: "34px"}}/>
-                <h4 style={{margin: "10px", marginLeft: "2.7vw", marginBottom: "17px"}}>Past and current lectures attendance:</h4>
-                {this.renderPastLectures()}
+                <Accordion key="programmed-lectures" style={{width: "99%", margin: "auto"}}>
+                    <Card>
+                        <Accordion.Toggle as={Card.Header} eventKey="0">
+                            <h4 style={{margin: "10px", marginLeft: "2.7vw", marginBottom: "17px"}}>Past and current lectures attendance</h4>
+                        </Accordion.Toggle>
+                        <Accordion.Collapse eventKey="0">
+                            <Card.Body style={{backgroundColor: "rgba(0,0,0,.03)"}}>
+                                {this.renderPastLectures()} 
+                            </Card.Body>
+                        </Accordion.Collapse>
+                    </Card>
+                </Accordion> 
             </div>
          );
      }
