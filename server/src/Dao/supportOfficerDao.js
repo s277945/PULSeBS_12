@@ -147,6 +147,12 @@ exports.uploadEnrollment=function(list, fileName){
     });
 }
 
+/**
+* Input: List of schedules, Filename
+* Output: True or False
+* Description: Insert all lectures into databaseaccording to provided schedule data
+*/
+
 exports.uploadSchedule=function(list, fileName){
     return new Promise((resolve, reject) => {
         let i = 0;
@@ -166,7 +172,7 @@ exports.uploadSchedule=function(list, fileName){
                             i++;
                             lecturesList=lecturesList.concat(listLectures.map(lecture=>{lecture.courseId=element.courseId; return lecture;}));// add data to temp array
                             if(i===list.length){ //if last iteration  
-                                insertLectures(lecturesList)
+                                insertLectures(lecturesList)//insert lectures into db
                                     .then(() => {// update file data after all lecture insert
                                         const date = moment().format("YYYY-MM-DD HH:mm:ss")
                                         const sql3 = 'UPDATE File SET FileName=? , LastUpdate=? WHERE FileType=4'
@@ -175,7 +181,10 @@ exports.uploadSchedule=function(list, fileName){
                                                 console.log("fail");
                                                 reject(err3)
                                             }
-                                            else resolve(true);
+                                            else {
+                                                console.log("Updated file 4 data")
+                                                resolve(true);
+                                            }
                                         })
                                     })
                                     .catch(/* istanbul ignore next */(err4) => {

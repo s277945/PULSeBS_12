@@ -274,7 +274,7 @@ export class StatisticsTab extends Component {
 
                             //set colors
                             animate={true}
-                            axisBottom={this.state.width>=(70*this.state.selected.length)}
+                            axisBottom={this.state.groupBy==="Week"?this.state.width>=(80*this.state.selected.length):this.state.width>=(50*this.state.selected.length)}
                             colorBy={d=>{
                                 if(d.id==="Booked seats") return d.indexValue;
                                 if(d.id==="Average attendees") return d.index;
