@@ -4,6 +4,27 @@ import dayGridPlugin from '@fullcalendar/daygrid'
 import timeGridPlugin from '@fullcalendar/timegrid'
 import moment from 'moment'
 
+function renderEventContent(arg) {
+    console.log(arg);
+    return (
+        <>
+            <div class="fc-event-main" style={{display: "block",width:"100%",backgroundColor:arg.backgroundColor, wrap: "nowrap",overflow:"auto"
+            }}>
+                <div style={{color:"#FFFFFF",marginLeft:"2px"}}>
+                    <b>{arg.event.extendedProps.lectureName}</b>
+                </div>
+                <div style={{color:"#FFFFFF",marginLeft:"2px"}}>
+                    {arg.event.extendedProps.courseName}
+                </div>
+                <div style={{color:"#FFFFFF",marginLeft:"2px"}}>
+                    {moment(arg.event.start).format("HH:mm")+" - "+moment(arg.event.end).format("HH:mm")}
+                </div>
+
+            </div>
+
+        </>
+    )
+}
 
 var stringToColour = function(str) {
     var hash = 0;
@@ -36,8 +57,7 @@ export default function Calendar({lectures,courses}){
             content:lecture.Name,
             start: lecture.Date,
             end: lecture.EndDate,
-            color: color,
-
+            color:color
         }
     })
 
@@ -57,18 +77,7 @@ export default function Calendar({lectures,courses}){
                 slotMinTime={"08:00:00"}
                 slotMaxTime={"22:00:00"}
                 slotEventOverlap={false}
-                eventContent={function(arg, createElement) {
-                    let children=[];
-                    /* istanbul ignore else */
-                    if (arg.event.extendedProps) {
-                        let elem4=createElement('div',{},moment(arg.event.start).format("HH:mm")+" - "+moment(arg.event.end).format("HH:mm"));
-                        let elem1=createElement('div',{},arg.event.extendedProps.lectureName+" / "+(arg.event.extendedProps.lectureType===/* istanbul ignore else */'p'?'Presence':'Virtual Classroom'));
-                        let elem2=createElement('b',{},arg.event.extendedProps.courseName);
-                        children=[elem2,elem1,elem4];
-                    }
-                    createElement()
-                    return createElement('div', {}, children);
-                }}
+                eventContent={renderEventContent}
             />
     )
 }
