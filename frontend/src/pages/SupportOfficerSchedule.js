@@ -210,6 +210,7 @@ export class SupportOfficerSchedule extends Component{
 
     renderModalSchedule=()=>{
         console.log("hour: "+this.state.elemModal.time);
+        console.log("day: "+this.state.elemModal.day);
         let tmp=[];
         tmp=this.splitString();
         return(
@@ -251,12 +252,12 @@ export class SupportOfficerSchedule extends Component{
                                     </Col>
                                     <Col>
                                         <Form.Label style={{display: "block", textAlign: "center"}}><b>Day</b></Form.Label>
-                                        <Form.Control value={this.state.day} data-testid={"day"} as={"select"} defaultValue={this.state.elemModal.day} onChange={this.handleChangeDay}>
-                                            <option>Mon</option>
-                                            <option>Tue</option>
-                                            <option>Wed</option>
-                                            <option>Thu</option>
-                                            <option>Fri</option>
+                                        <Form.Control value={(this.state.day==="")?this.state.elemModal.day:this.state.day} data-testid={"day"} as={"select"} onChange={this.handleChangeDay}>
+                                            <option key={0} value={"Mon"}>Mon</option>
+                                            <option key={1} value={"Tue"}>Tue</option>
+                                            <option key={2} value={"Wed"}>Wed</option>
+                                            <option key={3} value={"Thu"}>Thu</option>
+                                            <option key={4} value={"Fri"}>Fri</option>
                                         </Form.Control>
                                     </Col>
 
