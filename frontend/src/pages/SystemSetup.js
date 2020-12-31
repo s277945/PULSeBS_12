@@ -26,7 +26,7 @@ export default function SystemSetup() {
     return(
         <div style={{minWidth: "1000px"}}>
             <br/>
-            <h2 className="page-title">Upload data</h2>
+            <h1 className="page-title">Upload data</h1>
             <UploadComponent uploaded={uploaded} setUploaded={setUploaded} filename={uploaded[0].fileName} filedate={uploaded[0].lastUpdate} key={0} type={0} Name={"Student list"} listType="student"/>
             <UploadComponent uploaded={uploaded} setUploaded={setUploaded} filename={uploaded[1].fileName} filedate={uploaded[1].lastUpdate} key={1} type={1} Name={"Professor list"} listType="professor"/>
             <UploadComponent uploaded={uploaded} setUploaded={setUploaded} filename={uploaded[2].fileName} filedate={uploaded[2].lastUpdate} key={2} type={2} Name={"Course list"} listType="course"/>

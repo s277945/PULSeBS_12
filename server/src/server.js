@@ -681,21 +681,21 @@ app.post('/api/fileData', (req, res) => {
 ////////////////////////
 
 /**
- * GET /api/students/:studentSsn
+ * GET /api/users/:userSsn
  *
- * Retrieves list of positive students or a single
+ * Retrieves list of positive users or a single
  *
- * Request params: student
+ * Request params: user
  *
- * IMPORTANT: pass "positiveStudents" as parameter if you need list of positive students otherwise insert SSN of student
+ * IMPORTANT: pass "positiveusers" as parameter if you need list of positive users otherwise insert SSN of user
  */
 
-app.get('/api/students/:studentSsn', (req, res) => {
-    const param = req.params.studentSsn
+app.get('/api/users/:userSsn', (req, res) => {
+    const param = req.params.userSsn
     console.log(param)
 
-    if(param === "positiveStudents"){
-        bookingManagerDao.getPositiveStudents()
+    if(param === "positiveUsers"){
+        bookingManagerDao.getPositiveUsers()
             .then((list) => {
                 res.status(201).json(list)
             })
@@ -703,9 +703,9 @@ app.get('/api/students/:studentSsn', (req, res) => {
                 res.status(500).json(err)
             })
     } else {
-        bookingManagerDao.searchStudentBySsn(param)
-            .then((student) => {
-                res.status(201).json(student)
+        bookingManagerDao.searchUserBySsn(param)
+            .then((user) => {
+                res.status(201).json(user)
             })
             .catch(/* istanbul ignore next */(err) => {
                 res.status(500).json(err)
@@ -715,17 +715,17 @@ app.get('/api/students/:studentSsn', (req, res) => {
 
 
 /**
- * POST api/students/:studentSsn
+ * POST api/users/:userSsn
  *
- * Sets a student as positive to covid
+ * Sets a user as positive to covid
  *
  * body request: nothing
  */
 
-app.post('/api/students/:studentSsn', (req, res) => {
-    const ssn = req.params.studentSsn
+app.post('/api/users/:userSsn', (req, res) => {
+    const ssn = req.params.userSsn
 
-    bookingManagerDao.setPositiveStudent(ssn)
+    bookingManagerDao.setPositiveUser(ssn)
         .then((response)=>{
             res.status(200).json({"setAsPositive": response})
         })
@@ -735,18 +735,18 @@ app.post('/api/students/:studentSsn', (req, res) => {
 });
 
 /**
- * GET /api/reports/:studentSsn
+ * GET /api/reports/:userSsn
  *
- * Retrieves list of students that participated to the same lectures of a positive student
+ * Retrieves list of users that participated to the same lectures of a positive user
  *
  * Needed to create a report
  *
- * Request params: studentSsn
+ * Request params: userSsn
  *
  */
 
-app.get('/api/reports/:studentSsn', (req, res) => {
-    const param = req.params.studentSsn
+app.get('/api/reports/:userSsn', (req, res) => {
+    const param = req.params.userSsn
 
     bookingManagerDao.generateReport(param)
         .then((list) => {
@@ -868,6 +868,25 @@ app.put('/api/schedules', (req, res) => {
     supportOfficerDao.updateSchedules(req.body)
         .then((list) =>{
             res.status(200).json(list)
+        })
+        .catch(/* istanbul ignore next*/(err) => {
+            res.status(500).json({errors: [{'msg': err}]});
+        })
+});
+
+
+/**
+ * PUT api/user/tutorial
+ *
+ * Body request: {"userId": "s269422"}
+ * Body response: {"response": true}
+ * Updates tutorial field of a user
+ * */
+
+app.put('/api/user/tutorial', (req, res) => {
+    userDao.setTutorial(req.body.userId)
+        .then((value) =>{
+            res.status(200).json({response: value})
         })
         .catch(/* istanbul ignore next*/(err) => {
             res.status(500).json({errors: [{'msg': err}]});

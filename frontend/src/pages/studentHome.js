@@ -360,7 +360,7 @@ export class StudentHome extends Component {
                 <br/>
                 <h3 className="page-subtitle-1">Today</h3>
                 <br/>
-                <Table data-testid={'lectures'} striped bordered hover style={{backgroundColor: "#fff"}}>
+                <Table data-testid={'lectures'} striped bordered hover style={{backgroundColor: "#fff", width:"98.5%", margin: "auto", marginBottom: "34px"}}>
                     <thead>
                     <tr>
                         <th>Lecture</th>
@@ -374,7 +374,7 @@ export class StudentHome extends Component {
                     </tr>
                     </thead>
                     <tbody>
-                    {this.state.lectures.filter(lecture=>moment(lecture.Date).diff(moment(), 'days')===0).map((lecture,index) =>
+                    {this.state.lectures.filter(lecture=>moment(lecture.Date).isSame(moment(), 'day')).map((lecture,index) =>
                         <tr key={index}>
                             <td>{lecture.Name}</td>
                             <td>{moment(lecture.Date).format('YYYY-MM-DD HH:mm')}</td>

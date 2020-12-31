@@ -22,7 +22,7 @@ exports.checkUserPwd = function (username, password) {
                     else {
                         this.getRole(row.userID)
                             .then(row2 => {
-                                resolve({userID: row.userID, userType: row2.UserType});
+                                resolve({userID: row.userID, userType: row2.UserType, tutorial: row2.Tutorial});
                             })
                             .catch(/* istanbul ignore next */err3 => {
                                 reject(err3);
@@ -37,7 +37,7 @@ exports.checkUserPwd = function (username, password) {
     });
 };
 
-/*
+/**
 * Input: userID
 * Output: UserType of the user
 * Description: Retrieve the role of a specific user
@@ -45,7 +45,7 @@ exports.checkUserPwd = function (username, password) {
 
 exports.getRole=function(userId){
     return new Promise((resolve, reject) => {
-        const sql='SELECT UserType FROM User WHERE userID=?'
+        const sql='SELECT UserType, Tutorial FROM User WHERE userID=?'
         db.get(sql, [userId], (err, row)=>{
             /* istanbul ignore if */
             if(err)
@@ -58,3 +58,25 @@ exports.getRole=function(userId){
         })
     })
 }
+
+
+/**
+ * Input: userId
+ * Output: true/err
+ *
+ * Description: set Tutorial field to 1 if user finishes or skip the tutorial
+ * */
+
+exports.setTutorial = function(userId){
+    return new Promise((resolve, reject) => {
+        const sql = 'UPDATE User SET Tutorial = 1 WHERE userID = ?'
+        db.run(sql, [userId], (err)=>{
+            if(err)
+                reject(err)
+            else
+                resolve(true)
+        })
+    })
+}
+
+

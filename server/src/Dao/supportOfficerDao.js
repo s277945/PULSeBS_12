@@ -1,7 +1,7 @@
 'use strict';
 const db = require('../db');
 const moment = require('moment');
-
+const mailer = require('../mailer');
 //////////////////////////////////////////////////
 //////////////////////STORY12/////////////////////
 //////////////////////////////////////////////////
@@ -147,39 +147,49 @@ exports.uploadEnrollment=function(list, fileName){
     });
 }
 
+/**
+* Input: List of schedules, Filename
+* Output: True or False
+* Description: Insert all lectures into databaseaccording to provided schedule data
+*/
+
 exports.uploadSchedule=function(list, fileName){
-    let i = 0;
     return new Promise((resolve, reject) => {
+        let i = 0;
         const sql='INSERT INTO Schedule(code, Room, Day, Seats, Time) VALUES(?,?,?,?,?)';
+        let lecturesList=[]; //temp lectures array of a course
+        list=list.sort((a,b)=>{return a.courseId===b.courseId?0:(a.courseId>b.courseId?1:-1)})// sort by courseId
         for(let element of list) {
             db.run(sql, [element.courseId, element.room, element.day, element.seats, element.time], (err) => {
                 /* istanbul ignore if */
-                if (err)
+                if (err){
+                    console.log(err);
                     reject(err);
-                else {
+                }
+                else {   
                     getListLectures(element)
                         .then((listLectures) => {
-                            for (let el of listLectures ){
-                                let sql2 = 'INSERT INTO Lecture VALUES(?,?,?,?,?,?,?,?,?,?,?,?)';
-                                db.run(sql2, [el.Course_Ref, el.Name, el.Capacity, el.Date, el.EndDate, el.DateDeadline,
-                                    el.BookedSeats, el.UnbookedSeats, el.Type, el.EmailSent,0, el.Day], (err2) => {
-                                    /* istanbul ignore if */
-                                    if(err2){
-                                        console.log("fail");
-                                        reject(err2)
-                                    }
-
-                                    else{
-                                        i++
-                                        if(i === listLectures.length) {
-                                            const date = moment().format("YYYY-MM-DD HH:mm:ss")
-                                            const sql3='UPDATE File SET FileName=? , LastUpdate=? WHERE FileType=4'
-                                            db.run(sql3, [fileName, date], (err3) => {
+                            i++;
+                            lecturesList=lecturesList.concat(listLectures.map(lecture=>{lecture.courseId=element.courseId; return lecture;}));// add data to temp array
+                            if(i===list.length){ //if last iteration  
+                                insertLectures(lecturesList)//insert lectures into db
+                                    .then(() => {// update file data after all lecture insert
+                                        const date = moment().format("YYYY-MM-DD HH:mm:ss")
+                                        const sql3 = 'UPDATE File SET FileName=? , LastUpdate=? WHERE FileType=4'
+                                        db.run(sql3, [fileName, date], (err3) => {
+                                            if (err3) {
+                                                console.log("fail");
+                                                reject(err3)
+                                            }
+                                            else {
+                                                console.log("Updated file 4 data")
                                                 resolve(true);
-                                            })
-                                        }
-                                    }
-                                })
+                                            }
+                                        })
+                                    })
+                                    .catch(/* istanbul ignore next */(err4) => {
+                                        reject(err4);
+                                    })
                             }
                         })
                         .catch(/* istanbul ignore next */(err2) => {
@@ -189,6 +199,37 @@ exports.uploadSchedule=function(list, fileName){
             })
         }
     });
+}
+
+function insertLectures(lecturesList) {
+    return new Promise((resolve, reject) => {
+        let currentCourse=null;
+        let index=0;
+        lecturesList=lecturesList.sort((a,b)=>{//order by name then date
+            return a.courseId===b.courseId?moment(a.Date).diff(b.Date, "seconds"):(a.courseId>b.courseId?1:-1) }).map(lecture=>{
+                if(lecture.courseId!==currentCourse) {currentCourse=lecture.courseId; index=0;}
+                index++; lecture.Name=lecture.Name+index; return lecture});//add proper index to lecture
+        index=0;
+        for (let el of lecturesList ){
+            index++;
+            el.index=index;
+            let sql2 = 'INSERT INTO Lecture VALUES(?,?,?,?,?,?,?,?,?,?,?,?)'; //add lecture to db
+            db.run(sql2, [el.Course_Ref, el.Name, el.Capacity, el.Date, el.EndDate, el.DateDeadline,
+                el.BookedSeats, el.UnbookedSeats, el.Type, el.EmailSent,0, el.Day], (err2) => {
+                /* istanbul ignore if */
+                if(err2){
+                    console.log("fail");
+                    reject(err2)
+                }    
+                else{
+                    console.log(el.Name+" "+el.courseId+" "+el.index+" su "+lecturesList.length);
+                    if(el.index===lecturesList.length) {//resolve at last iteration
+                        resolve(true);
+                    }
+                }
+            })
+        }
+    })
 }
 
 function getListLectures(schedule){
@@ -239,7 +280,6 @@ function getListLectures(schedule){
                 let date = moment()
                 let start = moment(startDate)
                 let end = moment(endDate)
-                let i = 0
                 while(start.isBefore(end)){
                     if(time[0].length === 4)
                         time[0] = "0"+time[0]
@@ -247,8 +287,6 @@ function getListLectures(schedule){
                     let startLecture = start.format("YYYY-MM-DD").concat(" " + time[0] + ":00")
                     let deadline = moment(startLecture).subtract(1, 'day').format("YYYY-MM-DD").concat(" 23:00:00")
                     let endLecture = start.format("YYYY-MM-DD").concat(" " + time[1] + ":00")
-                    i++;
-                    console.log(i)
                     let mailsent;
                     if(start.isAfter(date)) mailsent=0;
                     else mailsent=1;
@@ -256,7 +294,7 @@ function getListLectures(schedule){
 
                     let obj = {
                             "Course_Ref": schedule.courseId,
-                            "Name": courseName + " Les:" + i,
+                            "Name": courseName + " Les:",
                             "Capacity": schedule.seats,
                             "Date": startLecture,
                             "EndDate": endLecture,
@@ -431,8 +469,10 @@ exports.getSchedule = function(){
 }
 
 /**
+ * Input: schedule to be changed
+ * Output: True if everything gone well
  *
- *
+ * Description: update given schedule and associated future lectures
  * */
 
 exports.updateSchedules = function(schedule){
@@ -466,6 +506,11 @@ exports.updateSchedules = function(schedule){
 
 }
 
+
+/**
+ * Input: schedule to be changed
+ * Description: update schedule to be changed
+ * */
 function updateSingleSchedule(schedule){
     return new Promise((resolve, reject) => {
         const sql = 'UPDATE Schedule SET Room=?, Day=?, Seats=?, Time=? WHERE Code=? AND Day=?'
@@ -481,7 +526,7 @@ function updateSingleSchedule(schedule){
 
 
 /**
- * Updates given lectures
+ * Updates given lectures associated to a single schedule
  *
  * */
 
@@ -493,18 +538,13 @@ function updateGivenLectures(lectures, schedule){
         "Thu": 4,
         "Fri": 5
     }
-    let i = 0
     return new Promise((resolve, reject)=> {
         const sql = 'UPDATE Lecture SET Capacity=?, Date=?, EndDate=?, DateDeadline=?, Day=? WHERE Course_Ref=? AND Date=?'
         if(lectures.length === 0) resolve("there are not lectures to be changed")
         for(let lecture of lectures){
-            i++
-            //console.log(lecture.Date)
             let date = moment(lecture.Date)
             let nDay = Number(dayMap[schedule.newDay])
             let newDate = moment(date).startOf('week').add(nDay, 'day')
-            //console.log("datasomma: "+ acca.add(2, 'day').format("YYYY-MM-DD"))
-            //console.log("scheduled "+ dayMap[schedule.newDay])
             let endDate = newDate
             let deadline = newDate
             deadline = moment(newDate).subtract(1, 'day').format("YYYY-MM-DD").concat(" 23:00:00")
@@ -513,17 +553,58 @@ function updateGivenLectures(lectures, schedule){
                                                 newDate.format("YYYY-MM-DD").concat(" "+time[0]+":00")
             endDate = (time[1].length === 4) ? endDate.format("YYYY-MM-DD").concat(" 0"+time[1]+":00") :
                                                 endDate.format("YYYY-MM-DD").concat(" "+time[1]+":00")
-            //console.log(newDate)
-            //console.log(endDate)
-            db.run(sql, [schedule.newSeats, newDate, endDate, deadline, schedule.newDay, lecture.Course_Ref, lecture.Date],
-                (err) => {
+
+            db.serialize(()=>{
+                db.run(sql, [schedule.newSeats, newDate, endDate, deadline, schedule.newDay,
+                        lecture.Course_Ref, lecture.Date], (err) => {
                     if(err)
                         reject(err)
-                    else {
-                        if (i === lectures.length) resolve(true)
+                })
+
+                const sql2 = 'UPDATE Booking SET Date_Ref=?, EndDate=? WHERE Course_Ref=? AND Date_Ref=?'
+                db.run(sql2, [newDate, endDate, lecture.Course_Ref, lecture.Date], (err) => {
+                    if(err)
+                        reject(err)
+                })
+
+                const sql3 = 'SELECT Email FROM User WHERE userID IN ('+
+                    'SELECT Student_Ref FROM Booking WHERE Course_Ref=? AND Date_Ref=?)'
+                db.all(sql3, [lecture.Course_Ref, newDate], (err, rows)=>{
+                    if(err)
+                        reject(err)
+                    else{
+                        for(let email of rows){
+                            sendBookingChangeNotification(email.Email, lecture.Date, newDate, endDate)
+                        }
                     }
                 })
+            })
+            resolve(true)
+
         }
 
+
     })
+}
+
+
+/**
+ * Sends notifications to all of students that have been affected by a changed lecture
+ * */
+function sendBookingChangeNotification(email, oldDate, newDate, newEnd){
+    let mailOptions = {
+        from: mailer.email,
+        to: email,
+        subject: 'Booking Change Notification',
+        text: `Dear student, lecture on ${oldDate} has been moved on ${newDate} and will last until ${newEnd}`
+    };
+
+    mailer.transporter.sendMail(mailOptions, function(err, info){
+        /* istanbul ignore if */
+        if(err){
+            console.log(err);
+        } else {
+            console.log('Email sent: ' + info.response);
+        }
+    });
 }

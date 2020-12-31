@@ -11,7 +11,7 @@ export default function coursesSetup() {
     return(
         <>
             <br/>
-            <h2 className="page-title">Courses setup</h2>
+            <h1 className="page-title">Courses setup</h1>
             <CoursesSetup/>
         </>
     )

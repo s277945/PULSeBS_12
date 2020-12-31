@@ -17,7 +17,8 @@ export class SupportOfficerSchedule extends Component{
         endDate:"",
         day:"",
         room:"",
-        seats:""
+        seats:"",
+        error:false
     }
     componentDidMount() {
         this.updateSchedule();
@@ -31,13 +32,14 @@ export class SupportOfficerSchedule extends Component{
                 console.log(err);
             })
     }
-    handleChangeStartTime=(date)=> {
+    handleChangeStartTime=(date, endDate)=> {
         date=moment('25/12/2020', "DD/MM/YYYY").utcOffset(1).add(date, 'seconds').format("HH:mm")
-        if(date>this.state.endDate&&this.state.endDate!=""){
+        if(this.state.endDate!=="") endDate = this.state.endDate;
+        if(moment(date, "HH:mm").isSameOrAfter(moment(endDate, "HH:mm"))){
             console.log("IF START DATE")
         }
         else{
-            this.setState({startDate:date});
+            this.setState({startDate:date,error:false});
         }
 
         console.log("startDate:"+this.state.startDate);
@@ -45,7 +47,7 @@ export class SupportOfficerSchedule extends Component{
     }
     splitString=()=>{
         let tmp=[];
-        if(this.state.elemModal.time!=undefined){
+        if(this.state.elemModal.time!==undefined){
             tmp=this.state.elemModal.time.toString().split('-');
             console.log(JSON.stringify(tmp));
             if(tmp.length===1){
@@ -61,14 +63,15 @@ export class SupportOfficerSchedule extends Component{
         }
         return tmp;
     }
-    handleChangeEndTime=(date)=>{
+    handleChangeEndTime=(date, startDate)=>{
         date=moment('25/12/2020', "DD/MM/YYYY").utcOffset(1).add(date, 'seconds').format("HH:mm")
-        console.log(moment('25/12/2020', "DD/MM/YYYY").utcOffset(1).add(date, 'seconds').format("HH:mm"))
-        if(date<this.state.startDate){
+        console.log(moment('25/12/2020', "DD/MM/YYYY").utcOffset(1).add(date, 'seconds').format("HH:mm"))        
+        if(this.state.startDate!=="") startDate = this.state.startDate;
+        if(moment(date, "HH:mm").isSameOrBefore(moment(startDate, "HH:mm"))){
             console.log('IF ENDDATE');
         }
         else{
-            this.setState({endDate:date});
+            this.setState({endDate:date,error:false});
         }
 
         console.log("startDate:"+this.state.startDate);
@@ -90,6 +93,9 @@ export class SupportOfficerSchedule extends Component{
         else
             this.setState({seats:e.target.value});
     }
+    handleDisabled=(elem)=>{
+        return ((elem.state.startDate===""&&elem.state.endDate===""&&elem.state.seats===""&&elem.state.room===""&&elem.state.day==="")||elem.state.error)
+    }
     /*When confirm button is pressed, first of all it should be created
         a body for PUT request, inside it there are old and new values of
         request*/
@@ -104,7 +110,7 @@ export class SupportOfficerSchedule extends Component{
         if(this.state.startDate===""&&this.state.endDate===""){
             time="";
         }
-        else if(this.state.startDate!=""&&this.state.endDate===""){
+        else if(this.state.startDate!==""&&this.state.endDate===""){
             console.log("tmp1: "+tmp[1]);
             console.log("start: "+this.state.startDate);
             if(moment(this.state.startDate).isBefore(tmp[1])){
@@ -114,7 +120,7 @@ export class SupportOfficerSchedule extends Component{
 
         }
 
-        else if(this.state.startDate===""&&this.state.endDate!=""){
+        else if(this.state.startDate===""&&this.state.endDate!==""){
             console.log("tmp0: "+tmp[0]);
             console.log("end: "+this.state.endDate)
             if(moment(this.state.endDate).isAfter(tmp[0])){
@@ -125,7 +131,7 @@ export class SupportOfficerSchedule extends Component{
         else{
             time=this.state.startDate+"-"+this.state.endDate;
         }
-        if(time!=""||this.state.day!=""||this.state.room!=""||this.state.seats!=""){
+        if(time!=""||this.state.day!==""||this.state.room!==""||this.state.seats!==""){
             body={
                 courseId:this.state.elemModal.courseId,
                 oldDay:this.state.elemModal.day,
@@ -158,7 +164,8 @@ export class SupportOfficerSchedule extends Component{
                         endDate:"",
                         day:"",
                         room:"",
-                        seats:""
+                        seats:"",
+                        error:false
                     });
                 })
                 .catch(err=>{
@@ -171,7 +178,9 @@ export class SupportOfficerSchedule extends Component{
                         endDate:"",
                         day:"",
                         room:"",
-                        seats:""});
+                        seats:"",
+                        error:false
+                    });
                 })
         }
         else{
@@ -201,6 +210,7 @@ export class SupportOfficerSchedule extends Component{
 
     renderModalSchedule=()=>{
         console.log("hour: "+this.state.elemModal.time);
+        console.log("day: "+this.state.elemModal.day);
         let tmp=[];
         tmp=this.splitString();
         return(
@@ -208,7 +218,7 @@ export class SupportOfficerSchedule extends Component{
                 <Modal.Header data-testid={"close"} closeButton>
                     <div>
                         <Modal.Title>
-                            <div>
+                            <div style={{marginLeft: "140px"}}>
                                 Update Schedule
                             </div>
                         </Modal.Title>
@@ -224,7 +234,7 @@ export class SupportOfficerSchedule extends Component{
                                         <Form.Label style={{display: "block", textAlign: "center"}}><b>CourseID</b></Form.Label>
                                         <Form.Control style={{display: "block", textAlign: "center"}} data-testid={"courseId"} type="text" plaintext readOnly placeholder={this.state.elemModal.courseId}/>
                                     </Col>
-                                    <Col xs={9}>
+                                    <Col xs={9} style={{borderLeft:"solid", borderWidth: "1px", borderColor: "#dddddd"}}>
                                         <Form.Label style={{display: "block", textAlign: "center"}}><b>Course Name</b></Form.Label>
                                         <Form.Control style={{display: "block", textAlign: "center"}} data-testid={"name"} type="text" plaintext readOnly placeholder={this.state.elemModal.courseName}/>
                                     </Col>
@@ -242,12 +252,12 @@ export class SupportOfficerSchedule extends Component{
                                     </Col>
                                     <Col>
                                         <Form.Label style={{display: "block", textAlign: "center"}}><b>Day</b></Form.Label>
-                                        <Form.Control value={this.state.day} data-testid={"day"} as={"select"} defaultValue={this.state.elemModal.day} onChange={this.handleChangeDay}>
-                                            <option>Mon</option>
-                                            <option>Tue</option>
-                                            <option>Wed</option>
-                                            <option>Thu</option>
-                                            <option>Fri</option>
+                                        <Form.Control value={(this.state.day==="")?this.state.elemModal.day:this.state.day} data-testid={"day"} as={"select"} onChange={this.handleChangeDay}>
+                                            <option key={0} value={"Mon"}>Mon</option>
+                                            <option key={1} value={"Tue"}>Tue</option>
+                                            <option key={2} value={"Wed"}>Wed</option>
+                                            <option key={3} value={"Thu"}>Thu</option>
+                                            <option key={4} value={"Fri"}>Fri</option>
                                         </Form.Control>
                                     </Col>
 
@@ -257,24 +267,25 @@ export class SupportOfficerSchedule extends Component{
                                 <Row>
                                     <Col>
                                         <Form.Label style={{display: "block", textAlign: "center"}}><b>Start Hour</b></Form.Label>
-                                        <TimePicker format={24} initialValue={tmp[0]} value={this.state.startDate} start={"8:30"} end={"21:00"} step={30} onChange={this.handleChangeStartTime} isInvalid={(this.state.startDate>this.state.endDate&&this.state.endDate!="")}>Start</TimePicker>
-                                        {   (moment(this.state.startDate).isAfter(this.state.endDate)&&this.state.endDate!="")
-                                            ? <><Form.Text style={{color: "red", paddingTop: "5px", paddingBottom: "5px"}}>Start date should not be greater than end date</Form.Text></>
+                                        <TimePicker format={24} initialValue={tmp[0]} value={this.state.startDate} start={"8:30"} end={"21:00"} step={30} onChange={e=>{this.handleChangeStartTime(e,tmp[1])}} isInvalid={(moment((this.state.startDate===""?tmp[0]:this.state.startDate)).isAfter((this.state.endDate===""?tmp[1]:this.state.endDate)))}>Start</TimePicker>
+                                        {   (moment((this.state.startDate===""?tmp[0]:this.state.startDate)).isAfter((this.state.endDate===""?tmp[1]:this.state.endDate)))
+                                            ?<><Form.Text style={{color: "red", paddingTop: "5px", paddingBottom: "5px"}}>Start date should not be greater than end date</Form.Text></>
                                             : null
                                         }
                                     </Col>
                                     <Col>
                                         <Form.Label style={{display: "block", textAlign: "center"}}><b>End Hour</b></Form.Label>
-                                        <TimePicker format={24} initialValue={tmp[1]} value={this.state.endDate} start={"8:30"} end={"21:00"} step={30} onChange={this.handleChangeEndTime} isInvalid={(this.state.endDate<this.state.startDate&&this.state.startDate!="")}>End</TimePicker>
-                                        {   (moment(this.state.endDate).isBefore(this.state.startDate)&&this.state.startDate!="")
-                                            ? <><Form.Text style={{color: "red", paddingTop: "5px", paddingBottom: "5px"}}>End date should not be less than start date</Form.Text></>
+                                        <TimePicker format={24} initialValue={tmp[1]} value={this.state.endDate} start={"8:30"} end={"21:00"} step={30} onChange={e=>{this.handleChangeEndTime(e,tmp[0])}} isInvalid={(moment((this.state.endDate===""?tmp[1]:this.state.endDate)).isBefore((this.state.startDate===""?tmp[0]:this.state.startDate)))}>End</TimePicker>
+                                        {   //case in which i already have both end and startDate. if it is the
+                                            (moment((this.state.endDate===""?tmp[1]:this.state.endDate)).isBefore((this.state.startDate===""?tmp[0]:this.state.startDate)))
+                                            ?<><Form.Text style={{color: "red", paddingTop: "5px", paddingBottom: "5px"}}>End date should not be less than start date</Form.Text></>
                                             : null
                                         }
                                     </Col>
                                 </Row>
                             </Form.Group>
                             <div style={{display: "flex", flexWrap: "nowrap",  justifyContent: "center"}}>
-                                <Button data-testid={"submit"} variant="primary" style={{marginRight: "25px", paddingRight: "17px", paddingLeft: "17px"}} onClick={this.handleConfirm}>
+                                <Button disabled={this.handleDisabled(this)} data-testid={"submit"} variant="primary" style={{marginRight: "25px", paddingRight: "17px", paddingLeft: "17px"}} onClick={this.handleConfirm}>
                                     Confirm
                                 </Button>
                                 <Button data-testid={"reset"} variant="danger" onClick={this.handleReset}>
@@ -295,11 +306,11 @@ export class SupportOfficerSchedule extends Component{
             table.push(<tr key={k++}>
                 <td>{row.courseId}</td>
                 <td>{row.courseName}</td>
-                <td>{row.room}</td>
-                <td>{row.day}</td>
-                <td>{row.seats}</td>
-                <td>{row.time}</td>
-                <td style={{ display: "flex", justifyContent: "flex-start" }}><Button style={{ marginLeft: "5px" }} data-testid={"showReport_" + k++} onClick={(e) => { e.preventDefault();this.setState({ modal:true,elemModal:row});}}>Modify Schedule</Button></td>
+                <td><div style={{ display: "flex", justifyContent: "center" }}>{row.room}</div></td>
+                <td><div style={{ display: "flex", justifyContent: "center" }}>{row.day}</div></td>
+                <td><div style={{ display: "flex", justifyContent: "center" }}>{row.seats}</div></td>
+                <td><div style={{ display: "flex", justifyContent: "center" }}>{row.time}</div></td>
+                <td style={{ display: "flex", justifyContent: "center" }}><Button style={{ marginLeft: "5px" }} data-testid={"showReport_" + k++} onClick={(e) => { e.preventDefault();this.setState({ modal:true,elemModal:row});}}>Modify Schedule</Button></td>
             </tr>)
         });
         return(
@@ -308,11 +319,11 @@ export class SupportOfficerSchedule extends Component{
                 <tr>
                     <th>CourseID</th>
                     <th>CourseName</th>
-                    <th>Room</th>
-                    <th>Day</th>
-                    <th>Seats</th>
-                    <th>Time</th>
-                    <th>Update</th>
+                    <th style={{width: "4%", textAlign: "center"}}>Room</th>
+                    <th style={{width: "6%", textAlign: "center"}}>Day</th>
+                    <th style={{width: "6%", textAlign: "center"}}>Seats</th>
+                    <th style={{width: "6%", textAlign: "center"}}>Time</th>
+                    <th style={{width: "12%", textAlign: "center"}}>Update</th>
                 </tr>
                 </thead>
                 <tbody data-testid={"listTabSL"}>
