@@ -874,5 +874,24 @@ app.put('/api/schedules', (req, res) => {
         })
 });
 
+
+/**
+ * PUT api/user/tutorial
+ *
+ * Body request: {"userId": "s269422"}
+ * Body response: {"response": true}
+ * Updates tutorial field of a user
+ * */
+
+app.put('/api/user/tutorial', (req, res) => {
+    userDao.setTutorial(req.body.userId)
+        .then((value) =>{
+            res.status(200).json({response: value})
+        })
+        .catch(/* istanbul ignore next*/(err) => {
+            res.status(500).json({errors: [{'msg': err}]});
+        })
+});
+
 //activate server
 app.listen(port, () => console.log(`Server ready at port: ${port}`));
