@@ -1,8 +1,10 @@
-import React, { Component } from 'react'
+import React, { Component, useContext } from 'react'
 import Nav from 'react-bootstrap/Nav'
 import Navbar from 'react-bootstrap/Navbar'
 import { authContext } from '../components/Authsystem'
 import { withRouter } from 'react-router-dom';
+import Button from 'react-bootstrap/Button'
+import {TourContext} from './studentHomeTour'
 
 class StudentNavbar extends Component {
     static contextType = authContext
@@ -44,12 +46,17 @@ class StudentNavbar extends Component {
 
         return (
             <>
-                <Navbar bg="dark" variant="dark">
+                <Navbar bg="dark" variant="dark" >
                     <Navbar.Brand data-testid={'home'} href="#" onClick={this.redirHome}>PULSeBS</Navbar.Brand>
-                    <Nav className="mr-auto">
+                    <Nav tour-selec="navbar" className="mr-auto">
                         <Nav.Link data-testid={"studentLectures"} href="#lectures" active={this.state.lectureslink} onSelect={this.showLectures}>Lectures</Nav.Link>
                         <Nav.Link data-testid={"calendar"} href="#calendar" active={this.state.calendarlink} onSelect={this.showCalendar}>Calendar</Nav.Link>
                     </Nav>
+
+                    <TourContext.Consumer>
+                        {setIsTourOpen => <Button variant="dark" onClick={() => setIsTourOpen(true)}>Start tour</Button>}                    
+                    </TourContext.Consumer>
+
                     <Nav.Link data-testid="logout" href="#logout" onSelect={this.handleLogout}>Logout</Nav.Link>
                 </Navbar>
             </>

@@ -40,7 +40,9 @@
     "react-scripts": "3.4.3",
     "react-test-renderer": "^17.0.1",
     "react-toastify": "^6.2.0",
+    "reactour": "^1.18.0",
     "redux": "^4.0.5",
+    "styled-components": "^4.4.1",
     "xlsx": "^0.16.9"
   },
   "scripts": {

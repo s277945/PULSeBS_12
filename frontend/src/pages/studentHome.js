@@ -10,6 +10,7 @@ import { getLectures, getCourses, getStudentBookedLectures, getStudentWaitingLec
 import Calendar from '../components/Calendar';
 import Container from 'react-bootstrap/Container'
 import moment from 'moment'
+import StudentHomeTour from "./studentHomeTour";
 
 export class StudentHome extends Component {
     static contextType = authContext
@@ -422,14 +423,19 @@ export class StudentHome extends Component {
         if(this.state.show === 1) return(this.renderCalendar())
     }
 
+
+
     render() {
         return (
-            <div className="app-element-background">
-                <StudentNavbar setShow={this.setShow}/>
-                {this.renderContent()}
-                {this.renderModal()}
-                {this.renderPopup()}
-            </div>
+            <StudentHomeTour>
+                <div className="app-element-background">
+                    
+                    <StudentNavbar setShow={this.setShow}/>
+                    {this.renderContent()}
+                    {this.renderModal()}
+                    {this.renderPopup()}
+                </div>
+            </StudentHomeTour>
         )
     }
 }
