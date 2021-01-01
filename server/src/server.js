@@ -866,8 +866,8 @@ app.get('/api/schedules', (req, res) => {
 
 app.put('/api/schedules', (req, res) => {
     supportOfficerDao.updateSchedules(req.body)
-        .then((list) =>{
-            res.status(200).json(list)
+        .then((response) =>{
+            res.status(200).json(response)
         })
         .catch(/* istanbul ignore next*/(err) => {
             res.status(500).json({errors: [{'msg': err}]});
