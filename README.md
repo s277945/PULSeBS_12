@@ -335,7 +335,7 @@
 
 ## ATTENDANCE ENDPOINT
 
-** POST /api/:courseId/:date/attendees **
+**POST /api/:courseId/:date/attendees**
 - Sets the attendance of the students to a lecture
 - request parameters: courseId, date
 - request body: [{"studentId": "s267348"}, ...]
@@ -343,7 +343,7 @@
 
 ## SCHEDULE ENDPOINTS
 
-** GET /api/teacherPastLectures **
+**GET /api/teacherPastLectures**
 - Returns a list of past lectures for a given teacher
 - response body: [
   {
@@ -358,7 +358,7 @@
   "Attendees": 0
   }, ...]
 
-** GET api/schedules ** 
+**GET api/schedules** 
 - Returns list of the schedules
 - response body: [
   {
@@ -378,14 +378,14 @@
   "time": "8:30-11:30"
   }, ...]
   
-** PUT /api/schedules **
+**PUT /api/schedules**
 - Updates a schedule and associated lectures
 - request body: {"courseId": "...","oldDay": "...","newDay":"...","oldTime":"...","newTime":"...","oldRoom": "...","newRoom": "...","oldSeats": "...","newSeats": "..."}
 - response body: true
 
 ## TUTORIAL ENDPOINT
 
-** PUT /api/user/tutorial **
+**PUT /api/user/tutorial**
 - Updates the tutorial field of a given user
 - body request: {"userId": "s269422"}
 - body response: {"response": true}
