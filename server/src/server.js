@@ -39,22 +39,6 @@ app.use(express.json());
 // Enable cors
 app.use(cors({ origin: true, credentials: true }));
 
-/**
- * FAKE ENDPOINT TO CHECK DEADLINE DAO
- *
- */
-
- /*app.get('/api/checkEmails', (req, res) => {
-   let date = moment().format('YYYY-MM-DD HH:mm:ss');
-   dao.checkDeadline(date)
-    .then((list) => {
-      res.status(200).json(list);
-    })
-    .catch(/* istanbul ignore next (err) => {
-      res.status(500).json({"errors": err});
-    })
- })*/
-
 //login route
 app.post('/api/login', (req, res) => {
   userDao.checkUserPwd(req.body.userName, req.body.password)
@@ -278,44 +262,30 @@ app.get('/api/teacherCourses', (req, res) => {
  });
 
 /**
- * GET /api/lectures/next
- *
- */
-
- /*app.get('/api/lectures/next', (req, res) => {
-    const user = req.user && req.user.user;
-    dao.getNextLectureNumber(user)
-      .then((response) => {
-        res.status(201).json(response);
-      })
-      .catch( istanbul ignore next (err) => res.status(500).json({ errors: [{ 'param': 'Server', 'msg': err.message }] }));
- });*/
-
-
-/**
  * GET /lectures/listStudents?courseRef=...&date=2020-....
  *
+ * Return the list of students that attended a specific lecture
+ * 
  * query parameters: lectureId
  */
 
  app.get('/api/lectures/listStudents', (req, res) => {
 
     const course_ref = req.query.courseRef;
-
     const date = moment(req.query.date).format('YYYY-MM-DD HH:mm:ss');
-     console.log('course_ref '+course_ref+" date: "+date);
+
     teacherDao.getStudentList(course_ref, date)
       .then((list) => {
         res.status(201).json(list);
       })
       .catch(/* istanbul ignore next */(err) => res.status(500).json({ errors: [{ 'param': 'Server', 'msg': err.message }] }));
-
  });
-
 
 /**
  * GET /lectures/booked
  *
+ * Return the lectures booked by the student logged in
+ * 
  * query parameters: userId => retrieved from cookie
  */
 
@@ -326,12 +296,13 @@ app.get('/api/lectures/booked', (req, res) => {
       res.status(201).json(list);
     })
     .catch(/* istanbul ignore next */(err) => res.status(500).json({ errors: [{ 'param': 'Server', 'msg': err.message }] }));
-
 });
 
 /**
  * GET /lectures/waiting
  *
+ * Return the list of lectures in which the student in waiting
+ * 
  * query parameters: userId => retrieved from cookie
  */
 
@@ -348,6 +319,8 @@ app.get('/api/lectures/waiting', (req, res) => {
 /**
  * DELETE /api/courseLectures/:courseId?date=...
  *
+ * Delete a lecture and notify all the students booked
+ * 
  * parameters: courseId, date
  */
 
@@ -391,6 +364,8 @@ app.get('/api/lectures/waiting', (req, res) => {
 /**
  * PUT /api/lectures
  *
+ * Change a lecture from "presence" to "distance"
+ * 
  * body parameters: {"courseId": C4567, "date": "2020-12-22 09:00:00"}
  * */
 
@@ -415,6 +390,7 @@ app.put('/api/lectures', (req, res) => {
 
 /**
  * GET /api/courseStats/:courseId
+ * 
  * Retrieves overall stats for every course for a given teacher
  *
  * body response: overall courses stats (to be defined)
@@ -434,6 +410,7 @@ app.get('/api/courseStats/:courseId', (req, res) => {
 
 /**
  * GET /api/historicalStats/:courseId
+ * 
  * Retrieves stats of the courses of a given teacher grouped by week (and course)
  *
  *  body response: stats grouped by week. Format to be defined
@@ -453,6 +430,7 @@ app.get('/api/monthStats/:courseId', (req, res) => {
 
 /**
  * GET /api/historicalStats/:courseId
+ * 
  * Retrieves stats of the courses of a given teacher grouped by week (and course)
  *
  *  body response: stats grouped by week. Format to be defined
@@ -498,7 +476,6 @@ app.get('/api/courses/all', (req, res) => {
  * Retrieves stats of a given course of the University
  *
  * Request param: courseId
- *
  */
 
 app.get('/api/managerCourses/:courseId', (req, res) => {
@@ -518,7 +495,6 @@ app.get('/api/managerCourses/:courseId', (req, res) => {
  * Retrieves stats of all courses of the University, grouped by courses
  *
  * Request params: courseId
- *
  */
 
 app.get('/api/managerCoursesTotal/:courseId', (req, res) => {
@@ -531,7 +507,6 @@ app.get('/api/managerCoursesTotal/:courseId', (req, res) => {
             res.status(500).json(err);
         })
 })
-
 
 /**
  * POST api/uploadStudents
@@ -551,7 +526,6 @@ app.post('/api/uploadStudents', (req, res) => {
         .catch(/* istanbul ignore next */(err) => {
             res.status(500).json(err);
         })
-
 });
 
 /**
@@ -572,9 +546,7 @@ app.post('/api/uploadTeachers', (req, res) => {
         .catch(/* istanbul ignore next */(err) => {
             res.status(500).json(err);
         })
-
 });
-
 
 /**
  * POST api/uploadCourses
@@ -593,7 +565,6 @@ app.post('/api/uploadCourses', (req, res) => {
         .catch(/* istanbul ignore next */(err) => {
             res.status(500).json(err);
         })
-
 });
 
 /**
@@ -613,9 +584,7 @@ app.post('/api/uploadEnrollment', (req, res) => {
         .catch(/* istanbul ignore next */(err) => {
             res.status(500).json(err);
         })
-
 });
-
 
 /**
  * POST api/uploadSchedule
@@ -634,7 +603,6 @@ app.post('/api/uploadSchedule', (req, res) => {
         .catch(/* istanbul ignore next */(err) => {
             res.status(500).json(err);
         })
-
 });
 
 /**
@@ -643,7 +611,6 @@ app.post('/api/uploadSchedule', (req, res) => {
  * Retrieves stats of all courses of the University, grouped by courses
  *
  * Request params: courseId
- *
  */
 
 app.get('/api/fileData', (req, res) => {
@@ -673,7 +640,6 @@ app.post('/api/fileData', (req, res) => {
       .catch(/* istanbul ignore next */(err) => {
           res.status(500).json(err);
       })
-
 });
 
 ////////////////////////
@@ -713,7 +679,6 @@ app.get('/api/users/:userSsn', (req, res) => {
     }
 })
 
-
 /**
  * POST api/users/:userSsn
  *
@@ -742,7 +707,6 @@ app.post('/api/users/:userSsn', (req, res) => {
  * Needed to create a report
  *
  * Request params: userSsn
- *
  */
 
 app.get('/api/reports/:userSsn', (req, res) => {
@@ -793,7 +757,6 @@ app.post('/api/lecturesBookable', (req, res) => {
       .catch(/* istanbul ignore next */(err) => {
           res.status(500).json(err);
       })
-
 });
 
 /**
@@ -839,12 +802,10 @@ app.get('/api/teacherPastLectures', (req, res) => {
       });
  });
 
-
 /**
  * GET api/schedules
  *
  * Returns list of the schedules
- *
  */
 
 app.get('/api/schedules', (req, res) => {
@@ -861,7 +822,6 @@ app.get('/api/schedules', (req, res) => {
  * PUT api/schedules
  *
  * Updates a schedule and associated lectures
- *
  */
 
 app.put('/api/schedules', (req, res) => {

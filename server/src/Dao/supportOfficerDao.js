@@ -428,11 +428,10 @@ function updateLectures(list){
 
 
 /**
-* Input: empty
-* Output: list of schedule
-* Description: retrieves list of schedule
+* Input: //
+* Output: list of schedule (Code, CourseName, Room, Day, Seats, Time)
+* Description: Retrieves list of schedule
 */
-
 
 exports.getSchedule = function(){
     let list = []
@@ -470,9 +469,8 @@ exports.getSchedule = function(){
 
 /**
  * Input: schedule to be changed
- * Output: True if everything gone well
- *
- * Description: update given schedule and associated future lectures
+ * Output: True ior False
+ * Description: Update the given schedule and associated future lectures
  * */
 
 exports.updateSchedules = function(schedule){
@@ -508,9 +506,11 @@ exports.updateSchedules = function(schedule){
 
 
 /**
- * Input: schedule to be changed
- * Description: update schedule to be changed
+ * Input: Schedule to be changed
+ * True or False
+ * Description: Update schedule to be changed
  * */
+
 function updateSingleSchedule(schedule){
     return new Promise((resolve, reject) => {
         const sql = 'UPDATE Schedule SET Room=?, Day=?, Seats=?, Time=? WHERE Code=? AND Day=?'
@@ -587,10 +587,10 @@ function updateGivenLectures(lectures, schedule){
     })
 }
 
-
 /**
  * Sends notifications to all of students that have been affected by a changed lecture
  * */
+
 function sendBookingChangeNotification(email, oldDate, newDate, newEnd){
     let mailOptions = {
         from: mailer.email,

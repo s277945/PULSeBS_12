@@ -9,7 +9,7 @@ const moment = require('moment');
 
 /**
 * Input: userID
-* Output: List of courses of the user
+* Output: List of courses (CourseID, Name)
 * Description: Retrieve the list of courses in which the user is enrolled
 */
 
@@ -161,7 +161,7 @@ exports.getStudentEmail = function(userId){
 /**
 * Input: Course_Ref, Date_Ref
 * Output: True or False
-* Description: Delete the booking from a lecture and update the avaiable seats of the lecture or pick the most recent student from 
+* Description: Delete the booking from a lecture and update the avaiable seats of the lecture OR pick the most recent student from 
 * the waiting list and keep the BookedSeats number the same
 */
 
@@ -198,7 +198,7 @@ exports.deleteSeat=function(userId, courseId, date){
 
 /*
 * Input: userID
-* Output: List of lectures booked
+* Output: List of lectures booked (Course_Ref, Date_Ref, EndDate)
 * Description: Retrieve the list of lectures already booked from a student
 */
 
@@ -243,7 +243,7 @@ function addWaitingList(userId, courseId, date, endDate){
 
 /**
 * Input: StudentID
-* Output: List of lectures
+* Output: List of lectures (Course_Ref, Date_Ref, EndDate_Ref)
 * Description: Pick the list of lectures in which the student is waiting
 */
 

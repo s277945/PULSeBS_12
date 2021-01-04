@@ -7,8 +7,8 @@ const moment = require('moment');
 //////////////////////////////////////////////////
 
 /**
- * Input:
- * Output: List of all the existent courses on the university
+ * Input: //
+ * Output: List of courses (CourseID)
  * Descrtiption: Retrieve the list of all the courses present on the university for the booking manager
  */
 
@@ -29,7 +29,7 @@ exports.getCourses=function(){
 
 /**
  * Input: Course_Ref
- * Output: List of lectures for the selected course
+ * Output: List of lectures for the selected course (Name, Date, BookedSeats, UnbookedSeats, Attendees)
  * Descrtiption: Retrieve a list of lectures for the selected course with the associated data (booking/cancellation/attendance)
  */
 
@@ -85,8 +85,8 @@ exports.getManagerCourseStatsTotal = function (courseId){
 //////////////////////////////////////////////////
 
 /**
- * Input: 
- * Output: List of positive students
+ * Input: //
+ * Output: List of positive students (Name, Surname, Birthday, SSN, UserType)
  * Descrtiption: Return the list of the students marked positive
  */
 
@@ -173,6 +173,10 @@ exports.generateReport = function(ssn){
     })
 }
 
+/**
+ * Descrtiption: Return the list of teachers that had the selected student in a lesson
+ */
+
 function retrieveTeachers(list, lectures){
     return new Promise ((resolve, reject) => {
         const sql='SELECT Name, Surname, Birthday, SSN, UserType FROM User WHERE UserID IN ('+
@@ -203,6 +207,10 @@ function retrieveTeachers(list, lectures){
         }
     })
 }
+
+/**
+ * Descrtiption: Return the list of students that had the selected student in a lesson
+ */
 
 function retrieveStudents(user, lectures){
     let list = [];
@@ -241,6 +249,10 @@ function retrieveStudents(user, lectures){
     })
 }
 
+/**
+ * Descrtiption: Return the list of lectures in which the student was present
+ */
+
 function retrieveLectures(userId, userType){
     let list = []
     return new Promise((resolve, reject) =>{
@@ -276,6 +288,10 @@ function retrieveLectures(userId, userType){
         }
     })
 }
+
+/**
+ * Descrtiption: Return the userID and the type of the user searched
+ */
 
 function getUserId(ssn){
     return new Promise((resolve, reject) =>{

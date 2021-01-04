@@ -3,7 +3,9 @@ const db = require('../db');
 const bcrypt = require('bcrypt');
 
 /**
- * Check user data for login
+ * Input: userID, Password
+ * Output: userID, Type, Tutorial
+ * Description: Check user data for login
  * */
 
 exports.checkUserPwd = function (username, password) {
@@ -62,8 +64,7 @@ exports.getRole=function(userId){
 
 /**
  * Input: userId
- * Output: true/err
- *
+ * Output: True or False
  * Description: set Tutorial field to 1 if user finishes or skip the tutorial
  * */
 
