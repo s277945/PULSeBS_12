@@ -267,7 +267,7 @@ export class SupportOfficerSchedule extends Component{
                                 <Row>
                                     <Col>
                                         <Form.Label style={{display: "block", textAlign: "center"}}><b>Start Hour</b></Form.Label>
-                                        <TimePicker format={24} initialValue={tmp[0]} value={this.state.startDate} start={"8:30"} end={"21:00"} step={30} onChange={e=>{this.handleChangeStartTime(e,tmp[1])}} isInvalid={(moment((this.state.startDate===""?tmp[0]:this.state.startDate)).isAfter((this.state.endDate===""?tmp[1]:this.state.endDate)))}>Start</TimePicker>
+                                        <TimePicker data-testid={"startTime"} format={24} initialValue={tmp[0]} value={this.state.startDate} start={"8:30"} end={"21:00"} step={30} onChange={e=>{this.handleChangeStartTime(e,tmp[1])}} isInvalid={(moment((this.state.startDate===""?tmp[0]:this.state.startDate)).isAfter((this.state.endDate===""?tmp[1]:this.state.endDate)))}>Start</TimePicker>
                                         {   (moment((this.state.startDate===""?tmp[0]:this.state.startDate)).isAfter((this.state.endDate===""?tmp[1]:this.state.endDate)))
                                             ?<><Form.Text style={{color: "red", paddingTop: "5px", paddingBottom: "5px"}}>Start date should not be greater than end date</Form.Text></>
                                             : null
@@ -275,7 +275,7 @@ export class SupportOfficerSchedule extends Component{
                                     </Col>
                                     <Col>
                                         <Form.Label style={{display: "block", textAlign: "center"}}><b>End Hour</b></Form.Label>
-                                        <TimePicker format={24} initialValue={tmp[1]} value={this.state.endDate} start={"8:30"} end={"21:00"} step={30} onChange={e=>{this.handleChangeEndTime(e,tmp[0])}} isInvalid={(moment((this.state.endDate===""?tmp[1]:this.state.endDate)).isBefore((this.state.startDate===""?tmp[0]:this.state.startDate)))}>End</TimePicker>
+                                        <TimePicker data-testid={"endTime"} format={24} initialValue={tmp[1]} value={this.state.endDate} start={"8:30"} end={"21:00"} step={30} onChange={e=>{this.handleChangeEndTime(e,tmp[0])}} isInvalid={(moment((this.state.endDate===""?tmp[1]:this.state.endDate)).isBefore((this.state.startDate===""?tmp[0]:this.state.startDate)))}>End</TimePicker>
                                         {   //case in which i already have both end and startDate. if it is the
                                             (moment((this.state.endDate===""?tmp[1]:this.state.endDate)).isBefore((this.state.startDate===""?tmp[0]:this.state.startDate)))
                                             ?<><Form.Text style={{color: "red", paddingTop: "5px", paddingBottom: "5px"}}>End date should not be less than start date</Form.Text></>
