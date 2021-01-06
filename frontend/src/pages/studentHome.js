@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component, useContext } from 'react'
 import StudentNavbar from './studentNavbar'
 import Accordion from 'react-bootstrap/Accordion'
 import Card from 'react-bootstrap/Card'
@@ -10,39 +10,56 @@ import { getLectures, getCourses, getStudentBookedLectures, getStudentWaitingLec
 import Calendar from '../components/Calendar';
 import Container from 'react-bootstrap/Container'
 import moment from 'moment'
-import StudentHomeTour from "./studentHomeTour";
+import StudentHomeTour from "../components/StudentHomeTourSystem";
+import {TourContext, tourLecture} from "../components/StudentHomeTourSystem";
 
-export class StudentHome extends Component {
+class StudentHome extends Component {
     static contextType = authContext
 
-    state = {
-        show : 0, //This state variable is used to choose the content to show. (0 : table, 1: calendar)
-        courses: [],
-        lectures: [],
-        togglecourse: null,
-        modal: {show: 0, lecture: null, message: null}, //this object contains all modal state variables
-        popup: {show: 0, lecture: {Name: "", Date: ""}, message: null}// this object contains all popup related variables
+    constructor(props){
+        super(props)
+
+        this.state = {
+            show : 0, //This state variable is used to choose the content to show. (0 : table, 1: calendar)
+            courses: [],
+            lectures: [],
+            togglecourse: null,
+            modal: {show: 0, lecture: null, message: null}, //this object contains all modal state variables
+            popup: {show: 0, lecture: {Name: "", Date: ""}, message: null}// this object contains all popup related variables
+        }
+
+        if(props.tour.isTourOpen){
+            this.state.lectures = tourLecture
+        }
     }
 
     componentDidMount() {
+        // Don't fetch nor save data when doing the tour
+        if(this.props.tour.isTourOpen) return;
+
+        this.getLecturesAndCoursesData();
+        this.handleSessionStorage();
+    }
+
+    getLecturesAndCoursesData(){
         // Get students courses data
         getCourses().then(response => {
             this.setState({ courses: response.data })
-            console.log(response.data)
         })
         .catch(/* istanbul ignore next */err => {
-            console.log(err);
+            console.error(err);
         })
         getLectures().then(response => {
             this.setState({ lectures: response.data })
-            console.log(response.data)
             this.setBookedLectures();
             this.setWaitingLectures();
         })
         .catch(/* istanbul ignore next */err => {
-            console.log(err);
+            console.error(err);
         })
+    }
 
+    handleSessionStorage(){
         let pagestate = sessionStorage.getItem("pagestate");//get saved show state value
         let togglecourse = sessionStorage.getItem("togglecourse");//get saved accordion state value
         let modal = sessionStorage.getItem("modal");//get saved modal state value
@@ -91,7 +108,7 @@ export class StudentHome extends Component {
             })
             this.setState({lectures: newLectureArray})
         }).catch(/* istanbul ignore next */err=>{
-            console.log(err);
+            console.error(err);
          });
 
     }
@@ -110,7 +127,7 @@ export class StudentHome extends Component {
             })
             this.setState({lectures: newLectureArray})
         }).catch(/* istanbul ignore next */err=>{
-            console.log(err);
+            console.error(err);
          });
 
     }
@@ -128,7 +145,6 @@ export class StudentHome extends Component {
         }
         postStudentBookedLecture(body)
             .then(response => {
-                console.log(response)
                 
                 const newLectures = this.state.lectures.slice();
                 const index = this.state.lectures.findIndex(lecture => //get lecture index in state array
@@ -147,7 +163,7 @@ export class StudentHome extends Component {
                 this.setState({lectures: newLectures})
                 this.modalClose();// then close modal
             }).catch(err=>{
-                console.log(err);
+                console.error(err);
                 if (err.response.status===500) {
                     /* istanbul ignore else */
                     if (err.response.data.errors[0].msg==="0 seats available") this.setPopup("Your booking request was not successful: there are no more seats available for this lecture");
@@ -160,7 +176,6 @@ export class StudentHome extends Component {
     cancelSeat(lectureId, date){
         deleteStudentBookedLecture(lectureId, date)
             .then(response => {
-                console.log(response)
                 const newLectures = this.state.lectures.slice();
                 const index = this.state.lectures.findIndex(lecture => //get lecture index in state array
                     lecture.Course_Ref === lectureId && lecture.Date === date
@@ -174,7 +189,7 @@ export class StudentHome extends Component {
                 this.setState({lectures: newLectures})
                 this.modalClose();// then close modal
             }).catch(/* istanbul ignore next */err=>{
-                console.log(err);
+                console.error(err);
              });
     }
 
@@ -427,15 +442,27 @@ export class StudentHome extends Component {
 
     render() {
         return (
-            <StudentHomeTour>
-                <div className="app-element-background">
-                    
-                    <StudentNavbar setShow={this.setShow}/>
-                    {this.renderContent()}
-                    {this.renderModal()}
-                    {this.renderPopup()}
-                </div>
-            </StudentHomeTour>
+            <div className="app-element-background">
+                
+                <StudentNavbar setShow={this.setShow}/>
+                {this.renderContent()}
+                {this.renderModal()}
+                {this.renderPopup()}
+            </div>
         )
     }
 }
+
+// Using wrapper to pass context as props (bcs a react component can only have one static context, and StudentHome is already the one for auth)
+// Note : could me more elegant with hooks, bcs refactoring now looks tedious
+const TourContextWrapper = () => {
+    return(
+        <StudentHomeTour>
+            <TourContext.Consumer>{tour=>
+                <StudentHome tour={tour}/>
+            }              
+            </TourContext.Consumer>
+        </StudentHomeTour>
+    )
+}
+export default TourContextWrapper
