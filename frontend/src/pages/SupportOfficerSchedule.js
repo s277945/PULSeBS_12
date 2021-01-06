@@ -183,7 +183,7 @@ export class SupportOfficerSchedule extends Component{
                     });
                 })
         }
-        else{
+        /*else{
             console.log("Nothing to modify");
             toast.info("Nothing to modify");
             this.setState({
@@ -194,7 +194,7 @@ export class SupportOfficerSchedule extends Component{
                 day:"",
                 room:"",
                 seats:""});
-        }
+        }*/
 
     }
     handleReset=()=>{

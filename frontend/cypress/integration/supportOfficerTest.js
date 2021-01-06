@@ -339,7 +339,7 @@ describe('SUPPORT OFFICER TESTS', function () {
                 url:'/api/schedules',
                 method:'GET',
                 status:200,
-                response:[{"courseId":"XY1211","courseName":"Metodi di finanziamento delle imprese","room":"1","day":"Mon","seats":120,"time":"8:30-11:30"},{"courseId":"XY8221","courseName":"Basi di dati","room":"4","day":"Mon","seats":80,"time":"10:00-11:30"}]
+                response:[{"courseId":"XY1211","courseName":"Metodi di finanziamento delle imprese","room":"1","day":"Mon","seats":120,"time":"16:00-17:30"},{"courseId":"XY8221","courseName":"Basi di dati","room":"4","day":"Mon","seats":80,"time":"10:00-11:30"}]
             }).as('schedule')
             cy.route({
                 method:'PUT',
@@ -369,19 +369,19 @@ describe('SUPPORT OFFICER TESTS', function () {
                         .should('have.value','50')
                     cy.get('[data-testid="startTime"]').should('be.visible')
                         .select("11:30")
-                        .should('have.value','11:30')
+                        .should('have.value','41400')
                     cy.get('[data-testid="endTime"]').should('be.visible')
                         .select("14:30")
-                        .should('have.value', '14:30')
+                        .should('have.value', '52200')
                     cy.get('[data-testid="submit"]').should('be.enabled')
                         .click()
                 })
             cy.wait('@put')
             cy.get('tbody>tr').eq(0).within(()=>{
-                cy.get('td').eq(2).should('have.value','170')
-                cy.get('td').eq(3).should('have.value','Tue')
-                cy.get('td').eq(4).should('have.value','50')
-                cy.get('td').eq(5).should('have.value','11:30-14:30')
+                cy.get('td').eq(2).should('contains.text','170')
+                cy.get('td').eq(3).should('contains.text','Tue')
+                cy.get('td').eq(4).should('contains.text','50')
+                cy.get('td').eq(5).should('contains.text','11:30-14:30')
             })
         });
         it('should not upload schedule if nothing was updated inside modal', function () {
@@ -419,7 +419,7 @@ describe('SUPPORT OFFICER TESTS', function () {
                 url:'/api/schedules',
                 method:'GET',
                 status:200,
-                response:[{"courseId":"XY1211","courseName":"Metodi di finanziamento delle imprese","room":"1","day":"Mon","seats":120,"time":"8:30-11:30"},{"courseId":"XY8221","courseName":"Basi di dati","room":"4","day":"Mon","seats":80,"time":"10:00-11:30"}]
+                response:[{"courseId":"XY1211","courseName":"Metodi di finanziamento delle imprese","room":"1","day":"Mon","seats":120,"time":"11:30-12:30"},{"courseId":"XY8221","courseName":"Basi di dati","room":"4","day":"Mon","seats":80,"time":"10:00-11:30"}]
             }).as('schedule')
             cy.route({
                 method:'PUT',
@@ -440,10 +440,10 @@ describe('SUPPORT OFFICER TESTS', function () {
                 .within(()=>{
                     cy.get('[data-testid="startTime"]').should('be.visible')
                         .select("12:30")
-                        .should('have.value','08:30')
+                        .should('have.value','41400')
                     cy.get('[data-testid="endTime"]').should('be.visible')
-                        .select("8:30")
-                        .should('have.value', '11:30')
+                        .select("08:30")
+                        .should('have.value', '45000')
                     cy.get('[data-testid="submit"]').should('not.be.enabled')
                 })
             
@@ -477,7 +477,15 @@ describe('SUPPORT OFFICER TESTS', function () {
                         .type("8A")
                         .should('have.value','8')
                     cy.get('[data-testid="submit"]').should('be.enabled')
+                        .click()
                 })
+            cy.wait('@put')
+            cy.get('tbody>tr').eq(0).within(()=>{
+                cy.get('td').eq(2).should('contains.text','1')
+                cy.get('td').eq(3).should('contains.text','Mon')
+                cy.get('td').eq(4).should('contains.text','8')
+                cy.get('td').eq(5).should('contains.text','8:30-11:30')
+            })
         });
         it('should return a server error', function () {
             cy.server()
@@ -485,7 +493,7 @@ describe('SUPPORT OFFICER TESTS', function () {
                 url:'/api/schedules',
                 method:'GET',
                 status:200,
-                response:[{"courseId":"XY1211","courseName":"Metodi di finanziamento delle imprese","room":"1","day":"Mon","seats":120,"time":"8:30-11:30"},{"courseId":"XY8221","courseName":"Basi di dati","room":"4","day":"Mon","seats":80,"time":"10:00-11:30"}]
+                response:[{"courseId":"XY1211","courseName":"Metodi di finanziamento delle imprese","room":"1","day":"Mon","seats":120,"time":"16:00-17:30"},{"courseId":"XY8221","courseName":"Basi di dati","room":"4","day":"Mon","seats":80,"time":"10:00-11:30"}]
             }).as('schedule')
             cy.route({
                 method:'PUT',
@@ -515,19 +523,19 @@ describe('SUPPORT OFFICER TESTS', function () {
                         .should('have.value','50')
                     cy.get('[data-testid="startTime"]').should('be.visible')
                         .select("11:30")
-                        .should('have.value','11:30')
+                        .should('have.value','41400')
                     cy.get('[data-testid="endTime"]').should('be.visible')
                         .select("14:30")
-                        .should('have.value', '14:30')
+                        .should('have.value', '52200')
                     cy.get('[data-testid="submit"]').should('be.enabled')
                         .click()
                 })
             cy.wait('@put')
             cy.get('tbody>tr').eq(0).within(()=>{
-                cy.get('td').eq(2).should('have.value','1')
-                cy.get('td').eq(3).should('have.value','Mon')
-                cy.get('td').eq(4).should('have.value','120')
-                cy.get('td').eq(5).should('have.value','8:30-11:30')
+                cy.get('td').eq(2).should('contains.text','1')
+                cy.get('td').eq(3).should('contains.text','Mon')
+                cy.get('td').eq(4).should('contains.text','120')
+                cy.get('td').eq(5).should('contains.text','16:00-17:30')
             })
         });
         it('should logout', function () {
