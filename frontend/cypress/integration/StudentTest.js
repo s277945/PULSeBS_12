@@ -4,6 +4,8 @@ describe('STUDENT PAGE', function () {
         cy.login('s2662260','scimmia','s')
         Cypress.Cookies.preserveOnce('token', 'value')
         Cypress.Cookies.debug(true)
+        cy.get(".app-element-background")
+            .click({force:true})
     })
     it('should show correctly student page', function () {
         cy.location('pathname').should('include','/studentHome')

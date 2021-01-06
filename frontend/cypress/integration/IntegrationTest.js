@@ -36,6 +36,9 @@ describe('TEACHER PAGE', function () {
         cy.get('[data-testid="teacherStudent"]').should('have.text', 'Student List')
             .should('have.attr', 'href', '#studentList')
             .click()
+        //click on programmed lectures info
+        cy.get('.card-header').eq(0)
+            .click({force:true})
         cy.get('tbody>tr').eq(0).find('.btn.btn-primary').should('have.text','SHOW LIST')
             .click()
         cy.wait(100)
@@ -51,6 +54,9 @@ describe('TEACHER PAGE', function () {
         cy.get('[data-testid="teacherStudent"]').should('have.text', 'Student List')
             .should('have.attr', 'href', '#studentList')
             .click()
+        //click on programmed lectures info
+        cy.get('.card-header').eq(0)
+            .click({force:true})
         cy.get('tbody>tr').eq(0).find('.btn.btn-primary').should('have.text','SHOW LIST')
             .click()
         cy.wait(100)

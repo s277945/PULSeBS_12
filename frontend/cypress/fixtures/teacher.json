@@ -45,6 +45,15 @@
       {"month":"January","year":2021,"average":null}]
   },
   {
+    "url": "/api/teacherPastLectures",
+    "method": "GET",
+    "data": [
+      {"Course_Ref":"C0123","Name":"SE2 Les:1","Date":"2020-10-01 13:00:00","DateDeadline":"2020-09-30 23:00:00","EndDate":"2020-10-01 16:00:00","BookedSeats":20,"Capacity":100,"Type":"p","Attendees":0},
+      {"Course_Ref":"C0123","Name":"SE2 Les:2","Date":"2020-10-02 14:30:00","DateDeadline":"2020-10-01 23:00:00","EndDate":"2020-10-02 16:00:00","BookedSeats":15,"Capacity":100,"Type":"p","Attendees":0},
+      {"Course_Ref":"C0123","Name":"SE2 Les:3","Date":"2020-12-04 18:00:00","DateDeadline":"2020-12-03 23:00:00","EndDate":"2020-12-04 19:30:00","BookedSeats":2,"Capacity":100,"Type":"p","Attendees":2},
+      {"Course_Ref":"C0123","Name":"SE2 Les:4","Date":"2020-12-17 19:30:00","DateDeadline":"2020-12-16 23:00:00","EndDate":"2020-10-17 21:00:00","BookedSeats":20,"Capacity":100,"Type":"p","Attendees":0}]
+  },
+  {
     "url": "/api/weekStats/*",
     "method": "GET",
     "data": [

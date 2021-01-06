@@ -332,8 +332,10 @@ describe('SUPPORT OFFICER TESTS', function () {
                     cy.wait(100)
                 })
         });
+    });
+    describe('SCHEDULE SETUP PAGE', function () {
         it('should modify a schedule', function () {
-             //scrivere un test in cui modifico tutti i campi e poi verifico che effettivamente i valori sono stati aggiornati
+            //scrivere un test in cui modifico tutti i campi e poi verifico che effettivamente i valori sono stati aggiornati
             cy.server()
             cy.route({
                 url:'/api/schedules',
@@ -446,7 +448,7 @@ describe('SUPPORT OFFICER TESTS', function () {
                         .should('have.value', '45000')
                     cy.get('[data-testid="submit"]').should('not.be.enabled')
                 })
-            
+
         });
         it('should not put in room field a char', function () {
             cy.server()
@@ -487,13 +489,101 @@ describe('SUPPORT OFFICER TESTS', function () {
                 cy.get('td').eq(5).should('contains.text','8:30-11:30')
             })
         });
+        it('should update start date only of a schedule', function () {
+            cy.server()
+            cy.route({
+                url:'/api/schedules',
+                method:'GET',
+                status:200,
+                response:[{"courseId":"XY1211","courseName":"Metodi di finanziamento delle imprese","room":"1","day":"Mon","seats":120,"time":"16:00-18:30"},{"courseId":"XY8221","courseName":"Basi di dati","room":"4","day":"Mon","seats":80,"time":"10:00-11:30"}]
+            }).as('schedule')
+            cy.route({
+                method:'PUT',
+                url:'/api/schedules',
+                status:200,
+                response:{}
+            }).as('put')
+            cy.get('[data-testid="schedule"]')
+                .should('be.visible')
+                .click()
+            cy.wait('@schedule')
+            cy.get('tbody>tr').eq(0).should('be.visible')
+                .click()
+                .within(()=>{
+                    cy.get('.btn.btn-primary').click()
+                })
+            cy.get('[data-testid="modal"]')
+                .within(()=>{
+                    cy.get('[data-testid="room"]').should('be.visible')
+                        .type("8A")
+                        .should('have.value','8A')
+                    cy.get('[data-testid="startTime"]').should('be.visible')
+                        .select("17:00")
+                        .should('have.value','61200')
+                    cy.wait(100)
+                    cy.get('[data-testid="submit"]').should('be.enabled')
+                        .click()
+                })
+            cy.wait('@put')
+            cy.get('tbody>tr').eq(0).within(()=>{
+                cy.get('td').eq(2).should('contains.text','8A')
+                cy.get('td').eq(3).should('contains.text','Mon')
+                cy.get('td').eq(4).should('contains.text','120')
+                cy.get('td').eq(5).should('contains.text','17:00:18:30')
+            })
+
+        });
+        it('should update only end date of a schedule', function () {
+            cy.server()
+            cy.route({
+                url:'/api/schedules',
+                method:'GET',
+                status:200,
+                response:[{"courseId":"XY1211","courseName":"Metodi di finanziamento delle imprese","room":"1","day":"Mon","seats":120,"time":"16:00-18:30"},{"courseId":"XY8221","courseName":"Basi di dati","room":"4","day":"Mon","seats":80,"time":"10:00-11:30"}]
+            }).as('schedule')
+            cy.route({
+                method:'PUT',
+                url:'/api/schedules',
+                status:200,
+                response:{}
+            }).as('put')
+            cy.get('[data-testid="schedule"]')
+                .should('be.visible')
+                .click()
+            cy.wait('@schedule')
+            cy.get('tbody>tr').eq(0).should('be.visible')
+                .click()
+                .within(()=>{
+                    cy.get('.btn.btn-primary').click()
+                })
+            cy.get('[data-testid="modal"]')
+                .within(()=>{
+                    cy.get('[data-testid="room"]').should('be.visible')
+                        .type("8A")
+                        .should('have.value','8A')
+                    cy.get('[data-testid="endTime"]').should('be.visible')
+                        .select("17:00")
+                        .should('have.value','61200')
+                    cy.wait(100)
+                    cy.get('[data-testid="submit"]').should('be.enabled')
+                        .click()
+                })
+            cy.wait('@put')
+            cy.get('tbody>tr').eq(0).within(()=>{
+                cy.get('td').eq(2).should('contains.text','8A')
+                cy.get('td').eq(3).should('contains.text','Mon')
+                cy.get('td').eq(4).should('contains.text','120')
+                cy.get('td').eq(5).should('contains.text','16:00-17:00')
+            })
+
+        });
         it('should return a server error', function () {
             cy.server()
             cy.route({
                 url:'/api/schedules',
                 method:'GET',
                 status:200,
-                response:[{"courseId":"XY1211","courseName":"Metodi di finanziamento delle imprese","room":"1","day":"Mon","seats":120,"time":"16:00-17:30"},{"courseId":"XY8221","courseName":"Basi di dati","room":"4","day":"Mon","seats":80,"time":"10:00-11:30"}]
+                response:[{"courseId":"XY1211","courseName":"Metodi di finanziamento delle imprese","room":"1","day":"Mon","seats":120,"time":"16:00:17:30"},{"courseId":"XY8221","courseName":"Basi di dati","room":"4","day":"Mon","seats":80,"time":"10:00-11:30"}]
             }).as('schedule')
             cy.route({
                 method:'PUT',
@@ -535,7 +625,7 @@ describe('SUPPORT OFFICER TESTS', function () {
                 cy.get('td').eq(2).should('contains.text','1')
                 cy.get('td').eq(3).should('contains.text','Mon')
                 cy.get('td').eq(4).should('contains.text','120')
-                cy.get('td').eq(5).should('contains.text','16:00-17:30')
+                cy.get('td').eq(5).should('contains.text','16:00:17:30')
             })
         });
         it('should logout', function () {
@@ -552,6 +642,5 @@ describe('SUPPORT OFFICER TESTS', function () {
             cy.getCookies().should('be.empty')
             cy.location('pathname').should('include','/')
         });
-
     });
 });
