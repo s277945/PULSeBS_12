@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component, useContext } from 'react'
 import StudentNavbar from './studentNavbar'
 import Accordion from 'react-bootstrap/Accordion'
 import Card from 'react-bootstrap/Card'
@@ -10,21 +10,38 @@ import { getLectures, getCourses, getStudentBookedLectures, getStudentWaitingLec
 import Calendar from '../components/Calendar';
 import Container from 'react-bootstrap/Container'
 import moment from 'moment'
-import StudentHomeTour from "./studentHomeTour";
+import StudentHomeTour from "../components/StudentHomeTourSystem";
+import {TourContext, tourLecture} from "../components/StudentHomeTourSystem";
 
-export class StudentHome extends Component {
+class StudentHome extends Component {
     static contextType = authContext
 
-    state = {
-        show : 0, //This state variable is used to choose the content to show. (0 : table, 1: calendar)
-        courses: [],
-        lectures: [],
-        togglecourse: null,
-        modal: {show: 0, lecture: null, message: null}, //this object contains all modal state variables
-        popup: {show: 0, lecture: {Name: "", Date: ""}, message: null}// this object contains all popup related variables
+    constructor(props){
+        super(props)
+
+        this.state = {
+            show : 0, //This state variable is used to choose the content to show. (0 : table, 1: calendar)
+            courses: [],
+            lectures: [],
+            togglecourse: null,
+            modal: {show: 0, lecture: null, message: null}, //this object contains all modal state variables
+            popup: {show: 0, lecture: {Name: "", Date: ""}, message: null}// this object contains all popup related variables
+        }
+
+        if(props.tour.isTourOpen){
+            this.state.lectures = tourLecture
+        }
     }
 
     componentDidMount() {
+        // Don't fetch nor save data when doing the tour
+        if(this.props.tour.isTourOpen) return;
+
+        this.getLecturesAndCoursesData();
+        this.handleSessionStorage();
+    }
+
+    getLecturesAndCoursesData(){
         // Get students courses data
         getCourses().then(response => {
             this.setState({ courses: response.data })
@@ -42,7 +59,9 @@ export class StudentHome extends Component {
         .catch(/* istanbul ignore next */err => {
             console.log(err);
         })
+    }
 
+    handleSessionStorage(){
         let pagestate = sessionStorage.getItem("pagestate");//get saved show state value
         let togglecourse = sessionStorage.getItem("togglecourse");//get saved accordion state value
         let modal = sessionStorage.getItem("modal");//get saved modal state value
@@ -354,6 +373,7 @@ export class StudentHome extends Component {
     }
 
     renderTodayLectureTables(){
+        console.log(this.state.lectures)
         return (
 
             <div>
@@ -427,15 +447,27 @@ export class StudentHome extends Component {
 
     render() {
         return (
-            <StudentHomeTour>
-                <div className="app-element-background">
-                    
-                    <StudentNavbar setShow={this.setShow}/>
-                    {this.renderContent()}
-                    {this.renderModal()}
-                    {this.renderPopup()}
-                </div>
-            </StudentHomeTour>
+            <div className="app-element-background">
+                
+                <StudentNavbar setShow={this.setShow}/>
+                {this.renderContent()}
+                {this.renderModal()}
+                {this.renderPopup()}
+            </div>
         )
     }
 }
+
+// Using wrapper to pass context as props (bcs a react component can only have one static context, and StudentHome is already the one for auth)
+// Note : could me more elegant with hooks, bcs refactoring now looks tedious
+const TourContextWrapper = () => {
+    return(
+        <StudentHomeTour>
+            <TourContext.Consumer>{tour=>
+                <StudentHome tour={tour}/>
+            }              
+            </TourContext.Consumer>
+        </StudentHomeTour>
+    )
+}
+export default TourContextWrapper

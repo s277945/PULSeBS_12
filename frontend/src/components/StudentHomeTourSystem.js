@@ -5,9 +5,14 @@ export const TourContext = createContext();
 
 export default function StudentHomeTour(props){
     const [isTourOpen, setIsTourOpen] = useState(true);
-  
+
+    const tour = {
+        isTourOpen: isTourOpen,
+        setIsTourOpen: setIsTourOpen
+    }
+
     return (
-        <TourContext.Provider value={isTourOpen, setIsTourOpen}>
+        <TourContext.Provider value={tour}>
             <Tour
             steps={steps}
             isOpen={isTourOpen}
@@ -26,4 +31,21 @@ const steps = [
         content: 'You can change between lectures/calendar view in the nav bar',
     },
 ];
-  
+
+
+        // BookedSeats: 1
+        // Capacity: 100
+        // Course_Ref: "C2468"
+        // Date: "2021-03-08 15:00:00"
+        // DateDeadline: "2021-03-07 23:00:00"
+        // EndDate: "2021-03-08 18:00:00"
+        // Name: "WA Les:3"
+        // Type: "p"
+        // alreadyBooked: true
+export const tourLecture = [
+    {
+        Name: "Lecture1",
+        Type: "p",
+        Date: new Date()
+    }
+]

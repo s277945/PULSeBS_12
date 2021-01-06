@@ -3,7 +3,7 @@ import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 import Login from './pages/Login'
-import { StudentHome } from './pages/studentHome'
+import StudentHome from './pages/studentHome'
 import { TeacherHome } from './pages/teacherHome'
 import BookingManagerHome from './pages/BookingManagerHome'
 import {PrivateRoute, ProvideAuth} from './components/Authsystem'
