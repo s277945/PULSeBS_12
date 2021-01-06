@@ -45,19 +45,17 @@ class StudentHome extends Component {
         // Get students courses data
         getCourses().then(response => {
             this.setState({ courses: response.data })
-            console.log(response.data)
         })
         .catch(/* istanbul ignore next */err => {
-            console.log(err);
+            console.error(err);
         })
         getLectures().then(response => {
             this.setState({ lectures: response.data })
-            console.log(response.data)
             this.setBookedLectures();
             this.setWaitingLectures();
         })
         .catch(/* istanbul ignore next */err => {
-            console.log(err);
+            console.error(err);
         })
     }
 
@@ -110,7 +108,7 @@ class StudentHome extends Component {
             })
             this.setState({lectures: newLectureArray})
         }).catch(/* istanbul ignore next */err=>{
-            console.log(err);
+            console.error(err);
          });
 
     }
@@ -129,7 +127,7 @@ class StudentHome extends Component {
             })
             this.setState({lectures: newLectureArray})
         }).catch(/* istanbul ignore next */err=>{
-            console.log(err);
+            console.error(err);
          });
 
     }
@@ -147,7 +145,6 @@ class StudentHome extends Component {
         }
         postStudentBookedLecture(body)
             .then(response => {
-                console.log(response)
                 
                 const newLectures = this.state.lectures.slice();
                 const index = this.state.lectures.findIndex(lecture => //get lecture index in state array
@@ -166,7 +163,7 @@ class StudentHome extends Component {
                 this.setState({lectures: newLectures})
                 this.modalClose();// then close modal
             }).catch(err=>{
-                console.log(err);
+                console.error(err);
                 if (err.response.status===500) {
                     /* istanbul ignore else */
                     if (err.response.data.errors[0].msg==="0 seats available") this.setPopup("Your booking request was not successful: there are no more seats available for this lecture");
@@ -179,7 +176,6 @@ class StudentHome extends Component {
     cancelSeat(lectureId, date){
         deleteStudentBookedLecture(lectureId, date)
             .then(response => {
-                console.log(response)
                 const newLectures = this.state.lectures.slice();
                 const index = this.state.lectures.findIndex(lecture => //get lecture index in state array
                     lecture.Course_Ref === lectureId && lecture.Date === date
@@ -193,7 +189,7 @@ class StudentHome extends Component {
                 this.setState({lectures: newLectures})
                 this.modalClose();// then close modal
             }).catch(/* istanbul ignore next */err=>{
-                console.log(err);
+                console.error(err);
              });
     }
 
@@ -373,7 +369,6 @@ class StudentHome extends Component {
     }
 
     renderTodayLectureTables(){
-        console.log(this.state.lectures)
         return (
 
             <div>
