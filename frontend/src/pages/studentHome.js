@@ -11,7 +11,7 @@ import Calendar from '../components/Calendar';
 import Container from 'react-bootstrap/Container'
 import moment from 'moment'
 import StudentHomeTour from "../components/StudentHomeTourSystem";
-import {TourContext, tourLecture} from "../components/StudentHomeTourSystem";
+import {TourContext, getTourState} from "../components/StudentHomeTourSystem";
 
 class StudentHome extends Component {
     static contextType = authContext
@@ -28,9 +28,7 @@ class StudentHome extends Component {
             popup: {show: 0, lecture: {Name: "", Date: ""}, message: null}// this object contains all popup related variables
         }
 
-        if(props.tour.isTourOpen){
-            this.state.lectures = tourLecture
-        }
+        if(props.tour.isTourOpen) this.state = getTourState()
     }
 
     componentDidMount() {
@@ -39,6 +37,17 @@ class StudentHome extends Component {
 
         this.getLecturesAndCoursesData();
         this.handleSessionStorage();
+    }
+
+    componentDidUpdate(prevProps){
+        if(!this.props.tour.isTourOpen && prevProps.tour.isTourOpen){
+            this.getLecturesAndCoursesData();
+            this.handleSessionStorage();
+        }
+
+        if(this.props.tour.isTourOpen && !prevProps.tour.isTourOpen){
+            this.setState(getTourState())
+        }
     }
 
     getLecturesAndCoursesData(){
@@ -314,7 +323,7 @@ class StudentHome extends Component {
                 <h4 className="page-subtitle-2">Select by course</h4>
                 <Accordion activeKey={this.state.togglecourse}>
                     {this.state.courses.map(course =>
-                        <Card key={course.Name}>
+                        <Card tour-selec="course-card" key={course.Name}>
                             <Accordion.Toggle as={Card.Header}  eventKey={course.Name} onClick={(e)=> {// set accordion selection state
                                 e.preventDefault();
                                 /* istanbul ignore if */
@@ -331,7 +340,7 @@ class StudentHome extends Component {
                             </Accordion.Toggle>
                             <Accordion.Collapse eventKey={course.Name}>
                                 <Card.Body>
-                                    <Table data-testid={'lectures'} striped bordered hover style={{ backgroundColor: "#fff" }}>
+                                    <Table  data-testid={'lectures'} striped bordered hover style={{ backgroundColor: "#fff" }}>
                                         <thead>
                                             <tr>
                                                 <th>Lecture</th>
@@ -371,7 +380,7 @@ class StudentHome extends Component {
     renderTodayLectureTables(){
         return (
 
-            <div>
+            <div tour-selec="today-lecture">
                 <br/>
                 <h3 className="page-subtitle-1">Today</h3>
                 <br/>
