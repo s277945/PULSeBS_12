@@ -144,4 +144,26 @@ describe('TEST SUPPORT OFFICER', function () {
                 })
         });
     });
+    describe('SCHEDULE SETUP', function () {
+        it('should get list of schedule and return status 200', function () {
+            return chai.request(url)
+                .get('/api/schedules')
+                .set('Cookie',cookie)
+                .send()
+                .then(res=>{
+                    expect(res).to.have.status(200)
+                    expect(res.body).to.be.an('array')
+                    expect(res.body).to.be.not.empty
+                })
+        });
+        it('should update schedule and return status 200', function () {
+            return chai.request(url)
+                .put('/api/schedules')
+                .set('Cookie',cookie)
+                .send({})
+                .then(res=>{
+                    expect(res).to.have.status(200)
+                })
+        });
+    });
 });

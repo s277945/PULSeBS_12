@@ -138,6 +138,14 @@ describe('TEACHER TESTING', function () {
                 })
         });
     });
+    describe('SET LECTURE ATTENDEES', function () {
+        it('should set correctly attendees and return status 200', function () {
+            
+        });
+        it('should return 500 if lecture is out of range', function () {
+            
+        });
+    });
     describe('GET COURSE STATS BY COURSE_ID', function () {
         it('should return status 200',async function () {
             return chai.request(url).get("/api/courseStats/C4567")
