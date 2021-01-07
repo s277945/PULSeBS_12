@@ -50,6 +50,338 @@ describe('TEACHER PAGE', function () {
             .click({ force: true });
 
     });
+    it('should render teacher attendance', function () {
+        cy.server()
+        cy.route({
+            url:'/api/teacherPastLectures',
+            method:'GET',
+            status:200,
+            response:[
+                {"Course_Ref":"C0123","Name":"SE2 Les:1","Date":"2020-10-01 13:00:00","DateDeadline":"2020-09-30 23:00:00","EndDate":"2020-10-01 16:00:00","BookedSeats":20,"Capacity":100,"Type":"p","Attendees":0},
+                {"Course_Ref":"C0123","Name":"SE2 Les:2","Date":"2020-10-02 14:30:00","DateDeadline":"2020-10-01 23:00:00","EndDate":"2020-10-02 16:00:00","BookedSeats":15,"Capacity":100,"Type":"p","Attendees":0},
+                {"Course_Ref":"C0123","Name":"SE2 Les:3","Date":"2020-12-04 18:00:00","DateDeadline":"2020-12-03 23:00:00","EndDate":"2020-12-04 19:30:00","BookedSeats":2,"Capacity":100,"Type":"p","Attendees":2},
+                {"Course_Ref":"C0123","Name":"SE2 Les:4","Date":"2020-12-17 19:30:00","DateDeadline":"2020-12-16 23:00:00","EndDate":"2020-10-17 21:00:00","BookedSeats":20,"Capacity":100,"Type":"p","Attendees":0}
+                ]
+        }).as('past')
+        cy.route({
+            url:'/api/lectures/listStudents?courseRef=*',
+            method:'GET',
+            status:200,
+            response:[{"userId":"s266260","name":"Fortunato Sabato","surname":"Sole","attendance":0}]
+        }).as('attendance')
+        cy.get('[data-testid="teacherStudent"]').should('have.text', 'Student List')
+            .should('have.attr', 'href', '#studentList')
+            .click()
+        //click on programmed lectures info
+        cy.get('.card-header').eq(1)
+            .click({force:true})
+        cy.get('.card-body').eq(1)
+            .within(()=>{
+                cy.get('[data-testid="listTabSL"]').within(()=>{
+                    cy.get('tr').eq(0).find('.btn.btn-secondary').click()
+                })
+            })
+
+        cy.wait('@attendance')
+        cy.get('.modal')
+            .should('be.visible')
+            .within(()=>{
+                cy.get('tbody>tr').eq(0)
+                    .contains('Fortunato Sabato')
+                    .parent()
+            })
+    });
+    it('should set presence', function () {
+        cy.server()
+        let start_date=Cypress.moment().subtract('hours',10).format('YYYY-MM-DD HH:mm');
+        let end_date=Cypress.moment().subtract('hours',7).format('YYYY-MM-DD HH:mm');
+        let deadline=Cypress.moment().subtract('days',1).format('YYYY-MM-DD HH:mm');
+        let selection;
+        let line;
+        cy.route({
+            url:'/api/teacherPastLectures',
+            method:'GET',
+            status:200,
+            response:[
+                {"Course_Ref":"C0123","Name":"SE2 Les:1","Date":start_date,"DateDeadline":deadline,"EndDate":end_date,"BookedSeats":20,"Capacity":100,"Type":"p","Attendees":0},
+                {"Course_Ref":"C0123","Name":"SE2 Les:2","Date":"2020-10-02 14:30:00","DateDeadline":"2020-10-01 23:00:00","EndDate":"2020-10-02 16:00:00","BookedSeats":15,"Capacity":100,"Type":"p","Attendees":0},
+                {"Course_Ref":"C0123","Name":"SE2 Les:3","Date":"2020-12-04 18:00:00","DateDeadline":"2020-12-03 23:00:00","EndDate":"2020-12-04 19:30:00","BookedSeats":2,"Capacity":100,"Type":"p","Attendees":2},
+                {"Course_Ref":"C0123","Name":"SE2 Les:4","Date":"2020-12-17 19:30:00","DateDeadline":"2020-12-16 23:00:00","EndDate":"2020-10-17 21:00:00","BookedSeats":20,"Capacity":100,"Type":"p","Attendees":0}
+            ]
+        }).as('past')
+        cy.route({
+            url:'/api/lectures/listStudents?courseRef=*',
+            method:'GET',
+            status:200,
+            response:[{"userId":"s266260","name":"Fortunato Sabato","surname":"Sole","attendance":0}]
+        }).as('attendance')
+        cy.route({
+            url:'*',
+            method:'POST',
+            status:200,
+            response:{modified:true}
+        }).as('post')
+        cy.get('[data-testid="teacherStudent"]').should('have.text', 'Student List')
+            .should('have.attr', 'href', '#studentList')
+            .click()
+        //click on programmed lectures info
+        cy.get('.card-header').eq(1)
+            .click({force:true})
+        cy.get('.card-body').eq(1)
+            .within(()=>{
+                cy.get('[data-testid="listTabSL"]').within(()=>{
+                    cy.get('tr').eq(0).find('.btn.btn-info').click()
+                })
+            })
+
+        cy.wait('@attendance')
+        cy.get('.modal')
+            .should('be.visible')
+            .within(()=>{
+                line=cy.get('tbody>tr').eq(0)
+                    line
+                    .within(()=>{
+                        cy.get('td').eq(2).should('contains.text','Fortunato Sabato')
+                        cy.get('td').eq(5).within(()=>{
+                            selection=cy.get('input[type=checkbox]')
+                            selection.check().should('be.checked')
+                        })
+
+                    })
+                //expect that primary button is enabled
+                cy.get('.btn.btn-danger').should('be.enabled')
+                    .and('contains.text','Reset selection')
+                cy.get('.btn.btn-secondary')
+                    .should('not.be.enabled')
+                    .and('contains.text','Select all')
+                cy.get('.btn.btn-primary')
+                    .should('be.enabled')
+                    .and('contains.text','Mark as present')
+                    .click()
+                cy.wait('@post')
+                line.get('td').eq(4).should('contains.text','Yes')
+
+            })
+    });
+    it('should not set presence if a server error occurs', function () {
+        cy.server()
+        let start_date=Cypress.moment().subtract('hours',10).format('YYYY-MM-DD HH:mm');
+        let end_date=Cypress.moment().subtract('hours',7).format('YYYY-MM-DD HH:mm');
+        let deadline=Cypress.moment().subtract('days',1).format('YYYY-MM-DD HH:mm');
+        let selection;
+        let line;
+        cy.route({
+            url:'/api/teacherPastLectures',
+            method:'GET',
+            status:200,
+            response:[
+                {"Course_Ref":"C0123","Name":"SE2 Les:1","Date":start_date,"DateDeadline":deadline,"EndDate":end_date,"BookedSeats":20,"Capacity":100,"Type":"p","Attendees":0},
+                {"Course_Ref":"C0123","Name":"SE2 Les:2","Date":"2020-10-02 14:30:00","DateDeadline":"2020-10-01 23:00:00","EndDate":"2020-10-02 16:00:00","BookedSeats":15,"Capacity":100,"Type":"p","Attendees":0},
+                {"Course_Ref":"C0123","Name":"SE2 Les:3","Date":"2020-12-04 18:00:00","DateDeadline":"2020-12-03 23:00:00","EndDate":"2020-12-04 19:30:00","BookedSeats":2,"Capacity":100,"Type":"p","Attendees":2},
+                {"Course_Ref":"C0123","Name":"SE2 Les:4","Date":"2020-12-17 19:30:00","DateDeadline":"2020-12-16 23:00:00","EndDate":"2020-10-17 21:00:00","BookedSeats":20,"Capacity":100,"Type":"p","Attendees":0}
+            ]
+        }).as('past')
+        cy.route({
+            url:'/api/lectures/listStudents?courseRef=*',
+            method:'GET',
+            status:200,
+            response:[{"userId":"s266260","name":"Fortunato Sabato","surname":"Sole","attendance":0}]
+        }).as('attendance')
+        cy.route({
+            url:'*',
+            method:'POST',
+            status:500,
+            response:{}
+        }).as('post')
+        cy.get('[data-testid="teacherStudent"]').should('have.text', 'Student List')
+            .should('have.attr', 'href', '#studentList')
+            .click()
+        //click on programmed lectures info
+        cy.get('.card-header').eq(1)
+            .click({force:true})
+        cy.get('.card-body').eq(1)
+            .within(()=>{
+                cy.get('[data-testid="listTabSL"]').within(()=>{
+                    cy.get('tr').eq(0).find('.btn.btn-info').click()
+                })
+            })
+
+        cy.wait('@attendance')
+        cy.get('.modal')
+            .should('be.visible')
+            .within(()=>{
+                line=cy.get('tbody>tr').eq(0)
+                line
+                    .within(()=>{
+                        cy.get('td').eq(2).should('contains.text','Fortunato Sabato')
+                        cy.get('td').eq(5).within(()=>{
+                            selection=cy.get('input[type=checkbox]')
+                            selection.check().should('be.checked')
+                        })
+
+                    })
+                //expect that primary button is enabled
+                cy.get('.btn.btn-danger').should('be.enabled')
+                    .and('contains.text','Reset selection')
+                cy.get('.btn.btn-secondary')
+                    .should('not.be.enabled')
+                    .and('contains.text','Select all')
+                cy.get('.btn.btn-primary')
+                    .should('be.enabled')
+                    .and('contains.text','Mark as present')
+                    .click()
+                cy.wait('@post')
+                line.get('td').eq(4).should('contains.text','No')
+
+            })
+    });
+    it('should click on reset', function () {
+        cy.server()
+        let start_date=Cypress.moment().subtract('hours',10).format('YYYY-MM-DD HH:mm');
+        let end_date=Cypress.moment().subtract('hours',7).format('YYYY-MM-DD HH:mm');
+        let deadline=Cypress.moment().subtract('days',1).format('YYYY-MM-DD HH:mm');
+        let selection;
+        let line;
+        cy.route({
+            url:'/api/teacherPastLectures',
+            method:'GET',
+            status:200,
+            response:[
+                {"Course_Ref":"C0123","Name":"SE2 Les:1","Date":start_date,"DateDeadline":deadline,"EndDate":end_date,"BookedSeats":20,"Capacity":100,"Type":"p","Attendees":0},
+                {"Course_Ref":"C0123","Name":"SE2 Les:2","Date":"2020-10-02 14:30:00","DateDeadline":"2020-10-01 23:00:00","EndDate":"2020-10-02 16:00:00","BookedSeats":15,"Capacity":100,"Type":"p","Attendees":0},
+                {"Course_Ref":"C0123","Name":"SE2 Les:3","Date":"2020-12-04 18:00:00","DateDeadline":"2020-12-03 23:00:00","EndDate":"2020-12-04 19:30:00","BookedSeats":2,"Capacity":100,"Type":"p","Attendees":2},
+                {"Course_Ref":"C0123","Name":"SE2 Les:4","Date":"2020-12-17 19:30:00","DateDeadline":"2020-12-16 23:00:00","EndDate":"2020-10-17 21:00:00","BookedSeats":20,"Capacity":100,"Type":"p","Attendees":0}
+            ]
+        }).as('past')
+        cy.route({
+            url:'/api/lectures/listStudents?courseRef=*',
+            method:'GET',
+            status:200,
+            response:[{"userId":"s266260","name":"Fortunato Sabato","surname":"Sole","attendance":0}]
+        }).as('attendance')
+        cy.route({
+            url:'*',
+            method:'POST',
+            status:200,
+            response:{modified:true}
+        })
+        cy.get('[data-testid="teacherStudent"]').should('have.text', 'Student List')
+            .should('have.attr', 'href', '#studentList')
+            .click()
+        //click on programmed lectures info
+        cy.get('.card-header').eq(1)
+            .click({force:true})
+        cy.get('.card-body').eq(1)
+            .within(()=>{
+                cy.get('[data-testid="listTabSL"]').within(()=>{
+                    cy.get('tr').eq(0).find('.btn.btn-info').click()
+                })
+            })
+
+        cy.wait('@attendance')
+        cy.get('.modal')
+            .should('be.visible')
+            .within(()=>{
+                line=cy.get('tbody>tr').eq(0)
+                line
+                    .within(()=>{
+                        cy.get('td').eq(2).should('contains.text','Fortunato Sabato')
+                        cy.get('td').eq(5).within(()=>{
+                            selection=cy.get('input[type=checkbox]')
+                            selection.check().should('be.checked')
+                        })
+
+                    })
+                //expect that primary button is enabled
+                cy.get('.btn.btn-danger').should('be.enabled')
+                    .and('contains.text','Reset selection')
+                    .click()
+                //selection.should('not.be.checked')
+                cy.get('.btn.btn-secondary')
+                    .should('be.enabled')
+                    .and('contains.text','Select all')
+                cy.get('.btn.btn-primary')
+                    .should('not.be.enabled')
+                    .and('contains.text','Mark as present')
+
+                line.get('td').eq(4).should('contains.text','No')
+
+            })
+    });
+    it('should click on select all', function () {
+        cy.server()
+        let start_date=Cypress.moment().subtract('hours',10).format('YYYY-MM-DD HH:mm');
+        let end_date=Cypress.moment().subtract('hours',7).format('YYYY-MM-DD HH:mm');
+        let deadline=Cypress.moment().subtract('days',1).format('YYYY-MM-DD HH:mm');
+        let selection;
+        let line;
+        cy.route({
+            url:'/api/teacherPastLectures',
+            method:'GET',
+            status:200,
+            response:[
+                {"Course_Ref":"C0123","Name":"SE2 Les:1","Date":start_date,"DateDeadline":deadline,"EndDate":end_date,"BookedSeats":20,"Capacity":100,"Type":"p","Attendees":0},
+                {"Course_Ref":"C0123","Name":"SE2 Les:2","Date":"2020-10-02 14:30:00","DateDeadline":"2020-10-01 23:00:00","EndDate":"2020-10-02 16:00:00","BookedSeats":15,"Capacity":100,"Type":"p","Attendees":0},
+                {"Course_Ref":"C0123","Name":"SE2 Les:3","Date":"2020-12-04 18:00:00","DateDeadline":"2020-12-03 23:00:00","EndDate":"2020-12-04 19:30:00","BookedSeats":2,"Capacity":100,"Type":"p","Attendees":2},
+                {"Course_Ref":"C0123","Name":"SE2 Les:4","Date":"2020-12-17 19:30:00","DateDeadline":"2020-12-16 23:00:00","EndDate":"2020-10-17 21:00:00","BookedSeats":20,"Capacity":100,"Type":"p","Attendees":0}
+            ]
+        }).as('past')
+        cy.route({
+            url:'/api/lectures/listStudents?courseRef=*',
+            method:'GET',
+            status:200,
+            response:[{"userId":"s266260","name":"Fortunato Sabato","surname":"Sole","attendance":0}]
+        }).as('attendance')
+        cy.route({
+            url:'*',
+            method:'POST',
+            status:200,
+            response:{modified:true}
+        })
+        cy.get('[data-testid="teacherStudent"]').should('have.text', 'Student List')
+            .should('have.attr', 'href', '#studentList')
+            .click()
+        //click on programmed lectures info
+        cy.get('.card-header').eq(1)
+            .click({force:true})
+        cy.get('.card-body').eq(1)
+            .within(()=>{
+                cy.get('[data-testid="listTabSL"]').within(()=>{
+                    cy.get('tr').eq(0).find('.btn.btn-info').click()
+                })
+            })
+
+        cy.wait('@attendance')
+        cy.get('.modal')
+            .should('be.visible')
+            .within(()=>{
+                line=cy.get('tbody>tr').eq(0)
+                line
+                    .within(()=>{
+                        cy.get('td').eq(2).should('contains.text','Fortunato Sabato')
+                        cy.get('td').eq(5).within(()=>{
+                            selection=cy.get('input[type=checkbox]')
+                            selection.should('not.be.checked')
+                        })
+
+                    })
+                //expect that primary button is enabled
+
+                cy.get('.btn.btn-secondary')
+                    .should('be.enabled')
+                    .and('contains.text','Select all')
+                    .click()
+                cy.get('.btn.btn-danger').should('be.enabled')
+                    .and('contains.text','Reset selection')
+                cy.get('.btn.btn-primary')
+                    .should('be.enabled')
+                    .and('contains.text','Mark as present')
+
+                line.get('td').eq(4).should('contains.text','No')
+                cy.get('input[type=checkbox]').should('be.checked')
+            })
+    });
+
     it('should reload modal student when refresh page', function () {
         cy.get('[data-testid="teacherStudent"]').should('have.text', 'Student List')
             .should('have.attr', 'href', '#studentList')
@@ -405,6 +737,8 @@ describe('TEST BEHAVIOUR OF CANCEL OR TURN INTO DISTANCE A LECTURE WITHIN 30-60M
         cy.get('[data-testid="teacherStudent"]').should('have.text', 'Student List')
             .should('have.attr', 'href', '#studentList')
             .click()
+        cy.get('.card-header').eq(0)
+            .click({force:true})
         cy.get('tbody>tr').eq(0).find('.btn.btn-primary').should('have.text','SHOW LIST')
             .click()
         cy.wait('@list')
