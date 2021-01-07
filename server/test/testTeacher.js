@@ -139,11 +139,24 @@ describe('TEACHER TESTING', function () {
         });
     });
     describe('SET LECTURE ATTENDEES', function () {
-        it('should set correctly attendees and return status 200', function () {
-            
+        it('should set correctly attendees and return status 200', async function () {
+             let date=await supportFunc.updateDateLecture("C4567","DS Les:6",0);
+                return chai.request(url)
+                .post('/api/C4567/'+date+'/attendees')
+                .set('Cookie',cookie)
+                .send([{"studentId":"s267890"},{"studentId":"s267348"}])
+                .then(res=>{
+                    expect(res).to.have.status(200)
+                })
         });
         it('should return 500 if lecture is out of range', function () {
-            
+            return chai.request(url)
+                .post('/api/C0123/2021-01-01%2018:00:00/attendees')
+                .set('Cookie',cookie)
+                .send([{"studentId":"s266260"},{"studentId":"s267348"}])
+                .then(res=>{
+                    expect(res).to.have.status(500)
+                })
         });
     });
     describe('GET COURSE STATS BY COURSE_ID', function () {
