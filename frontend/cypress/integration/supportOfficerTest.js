@@ -529,7 +529,7 @@ describe('SUPPORT OFFICER TESTS', function () {
                 cy.get('td').eq(2).should('contains.text','8A')
                 cy.get('td').eq(3).should('contains.text','Mon')
                 cy.get('td').eq(4).should('contains.text','120')
-                cy.get('td').eq(5).should('contains.text','17:00:18:30')
+                cy.get('td').eq(5).should('contains.text','17:00-18:30')
             })
 
         });

@@ -100,6 +100,7 @@ export class SupportOfficerSchedule extends Component{
         a body for PUT request, inside it there are old and new values of
         request*/
     handleConfirm=()=>{
+        console.log('handle confirm');
         let body;
         let time="";
         //i have to consider both the case in which I choose only one of the two dates:
@@ -113,20 +114,13 @@ export class SupportOfficerSchedule extends Component{
         else if(this.state.startDate!==""&&this.state.endDate===""){
             console.log("tmp1: "+tmp[1]);
             console.log("start: "+this.state.startDate);
-            if(moment(this.state.startDate).isBefore(tmp[1])){
-                console.log("isBefore");
-                time=this.state.startDate+"-"+tmp[1];
-            }
-
+            time=this.state.startDate+"-"+tmp[1];
         }
 
         else if(this.state.startDate===""&&this.state.endDate!==""){
             console.log("tmp0: "+tmp[0]);
-            console.log("end: "+this.state.endDate)
-            if(moment(this.state.endDate).isAfter(tmp[0])){
-                console.log("isBefore");
-                time=tmp[0]+"-"+this.state.endDate;
-            }
+            console.log("end: "+this.state.endDate);
+            time=tmp[0]+"-"+this.state.endDate;
         }
         else{
             time=this.state.startDate+"-"+this.state.endDate;
@@ -209,8 +203,6 @@ export class SupportOfficerSchedule extends Component{
     }
 
     renderModalSchedule=()=>{
-        console.log("hour: "+this.state.elemModal.time);
-        console.log("day: "+this.state.elemModal.day);
         let tmp=[];
         tmp=this.splitString();
         return(
