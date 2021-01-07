@@ -6,6 +6,8 @@ describe('STUDENT PAGE', function () {
         Cypress.Cookies.debug(true)
         cy.get(".app-element-background")
             .click({force:true})
+        cy.get('.sc-bdVaJa.cYQqRL.sc-bxivhb.eTpeTG.reactour__close')
+            .click()
     })
     it('should show correctly student page', function () {
         cy.location('pathname').should('include','/studentHome')
