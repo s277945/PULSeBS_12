@@ -241,6 +241,7 @@ function getTeacherEmail(courseId){
             if(err)
                 reject(err);
             else {
+                /* istanbul ignore else */
                 if(row) 
                     resolve(row.Email);
             }

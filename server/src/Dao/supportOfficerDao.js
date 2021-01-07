@@ -171,12 +171,14 @@ exports.uploadSchedule=function(list, fileName){
                         .then((listLectures) => {
                             i++;
                             lecturesList=lecturesList.concat(listLectures.map(lecture=>{lecture.courseId=element.courseId; return lecture;}));// add data to temp array
-                            if(i===list.length){ //if last iteration  
+                            /* istanbul ignore else */
+                            if(i===list.length){ //if last iteration
                                 insertLectures(lecturesList)//insert lectures into db
                                     .then(() => {// update file data after all lecture insert
                                         const date = moment().format("YYYY-MM-DD HH:mm:ss")
                                         const sql3 = 'UPDATE File SET FileName=? , LastUpdate=? WHERE FileType=4'
                                         db.run(sql3, [fileName, date], (err3) => {
+                                            /* istanbul ignore if */
                                             if (err3) {
                                                 console.log("fail");
                                                 reject(err3)
@@ -439,12 +441,14 @@ exports.getSchedule = function(){
     return new Promise((resolve, reject) => {
         const sql = 'SELECT Code, Room, Day, Seats, Time FROM Schedule'
         db.all(sql, [], (err, rows) => {
+            /* istanbul ignore if */
             if(err)
                 reject(err)
             else{
                 for(let row of rows){
                     const sql_2 = 'SELECT Name FROM Course WHERE CourseID = ?'
                     db.get(sql_2, [row.Code], (err_2, row_2) =>{
+                        /* istanbul ignore if */
                         if(err_2)
                             reject(err_2)
                         else{
@@ -478,6 +482,7 @@ exports.updateSchedules = function(schedule){
     return new Promise((resolve, reject) => {
         const sql = 'SELECT Course_Ref, Date, Day FROM Lecture WHERE Course_Ref=? AND Date>=? AND Day=?'
         db.all(sql, [schedule.courseId, today, schedule.oldDay], (err, rows)=> {
+            /* istanbul ignore if */
             if(err)
                 reject(err)
             else{
@@ -488,12 +493,12 @@ exports.updateSchedules = function(schedule){
                                 .then((response2) => {
                                     resolve(response2)
                                 })
-                                .catch((err2) => {
+                                .catch(/* istanbul ignore next */(err2) => {
                                     reject(err2)
                                 })
                         }
                     })
-                    .catch((err3) => {
+                    .catch(/* istanbul ignore next */(err3) => {
                         reject(err3)
                     })
 
@@ -516,6 +521,7 @@ function updateSingleSchedule(schedule){
         const sql = 'UPDATE Schedule SET Room=?, Day=?, Seats=?, Time=? WHERE Code=? AND Day=?'
         db.run(sql, [schedule.newRoom, schedule.newDay, schedule.newSeats, schedule.newTime,
                     schedule.courseId, schedule.oldDay], (err) => {
+            /* istanbul ignore if */
             if(err)
                 reject(err)
             else
@@ -557,12 +563,14 @@ function updateGivenLectures(lectures, schedule){
             db.serialize(()=>{
                 db.run(sql, [schedule.newSeats, newDate, endDate, deadline, schedule.newDay,
                         lecture.Course_Ref, lecture.Date], (err) => {
+                    /* istanbul ignore if */
                     if(err)
                         reject(err)
                 })
 
                 const sql2 = 'UPDATE Booking SET Date_Ref=?, EndDate=? WHERE Course_Ref=? AND Date_Ref=?'
                 db.run(sql2, [newDate, endDate, lecture.Course_Ref, lecture.Date], (err) => {
+                    /* istanbul ignore if */
                     if(err)
                         reject(err)
                 })
@@ -570,6 +578,7 @@ function updateGivenLectures(lectures, schedule){
                 const sql3 = 'SELECT Email FROM User WHERE userID IN ('+
                     'SELECT Student_Ref FROM Booking WHERE Course_Ref=? AND Date_Ref=?)'
                 db.all(sql3, [lecture.Course_Ref, newDate], (err, rows)=>{
+                    /* istanbul ignore if */
                     if(err)
                         reject(err)
                     else{

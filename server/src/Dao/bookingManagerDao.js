@@ -167,8 +167,8 @@ exports.generateReport = function(ssn){
                                             resolve(list);
                                         })
                                 }else resolve(list);
-                        }).catch(err=>reject(err))
-                    }).catch(err=>reject(err))
+                        }).catch(/* istanbul ignore next */err=>reject(err))
+                    }).catch(/* istanbul ignore next */err=>reject(err))
             }).catch(err=>reject(err))
     })
 }
@@ -184,6 +184,7 @@ function retrieveTeachers(list, lectures){
         let iterator = 0;
         for(let lecture of lectures){
             db.get(sql, [lecture.course], (err,row) => {
+                /* istanbul ignore if */
                 if(err) reject(err);
                 else{
                     let obj = {
@@ -201,8 +202,8 @@ function retrieveTeachers(list, lectures){
                     /* istanbul ignore else */
                     iterator++;
                 }
-                if(iterator === lectures.length) resolve(list)
                 /* istanbul ignore else */
+                if(iterator === lectures.length) resolve(list)
             })
         }
     })

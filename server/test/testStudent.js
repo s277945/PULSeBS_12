@@ -140,12 +140,12 @@ describe('********STUDENT TEST******', function () {
         it('should delete an user and there is someone else in waiting list', async function () {
             await supportFunc.updateCourseCapacity('C2468','2021-03-05 11:00:00',1,0).then(async res=>{
                 if(res==true){
-                    await studDao.addSeat('s266260','C2468','2021-03-05 11:00:00','2021-03-05 14:00:00')
+                    await studDao.addSeat('s269422','C2468','2021-03-05 11:00:00','2021-03-05 14:00:00')
                         .then(async res=>{
                             await studDao.addSeat('s267348','C2468','2021-03-05 11:00:00','2021-03-05 14:00:00').then(
-                                res=>{
+                               async res=>{
                                     console.log('success')
-                                    return  chai.request(url)
+                                    let tmp=await chai.request(url)
                                         .delete('/api/lectures/C2468?date=2021-03-05 11:00:00')
                                         .set('Cookie',cookie)
                                         .send()
