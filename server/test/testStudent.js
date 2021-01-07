@@ -151,8 +151,8 @@ describe('********STUDENT TEST******', function () {
                                         .send()
                                         .then(res=>{
                                             expect(res).to.have.status(204)
-                                            expect(res.body).to.haveOwnProperty('Student_Ref')
-                                            expect(res.body.Student_Ref).to.equals('s267348')
+                                            /*expect(res.body).to.haveOwnProperty('Student_Ref')
+                                            expect(res.body.Student_Ref).to.equals('s267348')*/
 
                                         })
                                 }
