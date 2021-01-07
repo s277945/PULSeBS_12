@@ -126,6 +126,18 @@ describe('TEACHER TESTING', function () {
             expect(res.body.response).to.be.equals(true);
         });
     });
+    describe('GET TEACHER PAST LECTURES', function () {
+        it('should return teacher past lectures and status 200', function () {
+            return chai.request(url).get('/api/teacherPastLectures')
+                .set("Cookie",cookie)
+                .send()
+                .then((res)=>{
+                    expect(res).to.have.status(200)
+                    expect(res.body).to.be.an('array')
+                    expect(res.body).to.be.not.empty
+                })
+        });
+    });
     describe('GET COURSE STATS BY COURSE_ID', function () {
         it('should return status 200',async function () {
             return chai.request(url).get("/api/courseStats/C4567")

@@ -85,7 +85,7 @@ describe('TEST SUITE MANAGER FUNCTION', function () {
     describe('SET STUDENT POSITIVE', function () {
         it('should mark a student as positive by ssn', function () {
             return chai.request(url)
-                .post('/api/students/WHTRWHRW')
+                .post('/api/users/WHTRWHRW')
                 .set('Cookie',cookie)
                 .send()
                 .then(res=>{
@@ -97,7 +97,7 @@ describe('TEST SUITE MANAGER FUNCTION', function () {
     });
     describe('GET LIST OF POSITIVE STUDENTS', function () {
         it('should return a list of students', function () {
-            return chai.request(url).get('/api/students/positiveStudents')
+            return chai.request(url).get('/api/students/positiveUsers')
                 .set('Cookie',cookie)
                 .send()
                 .then(res=>{
@@ -113,7 +113,7 @@ describe('TEST SUITE MANAGER FUNCTION', function () {
                 })
         });
         it('should not return a student if the ssn does not exists', function () {
-            return chai.request(url).get('/api/students/DOESNOTEXISTS')
+            return chai.request(url).get('/api/users/DOESNOTEXISTS')
                 .set('Cookie',cookie)
                 .send()
                 .then(res=>{
