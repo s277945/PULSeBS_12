@@ -31,7 +31,7 @@ describe('TEST SUPPORT OFFICER', function () {
             "birthday": "1991-11-04", "ssn": "MK97060783"});
         teacher.push({"userID": "d9000", "Name": "Ines", "Surname":"Beneventi", "email":"Ines.Beneventi@politu.it",
             "ssn": "XT6141393"});
-        course.push({"courseId": "XY1211", "year": 1, "name": "Metodi di finanziamento delle imprese", "semester": 1, "teacherId": "d9000"});
+        course.push({"courseId": "XY1212", "year": 1, "name": "Metodi di finanziamento delle imprese", "semester": 1, "teacherId": "t987654"});
         enrollment.push({"courseId":"XY1211", "studentId": "900000"});
         schedule.push({"courseId": "XY1211","room": 1, "day": "Mon", "seats": 120, "time": "8:30-11:30"});
     })
