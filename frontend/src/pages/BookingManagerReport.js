@@ -84,6 +84,7 @@ export class BookingManagerReport extends Component {
         const doc = new jsPDF();
 
         // table title. and  margin-left,margin-top
+        /* istanbul ignore else */
         if(user.type==="s") {
             doc.text("PULSeBS Student Report for COVID-19", 100, 16, 'center');
             doc.text("Report of COVID-19 positive for student:", 14, 32);
@@ -110,7 +111,7 @@ export class BookingManagerReport extends Component {
         console.log(report.length)
         //if the server returns empty array as a report []
         if (report.length === 0 ) {
-
+            /* istanbul ignore else */
             if(user.type==="s") doc.text("The mentioned student was not in contact with other students. ", 14, 80);
             else if(user.type==="t") doc.text("The mentioned teacher was not in contact with any students. ", 14, 80);
          }
@@ -131,13 +132,14 @@ export class BookingManagerReport extends Component {
                     user.ssn,
                 ];
                 // push each student's info into a row
+                /* istanbul ignore else */
                 if (user.type==="s") { tableRowsStudents.push(userData); numstudents++; }
                 else if (user.type==="t") tableRowsTeachers.push(userData);
             });
-
+            /* istanbul ignore else */
             if(user.type==="s") doc.text("The following students participated in the same lectures of the mentioned ", 14, 80);
             else if(user.type==="t") doc.text("The following students participated in the lectures of the mentioned ", 14, 80);
-
+            /* istanbul ignore else */
             if(user.type==="s") doc.text("student:", 14, 88);
             else if(user.type==="t") doc.text("teacher:", 14, 88);
 

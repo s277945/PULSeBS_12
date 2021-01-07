@@ -69,20 +69,23 @@ describe('TEST MANAGER PAGE', function () {
     it('should show correctly positive page', function () {
         cy.get('[data-testid="report"]')
             .click()
-        cy.get('.page-title').should('have.text', 'Positive students and reports')
-        cy.get('table').should('be.visible')
+        cy.get('.page-title').should('have.text', 'Positive users and reports')
+        cy.get('.card-header').eq(0).should('have.text','Positive students')
+        cy.get('.card-header').eq(1).should('have.text','Positive teachers')
     });
     it('should add a new positive student', function () {
         cy.server()
         cy.route({
             method:'POST',
-            url:'/api/students/*',
+            url:'/api/users/*',
             status:200,
             response:{"setAsPositive": true}
-        })
+        }).as('post')
         cy.get('[data-testid="report"]')
             .click()
-        cy.get('[data-testid="addSSN"]').should('have.text', 'Add New Student')
+        cy.get('.card-header').eq(0).should('have.text','Positive students')
+            .click()
+        cy.get('[data-testid="addSSN"]').should('have.text', 'Add positive user')
             .click()
         cy.get('[data-testid="modalSSN"]').should('be.visible')
             .within(() => {
@@ -97,16 +100,18 @@ describe('TEST MANAGER PAGE', function () {
                 cy.get('[data-testid="confirmButton"]')
                     .should('be.visible')
                     .click()
-                cy.wait(200)
+                cy.wait('@post')
 
             })
-        cy.get('tbody>tr').should('have.length',5)
+        cy.get('tbody>tr').should('have.length',6)
 
     });
     it('should close correctly popup', function () {
         cy.get('[data-testid="report"]')
             .click()
-        cy.get('[data-testid="addSSN"]').should('have.text', 'Add New Student')
+        cy.get('.card-header').eq(0).should('have.text','Positive students')
+            .click()
+        cy.get('[data-testid="addSSN"]').should('have.text', 'Add positive user')
             .click()
         cy.get('.modal').should('be.visible')
             .click({ force: true });
@@ -115,13 +120,13 @@ describe('TEST MANAGER PAGE', function () {
         cy.server()
         cy.route({
             method:'GET',
-            url:'/api/students/*',
+            url:'/api/users/*',
             status:500,
             response:{}
         }).as('student')
         cy.get('[data-testid="report"]')
             .click()
-        cy.get('[data-testid="addSSN"]').should('have.text', 'Add New Student')
+        cy.get('[data-testid="addSSN"]').should('have.text', 'Add positive user')
             .click()
         cy.get('[data-testid="modalSSN"]').should('be.visible')
             .within(() => {
@@ -131,7 +136,7 @@ describe('TEST MANAGER PAGE', function () {
                 cy.get('[data-testid="search"]').click()
                 cy.wait('@student')
             })
-            .should('contain.text', 'Student not found');
+            .should('contain.text', 'User not found');
     });
         it('should generate a report empty', function () {
             cy.server()
@@ -141,7 +146,16 @@ describe('TEST MANAGER PAGE', function () {
                 status:200,
                 response:[]
             }).as('report')
+            cy.server()
+            cy.route({
+                method:'POST',
+                url:'/api/users/*',
+                status:200,
+                response:{"setAsPositive": true}
+            }).as('post')
             cy.get('[data-testid="report"]')
+                .click()
+            cy.get('.card-header').eq(0).should('have.text','Positive students')
                 .click()
             cy.get('tbody>tr').eq(0)
                 .within(()=>{
@@ -158,7 +172,10 @@ describe('TEST MANAGER PAGE', function () {
                 status:500,
                 response:{}
             }).as('report')
+
             cy.get('[data-testid="report"]')
+                .click()
+            cy.get('.card-header').eq(0).should('have.text','Positive students')
                 .click()
             cy.get('tbody>tr').eq(2)
                 .within(()=>{
@@ -168,7 +185,18 @@ describe('TEST MANAGER PAGE', function () {
             cy.wait('@report')
         });
         it('should generate correctly a report', function () {
+            cy.server()
+            cy.route({
+                method:'GET',
+                url:'/api/reports/*',
+                status:200,
+                response:[
+                    {"name":"Fortunato Sabato","surname":"Sole","birthday":"18/08/1994","ssn":"WHTRWHRW","covid":0,"type":"s"}
+                ]
+            }).as('report')
             cy.get('[data-testid="report"]').click()
+            cy.get('.card-header').eq(0).should('have.text','Positive students')
+                .click()
             cy.get('tbody>tr').eq(1)
                 .within(()=>{
                     cy.get('.btn.btn-primary')
@@ -176,7 +204,71 @@ describe('TEST MANAGER PAGE', function () {
                     cy.wait(500);
                 })
         });
-        it('should logout', function () {
+    it('should show teacher inside table', function () {
+        cy.get('[data-testid="report"]').click()
+        cy.get('.card-header').eq(1).should('have.text','Positive teachers')
+            .click()
+        cy.get('.card-body').eq(1).within(()=>{
+            cy.get('tbody>tr').eq(0)
+                .within(()=>{
+                    cy.get('td').eq(0).should('have.text','Alessandro Bottisio')
+                    cy.get('td').eq(1).should('have.text','/')
+
+                })
+        })
+
+    });
+    it('should generate empty report of teacher', function () {
+        cy.server()
+        cy.route({
+            method:'GET',
+            url:'/api/reports/WRHWHRH',
+            status:200,
+            response:[]
+        }).as('report')
+        cy.get('[data-testid="report"]').click()
+        cy.get('.card-header').eq(1).should('have.text','Positive teachers')
+            .click()
+        cy.get('.card-body').eq(1)
+            .within(()=>{
+                cy.get('tbody>tr').eq(0)
+                    .within(()=>{
+                        cy.get('td').eq(0).should('have.text','Alessandro Bottisio')
+                        cy.get('td').eq(1).should('have.text','/')
+                        cy.get('.btn.btn-primary')
+                            .click()
+                    })
+            })
+
+        cy.wait('@report')
+    });
+    it('should generate a report for teacher', function () {
+        cy.server()
+        cy.route({
+            method:'GET',
+            url:'/api/reports/WRHWHRH',
+            status:200,
+            response:[
+                {"name":"Fortunato Sabato","surname":"Sole","birthday":"18/08/1994","ssn":"WHTRWHRW","type":"s"},
+                {"name":"Non","surname":"Esiste","birthday":"18/05/1994","ssn":"ABCDEFG","type":"s"},
+                {"name":"Sono","surname":"Fake","birthday":null,"ssn":"A123456","type":"t"}]
+        }).as('report')
+        cy.get('[data-testid="report"]').click()
+        cy.get('.card-header').eq(1).should('have.text','Positive teachers')
+            .click()
+        cy.get('.card-body').eq(1)
+            .within(()=>{
+                cy.get('tbody>tr').eq(0)
+                    .within(()=>{
+                        cy.get('td').eq(0).should('have.text','Alessandro Bottisio')
+                        cy.get('td').eq(1).should('have.text','/')
+                        cy.get('.btn.btn-primary')
+                            .click()
+                    })
+            })
+        cy.wait(100)
+    });
+    it('should logout', function () {
             cy.server()
             cy.route({
                 method:'POST',
