@@ -97,7 +97,7 @@ describe('TEST SUITE MANAGER FUNCTION', function () {
     });
     describe('GET LIST OF POSITIVE STUDENTS', function () {
         it('should return a list of students', function () {
-            return chai.request(url).get('/api/students/positiveUsers')
+            return chai.request(url).get('/api/users/positiveUsers')
                 .set('Cookie',cookie)
                 .send()
                 .then(res=>{
@@ -121,7 +121,7 @@ describe('TEST SUITE MANAGER FUNCTION', function () {
                 })
         });
         it('should return single student', function () {
-            return chai.request(url).get('/api/students/WHTRWHRW')
+            return chai.request(url).get('/api/users/WHTRWHRW')
                 .set('Cookie',cookie)
                 .send()
                 .then(res=>{

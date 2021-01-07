@@ -93,8 +93,9 @@ describe('TEACHER TESTING', function () {
 
         });
         it('should return status 204',async function () {
+            let date=await supportFunc.updateDateLecture("C4567","DS Les:6",1);
             return chai.request(url)
-                .delete('/api/courseLectures/C4567?date=2020-12-25 09:00:00')
+                .delete('/api/courseLectures/C4567?date='+date)
                 .set('Cookie',cookie)
                 .send()
                 .then(res=>{
@@ -118,8 +119,9 @@ describe('TEACHER TESTING', function () {
                 })
         });
         it('should return status 200',async function () {
+            let date=await supportFunc.updateDateLecture("C4567","DS Les:6",1);
             let res=await chai.request(url).put('/api/lectures').set("Cookie",cookie)
-                .send({courseId: "C4567",date:"2020-12-22 09:00:00"});
+                .send({courseId: "C4567",date:date});
             expect(res.err).to.be.undefined;
             expect(res).to.have.status(200);
             expect(res.body).to.have.property('response');

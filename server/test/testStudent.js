@@ -104,7 +104,8 @@ describe('********STUDENT TEST******', function () {
             })
         });
         it('should return status 201 ', async function () {
-            let res=await chai.request(url).post('/api/lectures').set('Cookie',cookie).send({lectureId: "C4567", date: "2020-12-25 09:00:00",endDate:"2020-12-25 12:00:00"})
+            let date=await supportFunc.updateDateLecture("C4567","DS Les:6",1);
+            let res=await chai.request(url).post('/api/lectures').set('Cookie',cookie).send({lectureId: "C4567", date: date})
             expect(res.status).to.equal(201);
             expect(res.body.operation).to.equals("booked");
         });
