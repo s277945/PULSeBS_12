@@ -13,10 +13,10 @@ export default function SystemSetup() {
     const [uploaded, setUploaded] = useState([0,0,0,0,0]);
     useEffect(() => {
         getFileData().then(response => {
+            /* istanbul ignore else */
             if(response.data) {console.log(response.data);
             setUploaded(response.data);
             }
-            /* istanbul ignore else */
             
         })
         .catch(/* istanbul ignore next */err => {
@@ -75,8 +75,8 @@ const UploadFileButton = ({disabled, uploaded, setUploaded, Name, listType, type
 
     const sendFile = () => {
         let file = files[0];
-        if(!file) return;
         /* istanbul ignore else */
+        if(!file) return;
         console.log(file);
         setUploading(true)
 
