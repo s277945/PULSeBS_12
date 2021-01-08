@@ -11,9 +11,8 @@ describe('TEST MAIL MODULE', function () {
         job.start();
         await setTimeout(function () {
             expect(job.getStatus()).to.be.equal('running');
-        },60000)
+        },5000)
     });
-
 });
 
 
