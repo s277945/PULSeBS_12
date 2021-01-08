@@ -296,7 +296,7 @@ export class StatisticsTab extends Component {
                                 }
                                 else if((d.id==="Average booked seats"||d.id==="Average attendees")){
                                     let substr=d.id.split(" ");
-                                    if (d.value!==0&&Math.floor(d.value)!==d.value) {
+                                    if (d.value!==0&&Math.floor(Number(d.value))!==d.value) {
                                         if(d.value>4) return(<tspan>
                                                                 <tspan>{d.value}</tspan><tspan text-anchor="middle" y={ -15 } dx={-34+c}>{ this.state.labels&&this.state.width>=970?substr[0].toLowerCase():"" }</tspan>
                                                                 <tspan text-anchor="middle" y={ -5 } dx={substr[2]?(-46+c):(-54+c)}>{this.state.labels&&this.state.width>=970?(substr[2]?substr[1]+" "+substr[2]:substr[1]):""}</tspan>
