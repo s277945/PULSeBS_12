@@ -488,6 +488,7 @@ exports.updateSchedules = function(schedule){
             else{
                 updateSingleSchedule(schedule)
                     .then((response) => {
+                        /* istanbul ignore else */
                         if(response){
                             updateGivenLectures(rows, schedule)
                                 .then((response2) => {

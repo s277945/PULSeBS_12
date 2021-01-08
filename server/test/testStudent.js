@@ -169,6 +169,16 @@ describe('********STUDENT TEST******', function () {
             expect(res.status).to.equal(204);
         });
     });
+    describe('Student tutorial', function () {
+        it('should return status 200', function () {
+            return chai.request(url).put('/api/user/tutorial')
+                .set('Cookie',cookie)
+                .send({userId:"s269422"})
+                .then(res=>{
+                    expect(res).to.have.status(200)
+                })
+        });
+    });
 
     describe('Logout', function () {
         it('should logout',async function () {
@@ -176,6 +186,7 @@ describe('********STUDENT TEST******', function () {
             expect(res.headers['set-cookies']).to.be.undefined;
         });
     });
+    
 
 
 })

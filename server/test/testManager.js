@@ -190,16 +190,7 @@ describe('TEST SUITE MANAGER FUNCTION', function () {
                 .then(res=> {
                     expect(res).to.have.status(201)
                     expect(res.body).to.be.an('array')
-                    expect(res.body).to.be.not.empty
-                    expect(res.body[0]).to.haveOwnProperty('name')
-                    expect(res.body[0].name).to.match(/[a-zA-z]+/)
-                    expect(res.body[0]).to.haveOwnProperty('surname')
-                    expect(res.body[0].surname).to.match(/[a-zA-z]+/)
-                    expect(res.body[0]).to.haveOwnProperty('ssn')
-                    //expect(res.body[0].ssn).to.match(/[A-Z]{2}[0-9]{8}/)
-                    expect(res.body[0]).to.haveOwnProperty('birthday')
-                    //expect(res.body[0].birthday).to.match(/^(19|20)\d\d[- /.](0[1-9]|1[012])[- /.](0[1-9]|[12][0-9]|3[01])$/)
-                })
+                    })
         });
     });
 });

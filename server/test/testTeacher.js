@@ -5,6 +5,7 @@ const dao=require('../src/Dao/studentDao');
 const chaiHttp=require('chai-http');
 chai.use(chaiHttp);
 chai.use(require('chai-match'));
+const studDao=require('../src/Dao/studentDao');
 const server=require('../src/server');
 const expect=chai.expect;
 let cookie;
@@ -93,7 +94,9 @@ describe('TEACHER TESTING', function () {
 
         });
         it('should return status 204',async function () {
+            //studDao.addSeat("")
             let date=await supportFunc.updateDateLecture("C4567","DS Les:6",1);
+
             return chai.request(url)
                 .delete('/api/courseLectures/C4567?date='+date)
                 .set('Cookie',cookie)

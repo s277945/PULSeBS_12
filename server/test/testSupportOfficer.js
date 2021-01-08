@@ -5,6 +5,7 @@ chai.use(chaiHttp);
 chai.use(require('chai-match'));
 const expect=chai.expect;
 const support=require('./supportFunction')
+const studDao=require('../src/Dao/studentDao');
 let cookie;
 let student=[];
 let teacher=[];
@@ -156,7 +157,9 @@ describe('TEST SUPPORT OFFICER', function () {
                     expect(res.body).to.be.not.empty
                 })
         });
-        it('should update schedule and return status 200', function () {
+        it('should update schedule and return status 200', async function () {
+            //insert a student inside a lecture of this schedule to trigger send email
+            await studDao.addSeat("s266260","XY0821","2021-01-18 08:30:00","2021-01-18 10:00:00")
             return chai.request(url)
                 .put('/api/schedules')
                 .set('Cookie',cookie)
