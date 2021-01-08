@@ -27,12 +27,13 @@ class StudentHome extends Component {
             modal: {show: 0, lecture: null, message: null}, //this object contains all modal state variables
             popup: {show: 0, lecture: {Name: "", Date: ""}, message: null}// this object contains all popup related variables
         }
-
+        /* istanbul ignore else */
         if(props.tour.isTourOpen) this.state = getTourState()
     }
 
     componentDidMount() {
         // Don't fetch nor save data when doing the tour
+        /* istanbul ignore else */
         if(this.props.tour.isTourOpen) return;
 
         this.getLecturesAndCoursesData();
@@ -40,6 +41,7 @@ class StudentHome extends Component {
     }
 
     componentDidUpdate(prevProps){
+        /* istanbul ignore else */
         if(!this.props.tour.isTourOpen && prevProps.tour.isTourOpen){
             this.getLecturesAndCoursesData();
             this.handleSessionStorage();
