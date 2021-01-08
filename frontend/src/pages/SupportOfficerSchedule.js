@@ -54,7 +54,7 @@ export class SupportOfficerSchedule extends Component{
             if(tmp.length===1){
                 //separator is not - char, so i have to split the string by :
                 let array=[];
-                array=tmp=this.state.elemModal.time.toString().split(':');
+                array=this.state.elemModal.time.toString().split(':');
                 console.log("array: "+JSON.stringify(array));
                 tmp=[];
                 tmp.push(array[0]+":"+array[1]);

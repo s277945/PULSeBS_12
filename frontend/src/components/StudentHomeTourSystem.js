@@ -23,7 +23,7 @@ export default function StudentHomeTour(props){
             {props.children}
         </TourContext.Provider>
     )
-  };
+  }
 
 const steps = [
     {
