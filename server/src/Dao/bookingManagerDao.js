@@ -161,10 +161,8 @@ exports.generateReport = function(ssn){
                             .then((list) => {
                                 if(user.type === 's'){
                                     retrieveTeachers(list, lectures)
-                                        .then((list) => {
-                                            for(let el of list){
-                                            }
-                                            resolve(list);
+                                        .then((list2) => {
+                                            resolve(list2);
                                         })
                                 }else resolve(list);
                         }).catch(/* istanbul ignore next */err=>reject(err))
