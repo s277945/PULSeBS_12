@@ -125,16 +125,16 @@ export class BookingManagerReport extends Component {
             const tableRowsTeachers = [];
             let numstudents = 0;
             // for each student pass all its data into an array
-            report.forEach(user => {
+            report.forEach(user2 => {
                 const userData = [
-                    `${user.name} ${user.surname}`,
-                    user.birthday,
-                    user.ssn,
+                    `${user2.name} ${user2.surname}`,
+                    user2.birthday,
+                    user2.ssn,
                 ];
                 // push each student's info into a row
                 /* istanbul ignore else */
-                if (user.type==="s") { tableRowsStudents.push(userData); numstudents++; }
-                else if (user.type==="t") tableRowsTeachers.push(userData);
+                if (user2.type==="s") { tableRowsStudents.push(userData); numstudents++; }
+                else if (user2.type==="t") tableRowsTeachers.push(userData);
             });
             /* istanbul ignore else */
             if(user.type==="s") doc.text("The following students participated in the same lectures of the mentioned ", 14, 80);
