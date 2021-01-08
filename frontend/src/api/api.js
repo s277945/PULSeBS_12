@@ -11,12 +11,12 @@ export function useResponseInterceptor(auth) { // function to set up response in
     axiosInst.interceptors.response.use(// create response interceptor
         (response) => { return response },
         async function (error) {
-
+            /* istanbul ignore next */
             if (error.response.status === 404) {
                 // redirecti to 404 page
                 // history.replace("/404")
             }
-
+                /* istanbul ignore else */
             if (error.response.status === 403 || error.response.status === 401) {// in case of expired jwt token
                 auth.clearSession(); // clear session data from useProvideAuth() instance method
             }

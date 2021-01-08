@@ -22,6 +22,8 @@ describe('TEST AXIOS INTERCEPTOR', function () {
             status:401,
             response:{}
         })
+        cy.get('.card-header').eq(0)
+            .click({force:true})
         cy.get('tbody>tr').eq(0).within(()=>{
             cy.get('.btn.btn-primary')
                 .click()
