@@ -1,3 +1,4 @@
+import moment from "moment";
 describe('STUDENT PAGE', function () {
     beforeEach(() => {
         cy.visit('http://localhost:3000/')
@@ -337,21 +338,6 @@ describe('STUDENT PAGE', function () {
 
     });
 
-    it('should logout', function () {
-        cy.server()
-        cy.route({
-            method:'POST',
-            url:'/api/logout',
-            status:200,
-            response:{}
-        }).as('logout')
-        cy.location('pathname').should('include','/studentHome')
-        cy.get('[data-testid="logout"]').should('be.visible')
-            .click()
-        cy.wait('@logout')
-        cy.getCookies().should('be.empty')
-        cy.location('pathname').should('include','/')
-    });
 });
 describe('TUTORIAL TEST', function () {
     beforeEach(() => {
@@ -393,12 +379,77 @@ describe('TUTORIAL TEST', function () {
         cy.wait(100)
         cy.get('.sc-bdVaJa.cYQqRL.sc-bxivhb.eTpeTG.reactour__close').parent().should('be.visible')
     });
+    it('should logout', function () {
+        cy.server()
+        cy.route({
+            method:'POST',
+            url:'/api/logout',
+            status:200,
+            response:{}
+        }).as('logout')
+        cy.get('.sc-bdVaJa.cYQqRL.sc-bxivhb.eTpeTG.reactour__close')
+            .click()
+        cy.location('pathname').should('include','/studentHome')
+        cy.get('[data-testid="logout"]').should('be.visible')
+            .click()
+        cy.wait('@logout')
+        cy.getCookies().should('be.empty')
+        cy.location('pathname').should('include','/')
+    });
 
 });
 describe('SHOW TODAY LECTURE AND VC LECTURES IN TABLE', function () {
     beforeEach(()=>{
+        let startDate;
+        let endDate;
+        let deadline;
+        startDate=moment().add('hours',1).format('YYYY-MM-DD HH:mm:ss');
+        deadline=moment().subtract('days',1).format('YYYY-MM-DD HH:mm:ss');
+        endDate=moment().add('hours',4).format('YYYY-MM-DD HH:mm:ss');
 
+        cy.server()
+        cy.route({
+            method:'POST',
+            url:'/api/login',
+            status:200,
+            request:{userName:"s266260",password:"password"},
+            response:{user:"s266260",userType:"s"}
+        }).as('login')
+        cy.route({
+            method:'GET',
+            url:'/api/courses',
+            response:[
+                {"CourseID":"C0123","Name":"Software Engineering II"}
+            ]
+        })
+        cy.route({
+            method:'GET',
+            url:'/api/lectures',
+            response:[
+                {"Course_Ref":"C0123","Name":"SE2 Les:4","Date":startDate,"DateDeadline":deadline,"EndDate":endDate,"BookedSeats":null,"Capacity":null,"Type":"d"},
+                {"Course_Ref":"C0123","Name":"SE2 Les:5","Date":"2021-03-27 19:30:00","DateDeadline":"2021-03-26 23:00:00","EndDate":"2021-03-27 21:00:00","BookedSeats":null,"Capacity":null,"Type":"d"},
+
+            ]
+        })
+        cy.get('input:first').type('s266260').should('have.value','s266260')
+        cy.get('input:last').type('scimmia').should('have.value','scimmia')
+        cy.get('.btn.btn-primary')
+            .click()
+
+        cy.wait('@login')
     })
+    it('should display today lecture distance', function () {
+        cy.get('.sc-bdVaJa.cYQqRL.sc-bxivhb.eTpeTG.reactour__close')
+            .click()
+        cy.get('[data-testid="lectures"]').within(()=>{
+            cy.get('tr').eq(1).within(()=>{
+                cy.get('td').eq(0).contains("SE2 Les:4")
+                cy.get('td').eq(3).contains('/')
+                cy.get('td').eq(4).contains('/')
+                cy.get('td').eq(5).contains('Virtual Classroom')
+            })
+        })
+    });
 });
 
 
