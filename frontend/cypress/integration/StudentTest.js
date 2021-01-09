@@ -4,8 +4,6 @@ describe('STUDENT PAGE', function () {
         cy.login('s2662260','scimmia','s')
         Cypress.Cookies.preserveOnce('token', 'value')
         Cypress.Cookies.debug(true)
-        cy.get(".app-element-background")
-            .click({force:true})
         cy.get('.sc-bdVaJa.cYQqRL.sc-bxivhb.eTpeTG.reactour__close')
             .click()
     })
@@ -28,6 +26,17 @@ describe('STUDENT PAGE', function () {
         cy.location('pathname').should('include', '/studentHome')
         cy.reload()
         cy.location('pathname').should('include','/studentHome')
+    });
+    it('should reload when toggle course is open', function () {
+        cy.wait(100)
+        cy.get('.card')
+            .eq(0).click()
+        cy.reload()
+        cy.get('.sc-bdVaJa.cYQqRL.sc-bxivhb.eTpeTG.reactour__close')
+            .click()
+        cy.get('.card-body').eq(0)
+            .should('be.visible')
+
     });
     it('should not redirect to login page', function () {
         cy.wait(200)
@@ -87,7 +96,31 @@ describe('STUDENT PAGE', function () {
                     .should('have.text', 'Yes')
             })
             .click({force: true})
+        cy.wait(50)
+        cy.get('.modal')
+            .should('not.be.visible')
 
+
+    });
+    it('should reload page when is open modal', function () {
+        cy.wait(200)
+        cy.get('[data-testid="studentLectures"]')
+            .click()
+        cy.get('.card')
+            .eq(0).click()
+            .within(()=>{
+                cy.get('tbody>tr').eq(0).within(()=>{
+                    cy
+                        .get('.btn.btn-danger')
+                        .should('be.enabled')
+                        .click()
+                })
+            })
+        cy.reload()
+        cy.get('.sc-bdVaJa.cYQqRL.sc-bxivhb.eTpeTG.reactour__close')
+            .click()
+        cy.get('.modal')
+            .should('be.visible')
 
     });
     it('should open correctly modal to cancel a seat ', function () {
@@ -307,6 +340,7 @@ describe('STUDENT PAGE', function () {
 
 
     });
+
     it('should logout', function () {
         cy.server()
         cy.route({
@@ -322,5 +356,49 @@ describe('STUDENT PAGE', function () {
         cy.getCookies().should('be.empty')
         cy.location('pathname').should('include','/')
     });
+});
+describe('TUTORIAL TEST', function () {
+    beforeEach(() => {
+        cy.visit('http://localhost:3000/')
+        cy.login('s2662260','scimmia','s')
+        Cypress.Cookies.preserveOnce('token', 'value')
+        Cypress.Cookies.debug(true)
+    })
+    it('should render correctly tutorial page', function () {
+        cy.get('.sc-bdVaJa.cYQqRL.sc-bxivhb.eTpeTG.reactour__close').parent()
+            .should('be.visible')
+            .and('contains.text','You can change between lectures/calendar view in the nav bar')
+            .within(()=>{
+                cy.get('[data-tour-elem="right-arrow"]')
+                    .should('be.enabled')
+                cy.get('[data-tour-elem="left-arrow"]')
+                    .should('not.be.enabled')
+                cy.get('[data-tour-elem="navigation"]')
+                    .should('be.visible')
+            })
+    });
+    it('should close tutorial popup', function () {
+
+        cy.get('.sc-bdVaJa.cYQqRL.sc-bxivhb.eTpeTG.reactour__close')
+            .click()
+        cy.get('.sc-bdVaJa.cYQqRL.sc-bxivhb.eTpeTG.reactour__close').parent()
+            .should('be.detached')
+    });
+    it('should click on start tour in navbar', function () {
+        cy.get('.sc-bdVaJa.cYQqRL.sc-bxivhb.eTpeTG.reactour__close')
+            .click()
+        cy.get('[data-testid="tour"]')
+            .click()
+        cy.get('.sc-bdVaJa.cYQqRL.sc-bxivhb.eTpeTG.reactour__close').parent()
+            .should('be.visible')
+    });
+    it('should refresh page', function () {
+        cy.get('.sc-bdVaJa.cYQqRL.sc-bxivhb.eTpeTG.reactour__close')
+            .click()
+        cy.reload()
+        cy.wait(100)
+        cy.get('.sc-bdVaJa.cYQqRL.sc-bxivhb.eTpeTG.reactour__close').parent().should('be.visible')
+    });
+
 });
 
