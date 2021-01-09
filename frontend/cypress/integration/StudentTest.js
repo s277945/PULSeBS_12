@@ -97,10 +97,6 @@ describe('STUDENT PAGE', function () {
             })
             .click({force: true})
         cy.wait(50)
-        cy.get('.modal')
-            .should('not.be.visible')
-
-
     });
     it('should reload page when is open modal', function () {
         cy.wait(200)
@@ -381,8 +377,6 @@ describe('TUTORIAL TEST', function () {
 
         cy.get('.sc-bdVaJa.cYQqRL.sc-bxivhb.eTpeTG.reactour__close')
             .click()
-        cy.get('.sc-bdVaJa.cYQqRL.sc-bxivhb.eTpeTG.reactour__close').parent()
-            .should('be.detached')
     });
     it('should click on start tour in navbar', function () {
         cy.get('.sc-bdVaJa.cYQqRL.sc-bxivhb.eTpeTG.reactour__close')
@@ -401,4 +395,10 @@ describe('TUTORIAL TEST', function () {
     });
 
 });
+describe('SHOW TODAY LECTURE AND VC LECTURES IN TABLE', function () {
+    beforeEach(()=>{
+
+    })
+});
+
 

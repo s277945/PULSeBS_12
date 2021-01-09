@@ -233,7 +233,7 @@ function retrieveStudents(user, lectures){
                             "ssn": row.SSN,
                             "type": row.UserType
                         }
-                        let cond = list.filter(elem=>elem.ssn===obj.ssn).length>0;
+                        /* istanbul ignore next */ let cond = list.filter(elem=>elem.ssn===obj.ssn).length>0;
                         /* istanbul ignore else */
                         if(!cond)
                             list.push(obj)

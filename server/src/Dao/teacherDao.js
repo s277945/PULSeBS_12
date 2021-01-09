@@ -339,7 +339,7 @@ function retrieveWeekStats(courseId, semester){
     let i = 0;
     /* istanbul ignore else */
     if(thisDate.isAfter(moment(6, 'M')))
-        currentYear = moment().year();
+        /* istanbul ignore next */currentYear = moment().year();
     /* istanbul ignore else */
     else{
         currentYear =  moment().year() - 1;
@@ -421,7 +421,7 @@ function retrieveMonthStats(courseId, semester){
     let currentYear;
     /* istanbul ignore else */
     if(thisDate.isAfter(moment(6, 'M')))
-        currentYear = moment().year();
+        /* istanbul ignore next */  currentYear = moment().year();
     /* istanbul ignore else */
     else{
         currentYear =  moment().year() - 1;

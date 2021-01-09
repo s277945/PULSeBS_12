@@ -158,7 +158,7 @@ exports.uploadSchedule=function(list, fileName){
         let i = 0;
         const sql='INSERT INTO Schedule(code, Room, Day, Seats, Time) VALUES(?,?,?,?,?)';
         let lecturesList=[]; //temp lectures array of a course
-        list=list.sort((a,b)=>{return a.courseId===b.courseId?0:(a.courseId>b.courseId?1:-1)})// sort by courseId
+        /* istanbul ignore next */list=list.sort((a,b)=>{return a.courseId===b.courseId?0:(a.courseId>b.courseId?1:-1)})// sort by courseId
         for(let element of list) {
             db.run(sql, [element.courseId, element.room, element.day, element.seats, element.time], (err) => {
                 /* istanbul ignore if */
@@ -208,7 +208,7 @@ function insertLectures(lecturesList) {
         let currentCourse=null;
         let index=0;
         lecturesList=lecturesList.sort((a,b)=>{//order by name then date
-            return a.courseId===b.courseId?moment(a.Date).diff(b.Date, "seconds"):(a.courseId>b.courseId?1:-1) }).map(lecture=>{
+            /* istanbul ignore next */ return a.courseId===b.courseId?moment(a.Date).diff(b.Date, "seconds"):(a.courseId>b.courseId?1:-1) }).map(lecture=>{
                 if(lecture.courseId!==currentCourse) {currentCourse=lecture.courseId; index=0;}
                 index++; lecture.Name=lecture.Name+index; return lecture});//add proper index to lecture
         index=0;
@@ -258,7 +258,7 @@ function getListLectures(schedule){
                 let currentYear
                 /* istanbul ignore else */
                 if (thisDate.isAfter(moment(6, 'M')))
-                    currentYear = moment().year();
+                    /* istanbul ignore next */currentYear = moment().year();
                 /* istanbul ignore else */
                 else {
                     currentYear = moment().year() - 1;
@@ -547,7 +547,7 @@ function updateGivenLectures(lectures, schedule){
     }
     return new Promise((resolve, reject)=> {
         const sql = 'UPDATE Lecture SET Capacity=?, Date=?, EndDate=?, DateDeadline=?, Day=? WHERE Course_Ref=? AND Date=?'
-        if(lectures.length === 0) resolve("there are not lectures to be changed")
+        /* istanbul ignore next */if(lectures.length === 0) resolve("there are not lectures to be changed")
         for(let lecture of lectures){
             let date = moment(lecture.Date)
             let nDay = Number(dayMap[schedule.newDay])

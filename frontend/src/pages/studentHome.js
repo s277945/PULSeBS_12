@@ -163,7 +163,7 @@ class StudentHome extends Component {
                 )
                 if(response.data.operation==="booked") {
                     newLectures[index].BookedSeats++;// increase booked seats number if successful booking
-                    /* istanbul ignore else */
+                    /* istanbul ignore next */
                     if(newLectures[index].BookedSeats>newLectures[index].Capacity) newLectures[index].BookedSeats=newLectures[index].Capacity; //check booking number constraint
                     newLectures[index].alreadyBooked = true// set booking state to true
                 }
@@ -175,10 +175,9 @@ class StudentHome extends Component {
                 this.modalClose();// then close modal
             }).catch(err=>{
                 console.error(err);
+                /* istanbul ignore else */
                 if (err.response.status===500) {
-                    /* istanbul ignore else */
-                    if (err.response.data.errors[0].msg==="0 seats available") this.setPopup("Your booking request was not successful: there are no more seats available for this lecture");
-                    else this.setPopup("Your booking request was not successful: server error");
+                    this.setPopup("Your booking request was not successful: server error");
                     this.modalClose();// then close modal
                 }
              });
@@ -254,7 +253,7 @@ class StudentHome extends Component {
             switch (this.state.modal.message) {
                 case "book a seat":
                     return "primary";
-
+                /* istanbul ignore next */
                 case "cancel your reservation":
                     return "warning";
     
@@ -284,7 +283,7 @@ class StudentHome extends Component {
             </Modal>
         )
     }
-
+    /* istanbul ignore next */
     popupClose = () => {// close popup
         this.setState({ popup: {show: 0, lecture: {Name: "", Date: ""}, message: null} });
         sessionStorage.removeItem("popup");

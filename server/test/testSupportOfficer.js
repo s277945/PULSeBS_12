@@ -178,5 +178,44 @@ describe('TEST SUPPORT OFFICER', function () {
                     expect(res).to.have.status(200)
                 })
         });
+        it('should upload schedule when the hour is between 8:00-9:00', async function () {
+            await studDao.addSeat("s266260","XY0821","2021-01-18 08:30:00","2021-01-18 10:00:00")
+            return chai.request(url)
+                .put('/api/schedules')
+                .set('Cookie',cookie)
+                .send({
+                    courseId:"XY0821",
+                    oldDay:"Mon",
+                    newDay:"Tue",
+                    oldTime:"8:30-10:00",
+                    newTime:"8:00-9:30",
+                    oldRoom:"4",
+                    newRoom:"2P",
+                    oldSeats:80,
+                    newSeats:40
+                })
+                .then(res=>{
+                    expect(res).to.have.status(200)
+                })
+        });
+        it('should not update schedule', function () {
+            return chai.request(url)
+                .put('/api/schedules')
+                .set('Cookie',cookie)
+                .send({
+                    courseId:"XY0821",
+                    oldDay:"Mon",
+                    newDay:"Mon",
+                    oldTime:"8:30-10:00",
+                    newTime:"8:30-10:00",
+                    oldRoom:"4",
+                    newRoom:"4",
+                    oldSeats:80,
+                    newSeats:80
+                })
+                .then(res=>{
+                    expect(res).to.have.status(200)
+                })
+        });
     });
 });

@@ -72,6 +72,7 @@ exports.setTutorial = function(userId){
     return new Promise((resolve, reject) => {
         const sql = 'UPDATE User SET Tutorial = 1 WHERE userID = ?'
         db.run(sql, [userId], (err)=>{
+            /* istanbul ignore if */
             if(err)
                 reject(err)
             else
