@@ -24,7 +24,7 @@
     ./start_script.sh
 
 
-## INSTALL AND START PROJECT WITH DOCKER
+## INSTALL AND START FINAL DEMO WITH DOCKER
 
   From a command line run:
   
@@ -63,6 +63,30 @@
     docker run -i -p 3000:3000 -p 3001:3001 -p 3002:3002 alebottisio/pulsebs_12:stable
 
   then open the page at "http://localhost:3000/"
+  
+  ## INSTALL AND START DEMO 2 WITH DOCKER
+  
+  From a command line run:
+  
+  Linux:
+  ```
+  git clone https://github.com/s277945/PULSeBS_12.git
+  cd PULSeBS_12
+  sudo docker pull alebottisio/pulsebs_12:frontend_stable
+  sudo docker pull alebottisio/pulsebs_12:mail_stable
+  sudo docker pull alebottisio/pulsebs_12:server_stable
+  sudo docker-compose up
+  ```
+  Windows:
+  ```
+  git clone https://github.com/s277945/PULSeBS_12.git
+  cd PULSeBS_12
+  docker pull alebottisio/pulsebs_12:frontend_stable
+  docker pull alebottisio/pulsebs_12:mail_stable
+  docker pull alebottisio/pulsebs_12:server_stable
+  docker-compose up
+  ```
+  
 ## SONARSCANNER INSTRUCTIONS
   Just run the following command from the project's root folder
   
