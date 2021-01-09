@@ -844,7 +844,9 @@ app.put('/api/schedules', (req, res) => {
  * */
 
 app.put('/api/user/tutorial', (req, res) => {
-    userDao.setTutorial(req.body.userId)
+    const user = req.user && req.user.user;
+    console.log(user)
+    userDao.setTutorial(user)
         .then((value) =>{
             res.status(200).json({response: value})
         })

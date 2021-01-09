@@ -188,9 +188,9 @@ export function setNewSchedule(body){
     return axiosInst.put('http://localhost:3001/api/schedules',body,{withCredentials:true});
 }
 
-export function setTutorial(userId){
+export function setTutorial(){
     //update tutorial value for user
-    return axiosInst.put('http://localhost:3001/api/user/tutorial',{userId: userId},{withCredentials:true});
+    return axiosInst.put('http://localhost:3001/api/user/tutorial',{},{withCredentials:true});
 }
 
 export async function login (userName, password){

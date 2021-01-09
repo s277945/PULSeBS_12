@@ -1,4 +1,6 @@
 import React, { useState, useContext, createContext } from 'react'
+import { setTutorial } from '../api/api'
+import { ProvideAuth } from '../components/Authsystem'
 import Tour from 'reactour'
 
 export const TourContext = createContext();
@@ -6,6 +8,12 @@ export const TourContext = createContext();
 export default function StudentHomeTour(props){
     const [isTourOpen, setIsTourOpen] = useState(true);
 
+    
+    {
+        if(localStorage.getItem("tutorial") == 1 && !localStorage.getItem("willingNewTutorial") && isTourOpen === true) setIsTourOpen(false)
+
+    }
+    
     const tour = {
         isTourOpen: isTourOpen,
         setIsTourOpen: setIsTourOpen
@@ -16,7 +24,11 @@ export default function StudentHomeTour(props){
             <Tour
             steps={steps}
             isOpen={isTourOpen}
-            onRequestClose={() => setIsTourOpen(false)}
+            onRequestClose={() => {
+                setIsTourOpen(false)
+                setTutorial()
+                localStorage.setItem("willingNewTutorial", false)
+            }}
             badgeContent={(curr, tot) => `${curr} of ${tot}`} 
             rounded={5}
             />

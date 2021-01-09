@@ -5,7 +5,7 @@ import Card from 'react-bootstrap/Card'
 import Table from 'react-bootstrap/Table'
 import Button from 'react-bootstrap/Button'
 import Modal from 'react-bootstrap/Modal'
-import { authContext } from '../components/Authsystem'
+import { authContext} from '../components/Authsystem'
 import { getLectures, getCourses, getStudentBookedLectures, getStudentWaitingLectures, postStudentBookedLecture, deleteStudentBookedLecture } from '../api/api'
 import Calendar from '../components/Calendar';
 import Container from 'react-bootstrap/Container'

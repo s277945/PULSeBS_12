@@ -71,7 +71,7 @@ function useProvideAuth() {
   };
 
   const doneTutorial = () => {
-    return setTutorial(user.userName).then(() => {
+    return setTutorial().then(() => {
       localStorage.setItem("tutorial", 1);
       setUser({userName : user.userName, userType : user.userType, tutorial : 1});
       return true;
@@ -130,5 +130,5 @@ function saveUserSession(user) {
     localStorage.setItem("userName", user.userName);// set session storage data (user name, user type)
     localStorage.setItem("userType", user.userType);
     localStorage.setItem("tutorial", user.tutorial);
-
+    localStorage.setItem("willingNewTutorial", false)
 }
