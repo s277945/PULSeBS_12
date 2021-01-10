@@ -26,6 +26,7 @@ export class TeacherTabHist extends Component {
         return (
             <div  className="app-element-background"><br></br><h1 className="page-title">Historical Data</h1><br></br>
                 {this.state.tableData.map((course) => <div style={{margin: "10px", border: "2px solid gray", borderRadius: "11px", padding: "17px"}}><StatisticsTab course={course}></StatisticsTab></div>)}
+                {this.props.tour.test}
             </div>
         )
     }
