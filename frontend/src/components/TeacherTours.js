@@ -6,7 +6,11 @@ import Tour from 'reactour'
 export const TeacherLecTourContext = createContext();
 
 export function TeacherLecTour(props) {
-    const [isTourOpen, setIsTourOpen] = useState(false);
+    const [isTourOpen, setIsTourOpen] = useState(true);
+
+    {
+        if(localStorage.getItem("tutorial") == 1 && localStorage.getItem("willingNewTutorial") == "false" && isTourOpen===true) setIsTourOpen(false)   
+    }
 
     const tour = {
         isTourOpen: isTourOpen,
@@ -35,6 +39,8 @@ export function TeacherLecTour(props) {
                 isOpen={isTourOpen}
                 onRequestClose={() => {
                     setIsTourOpen(false)
+                    setTutorial()
+                    localStorage.setItem("willingNewTutorial", false)
                 }}
                 badgeContent={(curr, tot) => `${curr} of ${tot}`}
                 rounded={5}
@@ -48,6 +54,10 @@ export const TeacherSLTourContext = createContext();
 
 export function TeacherSLTour(props) {
     const [isTourOpen, setIsTourOpen] = useState(false);
+
+    {
+        if(localStorage.getItem("tutorial") == 1 && localStorage.getItem("willingNewTutorial") == "false" && isTourOpen===true) setIsTourOpen(false)   
+    }
 
     const tour = {
         isTourOpen: isTourOpen,
@@ -88,6 +98,8 @@ export function TeacherSLTour(props) {
                 isOpen={isTourOpen}
                 onRequestClose={() => {
                     setIsTourOpen(false)
+                    setTutorial()
+                    localStorage.setItem("willingNewTutorial", false)
                 }}
                 badgeContent={(curr, tot) => `${curr} of ${tot}`}
                 rounded={5}
@@ -101,6 +113,10 @@ export const TeacherHistTourContext = createContext();
 
 export function TeacherHistTour(props) {
     const [isTourOpen, setIsTourOpen] = useState(false);
+
+    {
+        if(localStorage.getItem("tutorial") == 1 && localStorage.getItem("willingNewTutorial") == "false" && isTourOpen===true) setIsTourOpen(false)   
+    }
 
     const tour = {
         isTourOpen: isTourOpen,
@@ -137,6 +153,8 @@ export function TeacherHistTour(props) {
                 isOpen={isTourOpen}
                 onRequestClose={() => {
                     setIsTourOpen(false)
+                    setTutorial()
+                    localStorage.setItem("willingNewTutorial", false)
                 }}
                 badgeContent={(curr, tot) => `${curr} of ${tot}`}
                 rounded={5}
