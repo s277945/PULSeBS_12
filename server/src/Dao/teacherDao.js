@@ -9,7 +9,6 @@ const moment = require('moment');
 */
 
 exports.getCoursesByTeacherId=function(userId){
-    console.log(userId)
     return new Promise((resolve, reject) => {
         const sql='SELECT CourseID, Name, Restriction FROM Course WHERE Teacher_Ref = ?';
         db.all(sql, [userId], (err,rows)=>{
@@ -38,7 +37,6 @@ exports.getLecturesByTeacherId=function(userId){
             if(err)
                 reject(err);
             else{
-                console.log("lectures: " + rows + " userId " + userId);
                 resolve(rows);
             }
         });
@@ -414,7 +412,6 @@ exports.getMonthStats = function (courseId){
  */
 
 function retrieveMonthStats(courseId, semester){
-    console.log(courseId, semester);
     let list = [];
     let months;
     let thisDate = moment();
@@ -455,7 +452,6 @@ function retrieveMonthStats(courseId, semester){
                 if(err) reject(err);
                 else {
                     let monthName = startDate.format('MMMM');
-                    console.log(monthName+" "+monthYear);
                     list.push({"month": monthName, "year": monthYear, "average": row.average, "averageAtt": row.averageAtt});
                     i++;
                 }
@@ -485,7 +481,7 @@ exports.setPresentStudents = function (courseId, date, list){
                         db.run(sql2, [1, courseId, date, el.studentId], (err2) => {
                             /* istanbul ignore if */
                             if(err2) reject(err2);
-                            else{ console.log(el)
+                            else{
                                 i++;
                                 if(i===list.length) resolve(true);
                             }
@@ -513,7 +509,6 @@ exports.getPastLecturesByTeacherId=function(userId){
                 reject(err);
             }
             else{
-                console.log("lectures: " + rows + " userId " + userId);
                 resolve(rows);
             }
         });
