@@ -9,7 +9,16 @@ export function TeacherLecTour(props) {
     const [isTourOpen, setIsTourOpen] = useState(true);
 
     {
-        if(localStorage.getItem("tutorial") == 1 && localStorage.getItem("willingNewTutorial") == "false" && isTourOpen===true) setIsTourOpen(false)   
+        if(localStorage.getItem("tutorial") == 1 && 
+            localStorage.getItem("willingNewTutorial") == "false" && 
+            isTourOpen===true) 
+                setIsTourOpen(false)
+        else if(localStorage.getItem("tutorial") == 0 && localStorage.getItem("tutorialLec") == "true"  && isTourOpen===true)
+            if(localStorage.getItem("willingNewTutorial") == "false") setIsTourOpen(false)
+        else if (localStorage.getItem("tutorial") == 1 && 
+            localStorage.getItem("willingNewTutorial") == "false" && 
+            isTourOpen===true) 
+                setIsTourOpen(false)  
     }
 
     const tour = {
@@ -20,7 +29,7 @@ export function TeacherLecTour(props) {
     const steps = [
         {
             selector: '[tour-selec="TeachNavBar"]',
-            content: 'Here you can switch tabs between Lectures/StudentList/HisoricalData',
+            content: 'Here you can switch tabs between Lectures/StudentList/HistoricalData',
         },
         {
             selector: '[tour-selec="LecTable"]',
@@ -41,6 +50,7 @@ export function TeacherLecTour(props) {
                     setIsTourOpen(false)
                     setTutorial()
                     localStorage.setItem("willingNewTutorial", false)
+                    localStorage.setItem("tutorialLec", true)
                 }}
                 badgeContent={(curr, tot) => `${curr} of ${tot}`}
                 rounded={5}
@@ -56,7 +66,15 @@ export function TeacherSLTour(props) {
     const [isTourOpen, setIsTourOpen] = useState(false);
 
     {
-        if(localStorage.getItem("tutorial") == 1 && localStorage.getItem("willingNewTutorial") == "false" && isTourOpen===true) setIsTourOpen(false)   
+        if(localStorage.getItem("tutorial") == 1 && 
+            localStorage.getItem("willingNewTutorial") == "false" && 
+            isTourOpen===true) setIsTourOpen(false) 
+        else if(localStorage.getItem("tutorial") == 0 && localStorage.getItem("tutorialSL") == "true"  && isTourOpen===true)
+            if(localStorage.getItem("willingNewTutorial") == "false")  setIsTourOpen(false)
+        else if (localStorage.getItem("tutorial") == 1 && 
+            localStorage.getItem("willingNewTutorial") == "false" && 
+            isTourOpen===true) 
+                setIsTourOpen(false)   
     }
 
     const tour = {
@@ -67,7 +85,7 @@ export function TeacherSLTour(props) {
     const steps = [
         {
             selector: '[tour-selec="TeachNavBar"]',
-            content: 'Here you can switch tabs between Lectures/StudentList/HisoricalData',
+            content: 'Here you can switch tabs between Lectures/StudentList/HistoricalData',
         },
         {
             selector: '[tour-selec="programedLectures"]',
@@ -100,6 +118,7 @@ export function TeacherSLTour(props) {
                     setIsTourOpen(false)
                     setTutorial()
                     localStorage.setItem("willingNewTutorial", false)
+                    localStorage.setItem("tutorialSL", true)
                 }}
                 badgeContent={(curr, tot) => `${curr} of ${tot}`}
                 rounded={5}
@@ -115,7 +134,16 @@ export function TeacherHistTour(props) {
     const [isTourOpen, setIsTourOpen] = useState(false);
 
     {
-        if(localStorage.getItem("tutorial") == 1 && localStorage.getItem("willingNewTutorial") == "false" && isTourOpen===true) setIsTourOpen(false)   
+        if(localStorage.getItem("tutorial") == 1 && 
+            localStorage.getItem("willingNewTutorial") == "false" && 
+            isTourOpen===true) 
+                setIsTourOpen(false) 
+        else if(localStorage.getItem("tutorial") == 0 && localStorage.getItem("tutorialHT") == "true"  && isTourOpen===true)
+            if(localStorage.getItem("willingNewTutorial") == "false") setIsTourOpen(false)  
+        else if (localStorage.getItem("tutorial") == 1 && 
+            localStorage.getItem("willingNewTutorial") == "false" && 
+            isTourOpen===true) 
+                setIsTourOpen(false)   
     }
 
     const tour = {
@@ -130,7 +158,7 @@ export function TeacherHistTour(props) {
         },
         {
             selector: '[tour-selec="TeachNavBar"]',
-            content: 'Here you can switch tabs between Lectures/StudentList/HisoricalData',
+            content: 'Here you can switch tabs between Lectures/StudentList/HistoricalData',
         },
         {
             selector: '[tour-selec="graph"]',
@@ -155,6 +183,7 @@ export function TeacherHistTour(props) {
                     setIsTourOpen(false)
                     setTutorial()
                     localStorage.setItem("willingNewTutorial", false)
+                    localStorage.setItem("tutorialHT", true)
                 }}
                 badgeContent={(curr, tot) => `${curr} of ${tot}`}
                 rounded={5}

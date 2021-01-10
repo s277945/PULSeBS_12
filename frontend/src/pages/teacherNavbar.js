@@ -82,13 +82,18 @@ class TeacherNavbar extends Component {
             <>
                 <Navbar bg="dark" variant="dark">
                     <Navbar.Brand data-testid={"homeRedirect"} href="#" onClick={this.redirHome}>PULSeBS</Navbar.Brand>
-                    <Nav tour-selec="TeachNavBar" className="mr-auto">
-                        <Nav.Link data-testid={"lecturesPage"} href="#lectures" active={this.state.lectureslink} onSelect={this.showLectures}>Lectures</Nav.Link>
-                        <Nav.Link data-testid="teacherStudent" href="#studentList" active={this.state.studentslink} onSelect={this.showStudentList}>Student List</Nav.Link>
-                        <Nav.Link data-testid="history" href="#history" active={this.state.historylink} onSelect={this.showHistory}>Historical Data</Nav.Link>
+                    <Nav tour-selec="TeachNavBar" className="mr-auto">   
+                        <TeacherLecTourContext.Consumer>
+                            {tour => <Nav.Link data-testid={"lecturesPage"} href="#lectures" active={this.state.lectureslink} onSelect={()=>{this.showLectures(); tour.setIsTourOpen(true)}}>Lectures</Nav.Link>}
+                        </TeacherLecTourContext.Consumer>
+                        <TeacherSLTourContext.Consumer>
+                            {tour => <Nav.Link data-testid="teacherStudent" href="#studentList" active={this.state.studentslink} onSelect={()=>{this.showStudentList(); tour.setIsTourOpen(true)}}>Student List</Nav.Link>}
+                        </TeacherSLTourContext.Consumer>
+                        <TeacherHistTourContext.Consumer>
+                            {tour => <Nav.Link data-testid="history" href="#history" active={this.state.historylink} onSelect={()=>{this.showHistory(); tour.setIsTourOpen(true)}}>Historical Data</Nav.Link>}
+                         </TeacherHistTourContext.Consumer>
+                            
                     </Nav>
-
-
                     {this.renderTourButton()}
 
 
