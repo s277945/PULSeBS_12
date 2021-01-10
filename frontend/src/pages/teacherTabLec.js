@@ -22,6 +22,7 @@ export class TeacherTabLec extends Component {
 
     componentDidMount() {
         updateTeacher(this);
+
         let modalShow = sessionStorage.getItem("modalShow");//get saved modalShow state value
         let popup = sessionStorage.getItem("popup");//get saved popup state value
         let selectedLec = sessionStorage.getItem("selectedLec");//get saved selectedLec value
@@ -136,14 +137,15 @@ export class TeacherTabLec extends Component {
                 <td>{element.Course_Ref}</td>
                 <td>{element.Name}</td>
                 <td>{moment(element.Date).format('YYYY-MM-DD HH:mm')}</td>
-                <td style={{display: "flex", justifyContent: "center"}}><Button data-testid={"showCourse_"+k++} onClick={(e) => { e.preventDefault(); this.showModifications(element) }}>SELECT</Button></td>
+                <td style={{display: "flex", justifyContent: "center"}}><Button tour-selec="LecButton" data-testid={"showCourse_"+k++} onClick={(e) => { e.preventDefault(); this.showModifications(element) }}>SELECT</Button></td>
             </tr>)
         });
         return (
-            <>
+            <div >
                 <br/>
                 <h1 className="page-title">Lectures</h1>
                 <br/>
+                <div tour-selec="LecTable">
                 <Table striped bordered hover style={{backgroundColor: "#fff", width: "95%", margin: "auto"}}>
                     <thead>
                         <tr>
@@ -157,7 +159,7 @@ export class TeacherTabLec extends Component {
                         {tableBody}
                     </tbody>
                 </Table>
-
+                </div>
                 <Modal show={this.state.modalShow} onHide={this.handleClose} style={{marginTop: "17vh"}}>
                     <Modal.Header style={{flexWrap: "no-wrap", minWidth: "508px"}} data-testid={"close"} closeButton>
                         <div>
@@ -182,7 +184,7 @@ export class TeacherTabLec extends Component {
                         </div>
                     </Modal.Header>
                 </Modal>
-            </>
+            </div>
         )
     }
 

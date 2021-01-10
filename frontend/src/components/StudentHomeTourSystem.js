@@ -11,10 +11,7 @@ export default function StudentHomeTour(props){
     
     {
         
-        if(localStorage.getItem("tutorial") == 1 && localStorage.getItem("willingNewTutorial") == "false" && isTourOpen===true){
-            setIsTourOpen(false)
-            console.log("xd")
-        }else{console.log("tour " + isTourOpen)}
+        if(localStorage.getItem("tutorial") == 1 && localStorage.getItem("willingNewTutorial") == "false" && isTourOpen===true) setIsTourOpen(false)   
         
     }
     

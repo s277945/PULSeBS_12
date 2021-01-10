@@ -254,7 +254,7 @@ export class StatisticsTab extends Component {
                         <p style={{fontSize: "21px", minWidth: "110px", marginRight: "10px"}}>Detail level: </p>
                     
 
-                        <select className="browser-default custom-select "
+                        <select tour-selec="detailLevel" className="browser-default custom-select "
                             //On change we update the selected groupBy and call updateSelected as a callback
                             onChange={(e) => { this.setState({ groupBy: e.target.value }, this.updateSelected); }}>
                             {gbOptions.map((groupBy) => <option value={groupBy}>{groupBy}</option>)}
@@ -262,7 +262,7 @@ export class StatisticsTab extends Component {
                     </div>
                 </div>
                 <div >
-                    <div style={{ height: "400px"}}>
+                    <div tour-selec="graph" style={{ height: "400px"}}>
                         <ResponsiveBar
                             // margin needed to show axis labels
                             margin={{
@@ -356,7 +356,7 @@ export class StatisticsTab extends Component {
                         </div>)
                         :<div style={{marginBottom: "10px"}}/>
                     }
-                    <div style={{margin: "10px", marginLeft: "35px", marginRight: "37px"}}>
+                    <div tour-selec="histTables" style={{margin: "10px", marginLeft: "35px", marginRight: "37px"}}>
                         {this.renderTable()}
                     </div>
                 </div>
