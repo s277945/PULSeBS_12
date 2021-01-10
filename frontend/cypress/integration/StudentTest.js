@@ -2,11 +2,11 @@ import moment from "moment";
 describe('STUDENT PAGE', function () {
     beforeEach(() => {
         cy.visit('http://localhost:3000/')
-        cy.login('s2662260','scimmia','s')
+        cy.login('s2662260','scimmia','s',1)
         Cypress.Cookies.preserveOnce('token', 'value')
         Cypress.Cookies.debug(true)
-        cy.get('.sc-bdVaJa.cYQqRL.sc-bxivhb.eTpeTG.reactour__close')
-            .click()
+        /*cy.get('.sc-bdVaJa.cYQqRL.sc-bxivhb.eTpeTG.reactour__close')
+            .click()*/
     })
     it('should show correctly student page', function () {
         cy.location('pathname').should('include','/studentHome')
@@ -114,8 +114,6 @@ describe('STUDENT PAGE', function () {
                 })
             })
         cy.reload()
-        cy.get('.sc-bdVaJa.cYQqRL.sc-bxivhb.eTpeTG.reactour__close')
-            .click()
         cy.get('.modal')
             .should('be.visible')
 
@@ -342,7 +340,7 @@ describe('STUDENT PAGE', function () {
 describe('TUTORIAL TEST', function () {
     beforeEach(() => {
         cy.visit('http://localhost:3000/')
-        cy.login('s2662260','scimmia','s')
+        cy.login('s2662260','scimmia','s',0)
         Cypress.Cookies.preserveOnce('token', 'value')
         Cypress.Cookies.debug(true)
     })
@@ -413,7 +411,7 @@ describe('SHOW TODAY LECTURE AND VC LECTURES IN TABLE', function () {
             url:'/api/login',
             status:200,
             request:{userName:"s266260",password:"password"},
-            response:{user:"s266260",userType:"s"}
+            response:{user:"s266260",userType:"s",tutorial:1}
         }).as('login')
         cy.route({
             method:'GET',
@@ -439,8 +437,6 @@ describe('SHOW TODAY LECTURE AND VC LECTURES IN TABLE', function () {
         cy.wait('@login')
     })
     it('should display today lecture distance', function () {
-        cy.get('.sc-bdVaJa.cYQqRL.sc-bxivhb.eTpeTG.reactour__close')
-            .click()
         cy.get('[data-testid="lectures"]').within(()=>{
             cy.get('tr').eq(1).within(()=>{
                 cy.get('td').eq(0).contains("SE2 Les:4")

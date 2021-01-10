@@ -60,11 +60,15 @@ const CoursesSetup = () => {
                     return course
                 }));
                 if(newchecked) {
+                    /* istanbul ignore else */
                     if(!selection.semesters[0]) semesterSetChecked(selection.year, 0);
+                    /* istanbul ignore else */
                     if(!selection.semesters[1]) semesterSetChecked(selection.year, 1);
                 }
                 else {
+                    /* istanbul ignore else */
                     if(selection.semesters[0]) semesterSetChecked(selection.year, 0);
+                    /* istanbul ignore else */
                     if(selection.semesters[1]) semesterSetChecked(selection.year, 1);
                 }
                 
@@ -128,6 +132,7 @@ const CoursesSetup = () => {
     const semesterSetChecked = (year, semester) => {
         let s1courses = courses.filter(course=>{return course.year===year&&course.semester===1}).length>0;
         let s2courses = courses.filter(course=>{return course.year===year&&course.semester===2}).length>0;
+        /* istanbul ignore else */
         if(s1courses&&semester===0||s2courses&&semester===1) setYearsChecked(yearsChecked.map(y=>{
             /* istanbul ignore else */
             if(y.year===year&&!y.semesters[semester]) {
@@ -189,6 +194,7 @@ const CoursesSetup = () => {
                 y.semesters[1]=false;
             }
             else{
+                /* istanbul ignore else */
                 if(s1num===0&&s2num===0) {
                     y.checked=true;
                     y.semesters[0]=true;

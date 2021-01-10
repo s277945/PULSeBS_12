@@ -26,14 +26,14 @@
 //GENERIC COMMAND FOR LOGIN
 import 'cypress-file-upload';
 
-Cypress.Commands.add("login",(username,password,type)=>{
+Cypress.Commands.add("login",(username,password,type,tutorial)=>{
     cy.server()
     cy.route({
         method:'POST',
         url:'/api/login',
         status:200,
         request:{userName:username,password:password},
-        response:{user:username,userType:type}
+        response:{user:username,userType:type,tutorial:tutorial}
     }).as('login')
     cy.fixture('students.json').then((data)=>{
         let length=data.length;
