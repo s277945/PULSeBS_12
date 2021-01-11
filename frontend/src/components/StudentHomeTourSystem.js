@@ -1,10 +1,16 @@
 import React, { useState, useContext, createContext } from 'react'
+import Modal from 'react-bootstrap/Modal'
+import Button from 'react-bootstrap/Button'
 import Tour from 'reactour'
 
 export const TourContext = createContext();
 
 export default function StudentHomeTour(props){
     const [isTourOpen, setIsTourOpen] = useState(true);
+
+    const [show, setShow] = useState(false);
+    const handleClose = () => setShow(false);
+    const handleShow = () => setShow(true);
 
     const tour = {
         isTourOpen: isTourOpen,
@@ -19,7 +25,10 @@ export default function StudentHomeTour(props){
             onRequestClose={() => setIsTourOpen(false)}
             badgeContent={(curr, tot) => `${curr} of ${tot}`} 
             rounded={5}
+            disableInteraction={true}
+            onBeforeClose={() => handleShow()}
             />
+            <TourModal show={show} handleClose={handleClose} handleShow={handleShow}/>
             {props.children}
         </TourContext.Provider>
     )
@@ -37,10 +46,31 @@ const steps = [
     {
         selector: '[tour-selec="course-card"]',
         content: 'Here you can foud lectures regrouped by courses',
+        observe: '[tour-selec="course-card"]'
     },
 ];
 
 
+const TourModal = ({show, handleClose, handleShow}) => {
+    return (
+        <>
+          <Modal react-tour="tour-modal" show={show} onHide={handleClose}>
+            <Modal.Header closeButton>
+              <Modal.Title>Are you sure you want to leave the tour?</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>Youn can leave the tour if you feeling at ease</Modal.Body>
+            <Modal.Footer>
+              <Button variant="secondary" onClick={handleClose}>
+                Quit tour
+              </Button>
+              <Button variant="primary" onClick={handleClose}>
+                Return to tour
+              </Button>
+            </Modal.Footer>
+          </Modal>
+        </>
+      );
+}
 
 export const getTourState = (state) =>{
     return{
@@ -56,17 +86,6 @@ export const getTourState = (state) =>{
 const today = new Date();
 const tomorrow = new Date(today)
 tomorrow.setDate(tomorrow.getDate() + 1)
-
-        // BookedSeats: 1
-        // Capacity: 100
-        // Course_Ref: "C2468"
-        // Date: "2021-03-08 15:00:00"
-        // DateDeadline: "2021-03-07 23:00:00"
-        // EndDate: "2021-03-08 18:00:00"
-        // Name: "WA Les:3"
-        // Type: "p"
-        // alreadyBooked: true
-
 
 const tourLecture = [
     {

@@ -321,10 +321,10 @@ class StudentHome extends Component {
         return (
             <div>
                 <h4 className="page-subtitle-2">Select by course</h4>
-                <Accordion activeKey={this.state.togglecourse}>
+                <Accordion  tour-selec="course-accordion" activeKey={this.state.togglecourse}>
                     {this.state.courses.map(course =>
                         <Card tour-selec="course-card" key={course.Name}>
-                            <Accordion.Toggle as={Card.Header}  eventKey={course.Name} onClick={(e)=> {// set accordion selection state
+                            <Accordion.Toggle tour-selec="course-toggle" as={Card.Header}  eventKey={course.Name} onClick={(e)=> {// set accordion selection state
                                 e.preventDefault();
                                 /* istanbul ignore if */
                                 if (this.state.togglecourse===e.target.innerText) {
