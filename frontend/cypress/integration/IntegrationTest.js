@@ -743,7 +743,6 @@ describe('TEST BEHAVIOUR OF CANCEL OR TURN INTO DISTANCE A LECTURE WITHIN 30-60M
             .click()
         cy.wait('@list')
         cy.get('[data-testid="studentsList"]').should('have.length', 0)
-        cy.get('.modal').should('not.be.visible')
     });
     it('should click on tutorial page', function () {
         cy.get('[data-testid="tour"]').click()
@@ -789,6 +788,49 @@ describe('TEST BEHAVIOUR OF CANCEL OR TURN INTO DISTANCE A LECTURE WITHIN 30-60M
                 expect(localStorage.getItem('tutorialHT')).to.eq('true')
             })
     });
+});
+describe('TUTORIAL TESTING', function () {
+    beforeEach(()=>{
+        cy.server()
+        cy.route({
+            method:'PUT',
+            url:'/api/user/tutorial',
+            status:204,
+            response:{}
+        }).as('tutorial')
+        cy.visit('http://localhost:3000/')
+        cy.teacher('t987654','scimmia','t',0)
+        Cypress.Cookies.preserveOnce('token', 'value')
+        Cypress.Cookies.debug(true)
+    })
+    it('should execute teacher lecture test', function () {
+        expect(localStorage.getItem('tutorial')).to.eq('0')
+        cy.get('.sc-bdVaJa.cYQqRL.sc-bxivhb.eTpeTG.reactour__close')
+            .click().should(()=>{
+            expect(localStorage.getItem('willingNewTutorial')).to.eq('false')
+            expect(localStorage.getItem('tutorialLec')).to.eq('true')
+            //expect(localStorage.getItem('tutorial')).to.eq('1')
+        })
+        cy.wait('@tutorial')
+    });
+    it('should execute studentList test', function () {
+        expect(localStorage.getItem('tutorial')).to.eq('0')
+        cy.get('.sc-bdVaJa.cYQqRL.sc-bxivhb.eTpeTG.reactour__close')
+            .click()
+        cy.get('[data-testid="teacherStudent"]').should('have.text', 'Student List')
+            .should('have.attr', 'href', '#studentList')
+            .click()
+        cy.get('.sc-bdVaJa.cYQqRL.sc-bxivhb.eTpeTG.reactour__close')
+            .click().should(()=>{
+            expect(localStorage.getItem('willingNewTutorial')).to.eq('false')
+            expect(localStorage.getItem('tutorialLec')).to.eq('true')
+            expect(localStorage.getItem('tutorialSL')).to.eq('true')
+            //expect(localStorage.getItem('tutorial')).to.eq('1')
+
+        })
+        cy.wait('@tutorial')
+    });
+
 });
 
 
