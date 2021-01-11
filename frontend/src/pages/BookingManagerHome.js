@@ -77,14 +77,14 @@ export default function BookingManagerHome() {
                 )}
             </div>
         )
-
+        /* istanbul ignore else */
         if (show === 1) return (
             <div className="app-background">
                 <BookingManagerReport />
             </div>
         )
 
-        /* istanbul ignore else */
+
         else{
             return (
             <div>

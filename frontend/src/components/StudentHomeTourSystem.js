@@ -1,6 +1,7 @@
 import React, { useState, useContext, createContext } from 'react'
 import Modal from 'react-bootstrap/Modal'
 import Button from 'react-bootstrap/Button'
+import { setTutorial } from '../api/api'
 import Tour from 'reactour'
 
 export const TourContext = createContext();
@@ -12,6 +13,8 @@ export default function StudentHomeTour(props){
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
 
+    if(localStorage.getItem("tutorial") == 1 && localStorage.getItem("willingNewTutorial") == "false" && isTourOpen===true) setIsTourOpen(false)   
+        
     const tour = {
         isTourOpen: isTourOpen,
         setIsTourOpen: setIsTourOpen
@@ -22,7 +25,11 @@ export default function StudentHomeTour(props){
             <Tour
             steps={steps}
             isOpen={isTourOpen}
-            onRequestClose={() => setIsTourOpen(false)}
+            onRequestClose={() => {
+                setIsTourOpen(false)
+                setTutorial()
+                localStorage.setItem("willingNewTutorial", false)
+            }}
             badgeContent={(curr, tot) => `${curr} of ${tot}`} 
             rounded={5}
             disableInteraction={true}
@@ -32,7 +39,7 @@ export default function StudentHomeTour(props){
             {props.children}
         </TourContext.Provider>
     )
-  };
+  }
 
 const steps = [
     {
@@ -45,8 +52,7 @@ const steps = [
     },
     {
         selector: '[tour-selec="course-card"]',
-        content: 'Here you can foud lectures regrouped by courses',
-        observe: '[tour-selec="course-card"]'
+        content: 'Here you can find lectures grouped by course',
     },
 ];
 

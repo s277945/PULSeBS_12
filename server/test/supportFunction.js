@@ -231,3 +231,25 @@ exports.addWaitingList=function (userId, courseId, date, endDate){
         })
     });
 }
+exports.updateDateLecture=function(courseId,courseName,type){
+    return new Promise(((resolve, reject) => {
+        let startDate,endDate,deadline;
+        if(type===0){
+            startDate=moment().subtract('days',1).add('hours',1).format('YYYY-MM-DD HH:mm:ss');
+            deadline=moment().subtract('days',2).format('YYYY-MM-DD HH:mm:ss');
+            endDate=moment().subtract('days',1).add('hours',4).format('YYYY-MM-DD HH:mm:ss');
+        }
+        else{
+            startDate=moment().add('days',5).add('hours',1).format('YYYY-MM-DD HH:mm:ss');
+            deadline=moment().add('days',4).format('YYYY-MM-DD HH:mm:ss');
+            endDate=moment().add('days',5).add('hours',4).format('YYYY-MM-DD HH:mm:ss');
+        }
+        const sql='UPDATE Lecture SET Date=?,EndDate=?,DateDeadline=? WHERE Course_Ref=? AND Name=?';
+        db.run(sql,[startDate,endDate,deadline,courseId,courseName],(err)=>{
+            if(err)
+                reject(err);
+            else
+                resolve(startDate);
+        })
+    }))
+}

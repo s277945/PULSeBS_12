@@ -9,6 +9,7 @@
  import { getTeacherPastLectures, setPresentStudents } from '../api/api'
  import Accordion from 'react-bootstrap/Accordion'
  import Card from 'react-bootstrap/Card'
+ import { useAccordionToggle } from 'react-bootstrap/AccordionToggle';
 
  export class TeacherTabSL extends Component {
 
@@ -16,9 +17,22 @@
      state = { tableData: [], pastTableData: [], modalTableData: [], modalLecture: null, modal: 0, element: null }
 
      componentDidMount() {
-         updateTeacher(this);
+        //If tour is open set state with tour data
+        if(this.props.tour.isTourOpen) {
+            this.setState(this.props.tour.getTourState())
+            return
+        }
+
+        this.getPageData()
+
+         }
+
+     getPageData = () =>{
+        
+        updateTeacher(this);
          getTeacherPastLectures()
             .then(res => {
+                console.log("Past data:");
                 console.log(res.data);
                 this.setState({ pastTableData: res.data });
             }).catch(/* istanbul ignore next */err=>{
@@ -33,8 +47,18 @@
              this.showList(JSON.parse(element));
         }
          else sessionStorage.setItem("element", null);//if none is present, save element state value
+     
      }
 
+     componentDidUpdate(prevProps){
+        if(!this.props.tour.isTourOpen && prevProps.tour.isTourOpen){
+            this.getPageData()
+        }
+
+        if(this.props.tour.isTourOpen && !prevProps.tour.isTourOpen){
+            this.setState(this.props.tour.getTourState())
+        }
+     }
 
      showList = (element, num) => {
         getStudentList(element)
@@ -80,7 +104,7 @@
                                         <td>{row.Course_Ref}</td>
                                         <td>{row.Name}</td>
                                         <td>{moment(row.Date).format("DD/MM/YYYY HH:mm")}</td>
-                                        <td style={{display: "flex", justifyContent: "center"}}><Button style={{marginLeft: "5px"}} data-testid={"showList_"+i} onClick={(e) => { e.preventDefault(); this.showList(row, 1) }}>SHOW LIST</Button></td>
+                                        <td style={{display: "flex", justifyContent: "center"}}><Button tour-selec="showList" style={{marginLeft: "5px"}} data-testid={"showList_"+i} onClick={(e) => { e.preventDefault(); this.showList(row, 1) }}>SHOW LIST</Button></td>
                                     </tr>)
                             })}
                      </tbody>
@@ -155,7 +179,7 @@
                                         <td>{row.Course_Ref}</td>
                                         <td>{row.Name}</td>
                                         <td>{moment(row.Date).format("DD/MM/YYYY HH:mm")}</td>
-                                        <td style={{display: "flex", justifyContent: "center"}}><Button style={{marginLeft: "5px"}} variant="info" data-testid={"showList_"+i} onClick={(e) => { e.preventDefault(); this.showList(row,2) }}>{"SET STUDENT ATTENDANCE"}</Button></td>
+                                        <td style={{display: "flex", justifyContent: "center"}}><Button tour-selec="setAttendance" style={{marginLeft: "5px"}} variant="info" data-testid={"showList_"+i} onClick={(e) => { e.preventDefault(); this.showList(row,2) }}>{"SET STUDENT ATTENDANCE"}</Button></td>
                                     </tr>)
                             })}
                         {this.state.pastTableData.filter(row=>moment().diff(moment(row.Date), 'days') > 1).map((row,i) => {
@@ -163,7 +187,7 @@
                                         <td>{row.Course_Ref}</td>
                                         <td>{row.Name}</td>
                                         <td>{moment(row.Date).format("DD/MM/YYYY HH:mm")}</td>
-                                        <td style={{display: "flex", justifyContent: "center"}}><Button style={{marginLeft: "5px"}} variant="secondary" data-testid={"showList_"+i} onClick={(e) => { e.preventDefault(); this.showList(row,2) }}>{"SHOW ATTENDANCE DATA"}</Button></td>
+                                        <td style={{display: "flex", justifyContent: "center"}}><Button tour-selec="showPast" style={{marginLeft: "5px"}} variant="secondary" data-testid={"showList_"+i} onClick={(e) => { e.preventDefault(); this.showList(row,2) }}>{"SHOW ATTENDANCE DATA"}</Button></td>
                                     </tr>)
                             })}
                      </tbody>
@@ -197,6 +221,7 @@
                                                  <td style={{textAlign:"center"}}>{element.attendance===1?"Yes":"No"}</td>
                                                  <td style={{margin: "auto", width:"52px"}}><Checkbox style={{ marginLeft: "7px", marginTop: "1px", height: "15px" }} disabled={element.attendance===1} checked={element.checked&&element.attendance!==1} onClick={()=>{this.setState({
                                                      modalTableData: this.state.modalTableData.map(e => {
+                                                         /* istanbul ignore else */
                                                          if (e.userId === element.userId) return { userId: e.userId, name: e.name, surname: e.surname, attendance: e.attendance, checked: !e.checked }
                                                          else return e;
                                                      })
@@ -231,12 +256,16 @@
      }
 
      render() {
+
+        //Expand all the accordeons with key="0" if tour is open
+        let expand = this.props.tour.isTourOpen?"0":undefined
+
          return(
              <div className="app-background">
                 <br />
                 <h1 className="page-title">Student list</h1>
                 <br />
-                <Accordion key="programmed-lectures" style={{width: "99%", margin: "auto", marginTop: "17px"}}>
+                <Accordion activeKey={expand} tour-selec="programedLectures" key="programmed-lectures" style={{width: "99%", margin: "auto", marginTop: "17px"}}>
                     <Card>
                         <Accordion.Toggle as={Card.Header} eventKey="0">
                             <h4 style={{margin: "10px", marginLeft: "2.7vw", marginBottom: "17px", marginTop: "17px"}}>Programmed lectures info</h4>
@@ -249,7 +278,7 @@
                     </Card>
                 </Accordion> 
                 <div style={{marginBottom: "34px"}}/>
-                <Accordion key="programmed-lectures" style={{width: "99%", margin: "auto"}}>
+                <Accordion activeKey={expand} tour-selec="pastLectures" key="programmed-lectures" style={{width: "99%", margin: "auto"}}>
                     <Card>
                         <Accordion.Toggle as={Card.Header} eventKey="0">
                             <h4 style={{margin: "10px", marginLeft: "2.7vw", marginBottom: "17px", marginTop: "17px"}}>Past and current lectures attendance</h4>
@@ -265,3 +294,19 @@
          );
      }
  }
+
+
+ function CustomToggle({ children, eventKey }) {
+    const decoratedOnClick = useAccordionToggle(eventKey, () =>
+      console.log("toggle clicked")
+    );
+    return (
+      <button
+        type="button"
+        style={{ backgroundColor: "orange" }}
+        onClick={decoratedOnClick}
+      >
+        {children}
+      </button>
+    );
+  }

@@ -4,7 +4,7 @@
   "description": "Car Rent",
   "main": "index.js",
   "scripts": {
-    "test": "nyc --reporter=lcov --reporter=text-lcov mocha",
+    "test": "nyc --reporter=lcov --reporter=text-lcov mocha --exit",
     "start": "node src/server.js",
     "mail_start": "node src/mail_mod.js"
   },

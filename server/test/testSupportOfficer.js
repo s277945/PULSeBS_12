@@ -5,6 +5,7 @@ chai.use(chaiHttp);
 chai.use(require('chai-match'));
 const expect=chai.expect;
 const support=require('./supportFunction')
+const studDao=require('../src/Dao/studentDao');
 let cookie;
 let student=[];
 let teacher=[];
@@ -26,14 +27,14 @@ describe('TEST SUPPORT OFFICER', function () {
             password: 'scimmia'
         })
         cookie = res.headers['set-cookie'];
-        student.push({"userID": "900000", "Name": "Ambra", "Surname":"Ferri",
-            "City": "Poggio Ferro", "email":"s900000@students.politu.it",
-            "birthday": "1991-11-04", "ssn": "MK97060783"});
-        teacher.push({"userID": "d9000", "Name": "Ines", "Surname":"Beneventi", "email":"Ines.Beneventi@politu.it",
-            "ssn": "XT6141393"});
-        course.push({"courseId": "XY1211", "year": 1, "name": "Metodi di finanziamento delle imprese", "semester": 1, "teacherId": "d9000"});
-        enrollment.push({"courseId":"XY1211", "studentId": "900000"});
-        schedule.push({"courseId": "XY1211","room": 1, "day": "Mon", "seats": 120, "time": "8:30-11:30"});
+        student.push({"userID": "ASD1234", "Name": "Giuseppe", "Surname":"Esposito",
+            "City": "Poggiomarino", "email":"ASD1234@students.politu.it",
+            "birthday": "1991-11-04", "ssn": "AN97060783"});
+        teacher.push({"userID": "FAKENEWS", "Name": "Robertobracco", "Surname":"Benevolento", "email":"Robertobracco.Beneventi@politu.it",
+            "ssn": "at6141393"});
+        course.push({"courseId": "XY1212", "year": 1, "name": "Metodi di finanziamento delle imprese", "semester": 1, "teacherId": "t987654"});
+        enrollment.push({"courseId":"XY1212", "studentId": "900000"});
+        schedule.push({"courseId": "XY1212","room": 1, "day": "Mon", "seats": 120, "time": "8:30-11:30"});
     })
     describe('insert a student inside table', function () {
         it('should insert correctly a student', function () {
@@ -156,11 +157,62 @@ describe('TEST SUPPORT OFFICER', function () {
                     expect(res.body).to.be.not.empty
                 })
         });
-        it('should update schedule and return status 200', function () {
+        it('should update schedule and return status 200', async function () {
+            //insert a student inside a lecture of this schedule to trigger send email
+            await studDao.addSeat("s266260","XY0821","2021-01-18 08:30:00","2021-01-18 10:00:00")
             return chai.request(url)
                 .put('/api/schedules')
                 .set('Cookie',cookie)
-                .send({})
+                .send({
+                    courseId:"XY0821",
+                    oldDay:"Mon",
+                    newDay:"Tue",
+                    oldTime:"8:30-10:00",
+                    newTime:"13:00-15:30",
+                    oldRoom:"4",
+                    newRoom:"2P",
+                    oldSeats:80,
+                    newSeats:40
+                })
+                .then(res=>{
+                    expect(res).to.have.status(200)
+                })
+        });
+        it('should upload schedule when the hour is between 8:00-9:00', async function () {
+            await studDao.addSeat("s266260","XY0821","2021-01-18 08:30:00","2021-01-18 10:00:00")
+            return chai.request(url)
+                .put('/api/schedules')
+                .set('Cookie',cookie)
+                .send({
+                    courseId:"XY0821",
+                    oldDay:"Mon",
+                    newDay:"Tue",
+                    oldTime:"8:30-10:00",
+                    newTime:"8:00-9:30",
+                    oldRoom:"4",
+                    newRoom:"2P",
+                    oldSeats:80,
+                    newSeats:40
+                })
+                .then(res=>{
+                    expect(res).to.have.status(200)
+                })
+        });
+        it('should not update schedule', function () {
+            return chai.request(url)
+                .put('/api/schedules')
+                .set('Cookie',cookie)
+                .send({
+                    courseId:"XY0821",
+                    oldDay:"Mon",
+                    newDay:"Mon",
+                    oldTime:"8:30-10:00",
+                    newTime:"8:30-10:00",
+                    oldRoom:"4",
+                    newRoom:"4",
+                    oldSeats:80,
+                    newSeats:80
+                })
                 .then(res=>{
                     expect(res).to.have.status(200)
                 })

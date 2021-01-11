@@ -158,7 +158,7 @@ exports.uploadSchedule=function(list, fileName){
         let i = 0;
         const sql='INSERT INTO Schedule(code, Room, Day, Seats, Time) VALUES(?,?,?,?,?)';
         let lecturesList=[]; //temp lectures array of a course
-        list=list.sort((a,b)=>{return a.courseId===b.courseId?0:(a.courseId>b.courseId?1:-1)})// sort by courseId
+        /* istanbul ignore next */list=list.sort((a,b)=>{return a.courseId===b.courseId?0:(a.courseId>b.courseId?1:-1)})// sort by courseId
         for(let element of list) {
             db.run(sql, [element.courseId, element.room, element.day, element.seats, element.time], (err) => {
                 /* istanbul ignore if */
@@ -171,12 +171,14 @@ exports.uploadSchedule=function(list, fileName){
                         .then((listLectures) => {
                             i++;
                             lecturesList=lecturesList.concat(listLectures.map(lecture=>{lecture.courseId=element.courseId; return lecture;}));// add data to temp array
-                            if(i===list.length){ //if last iteration  
+                            /* istanbul ignore else */
+                            if(i===list.length){ //if last iteration
                                 insertLectures(lecturesList)//insert lectures into db
                                     .then(() => {// update file data after all lecture insert
                                         const date = moment().format("YYYY-MM-DD HH:mm:ss")
                                         const sql3 = 'UPDATE File SET FileName=? , LastUpdate=? WHERE FileType=4'
                                         db.run(sql3, [fileName, date], (err3) => {
+                                            /* istanbul ignore if */
                                             if (err3) {
                                                 console.log("fail");
                                                 reject(err3)
@@ -206,7 +208,7 @@ function insertLectures(lecturesList) {
         let currentCourse=null;
         let index=0;
         lecturesList=lecturesList.sort((a,b)=>{//order by name then date
-            return a.courseId===b.courseId?moment(a.Date).diff(b.Date, "seconds"):(a.courseId>b.courseId?1:-1) }).map(lecture=>{
+            /* istanbul ignore next */ return a.courseId===b.courseId?moment(a.Date).diff(b.Date, "seconds"):(a.courseId>b.courseId?1:-1) }).map(lecture=>{
                 if(lecture.courseId!==currentCourse) {currentCourse=lecture.courseId; index=0;}
                 index++; lecture.Name=lecture.Name+index; return lecture});//add proper index to lecture
         index=0;
@@ -256,7 +258,7 @@ function getListLectures(schedule){
                 let currentYear
                 /* istanbul ignore else */
                 if (thisDate.isAfter(moment(6, 'M')))
-                    currentYear = moment().year();
+                    /* istanbul ignore next */currentYear = moment().year();
                 /* istanbul ignore else */
                 else {
                     currentYear = moment().year() - 1;
@@ -439,12 +441,14 @@ exports.getSchedule = function(){
     return new Promise((resolve, reject) => {
         const sql = 'SELECT Code, Room, Day, Seats, Time FROM Schedule'
         db.all(sql, [], (err, rows) => {
+            /* istanbul ignore if */
             if(err)
                 reject(err)
             else{
                 for(let row of rows){
                     const sql_2 = 'SELECT Name FROM Course WHERE CourseID = ?'
                     db.get(sql_2, [row.Code], (err_2, row_2) =>{
+                        /* istanbul ignore if */
                         if(err_2)
                             reject(err_2)
                         else{
@@ -478,22 +482,24 @@ exports.updateSchedules = function(schedule){
     return new Promise((resolve, reject) => {
         const sql = 'SELECT Course_Ref, Date, Day FROM Lecture WHERE Course_Ref=? AND Date>=? AND Day=?'
         db.all(sql, [schedule.courseId, today, schedule.oldDay], (err, rows)=> {
+            /* istanbul ignore if */
             if(err)
                 reject(err)
             else{
                 updateSingleSchedule(schedule)
                     .then((response) => {
+                        /* istanbul ignore else */
                         if(response){
                             updateGivenLectures(rows, schedule)
                                 .then((response2) => {
                                     resolve(response2)
                                 })
-                                .catch((err2) => {
+                                .catch(/* istanbul ignore next */(err2) => {
                                     reject(err2)
                                 })
                         }
                     })
-                    .catch((err3) => {
+                    .catch(/* istanbul ignore next */(err3) => {
                         reject(err3)
                     })
 
@@ -516,6 +522,7 @@ function updateSingleSchedule(schedule){
         const sql = 'UPDATE Schedule SET Room=?, Day=?, Seats=?, Time=? WHERE Code=? AND Day=?'
         db.run(sql, [schedule.newRoom, schedule.newDay, schedule.newSeats, schedule.newTime,
                     schedule.courseId, schedule.oldDay], (err) => {
+            /* istanbul ignore if */
             if(err)
                 reject(err)
             else
@@ -540,7 +547,7 @@ function updateGivenLectures(lectures, schedule){
     }
     return new Promise((resolve, reject)=> {
         const sql = 'UPDATE Lecture SET Capacity=?, Date=?, EndDate=?, DateDeadline=?, Day=? WHERE Course_Ref=? AND Date=?'
-        if(lectures.length === 0) resolve("there are not lectures to be changed")
+        /* istanbul ignore next */if(lectures.length === 0) resolve("there are not lectures to be changed")
         for(let lecture of lectures){
             let date = moment(lecture.Date)
             let nDay = Number(dayMap[schedule.newDay])
@@ -557,12 +564,14 @@ function updateGivenLectures(lectures, schedule){
             db.serialize(()=>{
                 db.run(sql, [schedule.newSeats, newDate, endDate, deadline, schedule.newDay,
                         lecture.Course_Ref, lecture.Date], (err) => {
+                    /* istanbul ignore if */
                     if(err)
                         reject(err)
                 })
 
                 const sql2 = 'UPDATE Booking SET Date_Ref=?, EndDate=? WHERE Course_Ref=? AND Date_Ref=?'
                 db.run(sql2, [newDate, endDate, lecture.Course_Ref, lecture.Date], (err) => {
+                    /* istanbul ignore if */
                     if(err)
                         reject(err)
                 })
@@ -570,6 +579,7 @@ function updateGivenLectures(lectures, schedule){
                 const sql3 = 'SELECT Email FROM User WHERE userID IN ('+
                     'SELECT Student_Ref FROM Booking WHERE Course_Ref=? AND Date_Ref=?)'
                 db.all(sql3, [lecture.Course_Ref, newDate], (err, rows)=>{
+                    /* istanbul ignore if */
                     if(err)
                         reject(err)
                     else{

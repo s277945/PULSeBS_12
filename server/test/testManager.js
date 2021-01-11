@@ -97,7 +97,7 @@ describe('TEST SUITE MANAGER FUNCTION', function () {
     });
     describe('GET LIST OF POSITIVE STUDENTS', function () {
         it('should return a list of students', function () {
-            return chai.request(url).get('/api/students/positiveUsers')
+            return chai.request(url).get('/api/users/positiveUsers')
                 .set('Cookie',cookie)
                 .send()
                 .then(res=>{
@@ -121,7 +121,7 @@ describe('TEST SUITE MANAGER FUNCTION', function () {
                 })
         });
         it('should return single student', function () {
-            return chai.request(url).get('/api/students/WHTRWHRW')
+            return chai.request(url).get('/api/users/WHTRWHRW')
                 .set('Cookie',cookie)
                 .send()
                 .then(res=>{
@@ -168,6 +168,14 @@ describe('TEST SUITE MANAGER FUNCTION', function () {
                 })
         });
         it('should return an empty report if the student was not in other lectures', function () {
+            return chai.request(url).get('/api/reports/WRHWHRH')
+                .set('Cookie',cookie)
+                .send()
+                .then(res=>{
+                    expect(res).to.have.status(500)
+                })
+        });
+        it('should return an empty teacher report with status 500', function () {
             return chai.request(url).get('/api/reports/FWGWG')
                 .set('Cookie',cookie)
                 .send()
@@ -175,14 +183,14 @@ describe('TEST SUITE MANAGER FUNCTION', function () {
                     expect(res).to.have.status(500)
                 })
         });
+        it('should generate a report for a teacher', function () {
+            return chai.request(url).get('/api/reports/THWHW')
+                .set('Cookie',cookie)
+                .send()
+                .then(res=> {
+                    expect(res).to.have.status(201)
+                    expect(res.body).to.be.an('array')
+                    })
+        });
     });
-    after(async()=>{
-        //set a student as not positive
-        await dao.setNotPositive('s266260').then(res=>{
-            if(res==true){
-                console.log('ok')
-            }
-        })
-        await chai.request(url).post('/api/logout').set('Cookie',cookie).send();
-    })
 });

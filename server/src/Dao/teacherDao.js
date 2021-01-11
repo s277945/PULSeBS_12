@@ -9,7 +9,6 @@ const moment = require('moment');
 */
 
 exports.getCoursesByTeacherId=function(userId){
-    console.log(userId)
     return new Promise((resolve, reject) => {
         const sql='SELECT CourseID, Name, Restriction FROM Course WHERE Teacher_Ref = ?';
         db.all(sql, [userId], (err,rows)=>{
@@ -38,7 +37,6 @@ exports.getLecturesByTeacherId=function(userId){
             if(err)
                 reject(err);
             else{
-                console.log("lectures: " + rows + " userId " + userId);
                 resolve(rows);
             }
         });
@@ -241,6 +239,7 @@ function getTeacherEmail(courseId){
             if(err)
                 reject(err);
             else {
+                /* istanbul ignore else */
                 if(row) 
                     resolve(row.Email);
             }
@@ -338,7 +337,7 @@ function retrieveWeekStats(courseId, semester){
     let i = 0;
     /* istanbul ignore else */
     if(thisDate.isAfter(moment(6, 'M')))
-        currentYear = moment().year();
+        /* istanbul ignore next */currentYear = moment().year();
     /* istanbul ignore else */
     else{
         currentYear =  moment().year() - 1;
@@ -413,14 +412,13 @@ exports.getMonthStats = function (courseId){
  */
 
 function retrieveMonthStats(courseId, semester){
-    console.log(courseId, semester);
     let list = [];
     let months;
     let thisDate = moment();
     let currentYear;
     /* istanbul ignore else */
     if(thisDate.isAfter(moment(6, 'M')))
-        currentYear = moment().year();
+        /* istanbul ignore next */  currentYear = moment().year();
     /* istanbul ignore else */
     else{
         currentYear =  moment().year() - 1;
@@ -454,7 +452,6 @@ function retrieveMonthStats(courseId, semester){
                 if(err) reject(err);
                 else {
                     let monthName = startDate.format('MMMM');
-                    console.log(monthName+" "+monthYear);
                     list.push({"month": monthName, "year": monthYear, "average": row.average, "averageAtt": row.averageAtt});
                     i++;
                 }
@@ -481,10 +478,10 @@ exports.setPresentStudents = function (courseId, date, list){
             else{
                 const sql2='UPDATE Booking SET Attendance=? WHERE Course_Ref=? AND Date_Ref=? AND Student_Ref=?'
                     for(let el of list){
-                        db.run(sql2, [1, courseId, date, el.studentId], (err) => {
+                        db.run(sql2, [1, courseId, date, el.studentId], (err2) => {
                             /* istanbul ignore if */
-                            if(err) reject(err);
-                            else{ console.log(el)
+                            if(err2) reject(err2);
+                            else{
                                 i++;
                                 if(i===list.length) resolve(true);
                             }
@@ -512,7 +509,6 @@ exports.getPastLecturesByTeacherId=function(userId){
                 reject(err);
             }
             else{
-                console.log("lectures: " + rows + " userId " + userId);
                 resolve(rows);
             }
         });

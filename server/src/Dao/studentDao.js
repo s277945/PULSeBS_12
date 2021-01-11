@@ -230,7 +230,6 @@ exports.getLecturesBookedByUserId=function(userId){
 function addWaitingList(userId, courseId, date, endDate){
     return new Promise((resolve, reject) => {
         let bookingDate = moment().format('YYYY-MM-DD HH:mm:ss');
-        console.log(bookingDate);
         const sql='INSERT INTO WaitingList VALUES (?,?,?,?,?)';
         db.run(sql,[courseId, date, userId, endDate, bookingDate],(err) => {
             /* istanbul ignore if */
@@ -301,7 +300,6 @@ function addFromWaitingList(courseId, date){
             if(err)
                 reject(err);
             else {
-                console.log("Student_Ref "+row.Student_Ref);
                 const sql2='INSERT INTO Booking VALUES (?,?,?,?,0)';
                 db.run(sql2, [courseId, date, row.Student_Ref, row.EndDate_Ref], (err2) => {
                     /* istanbul ignore if */

@@ -16,6 +16,7 @@
     "data":[
       {"courseId":"C4567","year":1,"name":"Data Science","semester":1,"restriction":1},
       {"courseId":"C1357","year":1,"name":"Information System","semester":1,"restriction":0},
+      {"courseId":"C1358","year":1,"name":"Information System","semester":2,"restriction":0},
       {"courseId":"C0123","year":2,"name":"Software Engineering II","semester":1,"restriction":0},
       {"courseId":"C8901","year":2,"name":"Human Computer Interaction","semester":2,"restriction":0},
       {"courseId":"C2468","year":2,"name":"Web Applications I","semester":2,"restriction":0}

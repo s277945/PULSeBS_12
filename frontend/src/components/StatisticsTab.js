@@ -254,7 +254,7 @@ export class StatisticsTab extends Component {
                         <p style={{fontSize: "21px", minWidth: "110px", marginRight: "10px"}}>Detail level: </p>
                     
 
-                        <select className="browser-default custom-select "
+                        <select tour-selec="detailLevel" className="browser-default custom-select "
                             //On change we update the selected groupBy and call updateSelected as a callback
                             onChange={(e) => { this.setState({ groupBy: e.target.value }, this.updateSelected); }}>
                             {gbOptions.map((groupBy) => <option value={groupBy}>{groupBy}</option>)}
@@ -262,7 +262,7 @@ export class StatisticsTab extends Component {
                     </div>
                 </div>
                 <div >
-                    <div style={{ height: "400px"}}>
+                    <div tour-selec="graph" style={{ height: "400px"}}>
                         <ResponsiveBar
                             // margin needed to show axis labels
                             margin={{
@@ -296,7 +296,7 @@ export class StatisticsTab extends Component {
                                 }
                                 else if((d.id==="Average booked seats"||d.id==="Average attendees")){
                                     let substr=d.id.split(" ");
-                                    if (d.value!==0&&Math.floor(d.value)!==d.value) {
+                                    if (d.value!==0&&Math.floor(Number(d.value))!==d.value) {
                                         if(d.value>4) return(<tspan>
                                                                 <tspan>{d.value}</tspan><tspan text-anchor="middle" y={ -15 } dx={-34+c}>{ this.state.labels&&this.state.width>=970?substr[0].toLowerCase():"" }</tspan>
                                                                 <tspan text-anchor="middle" y={ -5 } dx={substr[2]?(-46+c):(-54+c)}>{this.state.labels&&this.state.width>=970?(substr[2]?substr[1]+" "+substr[2]:substr[1]):""}</tspan>
@@ -356,7 +356,7 @@ export class StatisticsTab extends Component {
                         </div>)
                         :<div style={{marginBottom: "10px"}}/>
                     }
-                    <div style={{margin: "10px", marginLeft: "35px", marginRight: "37px"}}>
+                    <div tour-selec="histTables" style={{margin: "10px", marginLeft: "35px", marginRight: "37px"}}>
                         {this.renderTable()}
                     </div>
                 </div>

@@ -11,12 +11,12 @@ export function useResponseInterceptor(auth) { // function to set up response in
     axiosInst.interceptors.response.use(// create response interceptor
         (response) => { return response },
         async function (error) {
-
+            /* istanbul ignore next */
             if (error.response.status === 404) {
                 // redirecti to 404 page
                 // history.replace("/404")
             }
-
+                /* istanbul ignore else */
             if (error.response.status === 403 || error.response.status === 401) {// in case of expired jwt token
                 auth.clearSession(); // clear session data from useProvideAuth() instance method
             }
@@ -177,13 +177,20 @@ export function getFileData(){
     // get uploaded files info from server
     return axiosInst.get(`http://localhost:3001/api/fileData`, { withCredentials: true });
 }
+
 export function getAllSchedule(){
     //get all schedules of SupportOfficer page from server
     return axiosInst.get('http://localhost:3001/api/schedules',{withCredentials:true});
 }
+
 export function setNewSchedule(body){
     //update schedule and send the new schedule of a given course to the server, one element at time
     return axiosInst.put('http://localhost:3001/api/schedules',body,{withCredentials:true});
+}
+
+export function setTutorial(){
+    //update tutorial value for user
+    return axiosInst.put('http://localhost:3001/api/user/tutorial',{},{withCredentials:true});
 }
 
 export async function login (userName, password){
@@ -191,7 +198,8 @@ export async function login (userName, password){
         .then(result => {
             return {
                 userName : result.data.userID,
-                userType: result.data.userType
+                userType: result.data.userType,
+                tutorial: result.data.tutorial
             }
         })
 }

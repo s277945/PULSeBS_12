@@ -227,6 +227,120 @@ describe('SUPPORT OFFICER TESTS', function () {
             cy.wait('@bookable')
             cy.get('.card').eq(0).should('contains.text','2remote courses,0courses in presence')
         });
+        it('should click two times on the year checkbox', function () {
+            cy.server()
+            cy.route({
+                method:'POST',
+                url:'/api/lecturesBookable',
+                status:200,
+                response:{"modified": true}
+            }).as('bookable')
+            cy.get('[data-testid="updatebookable"]')
+                .should('be.visible')
+                .click()
+            cy.wait(100)
+            cy.get('.card').eq(0).should('be.visible')
+                .click({force:true})
+                .within(()=>{
+                    cy.get('[data-testid="year"]').should('be.visible').click()
+                })
+            cy.get('.btn.btn-info').should('be.enabled')
+            cy.get('[data-testid="year"]').eq(0).should('be.visible').click()
+            cy.get('[data-testid="year"]').should('not.be.checked')
+        });
+        it('should select a course of second semester', function () {
+            cy.server()
+            cy.route({
+                method:'POST',
+                url:'/api/lecturesBookable',
+                status:200,
+                response:{"modified": true}
+            }).as('bookable')
+            cy.get('[data-testid="updatebookable"]')
+                .should('be.visible')
+                .click()
+            cy.wait(100)
+            cy.get('.card').eq(0).should('be.visible')
+                .click()
+
+            cy.get('.card-body').eq(0).should('be.visible')
+                .within(()=>{
+                    cy.get('.accordion-custom-setup-1').eq(1)
+                        .find('.form-check-input.position-static')
+                        .check()
+                })
+            cy.get('.btn.btn-info').should('be.enabled')
+        });
+        it('should invert type of a course of first semester', function () {
+            cy.server()
+            cy.route({
+                method:'POST',
+                url:'/api/lecturesBookable',
+                status:200,
+                response:{"modified": true}
+            }).as('bookable')
+            cy.get('[data-testid="updatebookable"]')
+                .should('be.visible')
+                .click()
+            cy.wait(100)
+            cy.get('.card').eq(0).should('be.visible')
+                .click()
+
+            cy.get('.card-body').eq(0).should('be.visible')
+                .within(()=>{
+                    cy.get('.accordion-custom-setup-1').eq(0)
+                        .find('.form-check-input.position-static')
+                        .check()
+                })
+            cy.get('.btn.btn-info').should('be.enabled')
+            cy.get('.btn.btn-secondary').eq(2).should('be.enabled').click()
+            cy.wait(100)
+            cy.get('.form-check-input.position-static').eq(1)
+                .should('not.be.checked')
+        });
+        it('should invert type of a course of second semester', function () {
+            cy.server()
+            cy.route({
+                method:'POST',
+                url:'/api/lecturesBookable',
+                status:200,
+                response:{"modified": true}
+            }).as('bookable')
+            cy.get('[data-testid="updatebookable"]')
+                .should('be.visible')
+                .click()
+            cy.wait(100)
+            cy.get('.card').eq(0).should('be.visible')
+                .click()
+
+            cy.get('.card-body').eq(0).should('be.visible')
+                .within(()=>{
+                    cy.get('.accordion-custom-setup-1').eq(1)
+                        .find('.form-check-input.position-static')
+                        .check()
+                })
+            cy.get('.btn.btn-info').should('be.enabled')
+            cy.get('.btn.btn-secondary').eq(2).should('be.enabled').click()
+            cy.wait(100)
+            cy.get('.form-check-input.position-static').eq(4)
+                .should('not.be.checked')
+        });
+        it('should deselect all', function () {
+            cy.get('[data-testid="updatebookable"]')
+                .should('be.visible')
+                .click()
+            cy.get('.btn.btn-secondary').eq(1).should('be.enabled').click()
+            cy.wait(100)
+            cy.get('.form-check-input.position-static').each((item,index)=>{
+                cy.wrap(item)
+                    .should('be.checked')
+            })
+            cy.get('.btn.btn-secondary').eq(2).should('be.enabled').click()
+            cy.get('.form-check-input.position-static').each((item,index)=>{
+                cy.wrap(item)
+                    .should('not.be.checked')
+            })
+        });
         it('should turn lecture into presence', function () {
             cy.server()
             cy.route({
@@ -317,7 +431,7 @@ describe('SUPPORT OFFICER TESTS', function () {
                     cy.wait(100)
                 })
         });
-        it('should click on course', function () {
+        it('should click on course of first semester', function () {
             cy.get('[data-testid="updatebookable"]')
                 .should('be.visible')
                 .click()
@@ -328,6 +442,22 @@ describe('SUPPORT OFFICER TESTS', function () {
                     cy.get(".card-header").eq(1).click()
                     cy.get(".card-body").eq(1).within(()=>{
                         cy.get('.form-check-input').eq(1).check()
+                    })
+                    cy.wait(100)
+                })
+        });
+        it('should click on course of second semester', function () {
+            cy.get('[data-testid="updatebookable"]')
+                .should('be.visible')
+                .click()
+            cy.wait(100)
+            cy.get('.card').eq(0).should('be.visible')
+                .click()
+                .within(()=>{
+                    cy.get(".card-header").eq(2).click()
+                    cy.get(".card-body").eq(2).within(()=>{
+                        cy.get('.form-check-input').eq(0).check()
+                            .should('be.checked')
                     })
                     cy.wait(100)
                 })

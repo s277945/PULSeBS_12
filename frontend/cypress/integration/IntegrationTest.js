@@ -3,7 +3,7 @@
 describe('TEACHER PAGE', function () {
     beforeEach(() => {
         cy.visit('http://localhost:3000/')
-        cy.teacher('t987654','scimmia','t')
+        cy.teacher('t987654','scimmia','t',1)
         Cypress.Cookies.preserveOnce('token', 'value')
         Cypress.Cookies.debug(true)
     })
@@ -655,7 +655,7 @@ describe('TEST BEHAVIOUR OF CANCEL OR TURN INTO DISTANCE A LECTURE WITHIN 30-60M
             url:'/api/login',
             status:200,
             request:{userName:'t987654',password:'scimmia'},
-            response:{user:'t987654',userType:'t'}
+            response:{user:'t987654',userType:'t',tutorial:1}
         }).as('login')
         cy.route({
             url: "/api/teacherLectures",
@@ -742,9 +742,96 @@ describe('TEST BEHAVIOUR OF CANCEL OR TURN INTO DISTANCE A LECTURE WITHIN 30-60M
         cy.get('tbody>tr').eq(0).find('.btn.btn-primary').should('have.text','SHOW LIST')
             .click()
         cy.wait('@list')
-        cy.get('[data-testid="studentsList"]').should('have.length', 1)
-        cy.get('.modal').should('be.visible')
+        cy.get('[data-testid="studentsList"]').should('have.length', 0)
+    });
+    it('should click on tutorial page', function () {
+        cy.get('[data-testid="tour"]').click()
+            .should(()=>{
+                expect(localStorage.getItem('tutorial')).to.eq('1')
+                expect(localStorage.getItem('willingNewTutorial')).to.eq('true')
+            })
+        //test when close button is pressed in tutorial
+        cy.get('.sc-bdVaJa.cYQqRL.sc-bxivhb.eTpeTG.reactour__close')
+            .click()
+            .should(()=>{
+                expect(localStorage.getItem('willingNewTutorial')).to.eq('false')
+                expect(localStorage.getItem('tutorialLec')).to.eq('true')
+            })
+    });
+    it('should click on tutorial button from studentList page and click on close', function () {
+        cy.get('[data-testid="teacherStudent"]')
+            .click()
+        cy.get('[data-testid="tour"]').click()
+            .should(()=>{
+                expect(localStorage.getItem('tutorial')).to.eq('1')
+                expect(localStorage.getItem('willingNewTutorial')).to.eq('true')
+            })
+        cy.get('.sc-bdVaJa.cYQqRL.sc-bxivhb.eTpeTG.reactour__close')
+            .click()
+            .should(()=>{
+                expect(localStorage.getItem('willingNewTutorial')).to.eq('false')
+                expect(localStorage.getItem('tutorialSL')).to.eq('true')
+            })
+    });
+    it('should click on tutorial button from history page and click on close', function () {
+        cy.get('[data-testid="history"]')
+            .click()
+        cy.get('[data-testid="tour"]').click()
+            .should(()=>{
+                expect(localStorage.getItem('tutorial')).to.eq('1')
+                expect(localStorage.getItem('willingNewTutorial')).to.eq('true')
+            })
+        cy.get('.sc-bdVaJa.cYQqRL.sc-bxivhb.eTpeTG.reactour__close')
+            .click()
+            .should(()=>{
+                expect(localStorage.getItem('willingNewTutorial')).to.eq('false')
+                expect(localStorage.getItem('tutorialHT')).to.eq('true')
+            })
     });
 });
+describe('TUTORIAL TESTING', function () {
+    beforeEach(()=>{
+        cy.server()
+        cy.route({
+            method:'PUT',
+            url:'/api/user/tutorial',
+            status:204,
+            response:{}
+        }).as('tutorial')
+        cy.visit('http://localhost:3000/')
+        cy.teacher('t987654','scimmia','t',0)
+        Cypress.Cookies.preserveOnce('token', 'value')
+        Cypress.Cookies.debug(true)
+    })
+    it('should execute teacher lecture test', function () {
+        expect(localStorage.getItem('tutorial')).to.eq('0')
+        cy.get('.sc-bdVaJa.cYQqRL.sc-bxivhb.eTpeTG.reactour__close')
+            .click().should(()=>{
+            expect(localStorage.getItem('willingNewTutorial')).to.eq('false')
+            expect(localStorage.getItem('tutorialLec')).to.eq('true')
+            //expect(localStorage.getItem('tutorial')).to.eq('1')
+        })
+        cy.wait('@tutorial')
+    });
+    it('should execute studentList test', function () {
+        expect(localStorage.getItem('tutorial')).to.eq('0')
+        cy.get('.sc-bdVaJa.cYQqRL.sc-bxivhb.eTpeTG.reactour__close')
+            .click()
+        cy.get('[data-testid="teacherStudent"]').should('have.text', 'Student List')
+            .should('have.attr', 'href', '#studentList')
+            .click()
+        cy.get('.sc-bdVaJa.cYQqRL.sc-bxivhb.eTpeTG.reactour__close')
+            .click().should(()=>{
+            expect(localStorage.getItem('willingNewTutorial')).to.eq('false')
+            expect(localStorage.getItem('tutorialLec')).to.eq('true')
+            expect(localStorage.getItem('tutorialSL')).to.eq('true')
+            //expect(localStorage.getItem('tutorial')).to.eq('1')
+
+        })
+        cy.wait('@tutorial')
+    });
+
+});
+
 
 

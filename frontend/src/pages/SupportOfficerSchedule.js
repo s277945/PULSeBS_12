@@ -28,12 +28,13 @@ export class SupportOfficerSchedule extends Component{
             .then(res=>{
                 this.setState({ listSchedule: res.data });
             })
-            .catch(err=>{
+            .catch(/* istanbul ignore next */err=>{
                 console.log(err);
             })
     }
     handleChangeStartTime=(date, endDate)=> {
         date=moment('25/12/2020', "DD/MM/YYYY").utcOffset(1).add(date, 'seconds').format("HH:mm")
+        /* istanbul ignore else */
         if(this.state.endDate!=="") endDate = this.state.endDate;
         if(moment(date, "HH:mm").isSameOrAfter(moment(endDate, "HH:mm"))){
             console.log("IF START DATE")
@@ -53,7 +54,7 @@ export class SupportOfficerSchedule extends Component{
             if(tmp.length===1){
                 //separator is not - char, so i have to split the string by :
                 let array=[];
-                array=tmp=this.state.elemModal.time.toString().split(':');
+                array=this.state.elemModal.time.toString().split(':');
                 console.log("array: "+JSON.stringify(array));
                 tmp=[];
                 tmp.push(array[0]+":"+array[1]);
@@ -125,6 +126,7 @@ export class SupportOfficerSchedule extends Component{
         else{
             time=this.state.startDate+"-"+this.state.endDate;
         }
+        /* istanbul ignore else */
         if(time!=""||this.state.day!==""||this.state.room!==""||this.state.seats!==""){
             body={
                 courseId:this.state.elemModal.courseId,

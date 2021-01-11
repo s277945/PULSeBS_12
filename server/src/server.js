@@ -43,7 +43,6 @@ app.use(cors({ origin: true, credentials: true }));
 app.post('/api/login', (req, res) => {
   userDao.checkUserPwd(req.body.userName, req.body.password)
       .then((response) => {
-        console.log(response.userID);
           const token = jsonwebtoken.sign({ user: response.userID, userType: response.userType }, jwtSecret, { expiresIn: expireTime });
           res.cookie('token', token, { httpOnly: true, sameSite: true, maxAge: 3000 * expireTime });
           res.status(200).json(response).end();
@@ -97,7 +96,6 @@ app.use((err, req, res, next) => {
 
  app.get('/api/lectures', (req, res) => {
   const user = req.user && req.user.user;
-  console.log("User: " + user);
     studentDao.getLecturesByStudentId(user)
       .then((lectures) => {
         res.status(200).json(lectures);
@@ -117,7 +115,6 @@ app.use((err, req, res, next) => {
 
 app.get('/api/teacherLectures', (req, res) => {
   const user = req.user && req.user.user;
-  console.log("User: " + user);
     teacherDao.getLecturesByTeacherId(user)
       .then((lectures) => {
         res.status(200).json(lectures);
@@ -336,7 +333,6 @@ app.get('/api/lectures/waiting', (req, res) => {
 
     teacherDao.deleteLecture(courseId, date)
       .then((emails) => {
-          console.log('Email da cancellare: '+emails);
         for(let email of emails){
           var mailOptions = {
             from: mailer.email,
@@ -418,7 +414,6 @@ app.get('/api/courseStats/:courseId', (req, res) => {
 
 app.get('/api/monthStats/:courseId', (req, res) => {
     const courseId = req.params.courseId;
-    console.log('Month stat courseId: '+courseId);
     teacherDao.getMonthStats(courseId)
         .then((response) => {
             res.status(200).json(response);
@@ -438,7 +433,6 @@ app.get('/api/monthStats/:courseId', (req, res) => {
 
 app.get('/api/weekStats/:courseId', (req, res) => {
     const courseId = req.params.courseId;
-    console.log('Week stat courseId: '+courseId);
     teacherDao.getWeekStats(courseId)
         .then((response) => {
             res.status(200).json(response);
@@ -658,8 +652,6 @@ app.post('/api/fileData', (req, res) => {
 
 app.get('/api/users/:userSsn', (req, res) => {
     const param = req.params.userSsn
-    console.log(param)
-
     if(param === "positiveUsers"){
         bookingManagerDao.getPositiveUsers()
             .then((list) => {
@@ -844,7 +836,8 @@ app.put('/api/schedules', (req, res) => {
  * */
 
 app.put('/api/user/tutorial', (req, res) => {
-    userDao.setTutorial(req.body.userId)
+    const user = req.user && req.user.user;
+    userDao.setTutorial(user)
         .then((value) =>{
             res.status(200).json({response: value})
         })

@@ -1,4 +1,4 @@
-import React, { Component, useContext } from 'react'
+import React, { Component } from 'react'
 import Nav from 'react-bootstrap/Nav'
 import Navbar from 'react-bootstrap/Navbar'
 import { authContext } from '../components/Authsystem'
@@ -54,7 +54,7 @@ class StudentNavbar extends Component {
                     </Nav>
 
                     <TourContext.Consumer>
-                        {tour => <Button variant="dark" onClick={() => tour.setIsTourOpen(true)}>Start tour</Button>}  
+                        {tour => <Button data-testid={"tour"} variant="dark" onClick={() => {tour.setIsTourOpen(true); localStorage.setItem("willingNewTutorial", true)}}>Start tour</Button>}
                     </TourContext.Consumer>
 
                     <Nav.Link data-testid="logout" href="#logout" onSelect={this.handleLogout}>Logout</Nav.Link>

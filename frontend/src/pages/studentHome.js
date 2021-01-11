@@ -1,11 +1,11 @@
-import React, { Component, useContext } from 'react'
+import React, { Component } from 'react'
 import StudentNavbar from './studentNavbar'
 import Accordion from 'react-bootstrap/Accordion'
 import Card from 'react-bootstrap/Card'
 import Table from 'react-bootstrap/Table'
 import Button from 'react-bootstrap/Button'
 import Modal from 'react-bootstrap/Modal'
-import { authContext } from '../components/Authsystem'
+import { authContext} from '../components/Authsystem'
 import { getLectures, getCourses, getStudentBookedLectures, getStudentWaitingLectures, postStudentBookedLecture, deleteStudentBookedLecture } from '../api/api'
 import Calendar from '../components/Calendar';
 import Container from 'react-bootstrap/Container'
@@ -27,12 +27,13 @@ class StudentHome extends Component {
             modal: {show: 0, lecture: null, message: null}, //this object contains all modal state variables
             popup: {show: 0, lecture: {Name: "", Date: ""}, message: null}// this object contains all popup related variables
         }
-
+        /* istanbul ignore else */
         if(props.tour.isTourOpen) this.state = getTourState()
     }
 
     componentDidMount() {
         // Don't fetch nor save data when doing the tour
+        /* istanbul ignore else */
         if(this.props.tour.isTourOpen) return;
 
         this.getLecturesAndCoursesData();
@@ -40,6 +41,7 @@ class StudentHome extends Component {
     }
 
     componentDidUpdate(prevProps){
+        /* istanbul ignore else */
         if(!this.props.tour.isTourOpen && prevProps.tour.isTourOpen){
             this.getLecturesAndCoursesData();
             this.handleSessionStorage();
@@ -161,7 +163,7 @@ class StudentHome extends Component {
                 )
                 if(response.data.operation==="booked") {
                     newLectures[index].BookedSeats++;// increase booked seats number if successful booking
-                    /* istanbul ignore else */
+                    /* istanbul ignore next */
                     if(newLectures[index].BookedSeats>newLectures[index].Capacity) newLectures[index].BookedSeats=newLectures[index].Capacity; //check booking number constraint
                     newLectures[index].alreadyBooked = true// set booking state to true
                 }
@@ -173,10 +175,9 @@ class StudentHome extends Component {
                 this.modalClose();// then close modal
             }).catch(err=>{
                 console.error(err);
+                /* istanbul ignore else */
                 if (err.response.status===500) {
-                    /* istanbul ignore else */
-                    if (err.response.data.errors[0].msg==="0 seats available") this.setPopup("Your booking request was not successful: there are no more seats available for this lecture");
-                    else this.setPopup("Your booking request was not successful: server error");
+                    this.setPopup("Your booking request was not successful: server error");
                     this.modalClose();// then close modal
                 }
              });
@@ -252,7 +253,7 @@ class StudentHome extends Component {
             switch (this.state.modal.message) {
                 case "book a seat":
                     return "primary";
-
+                /* istanbul ignore next */
                 case "cancel your reservation":
                     return "warning";
     
@@ -282,7 +283,7 @@ class StudentHome extends Component {
             </Modal>
         )
     }
-
+    /* istanbul ignore next */
     popupClose = () => {// close popup
         this.setState({ popup: {show: 0, lecture: {Name: "", Date: ""}, message: null} });
         sessionStorage.removeItem("popup");
