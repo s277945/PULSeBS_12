@@ -84,6 +84,9 @@ export function TeacherLecTour(props) {
         getTourState: getTourState
     }
 
+    const disableBody = target => disableBodyScroll(target)
+    const enableBody = target => enableBodyScroll(target)
+
     return (
         <TeacherLecTourContext.Provider value={tour}>
             <Tour
@@ -96,8 +99,8 @@ export function TeacherLecTour(props) {
                     localStorage.setItem("willingNewTutorial", false)
                     localStorage.setItem("tutorialLec", true)
                 }}
-                onAfterOpen={target => disableBodyScroll(target)}
-                onBeforeClose={target => enableBodyScroll(target)}
+                onAfterOpen={disableBody}
+                onBeforeClose={enableBody}
                 badgeContent={(curr, tot) => `${curr} of ${tot}`}
                 rounded={5}
                 startAt={0}
@@ -207,8 +210,9 @@ export function TeacherSLTour(props) {
         getTourState: getTourState
     }
 
-
-
+    const disableBody = target => disableBodyScroll(target)
+    const enableBody = target => enableBodyScroll(target)
+    
     return (
         <TeacherSLTourContext.Provider value={tour}>
             <Tour
@@ -221,8 +225,8 @@ export function TeacherSLTour(props) {
                     localStorage.setItem("willingNewTutorial", false)
                     localStorage.setItem("tutorialSL", true)
                 }}
-                onAfterOpen={target => disableBodyScroll(target)}
-                onBeforeClose={target => enableBodyScroll(target)}
+                onAfterOpen={disableBody}
+                onBeforeClose={enableBody}
                 badgeContent={(curr, tot) => `${curr} of ${tot}`}
                 rounded={5}
                 startAt={0}
@@ -278,8 +282,11 @@ export function TeacherHistTour(props) {
             selector: '[tour-selec="histTables"]',
             content: 'Here you find the statistics displayed in tables.',
         },
-    ]
-
+    ];
+    
+    const disableBody = target => disableBodyScroll(target)
+    const enableBody = target => enableBodyScroll(target)
+    
     return (
         <TeacherHistTourContext.Provider value={tour}>
             <Tour
@@ -292,8 +299,8 @@ export function TeacherHistTour(props) {
                     localStorage.setItem("willingNewTutorial", false)
                     localStorage.setItem("tutorialHT", true)
                 }}
-                onAfterOpen={target => disableBodyScroll(target)}
-                onBeforeClose={target => enableBodyScroll(target)}
+                onAfterOpen={disableBody}
+                onBeforeClose={enableBody}
                 badgeContent={(curr, tot) => `${curr} of ${tot}`}
                 rounded={5}
                 startAt={0}
