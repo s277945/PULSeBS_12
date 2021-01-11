@@ -17,9 +17,22 @@
      state = { tableData: [], pastTableData: [], modalTableData: [], modalLecture: null, modal: 0, element: null }
 
      componentDidMount() {
-         updateTeacher(this);
+        //If tour is open set state with tour data
+        if(this.props.tour.isTourOpen) {
+            this.setState(this.props.tour.getTourState())
+            return
+        }
+
+        this.getPageData()
+
+         }
+
+     getPageData = () =>{
+        
+        updateTeacher(this);
          getTeacherPastLectures()
             .then(res => {
+                console.log("Past data:");
                 console.log(res.data);
                 this.setState({ pastTableData: res.data });
             }).catch(/* istanbul ignore next */err=>{
@@ -34,8 +47,18 @@
              this.showList(JSON.parse(element));
         }
          else sessionStorage.setItem("element", null);//if none is present, save element state value
+     
      }
 
+     componentDidUpdate(prevProps){
+        if(!this.props.tour.isTourOpen && prevProps.tour.isTourOpen){
+            this.getPageData()
+        }
+
+        if(this.props.tour.isTourOpen && !prevProps.tour.isTourOpen){
+            this.setState(this.props.tour.getTourState())
+        }
+     }
 
      showList = (element, num) => {
         getStudentList(element)

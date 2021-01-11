@@ -21,6 +21,17 @@ export class TeacherTabLec extends Component {
             }
 
     componentDidMount() {
+
+        if(this.props.tour.isTourOpen) {
+            this.setState(this.props.tour.getTourState())
+            return
+        }
+
+        this.getPageData()
+        }
+
+    getPageData = () =>{
+        
         updateTeacher(this);
 
         let modalShow = sessionStorage.getItem("modalShow");//get saved modalShow state value
@@ -33,6 +44,16 @@ export class TeacherTabLec extends Component {
         if(selectedLec!==null) this.setState({ selectedLec: JSON.parse(selectedLec) });
         else sessionStorage.setItem("selectedLec", JSON.stringify(this.state.selectedLec));//if none is present, save selectedLec state value
     }
+
+    componentDidUpdate(prevProps){
+        if(!this.props.tour.isTourOpen && prevProps.tour.isTourOpen){
+            this.getPageData()
+        }
+
+        if(this.props.tour.isTourOpen && !prevProps.tour.isTourOpen){
+            this.setState(this.props.tour.getTourState())
+        }
+     }
 
     showModifications = (element) => {
 
