@@ -3,10 +3,12 @@ import Modal from 'react-bootstrap/Modal'
 import Button from 'react-bootstrap/Button'
 import { setTutorial } from '../api/api'
 import Tour from 'reactour'
+import { disableBodyScroll, enableBodyScroll } from 'body-scroll-lock'
 
 export const TourContext = createContext();
 
 export default function StudentHomeTour(props){
+    
     const [isTourOpen, setIsTourOpen] = useState(true);
 
     const [show, setShow] = useState(false);
@@ -25,15 +27,19 @@ export default function StudentHomeTour(props){
             <Tour
             steps={steps}
             isOpen={isTourOpen}
+            disableInteraction={true}
             onRequestClose={() => {
                 setIsTourOpen(false)
                 setTutorial()
                 localStorage.setItem("willingNewTutorial", false)
             }}
+            onAfterOpen={target => disableBodyScroll(target)}
+            onBeforeClose={target => enableBodyScroll(target)}
             badgeContent={(curr, tot) => `${curr} of ${tot}`} 
             rounded={5}
             disableInteraction={true}
             onBeforeClose={() => handleShow()}
+            startAt={0}
             />
             <TourModal show={show} handleClose={handleClose} handleShow={handleShow}/>
             {props.children}
