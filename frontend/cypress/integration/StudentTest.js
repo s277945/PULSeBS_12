@@ -33,8 +33,6 @@ describe('STUDENT PAGE', function () {
         cy.get('.card')
             .eq(0).click()
         cy.reload()
-        cy.get('.sc-bdVaJa.cYQqRL.sc-bxivhb.eTpeTG.reactour__close')
-            .click()
         cy.get('.card-body').eq(0)
             .should('be.visible')
 
@@ -419,7 +417,7 @@ describe('SHOW TODAY LECTURE AND VC LECTURES IN TABLE', function () {
             response:[
                 {"CourseID":"C0123","Name":"Software Engineering II"}
             ]
-        })
+        }).as('course')
         cy.route({
             method:'GET',
             url:'/api/lectures',
@@ -428,7 +426,7 @@ describe('SHOW TODAY LECTURE AND VC LECTURES IN TABLE', function () {
                 {"Course_Ref":"C0123","Name":"SE2 Les:5","Date":"2021-03-27 19:30:00","DateDeadline":"2021-03-26 23:00:00","EndDate":"2021-03-27 21:00:00","BookedSeats":null,"Capacity":null,"Type":"d"},
 
             ]
-        })
+        }).as('lecture')
         cy.get('input:first').type('s266260').should('have.value','s266260')
         cy.get('input:last').type('scimmia').should('have.value','scimmia')
         cy.get('.btn.btn-primary')
@@ -437,6 +435,8 @@ describe('SHOW TODAY LECTURE AND VC LECTURES IN TABLE', function () {
         cy.wait('@login')
     })
     it('should display today lecture distance', function () {
+        cy.wait('@course')
+        cy.wait('@lecture')
         cy.get('[data-testid="lectures"]').within(()=>{
             cy.get('tr').eq(1).within(()=>{
                 cy.get('td').eq(0).contains("SE2 Les:4")
