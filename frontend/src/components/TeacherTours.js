@@ -1,6 +1,7 @@
 import React, { useState, createContext } from 'react'
 import { setTutorial } from '../api/api'
 import Tour from 'reactour'
+import { disableBodyScroll, enableBodyScroll } from 'body-scroll-lock'
 
 const today = new Date();
 const tomorrow = new Date(today)
@@ -13,7 +14,6 @@ const beforeYesterday = new Date(today)
 beforeYesterday.setDate(today.getDate() + -2)
 
 //Tour for Lectures tab
-
 export const TeacherLecTourContext = createContext();
 
 export function TeacherLecTour(props) {
@@ -89,14 +89,18 @@ export function TeacherLecTour(props) {
             <Tour
                 steps={steps}
                 isOpen={isTourOpen}
+                disableInteraction={true}
                 onRequestClose={() => {
                     setIsTourOpen(false)
                     setTutorial()
                     localStorage.setItem("willingNewTutorial", false)
                     localStorage.setItem("tutorialLec", true)
                 }}
+                onAfterOpen={target => disableBodyScroll(target)}
+                onBeforeClose={target => enableBodyScroll(target)}
                 badgeContent={(curr, tot) => `${curr} of ${tot}`}
                 rounded={5}
+                startAt={0}
             />
             {props.children}
         </TeacherLecTourContext.Provider>
@@ -210,14 +214,18 @@ export function TeacherSLTour(props) {
             <Tour
                 steps={steps_2}
                 isOpen={isTourOpen}
+                disableInteraction={true}
                 onRequestClose={() => {
                     setIsTourOpen(false)
                     setTutorial()
                     localStorage.setItem("willingNewTutorial", false)
                     localStorage.setItem("tutorialSL", true)
                 }}
+                onAfterOpen={target => disableBodyScroll(target)}
+                onBeforeClose={target => enableBodyScroll(target)}
                 badgeContent={(curr, tot) => `${curr} of ${tot}`}
                 rounded={5}
+                startAt={0}
             />
             {props.children}
         </TeacherSLTourContext.Provider>
@@ -277,14 +285,18 @@ export function TeacherHistTour(props) {
             <Tour
                 steps={steps_3}
                 isOpen={isTourOpen}
+                disableInteraction={true}
                 onRequestClose={() => {
                     setIsTourOpen(false)
                     setTutorial()
                     localStorage.setItem("willingNewTutorial", false)
                     localStorage.setItem("tutorialHT", true)
                 }}
+                onAfterOpen={target => disableBodyScroll(target)}
+                onBeforeClose={target => enableBodyScroll(target)}
                 badgeContent={(curr, tot) => `${curr} of ${tot}`}
                 rounded={5}
+                startAt={0}
             />
             {props.children}
         </TeacherHistTourContext.Provider>

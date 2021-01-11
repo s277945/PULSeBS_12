@@ -1,10 +1,12 @@
 import React, { useState, createContext } from 'react'
 import { setTutorial } from '../api/api'
 import Tour from 'reactour'
+import { disableBodyScroll, enableBodyScroll } from 'body-scroll-lock'
 
 export const TourContext = createContext();
 
 export default function StudentHomeTour(props){
+    
     const [isTourOpen, setIsTourOpen] = useState(true);
 
     
@@ -24,13 +26,17 @@ export default function StudentHomeTour(props){
             <Tour
             steps={steps}
             isOpen={isTourOpen}
+            disableInteraction={true}
             onRequestClose={() => {
                 setIsTourOpen(false)
                 setTutorial()
                 localStorage.setItem("willingNewTutorial", false)
             }}
+            onAfterOpen={target => disableBodyScroll(target)}
+            onBeforeClose={target => enableBodyScroll(target)}
             badgeContent={(curr, tot) => `${curr} of ${tot}`} 
             rounded={5}
+            startAt={0}
             />
             {props.children}
         </TourContext.Provider>
