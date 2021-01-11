@@ -48,14 +48,14 @@ Cypress.Commands.add("login",(username,password,type,tutorial)=>{
 
     cy.wait('@login')
 })
-Cypress.Commands.add("teacher",(username,password,type)=>{
+Cypress.Commands.add("teacher",(username,password,type,tutorial)=>{
     cy.server()
     cy.route({
         method:'POST',
         url:'/api/login',
         status:200,
         request:{userName:username,password:password},
-        response:{user:username,userType:type}
+        response:{user:username,userType:type,tutorial:tutorial}
     }).as('login')
     cy.fixture('teacher.json').then((data)=>{
         let length=data.length;
