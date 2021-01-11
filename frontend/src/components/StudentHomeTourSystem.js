@@ -49,7 +49,7 @@ const steps = [
     },
     {
         selector: '[tour-selec="course-card"]',
-        content: 'Here you can foud lectures regrouped by courses',
+        content: 'Here you can find lectures grouped by course',
     },
 ];
 

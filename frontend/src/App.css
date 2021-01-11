@@ -218,3 +218,13 @@
 .fc .fc-daygrid-event-harness::-webkit-scrollbar-thumb:hover {
     background:rgb(54, 56, 58);
 }
+
+.reactour__helper {
+  margin: 17px;
+}
+
+.reactour__helper .reactour__close {
+  top: 12px;
+  right: 12px;
+  margin: 3px;
+}
