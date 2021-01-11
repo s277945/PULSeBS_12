@@ -1,6 +1,5 @@
-import React, { useState, useContext, createContext } from 'react'
+import React, { useState, createContext } from 'react'
 import { setTutorial } from '../api/api'
-import { ProvideAuth } from './Authsystem'
 import Tour from 'reactour'
 
 const today = new Date();
@@ -123,7 +122,7 @@ export function TeacherSLTour(props) {
                 setIsTourOpen(false)
     }
 
-    const steps = [
+    const steps_2 = [
         {
             selector: '[tour-selec="TeachNavBar"]',
             content: 'Here you can switch tabs between Lectures/StudentList/HistoricalData',
@@ -152,7 +151,7 @@ export function TeacherSLTour(props) {
 
 
 
-    const tableData = [{
+    const tableData_2 = [{
         BookedSeats: 1,
         Capacity: 100,
         Course_Ref: "C0123",
@@ -195,7 +194,7 @@ export function TeacherSLTour(props) {
     }]
 
     const getTourState = (state) => {
-        return { tableData: tableData, pastTableData: pastTableData, modalTableData: [], modalLecture: null, modal: 0, element: null }
+        return { tableData: tableData_2, pastTableData: pastTableData, modalTableData: [], modalLecture: null, modal: 0, element: null }
     }
 
     const tour = {
@@ -209,7 +208,7 @@ export function TeacherSLTour(props) {
     return (
         <TeacherSLTourContext.Provider value={tour}>
             <Tour
-                steps={steps}
+                steps={steps_2}
                 isOpen={isTourOpen}
                 onRequestClose={() => {
                     setIsTourOpen(false)
@@ -250,7 +249,7 @@ export function TeacherHistTour(props) {
         setIsTourOpen: setIsTourOpen,
     }
 
-    const steps = [
+    const steps_3 = [
         {
             selector: '[tour-selec="center"]',
             content: 'Int this page you will find statistics about students attendace to lessons.',
@@ -276,7 +275,7 @@ export function TeacherHistTour(props) {
     return (
         <TeacherHistTourContext.Provider value={tour}>
             <Tour
-                steps={steps}
+                steps={steps_3}
                 isOpen={isTourOpen}
                 onRequestClose={() => {
                     setIsTourOpen(false)

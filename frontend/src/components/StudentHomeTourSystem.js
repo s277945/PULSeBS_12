@@ -1,6 +1,5 @@
-import React, { useState, useContext, createContext } from 'react'
+import React, { useState, createContext } from 'react'
 import { setTutorial } from '../api/api'
-import { ProvideAuth } from '../components/Authsystem'
 import Tour from 'reactour'
 
 export const TourContext = createContext();

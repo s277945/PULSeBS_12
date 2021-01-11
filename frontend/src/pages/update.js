@@ -1,4 +1,4 @@
-import { getLectures, getTeacherLectures } from '../api/api'
+import { getTeacherLectures } from '../api/api'
 
 /*function update(component) {
   let lecList = [];
