@@ -342,7 +342,7 @@ export class SupportOfficerSchedule extends Component{
 
     render() {
         return(
-            <div ><br></br><h1 className="page-title">Update schedule lectures</h1><br></br>
+            <div ><br></br><h1 className="page-title">Lecture schedule setup</h1><br></br>
                 <br/>
                 {this.renderSchedule()}
                 {this.renderModalSchedule()}
