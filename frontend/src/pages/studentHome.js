@@ -207,16 +207,16 @@ class StudentHome extends Component {
         return(
             <>
             {(lecture.alreadyBooked || disabled)  &&
-                <Button disabled>Book Seat</Button>
+                <Button tour-selec="BookButton" disabled>Book Seat</Button>
             }
             {(!lecture.alreadyBooked && !lecture.alreadyWaiting && !disabled) && lecture.BookedSeats<lecture.Capacity &&
-                <Button data-testid={'bookButton_'+index} onClick={() => this.setModal(lecture, "book a seat")}>Book Seat</Button>
+                <Button tour-selec="BookButton" data-testid={'bookButton_'+index} onClick={() => this.setModal(lecture, "book a seat")}>Book Seat</Button>
             }
             {lecture.alreadyWaiting && !lecture.alreadyBooked &&
-                <Button variant="warning" disabled>In waiting list</Button>
+                <Button tour-selec="BookButton" variant="warning" disabled>In waiting list</Button>
             }
             {(!lecture.alreadyBooked && !lecture.alreadyWaiting && !disabled) && lecture.BookedSeats>=lecture.Capacity &&
-                <Button variant="warning" data-testid={'waitButton_'+index} onClick={() => this.setModal(lecture, "enter the waiting list")}>Enter waiting list</Button>
+                <Button tour-selec="BookButton" variant="warning" data-testid={'waitButton_'+index} onClick={() => this.setModal(lecture, "enter the waiting list")}>Enter waiting list</Button>
             }
             </>
         )
@@ -226,13 +226,13 @@ class StudentHome extends Component {
         return (
             <>
             {(lecture.alreadyBooked && !disabled) &&
-                <Button data-testid={'cancelButton_'+index} onClick={() => this.setModal(lecture, "cancel your booking")} variant="danger">Cancel</Button>
+                <Button tour-selec="CancelButton" data-testid={'cancelButton_'+index} onClick={() => this.setModal(lecture, "cancel your booking")} variant="danger">Cancel</Button>
             }
             {(lecture.alreadyWaiting) && !lecture.alreadyBooked &&
-                <Button disabled data-testid={'cancelButton_'+index} onClick={() => this.setModal(lecture, "cancel your reservation")} variant="danger">Cancel</Button>
+                <Button tour-selec="CancelButton" disabled data-testid={'cancelButton_'+index} onClick={() => this.setModal(lecture, "cancel your reservation")} variant="danger">Cancel</Button>
             }
             {((!lecture.alreadyBooked && !lecture.alreadyWaiting) || disabled) &&
-                <Button variant="danger" disabled>Cancel</Button>
+                <Button tour-selec="CancelButton" variant="danger" disabled>Cancel</Button>
             }
             </>
         )

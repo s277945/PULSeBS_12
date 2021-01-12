@@ -60,15 +60,15 @@ class TeacherNavbar extends Component {
         switch (this.props.show) {
             case 0:
                 return <TeacherLecTourContext.Consumer>
-                    {tour => <Button data-testid={"tour"} variant="dark" onClick={() => {tour.setIsTourOpen(true); localStorage.setItem("willingNewTutorial", true)}}>Start tour</Button>}
+                    {tour => <Button data-testid={"tour"} variant="dark" onClick={() => {tour.setIsTourOpen(true); localStorage.setItem("willingNewTutorial", true)}}>Help</Button>}
                 </TeacherLecTourContext.Consumer>
             case 1:
                 return <TeacherSLTourContext.Consumer>
-                    {tour => <Button data-testid={"tour"} variant="dark" onClick={() => {tour.setIsTourOpen(true); localStorage.setItem("willingNewTutorial", true)}}>Start tour</Button>}
+                    {tour => <Button data-testid={"tour"} variant="dark" onClick={() => {tour.setIsTourOpen(true); localStorage.setItem("willingNewTutorial", true)}}>Help</Button>}
                 </TeacherSLTourContext.Consumer>
             case 2:
                 return <TeacherHistTourContext.Consumer>
-                    {tour => <Button data-testid={"tour"} variant="dark" onClick={() => {tour.setIsTourOpen(true); localStorage.setItem("willingNewTutorial", true)}}>Start tour</Button>}
+                    {tour => <Button data-testid={"tour"} variant="dark" onClick={() => {tour.setIsTourOpen(true); localStorage.setItem("willingNewTutorial", true)}}>Help</Button>}
                 </TeacherHistTourContext.Consumer>
             default:
             // code block

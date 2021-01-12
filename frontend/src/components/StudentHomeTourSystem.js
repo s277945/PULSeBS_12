@@ -42,7 +42,7 @@ export default function StudentHomeTour(props){
             onBeforeClose={() => handleShow()}
             startAt={0}
             />
-            <TourModal show={show} handleClose={handleClose} handleShow={handleShow}/>
+            {/* <TourModal show={show} handleClose={handleClose} handleShow={handleShow}/> */}
             {props.children}
         </TourContext.Provider>
     )
@@ -58,9 +58,18 @@ const steps = [
         content: 'Here will be the lectures for today',
     },
     {
+        selector: '[tour-selec="BookButton"]',
+        content: 'Use this button to book a seat for this course',
+    },
+    {
+        selector: '[tour-selec="CancelButton"]',
+        content: 'And this button to can cancel the booking',
+    },
+    {
         selector: '[tour-selec="course-card"]',
         content: 'Here you can find lectures grouped by course',
     },
+
 ];
 
 
