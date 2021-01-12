@@ -71,7 +71,7 @@ const lectureSteps1 = [
     },
     {
         selector: '[tour-selec="CancelButton"]',
-        content: 'And this button to can cancel the booking',
+        content: 'Once booked you can use this button to cancel the booking',
     },
     {
         selector: '[tour-selec="WarnButton"]',
@@ -123,8 +123,12 @@ const calendarSteps = [
         content: 'This Calendar will show you all your courses',
     },
     {
+        selector: '.fc-timeGridWeek-button',
+        content: 'This button will set the view by week (as it currently is)',
+    },
+    {
         selector: '.fc-dayGridMonth-button',
-        content: 'This button will set the view by month (as it currently is)',
+        content: 'This button will set the view by month',
     },
     {
         selector: '.fc-button-group',
@@ -133,10 +137,6 @@ const calendarSteps = [
     {
         selector: '.fc-today-button',
         content: 'Press this button to return to the current time window',
-    },
-    {
-        selector: '.fc-timeGridWeek-button',
-        content: 'This button will set the view by week',
     },
     {
         selector: '.fc-event-main',
