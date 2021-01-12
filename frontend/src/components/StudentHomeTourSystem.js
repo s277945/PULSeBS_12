@@ -9,9 +9,9 @@ export const TourContext = createContext();
 
 export default function StudentHomeTour(props){
     
-    const [isTourOpen, setIsTourOpen] = useState(true);
+    const [isTourOpen, setIsTourOpen] = useState(window.performance&&performance.navigation.type !== 1);
     const [stepsNum, setStepsNum] = useState(0);
-    const [first, setFirst] = useState(true);
+    const [first, setFirst] = useState(window.performance&&performance.navigation.type !== 1);
     let steps=lectureSteps1;
     const disableBody = target => disableBodyScroll(target)
     const enableBody = target => enableBodyScroll(target)
