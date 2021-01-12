@@ -58,7 +58,7 @@ class StudentNavbar extends Component {
                         <Nav.Link data-testid={"calendar"} href="#calendar" active={this.state.calendarlink} onSelect={this.showCalendar}>Calendar</Nav.Link>
                     </Nav>
 
-                    <Button data-testid={"tour"} variant="dark" onClick={() => {this.props.tour.setIsTourOpen(true); localStorage.setItem("willingNewTutorial", true)}}>Help</Button>
+                    <Button data-testid={"tour"} variant="dark" onClick={() => {this.props.tour.setIsTourOpen(true); localStorage.setItem("willingNewTutorialSC", true); localStorage.setItem("willingNewTutorialSL", true)}}>Help</Button>
 
                     <Nav.Link data-testid="logout" href="#logout" onSelect={this.handleLogout}>Logout</Nav.Link>
                 </Navbar>

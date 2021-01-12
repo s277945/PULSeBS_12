@@ -9,15 +9,17 @@ export const TourContext = createContext();
 
 export default function StudentHomeTour(props){
     
-    const [isTourOpen, setIsTourOpen] = useState(window.performance&&performance.navigation.type !== 1);
+    const [isTourOpen, setIsTourOpen] = useState(false);
     const [stepsNum, setStepsNum] = useState(0);
-    const [first, setFirst] = useState(window.performance&&performance.navigation.type !== 1);
+    const [first, setFirst] = useState(false);
     let steps=lectureSteps1;
     const disableBody = target => disableBodyScroll(target)
     const enableBody = target => enableBodyScroll(target)
 
-    if(localStorage.getItem("tutorial") == 1 && localStorage.getItem("willingNewTutorial") == "false" && isTourOpen===true) { setIsTourOpen(false); setFirst(false);} 
-
+    if(localStorage.getItem("tutorial") == 0 && localStorage.getItem("willingNewTutorialSL")=="false" && isTourOpen===false) { setIsTourOpen(true); setFirst(true);} 
+    if(localStorage.getItem("tutorial") == 0 && stepsNum===1 && localStorage.getItem("willingNewTutorialSC")=="false" && isTourOpen===false) { setIsTourOpen(true); setFirst(true);} 
+    //if(localStorage.getItem("tutorial") == 1 && localStorage.getItem("willingNewTutorial") == "false" && isTourOpen===true) { setIsTourOpen(false); setFirst(false);} 
+    
     const tour = {
         isTourOpen: isTourOpen,
         setIsTourOpen: setIsTourOpen,
@@ -35,9 +37,10 @@ export default function StudentHomeTour(props){
             onRequestClose={() => {
                 setIsTourOpen(false)
                 setTutorial()
-                setFirst(false);
                 steps=lectureSteps1
-                localStorage.setItem("willingNewTutorial", false)
+                if(first&&localStorage.getItem("willingNewTutorialSL")!="false") localStorage.setItem("willingNewTutorialSC", true)
+                if(first) localStorage.setItem("willingNewTutorialSL", true)
+                setFirst(false);
             }}
             onAfterOpen={disableBody}
             onBeforeClose={enableBody}

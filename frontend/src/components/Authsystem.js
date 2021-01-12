@@ -131,4 +131,6 @@ function saveUserSession(user) {
     localStorage.setItem("userType", user.userType);
     localStorage.setItem("tutorial", user.tutorial);
     localStorage.setItem("willingNewTutorial", false)
+    localStorage.setItem("willingNewTutorialSL", false)    
+    localStorage.setItem("willingNewTutorialSC", false)
 }
