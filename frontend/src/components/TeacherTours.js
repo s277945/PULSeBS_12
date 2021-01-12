@@ -145,23 +145,23 @@ export function TeacherSLTour(props) {
         },
         {
             selector: '[tour-selec="programedLectures"]',
-            content: 'In this section you can find courses and their upcoming lessons.',
+            content: 'In this section you can find all courses and their upcoming lectures',
         },
         {
             selector: '[tour-selec="showList"]',
-            content: 'Use this button to see the students that are willing to attend the lesson.',
+            content: 'You can use this button to open a window with the list of students that are willing to attend the lesson',
         },
         {
             selector: '[tour-selec="pastLectures"]',
-            content: 'In this section you can find courses and their current/past lessons.',
+            content: 'In this section you can find courses and their current/past lectures',
         },
         {
             selector: '[tour-selec="setAttendance"]',
-            content: 'If the lesson has been held in the past 24 hours, you can set student attendance using this button.',
+            content: 'If the lecture has been held in the past 24 hours, you can open a window to set student attendance using this button',
         },
         {
             selector: '[tour-selec="showPast"]',
-            content: 'Use this button to see the students that attended a past lesson.',
+            content: 'You can use this button to see the students that attended a past lecture',
         },
     ]
 
@@ -264,7 +264,7 @@ export function TeacherHistTour(props) {
     const steps_3 = [
         {
             selector: '[tour-selec="center"]',
-            content: 'Int this page you will find statistics about students attendace to lessons.',
+            content: "In this page you can find statistics about students' bookings and attendance",
         },
         {
             selector: '[tour-selec="TeachNavBar"]',
@@ -272,15 +272,15 @@ export function TeacherHistTour(props) {
         },
         {
             selector: '[tour-selec="graph"]',
-            content: 'Here is a graph with the average attendance to lessons',
+            content: 'For each course there is a graph displaying the relevant data',
         },
         {
             selector: '[tour-selec="detailLevel"]',
-            content: 'You can change the level of detail between Lectures/Weekly/Monthly.',
+            content: 'You can switch the grouping level of data between Lectures/Weekly/Monthly',
         },
         {
             selector: '[tour-selec="histTables"]',
-            content: 'Here you find the statistics displayed in tables.',
+            content: 'Here you will find the statistics displayed inside the corresponding tables',
         },
     ];
     
