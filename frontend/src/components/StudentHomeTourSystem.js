@@ -58,7 +58,7 @@ export default function StudentHomeTour(props){
 const lectureSteps1 = [
     {
         selector: '',
-        content: "Welcome! This is the student page tutorial. Click on the arrow to follow to the next step or the cross on the top right to close it",
+        content: "Welcome! This is the student page tutorial. Click on the arrows to go to the previous/next step or on the cross on the top right to close the tutorial",
     },
     {
         selector: '[tour-selec="navbar"]',
