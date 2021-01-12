@@ -62,7 +62,7 @@ const lectureSteps1 = [
     },
     {
         selector: '[tour-selec="navbar"]',
-        content: 'You can change between lectures/calendar view in the nav bar',
+        content: 'You can switch between lectures/calendar view in the nav bar',
     },
     {
         selector: '[tour-selec="today-lecture"]',
@@ -90,7 +90,7 @@ const lectureSteps1 = [
 const lectureSteps2 = [
     {
         selector: '[tour-selec="navbar"]',
-        content: 'You can change between lectures/calendar view in the nav bar',
+        content: 'You can switch between lectures/calendar view in the nav bar',
     },
     {
         selector: '[tour-selec="today-lecture"]',
@@ -119,7 +119,7 @@ const lectureSteps2 = [
 const calendarSteps = [
     {
         selector: '[tour-selec="navbar"]',
-        content: 'You can change between lectures/calendar view in the nav bar',
+        content: 'You can switch between lectures/calendar view in the nav bar',
     },
     {
         selector: '.fc',
