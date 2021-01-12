@@ -143,7 +143,7 @@ const calendarSteps = [
     },
     {
         selector: '.fc-event-main',
-        content: 'Here is an example of today lecture',
+        content: 'Lectures appear inside the calendar as boxes with different colors and lengths depending on the course and lecture duration',
     },
     
 ];
@@ -182,19 +182,19 @@ export const getTourState = (show) =>{
 }
 
 const today = new Date();
-const tomorrow = new Date(today)
-const dayAfterTomorrow = new Date(today)
+today.setMinutes(30);
+const tomorrow = new Date(today);
 tomorrow.setDate(tomorrow.getDate() + 1)
-dayAfterTomorrow.setDate(tomorrow.getDate() + 2)
 
 const today2HoursLater = new Date(today);
-const tomorrow2HoursLater = new Date(tomorrow);
-today2HoursLater.setHours(today2HoursLater.getHours() + 2);
-tomorrow2HoursLater.setHours(today2HoursLater.getHours() + 2);
+const today4HoursLater = new Date(today);
+today.setHours(13);
+today2HoursLater.setHours(15);
+today4HoursLater.setHours(17);
 
 const tourLecture = [
     {
-        Name: "Lecture1",
+        Name: "SE2: Lecture 1",
         Type: "p",
         Date: today,
         EndDate: today2HoursLater,
@@ -204,20 +204,24 @@ const tourLecture = [
         BookedSeats: 5
     },
     {
-        Name: "Lecture2",
+        Name: "MFI: Lecture 1",
         Type: "p",
-        Date: today,
-        EndDate: today2HoursLater,
+        Date: today2HoursLater,
+        EndDate: today4HoursLater,
         DateDeadline: tomorrow,
         Capacity: 50,
         BookedSeats: 50,
-        Course_Ref: "C0123"
+        Course_Ref: "XY1211"
     },
 ]
 
 const tourCourses = [
-{
-    CourseID: "C0123",
-    Name: "Software Engineering II"
-}
+    {
+        CourseID: "C0123",
+        Name: "Software Engineering II"
+    },
+    {
+        CourseID: "XY1211",
+        Name: "Metodi di finanziamento delle imprese"
+    }
 ]
