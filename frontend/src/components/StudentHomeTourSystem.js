@@ -76,6 +76,10 @@ const lectureSteps = [
 
 const calendarSteps = [
     {
+        selector: '[tour-selec="navbar"]',
+        content: 'You can change between lectures/calendar view in the nav bar',
+    },
+    {
         selector: '.fc',
         content: 'This Calendar will show you all your courses',
     },
