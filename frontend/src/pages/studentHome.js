@@ -48,7 +48,8 @@ class StudentHome extends Component {
         }
 
         if(this.props.tour.isTourOpen && !prevProps.tour.isTourOpen){
-            this.setState(getTourState())
+            const tourState = getTourState()
+            this.setState({lectures: tourState.lectures, courses: tourState.courses})
         }
     }
 
@@ -454,7 +455,10 @@ class StudentHome extends Component {
         return (
             <div className="app-element-background">
                 
-                <StudentNavbar setShow={this.setShow}/>
+                <TourContext.Consumer>{tour=>
+                    <StudentNavbar tour={tour} show={this.state.show} setShow={this.setShow}/>
+                }              
+                </TourContext.Consumer>
                 {this.renderContent()}
                 {this.renderModal()}
                 {this.renderPopup()}

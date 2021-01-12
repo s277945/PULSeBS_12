@@ -10,18 +10,22 @@ export const TourContext = createContext();
 export default function StudentHomeTour(props){
     
     const [isTourOpen, setIsTourOpen] = useState(true);
+    const [stepsNum, setStepsNum] = useState(0);
 
-    const [show, setShow] = useState(false);
-    const handleClose = () => setShow(false);
-    const handleShow = () => setShow(true);
     const disableBody = target => disableBodyScroll(target)
     const enableBody = target => enableBodyScroll(target)
     if(localStorage.getItem("tutorial") == 1 && localStorage.getItem("willingNewTutorial") == "false" && isTourOpen===true) setIsTourOpen(false)   
         
     const tour = {
         isTourOpen: isTourOpen,
-        setIsTourOpen: setIsTourOpen
+        setIsTourOpen: setIsTourOpen,
+        setStepsNum: setStepsNum,
     }
+
+    let steps;
+    if(stepsNum===0) steps = lectureSteps;
+    if(stepsNum===1) steps = calendarSteps;
+
 
     return (
         <TourContext.Provider value={tour}>
@@ -39,7 +43,6 @@ export default function StudentHomeTour(props){
             badgeContent={(curr, tot) => `${curr} of ${tot}`} 
             rounded={5}
             disableInteraction={true}
-            onBeforeClose={() => handleShow()}
             startAt={0}
             />
             {/* <TourModal show={show} handleClose={handleClose} handleShow={handleShow}/> */}
@@ -48,7 +51,7 @@ export default function StudentHomeTour(props){
     )
   }
 
-const steps = [
+const lectureSteps = [
     {
         selector: '[tour-selec="navbar"]',
         content: 'You can change between lectures/calendar view in the nav bar',
@@ -73,6 +76,28 @@ const steps = [
 ];
 
 
+const calendarSteps = [
+    {
+        selector: '.fc',
+        content: 'This Calendar will show you all your courses',
+    },
+    {
+        selector: '.fc-dayGridMonth-button',
+        content: 'This button will set the view by month (as it currently is)',
+    },
+    
+    {
+        selector: '.fc-timeGridWeek-button',
+        content: 'This button will set the view by week',
+    },
+    {
+        selector: '.fc-event-main',
+        content: 'Here is an example of today lecture',
+    },
+    
+];
+
+
 const TourModal = ({show, handleClose, handleShow}) => {
     return (
         <>
@@ -94,7 +119,7 @@ const TourModal = ({show, handleClose, handleShow}) => {
       );
 }
 
-export const getTourState = (state) =>{
+export const getTourState = (show) =>{
     return{
         show : 0, //This state variable is used to choose the content to show. (0 : table, 1: calendar)
         courses: tourCourses,
@@ -109,24 +134,28 @@ const today = new Date();
 const tomorrow = new Date(today)
 tomorrow.setDate(tomorrow.getDate() + 1)
 
+const today2HoursLater = new Date();
+today2HoursLater.setHours(today2HoursLater.getHours() + 2);
+
 const tourLecture = [
     {
         Name: "Lecture1",
         Type: "p",
         Date: today,
+        EndDate: today2HoursLater,
         DateDeadline: tomorrow,
         Course_Ref: "C0123",
         Capacity: 50,
         BookedSeats: 5
     },
-    {
-        Name: "Lecture2",
-        Type: "p",
-        Date: tomorrow,
-        Capacity: 50,
-        BookedSeats: 50,
-        Course_Ref: "C0123"
-    },
+    // {
+    //     Name: "Lecture2",
+    //     Type: "p",
+    //     Date: tomorrow,
+    //     Capacity: 50,
+    //     BookedSeats: 50,
+    //     Course_Ref: "C0123"
+    // },
 ]
 
 const tourCourses = [

@@ -4,7 +4,6 @@ import Navbar from 'react-bootstrap/Navbar'
 import { authContext } from '../components/Authsystem'
 import { withRouter } from 'react-router-dom';
 import Button from 'react-bootstrap/Button'
-import {TourContext} from '../components/StudentHomeTourSystem'
 
 class StudentNavbar extends Component {
     static contextType = authContext
@@ -16,9 +15,11 @@ class StudentNavbar extends Component {
     componentDidMount() {
         let pagestate = parseInt(sessionStorage.getItem("pagestate"), 10);//get saved state value
         if(pagestate===1) this.setState({ lectureslink: false,calendarlink: true });
+        this.props.tour.setStepsNum(pagestate)
     }
     showLectures = () => { //Function called when Lectures link is selected
         this.props.setShow(0);
+        this.props.tour.setStepsNum(0)
         sessionStorage.setItem("pagestate", 0);//save state value
         this.setState({lectureslink: true,calendarlink: false});
     }
@@ -26,6 +27,8 @@ class StudentNavbar extends Component {
     redirHome = (e) => { //Function that redirects to the home page
         e.preventDefault();
         this.props.setShow(0);
+        this.props.tour.setStepsNum(0)
+        
         sessionStorage.setItem("pagestate", 0);//save state value
         this.setState({lectureslink: true,calendarlink: false});
         this.props.history.push("/studentHome");
@@ -33,6 +36,8 @@ class StudentNavbar extends Component {
 
     showCalendar = () => { //Function called when Calendar link is selected
         this.props.setShow(1);
+        this.props.tour.setStepsNum(1)
+
         sessionStorage.setItem("pagestate", 1);//save state value
         this.setState({lectureslink: false,calendarlink: true});
     }
@@ -53,9 +58,7 @@ class StudentNavbar extends Component {
                         <Nav.Link data-testid={"calendar"} href="#calendar" active={this.state.calendarlink} onSelect={this.showCalendar}>Calendar</Nav.Link>
                     </Nav>
 
-                    <TourContext.Consumer>
-                        {tour => <Button data-testid={"tour"} variant="dark" onClick={() => {tour.setIsTourOpen(true); localStorage.setItem("willingNewTutorial", true)}}>Help</Button>}
-                    </TourContext.Consumer>
+                    <Button data-testid={"tour"} variant="dark" onClick={() => {this.props.tour.setIsTourOpen(true); localStorage.setItem("willingNewTutorial", true)}}>Help</Button>
 
                     <Nav.Link data-testid="logout" href="#logout" onSelect={this.handleLogout}>Logout</Nav.Link>
                 </Navbar>

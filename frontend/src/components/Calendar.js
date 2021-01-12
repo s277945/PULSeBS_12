@@ -8,7 +8,7 @@ function renderEventContent(arg) {
     console.log(arg);
     return (
         <>
-            <div class="fc-event-main" style={{display: "block",width:"100%",backgroundColor:arg.backgroundColor, wrap: "nowrap",overflow:"auto"
+            <div className="fc-event-main" style={{display: "block",width:"100%",backgroundColor:arg.backgroundColor, wrap: "nowrap",overflow:"auto"
             }}>
                 <div style={{color:"#FFFFFF",marginLeft:"2px"}}>
                     <b>{arg.event.extendedProps.lectureName}</b>
@@ -62,22 +62,21 @@ export default function Calendar({lectures,courses}){
     })
 
     return(
-            <FullCalendar
-
-                plugins={[ dayGridPlugin,timeGridPlugin ]}
-                initialView="timeGridWeek"
-                weekends={false}
-                headerToolbar={{
-                    left: 'prev,next today',
-                    center: 'title',
-                    right: 'dayGridMonth,timeGridWeek'
-                }}
-                events={events}
-                locale="it"
-                slotMinTime={"08:00:00"}
-                slotMaxTime={"22:00:00"}
-                slotEventOverlap={false}
-                eventContent={renderEventContent}
-            />
+        <FullCalendar tour-selec="calendar"
+            plugins={[ dayGridPlugin,timeGridPlugin ]}
+            initialView="timeGridWeek"
+            weekends={false}
+            headerToolbar={{
+                left: 'prev,next today',
+                center: 'title',
+                right: 'dayGridMonth,timeGridWeek'
+            }}
+            events={events}
+            locale="it"
+            slotMinTime={"08:00:00"}
+            slotMaxTime={"22:00:00"}
+            slotEventOverlap={false}
+            eventContent={renderEventContent}
+        />
     )
 }
