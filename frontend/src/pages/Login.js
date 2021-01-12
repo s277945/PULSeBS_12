@@ -45,8 +45,11 @@ export class Login extends Component{
         e.preventDefault()
         // Entries check
         if (this.state.username==="" || this.state.password==="") {
+            /* istanbul ignore else */
             if (this.state.username==="") this.setState({ showInvalidU: true });
+            /* istanbul ignore else */
             if (this.state.password==="") this.setState({ showInvalidP: true });
+            /* istanbul ignore else */
             return;
         }
         // Use auth system to login the user                    
@@ -56,6 +59,7 @@ export class Login extends Component{
                 let location = this.props.location;
 
                 // If user was redirect here, direct him back to the url he was coming  from
+                /* istanbul ignore next */
                 if(location.state  && location.state.from && sessionStorage.getItem("redir")===this.context.user.userName){
                     history.replace(location.state.from)
                     return;
@@ -76,6 +80,7 @@ export class Login extends Component{
                     case 'so':
                         history.replace('/supportOfficer')
                         break;
+                    /* istanbul ignore next */
                     default:
                         history.replace('/')
                         break;

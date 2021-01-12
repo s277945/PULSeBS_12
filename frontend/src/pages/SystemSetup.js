@@ -7,11 +7,13 @@ import {uploadStudents, uploadTeachers, uploadCourses, uploadEnrollment, uploadS
 import { toast } from 'react-toastify';
 import Spinner  from 'react-bootstrap/Spinner'
 import moment from 'moment';
+import { MdErrorOutline } from "react-icons/md";
 
 export default function SystemSetup() {
     const [uploaded, setUploaded] = useState([0,0,0,0,0]);
     useEffect(() => {
         getFileData().then(response => {
+            /* istanbul ignore else */
             if(response.data) {console.log(response.data);
             setUploaded(response.data);
             }
@@ -24,7 +26,7 @@ export default function SystemSetup() {
     return(
         <div style={{minWidth: "1000px"}}>
             <br/>
-            <h2 className="page-title">Upload data</h2>
+            <h1 className="page-title">Upload data</h1>
             <UploadComponent uploaded={uploaded} setUploaded={setUploaded} filename={uploaded[0].fileName} filedate={uploaded[0].lastUpdate} key={0} type={0} Name={"Student list"} listType="student"/>
             <UploadComponent uploaded={uploaded} setUploaded={setUploaded} filename={uploaded[1].fileName} filedate={uploaded[1].lastUpdate} key={1} type={1} Name={"Professor list"} listType="professor"/>
             <UploadComponent uploaded={uploaded} setUploaded={setUploaded} filename={uploaded[2].fileName} filedate={uploaded[2].lastUpdate} key={2} type={2} Name={"Course list"} listType="course"/>
@@ -73,6 +75,7 @@ const UploadFileButton = ({disabled, uploaded, setUploaded, Name, listType, type
 
     const sendFile = () => {
         let file = files[0];
+        /* istanbul ignore else */
         if(!file) return;
         console.log(file);
         setUploading(true)
@@ -106,7 +109,8 @@ const UploadFileButton = ({disabled, uploaded, setUploaded, Name, listType, type
                 case "schedule":
                     apiCall = uploadSchedule
                     headers = "courseId,room,day,seats,time".split(',')
-                break; 
+                break;
+                /* istanbul ignore next */
                 default :
                     console.error("Incorrect list type")
                 break;
@@ -161,7 +165,7 @@ const UploadFileButton = ({disabled, uploaded, setUploaded, Name, listType, type
                 setUploaded(newuploaded);
                 setFiles([]);
             })
-            .catch(err1 => {
+            .catch(/* istanbul ignore next */err1 => {
                 console.log(err1);
                 if(typeof(err1.response)==="undefined") toast.error("Server error: error sending data to server");
                 else if(err1.response.status===500){// check error response status
@@ -196,7 +200,10 @@ const UploadFileButton = ({disabled, uploaded, setUploaded, Name, listType, type
         </Button>
             {uploading?<h3 style={{marginTop: "0px", marginLeft: "10px", color: "grey"}}>{percentage}%</h3>:<div/>}
             {!files[0]?<div style={{margin: "auto", marginLeft: "13px", color: "#999999", fontStyle: "italic"}}>{"Select a valid .csv file to upload"}</div>:<div/>}
-            {disabled&&files[0]?<div style={{margin: "auto", marginLeft: "13px", color: "#999999", fontStyle: "italic"}}>{"Missing file dependencies"}</div>:<div/>}
+            {disabled&&files[0]?<div style={{margin: "auto", marginLeft: "13px", color: "#999999", fontStyle: "italic"}}>
+                    <MdErrorOutline style={{marginRight: "5px", marginBottom: "2pt"}}/>
+                    {"Missing file dependencies"}
+                </div>:<div/>}
     </div>
     )
 }

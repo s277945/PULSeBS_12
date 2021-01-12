@@ -5,14 +5,21 @@ const dao=require('../src/Dao/studentDao');
 const chaiHttp=require('chai-http');
 chai.use(chaiHttp);
 chai.use(require('chai-match'));
+const studDao=require('../src/Dao/studentDao');
 const server=require('../src/server');
 const expect=chai.expect;
 let cookie;
 const url='http://localhost:3001';
 const supportFunc=require('./supportFunction');
-
+const db=require('../src/db')
 describe('TEACHER TESTING', function () {
     //login teacher and saves its session before to do other stuffs
+    beforeEach(()=>{
+        db.run("BEGIN")
+    })
+    afterEach(()=>{
+        db.run("ROLLBACK")
+    })
     before(async() => {
         let res = await chai.request(url).post('/api/login').send({
             userName: 't987654',
@@ -87,8 +94,11 @@ describe('TEACHER TESTING', function () {
 
         });
         it('should return status 204',async function () {
+            //studDao.addSeat("")
+            let date=await supportFunc.updateDateLecture("C4567","DS Les:6",1);
+
             return chai.request(url)
-                .delete('/api/courseLectures/C4567?date=2020-12-25 09:00:00')
+                .delete('/api/courseLectures/C4567?date='+date)
                 .set('Cookie',cookie)
                 .send()
                 .then(res=>{
@@ -112,12 +122,46 @@ describe('TEACHER TESTING', function () {
                 })
         });
         it('should return status 200',async function () {
+            let date=await supportFunc.updateDateLecture("C4567","DS Les:6",1);
             let res=await chai.request(url).put('/api/lectures').set("Cookie",cookie)
-                .send({courseId: "C4567",date:"2020-12-22 09:00:00"});
+                .send({courseId: "C4567",date:date});
             expect(res.err).to.be.undefined;
             expect(res).to.have.status(200);
             expect(res.body).to.have.property('response');
             expect(res.body.response).to.be.equals(true);
+        });
+    });
+    describe('GET TEACHER PAST LECTURES', function () {
+        it('should return teacher past lectures and status 200', function () {
+            return chai.request(url).get('/api/teacherPastLectures')
+                .set("Cookie",cookie)
+                .send()
+                .then((res)=>{
+                    expect(res).to.have.status(200)
+                    expect(res.body).to.be.an('array')
+                    expect(res.body).to.be.not.empty
+                })
+        });
+    });
+    describe('SET LECTURE ATTENDEES', function () {
+        it('should set correctly attendees and return status 200', async function () {
+             let date=await supportFunc.updateDateLecture("C4567","DS Les:6",0);
+                return chai.request(url)
+                .post('/api/C4567/'+date+'/attendees')
+                .set('Cookie',cookie)
+                .send([{"studentId":"s267890"},{"studentId":"s267348"}])
+                .then(res=>{
+                    expect(res).to.have.status(200)
+                })
+        });
+        it('should return 500 if lecture is out of range', function () {
+            return chai.request(url)
+                .post('/api/C0123/2021-01-01%2018:00:00/attendees')
+                .set('Cookie',cookie)
+                .send([{"studentId":"s266260"},{"studentId":"s267348"}])
+                .then(res=>{
+                    expect(res).to.have.status(500)
+                })
         });
     });
     describe('GET COURSE STATS BY COURSE_ID', function () {
@@ -187,19 +231,7 @@ describe('TEACHER TESTING', function () {
                     expect(res.body[0]).to.haveOwnPropertyDescriptor('average')*/
 
         });
+
     });
-    after(async()=>{
-        const course_id='C4567';
-        let date='2020-12-22 09:00:00';
-        await supportFunc.restoreTypeLecture(course_id,date);
-        const course_Ref='C4567';
-        const userId='s266260';
-        date='2020-12-25 09:00:00';
-        const deadline='2020-12-24 23:00:00';
-        const name='DS Les:6';
-        const capacity=70;
-        await supportFunc.insertDeletedRow(course_Ref,name,date,deadline,capacity);
-        await dao.addSeat(userId,course_id,date);
-        let res=await chai.request(url).post('/api/logout').set('Cookie',cookie).send();
-    })
+
 });

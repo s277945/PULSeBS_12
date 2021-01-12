@@ -65,6 +65,13 @@ describe('LOGIN PAGE', function () {
         password.should('have.value','')
     });
     it('should not login', function () {
+        cy.server()
+        cy.route({
+            method:'POST',
+            url:'/api/login',
+            status:401,
+            response:{}
+        }).as('login')
         const username=cy.get('input:first').type('prova').should('have.value','prova');
         const password=cy.get('input:last').type('ciao').should('have.value','ciao')
         cy.get('.btn.btn-primary')

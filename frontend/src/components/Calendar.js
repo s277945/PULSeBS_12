@@ -4,6 +4,27 @@ import dayGridPlugin from '@fullcalendar/daygrid'
 import timeGridPlugin from '@fullcalendar/timegrid'
 import moment from 'moment'
 
+function renderEventContent(arg) {
+    console.log(arg);
+    return (
+        <>
+            <div className="fc-event-main" style={{display: "block",width:"100%",backgroundColor:arg.backgroundColor, wrap: "nowrap",overflow:"auto"
+            }}>
+                <div style={{color:"#FFFFFF",marginLeft:"2px"}}>
+                    <b>{arg.event.extendedProps.lectureName}</b>
+                </div>
+                <div style={{color:"#FFFFFF",marginLeft:"2px"}}>
+                    {arg.event.extendedProps.courseName}
+                </div>
+                <div style={{color:"#FFFFFF",marginLeft:"2px"}}>
+                    {moment(arg.event.start).format("HH:mm")+" - "+moment(arg.event.end).format("HH:mm")}
+                </div>
+
+            </div>
+
+        </>
+    )
+}
 
 var stringToColour = function(str) {
     var hash = 0;
@@ -25,49 +46,37 @@ export default function Calendar({lectures,courses}){
         //generate a color based on hash
         let course=courses.filter(course1=>course1.CourseID===lecture.Course_Ref)[0];
 
-        let color=stringToColour(course.Name);
+        let color=course&&course.Name?stringToColour(course.Name):null;
         return{
             extendedProps:{
                 lectureName: lecture.Name,
-                courseName:course.Name,
+                courseName:course&&course.Name?course.Name:null,
                 lectureType:lecture.Type
             },
             html:true,
             content:lecture.Name,
             start: lecture.Date,
             end: lecture.EndDate,
-            color: color,
-
+            color:color
         }
     })
 
     return(
-            <FullCalendar
-
-                plugins={[ dayGridPlugin,timeGridPlugin ]}
-                initialView="timeGridWeek"
-                weekends={false}
-                headerToolbar={{
-                    left: 'prev,next today',
-                    center: 'title',
-                    right: 'dayGridMonth,timeGridWeek'
-                }}
-                events={events}
-                locale="it"
-                slotMinTime={"08:00:00"}
-                slotMaxTime={"22:00:00"}
-                slotEventOverlap={false}
-                eventContent={function(arg, createElement) {
-                    let children=[];
-                    if (arg.event.extendedProps) {
-                        let elem4=createElement('div',{},moment(arg.event.start).format("HH:mm")+" - "+moment(arg.event.end).format("HH:mm"));
-                        let elem1=createElement('div',{},arg.event.extendedProps.lectureName+" / "+(arg.event.extendedProps.lectureType==='p'?'Presence':'Virtual Classroom'));
-                        let elem2=createElement('b',{},arg.event.extendedProps.courseName);
-                        children=[elem2,elem1,elem4];
-                    }
-                    createElement()
-                    return createElement('div', {}, children);
-                }}
-            />
+        <FullCalendar tour-selec="calendar"
+            plugins={[ dayGridPlugin,timeGridPlugin ]}
+            initialView="timeGridWeek"
+            weekends={false}
+            headerToolbar={{
+                left: 'prev,next today',
+                center: 'title',
+                right: 'dayGridMonth,timeGridWeek'
+            }}
+            events={events}
+            locale="it"
+            slotMinTime={"08:00:00"}
+            slotMaxTime={"22:00:00"}
+            slotEventOverlap={false}
+            eventContent={renderEventContent}
+        />
     )
 }

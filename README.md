@@ -1,4 +1,5 @@
 # PULSeBS_12
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=s277945_PULSeBS_12&metric=alert_status)](https://sonarcloud.io/dashboard?id=s277945_PULSeBS_12)
 [![Bugs](https://sonarcloud.io/api/project_badges/measure?project=s277945_PULSeBS_12&metric=bugs)](https://sonarcloud.io/dashboard?id=s277945_PULSeBS_12)
 [![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=s277945_PULSeBS_12&metric=code_smells)](https://sonarcloud.io/dashboard?id=s277945_PULSeBS_12)
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=s277945_PULSeBS_12&metric=coverage)](https://sonarcloud.io/dashboard?id=s277945_PULSeBS_12)
@@ -356,3 +357,65 @@
 - Changes the bookability of a course/year
 - body request: [{"courseId": "C4567","restriction": 0}, ...]
 - response example: {"modified": true}
+
+
+## ATTENDANCE ENDPOINT
+
+**POST /api/:courseId/:date/attendees**
+- Sets the attendance of the students to a lecture
+- request parameters: courseId, date
+- request body: [{"studentId": "s267348"}, ...]
+- response body: {"modified": true}
+
+## SCHEDULE ENDPOINTS
+
+**GET /api/teacherPastLectures**
+- Returns a list of past lectures for a given teacher
+- response body: [
+  {
+  "Course_Ref": "C0123",
+  "Name": "SE2 Les:1",
+  "Date": "2020-10-01 13:00:00",
+  "DateDeadline": "2020-09-30 23:00:00",
+  "EndDate": "2020-10-01 16:00:00",
+  "BookedSeats": 20,
+  "Capacity": 100,
+  "Type": "p",
+  "Attendees": 0
+  }, ...]
+
+**GET api/schedules** 
+- Returns list of the schedules
+- response body: [
+  {
+  "courseId": "XY0821",
+  "courseName": "Analisi matematica II",
+  "room": "4",
+  "day": "Mon",
+  "seats": 80,
+  "time": "8:30-10:00"
+  },
+  {
+  "courseId": "XY1211",
+  "courseName": "Metodi di finanziamento delle imprese",
+  "room": "1",
+  "day": "Mon",
+  "seats": 120,
+  "time": "8:30-11:30"
+  }, ...]
+  
+**PUT /api/schedules**
+- Updates a schedule and associated lectures
+- request body: {"courseId": "...","oldDay": "...","newDay":"...","oldTime":"...","newTime":"...","oldRoom": "...","newRoom": "...","oldSeats": "...","newSeats": "..."}
+- response body: true
+
+## TUTORIAL ENDPOINT
+
+**PUT /api/user/tutorial**
+- Updates the tutorial field of a given user
+- body request: {"userId": "s269422"}
+- body response: {"response": true}
+
+    
+  
+  

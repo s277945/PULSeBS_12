@@ -1,9 +1,12 @@
+import moment from "moment";
 describe('STUDENT PAGE', function () {
     beforeEach(() => {
         cy.visit('http://localhost:3000/')
-        cy.login('s2662260','scimmia','s')
+        cy.login('s2662260','scimmia','s',1)
         Cypress.Cookies.preserveOnce('token', 'value')
         Cypress.Cookies.debug(true)
+        /*cy.get('.sc-bdVaJa.cYQqRL.sc-bxivhb.eTpeTG.reactour__close')
+            .click()*/
     })
     it('should show correctly student page', function () {
         cy.location('pathname').should('include','/studentHome')
@@ -24,6 +27,15 @@ describe('STUDENT PAGE', function () {
         cy.location('pathname').should('include', '/studentHome')
         cy.reload()
         cy.location('pathname').should('include','/studentHome')
+    });
+    it('should reload when toggle course is open', function () {
+        cy.wait(100)
+        cy.get('.card')
+            .eq(0).click()
+        cy.reload()
+        cy.get('.card-body').eq(0)
+            .should('be.visible')
+
     });
     it('should not redirect to login page', function () {
         cy.wait(200)
@@ -83,7 +95,25 @@ describe('STUDENT PAGE', function () {
                     .should('have.text', 'Yes')
             })
             .click({force: true})
-
+        cy.wait(50)
+    });
+    it('should reload page when is open modal', function () {
+        cy.wait(200)
+        cy.get('[data-testid="studentLectures"]')
+            .click()
+        cy.get('.card')
+            .eq(0).click()
+            .within(()=>{
+                cy.get('tbody>tr').eq(0).within(()=>{
+                    cy
+                        .get('.btn.btn-danger')
+                        .should('be.enabled')
+                        .click()
+                })
+            })
+        cy.reload()
+        cy.get('.modal')
+            .should('be.visible')
 
     });
     it('should open correctly modal to cancel a seat ', function () {
@@ -303,13 +333,119 @@ describe('STUDENT PAGE', function () {
 
 
     });
+
+});
+describe('TUTORIAL TEST', function () {
+    beforeEach(() => {
+        cy.visit('http://localhost:3000/')
+        cy.login('s2662260','scimmia','s',0)
+        Cypress.Cookies.preserveOnce('token', 'value')
+        Cypress.Cookies.debug(true)
+    })
+    it('should render correctly tutorial page', function () {
+        cy.get('.sc-bdVaJa.cYQqRL.sc-bxivhb.eTpeTG.reactour__close').parent()
+            .should('be.visible')
+            .and('contains.text','You can change between lectures/calendar view in the nav bar')
+            .within(()=>{
+                cy.get('[data-tour-elem="right-arrow"]')
+                    .should('be.enabled')
+                cy.get('[data-tour-elem="left-arrow"]')
+                    .should('not.be.enabled')
+                cy.get('[data-tour-elem="navigation"]')
+                    .should('be.visible')
+            })
+    });
+    it('should close tutorial popup', function () {
+
+        cy.get('.sc-bdVaJa.cYQqRL.sc-bxivhb.eTpeTG.reactour__close')
+            .click()
+    });
+    it('should click on start tour in navbar', function () {
+        cy.get('.sc-bdVaJa.cYQqRL.sc-bxivhb.eTpeTG.reactour__close')
+            .click()
+        cy.get('[data-testid="tour"]')
+            .click()
+        cy.get('.sc-bdVaJa.cYQqRL.sc-bxivhb.eTpeTG.reactour__close').parent()
+            .should('be.visible')
+    });
+    it('should refresh page', function () {
+        cy.get('.sc-bdVaJa.cYQqRL.sc-bxivhb.eTpeTG.reactour__close')
+            .click()
+        cy.reload()
+        cy.wait(100)
+        cy.get('.sc-bdVaJa.cYQqRL.sc-bxivhb.eTpeTG.reactour__close').parent().should('be.visible')
+    });
     it('should logout', function () {
+        cy.server()
+        cy.route({
+            method:'POST',
+            url:'/api/logout',
+            status:200,
+            response:{}
+        }).as('logout')
+        cy.get('.sc-bdVaJa.cYQqRL.sc-bxivhb.eTpeTG.reactour__close')
+            .click()
         cy.location('pathname').should('include','/studentHome')
         cy.get('[data-testid="logout"]').should('be.visible')
             .click()
-        cy.wait(1000)
+        cy.wait('@logout')
         cy.getCookies().should('be.empty')
         cy.location('pathname').should('include','/')
     });
+
 });
+describe('SHOW TODAY LECTURE AND VC LECTURES IN TABLE', function () {
+    beforeEach(()=>{
+        let startDate;
+        let endDate;
+        let deadline;
+        startDate=moment().add('hours',1).format('YYYY-MM-DD HH:mm:ss');
+        deadline=moment().subtract('days',1).format('YYYY-MM-DD HH:mm:ss');
+        endDate=moment().add('hours',4).format('YYYY-MM-DD HH:mm:ss');
+
+        cy.server()
+        cy.route({
+            method:'POST',
+            url:'/api/login',
+            status:200,
+            request:{userName:"s266260",password:"password"},
+            response:{user:"s266260",userType:"s",tutorial:1}
+        }).as('login')
+        cy.route({
+            method:'GET',
+            url:'/api/courses',
+            response:[
+                {"CourseID":"C0123","Name":"Software Engineering II"}
+            ]
+        }).as('course')
+        cy.route({
+            method:'GET',
+            url:'/api/lectures',
+            response:[
+                {"Course_Ref":"C0123","Name":"SE2 Les:4","Date":startDate,"DateDeadline":deadline,"EndDate":endDate,"BookedSeats":null,"Capacity":null,"Type":"d"},
+                {"Course_Ref":"C0123","Name":"SE2 Les:5","Date":"2021-03-27 19:30:00","DateDeadline":"2021-03-26 23:00:00","EndDate":"2021-03-27 21:00:00","BookedSeats":null,"Capacity":null,"Type":"d"},
+
+            ]
+        }).as('lecture')
+        cy.get('input:first').type('s266260').should('have.value','s266260')
+        cy.get('input:last').type('scimmia').should('have.value','scimmia')
+        cy.get('.btn.btn-primary')
+            .click()
+
+        cy.wait('@login')
+    })
+    it('should display today lecture distance', function () {
+        cy.wait('@course')
+        cy.wait('@lecture')
+        cy.get('[data-testid="lectures"]').within(()=>{
+            cy.get('tr').eq(1).within(()=>{
+                cy.get('td').eq(0).contains("SE2 Les:4")
+                cy.get('td').eq(3).contains('/')
+                cy.get('td').eq(4).contains('/')
+                cy.get('td').eq(5).contains('Virtual Classroom')
+            })
+        })
+    });
+});
+
 
