@@ -18,6 +18,9 @@ export const TeacherLecTourContext = createContext();
 
 export function TeacherLecTour(props) {
     const [isTourOpen, setIsTourOpen] = useState(true);
+    const [first, setFirst] = useState(true);
+    let steps=lectureSteps1;
+    if(!first) steps=lectureSteps2
 
     {
         if (localStorage.getItem("tutorial") == 1 &&
@@ -32,20 +35,6 @@ export function TeacherLecTour(props) {
                 setIsTourOpen(false)
     }
 
-    const steps = [
-        {
-            selector: '[tour-selec="TeachNavBar"]',
-            content: 'Here you can switch tabs between Lectures/StudentList/HistoricalData',
-        },
-        {
-            selector: '[tour-selec="LecTable"]',
-            content: 'In this table you can find courses and their upcoming lessons.',
-        },
-        {
-            selector: '[tour-selec="LecButton"]',
-            content: 'Use this button to modify a lecture and turn it into a distance lecture or cancel it.',
-        },
-    ]
 
     const tableData = [{
         BookedSeats: 1,
@@ -96,6 +85,7 @@ export function TeacherLecTour(props) {
                 onRequestClose={() => {
                     setIsTourOpen(false)
                     setTutorial()
+                    setFirst(false);
                     localStorage.setItem("willingNewTutorial", false)
                     localStorage.setItem("tutorialLec", true)
                 }}
@@ -109,6 +99,40 @@ export function TeacherLecTour(props) {
         </TeacherLecTourContext.Provider>
     )
 }
+//Teacher lecture tutorial steps data
+const lectureSteps1 = [
+    {
+        selector: '',
+        content: "Welcome, user! This is the teacher page tutorial. Click on the arrow to follow to the next step or the cross on the top right to close it",
+    },
+    {
+        selector: '[tour-selec="TeachNavBar"]',
+        content: 'Here you can switch tabs between Lectures/StudentList/HistoricalData',
+    },
+    {
+        selector: '[tour-selec="LecTable"]',
+        content: 'In this table you can find courses and their upcoming lessons.',
+    },
+    {
+        selector: '[tour-selec="LecButton"]',
+        content: 'Use this button to modify a lecture and turn it into a distance lecture or cancel it.',
+    },
+]
+
+const lectureSteps2 = [
+    {
+        selector: '[tour-selec="TeachNavBar"]',
+        content: 'Here you can switch tabs between Lectures/StudentList/HistoricalData',
+    },
+    {
+        selector: '[tour-selec="LecTable"]',
+        content: 'In this table you can find courses and their upcoming lessons.',
+    },
+    {
+        selector: '[tour-selec="LecButton"]',
+        content: 'Use this button to modify a lecture and turn it into a distance lecture or cancel it.',
+    },
+]
 
 //Tour for Student List tab
 
