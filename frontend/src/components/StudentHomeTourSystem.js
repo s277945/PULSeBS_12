@@ -11,18 +11,19 @@ export default function StudentHomeTour(props){
     
     const [isTourOpen, setIsTourOpen] = useState(true);
     const [stepsNum, setStepsNum] = useState(0);
-
+    const [first, setFirst] = useState(true);
+    let steps=lectureSteps1;
     const disableBody = target => disableBodyScroll(target)
     const enableBody = target => enableBodyScroll(target)
-    if(localStorage.getItem("tutorial") == 1 && localStorage.getItem("willingNewTutorial") == "false" && isTourOpen===true) setIsTourOpen(false)   
-        
+
+    if(localStorage.getItem("tutorial") == 1 && localStorage.getItem("willingNewTutorial") == "false" && isTourOpen===true) { setIsTourOpen(false); setFirst(false);} 
+
     const tour = {
         isTourOpen: isTourOpen,
         setIsTourOpen: setIsTourOpen,
         setStepsNum: setStepsNum,
     }
-
-    let steps = lectureSteps;
+    if(!first) steps=lectureSteps2
     if(stepsNum===1) steps = calendarSteps;
 
     return (
@@ -34,6 +35,8 @@ export default function StudentHomeTour(props){
             onRequestClose={() => {
                 setIsTourOpen(false)
                 setTutorial()
+                setFirst(false);
+                steps=lectureSteps1
                 localStorage.setItem("willingNewTutorial", false)
             }}
             onAfterOpen={disableBody}
@@ -49,7 +52,39 @@ export default function StudentHomeTour(props){
     )
   }
 
-const lectureSteps = [
+const lectureSteps1 = [
+    {
+        selector: '',
+        content: "Welcome, user! This is the student page tutorial. Click on the arrow to follow to the next step or the cross on the top left to close it",
+    },
+    {
+        selector: '[tour-selec="navbar"]',
+        content: 'You can change between lectures/calendar view in the nav bar',
+    },
+    {
+        selector: '[tour-selec="today-lecture"]',
+        content: 'Here will be the lectures for today',
+    },
+    {
+        selector: '[tour-selec="BookButton"]',
+        content: 'Use this button to book a seat for this course',
+    },
+    {
+        selector: '[tour-selec="CancelButton"]',
+        content: 'And this button to can cancel the booking',
+    },
+    {
+        selector: '[tour-selec="WarnButton"]',
+        content: 'Use this button to enter the waiting list for a lecture once there are no more available seats',
+    },
+    {
+        selector: '[tour-selec="course-card"]',
+        content: 'Here you can find lectures grouped by course',
+    },
+
+];
+
+const lectureSteps2 = [
     {
         selector: '[tour-selec="navbar"]',
         content: 'You can change between lectures/calendar view in the nav bar',
