@@ -1,9 +1,9 @@
-import React, { useState, useContext, createContext } from 'react'
+import React, { useState,  createContext } from 'react'
 import Modal from 'react-bootstrap/Modal'
 import Button from 'react-bootstrap/Button'
 import { setTutorial } from '../api/api'
 import Tour from 'reactour'
-import { disableBodyScroll, enableBodyScroll, clearAllBodyScrollLocks } from 'body-scroll-lock'
+import { disableBodyScroll, enableBodyScroll } from 'body-scroll-lock'
 
 export const TourContext = createContext();
 
