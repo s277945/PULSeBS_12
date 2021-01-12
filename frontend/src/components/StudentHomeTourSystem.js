@@ -87,7 +87,14 @@ const calendarSteps = [
         selector: '.fc-dayGridMonth-button',
         content: 'This button will set the view by month (as it currently is)',
     },
-    
+    {
+        selector: '.fc-button-group',
+        content: 'You can browse to the previous/next time window with these buttons',
+    },
+    {
+        selector: '.fc-today-button',
+        content: 'Press this button to return to the current time window',
+    },
     {
         selector: '.fc-timeGridWeek-button',
         content: 'This button will set the view by week',
