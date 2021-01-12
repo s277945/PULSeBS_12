@@ -22,10 +22,8 @@ export default function StudentHomeTour(props){
         setStepsNum: setStepsNum,
     }
 
-    let steps;
-    if(stepsNum===0) steps = lectureSteps;
+    let steps = lectureSteps;
     if(stepsNum===1) steps = calendarSteps;
-
 
     return (
         <TourContext.Provider value={tour}>
