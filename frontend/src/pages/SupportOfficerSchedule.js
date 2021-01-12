@@ -23,6 +23,8 @@ export class SupportOfficerSchedule extends Component{
     componentDidMount() {
         this.updateSchedule();
     }
+    /*The function retrieve the list of all the schedule from network, and stores the result inside
+    * a vector*/
     updateSchedule=()=>{
         getAllSchedule()
             .then(res=>{
@@ -32,6 +34,10 @@ export class SupportOfficerSchedule extends Component{
                 console.log(err);
             })
     }
+    /*The following handler will be invoked each time an item is selected from TimePicker
+    * First of all,TimePicker returns a value that is equal to time in seconds, so i have to
+    * convert result in HH:mm notation.In the next step it will be checked if the picked value is LT
+    * endTime(otherwise the value is not updated). */
     handleChangeStartTime=(date, endDate)=> {
         date=moment('25/12/2020', "DD/MM/YYYY").utcOffset(1).add(date, 'seconds').format("HH:mm")
         /* istanbul ignore else */
@@ -46,6 +52,9 @@ export class SupportOfficerSchedule extends Component{
         console.log("startDate:"+this.state.startDate);
         console.log("endDate:"+this.state.endDate);
     }
+    /*In input we have a string like: 08:30-10:30 or 08:30:10:30.
+    * This function returns an array of value, in which tmp[0] is startValue and tmp[1] endValue.
+    * */
     splitString=()=>{
         let tmp=[];
         if(this.state.elemModal.time!==undefined){
@@ -64,6 +73,10 @@ export class SupportOfficerSchedule extends Component{
         }
         return tmp;
     }
+    /*The following handler will be invoked each time an item is selected from TimePicker
+    * First of all,TimePicker returns a value that is equal to time in seconds, so i have to
+    * convert result in HH:mm notation.In the next step it will be checked if the picked value is GT
+    * endTime(otherwise the value is not updated). */
     handleChangeEndTime=(date, startDate)=>{
         date=moment('25/12/2020', "DD/MM/YYYY").utcOffset(1).add(date, 'seconds').format("HH:mm")
         console.log(moment('25/12/2020', "DD/MM/YYYY").utcOffset(1).add(date, 'seconds').format("HH:mm"))        
