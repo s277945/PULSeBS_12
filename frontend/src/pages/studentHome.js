@@ -214,10 +214,10 @@ class StudentHome extends Component {
                 <Button tour-selec="BookButton" data-testid={'bookButton_'+index} onClick={() => this.setModal(lecture, "book a seat")}>Book Seat</Button>
             }
             {lecture.alreadyWaiting && !lecture.alreadyBooked &&
-                <Button tour-selec="BookButton" variant="warning" disabled>In waiting list</Button>
+                <Button tour-selec="WarnButton" variant="warning" disabled>In waiting list</Button>
             }
             {(!lecture.alreadyBooked && !lecture.alreadyWaiting && !disabled) && lecture.BookedSeats>=lecture.Capacity &&
-                <Button tour-selec="BookButton" variant="warning" data-testid={'waitButton_'+index} onClick={() => this.setModal(lecture, "enter the waiting list")}>Enter waiting list</Button>
+                <Button tour-selec="WarnButton" variant="warning" data-testid={'waitButton_'+index} onClick={() => this.setModal(lecture, "enter the waiting list")}>Enter waiting list</Button>
             }
             </>
         )

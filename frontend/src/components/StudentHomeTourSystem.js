@@ -67,6 +67,10 @@ const lectureSteps = [
         content: 'And this button to can cancel the booking',
     },
     {
+        selector: '[tour-selec="WarnButton"]',
+        content: 'Use this button to enter the waiting list for a lecture once there are no more available seats',
+    },
+    {
         selector: '[tour-selec="course-card"]',
         content: 'Here you can find lectures grouped by course',
     },
@@ -141,10 +145,14 @@ export const getTourState = (show) =>{
 
 const today = new Date();
 const tomorrow = new Date(today)
+const dayAfterTomorrow = new Date(today)
 tomorrow.setDate(tomorrow.getDate() + 1)
+dayAfterTomorrow.setDate(tomorrow.getDate() + 2)
 
-const today2HoursLater = new Date();
+const today2HoursLater = new Date(today);
+const tomorrow2HoursLater = new Date(tomorrow);
 today2HoursLater.setHours(today2HoursLater.getHours() + 2);
+tomorrow2HoursLater.setHours(today2HoursLater.getHours() + 2);
 
 const tourLecture = [
     {
@@ -157,14 +165,16 @@ const tourLecture = [
         Capacity: 50,
         BookedSeats: 5
     },
-    // {
-    //     Name: "Lecture2",
-    //     Type: "p",
-    //     Date: tomorrow,
-    //     Capacity: 50,
-    //     BookedSeats: 50,
-    //     Course_Ref: "C0123"
-    // },
+    {
+        Name: "Lecture2",
+        Type: "p",
+        Date: today,
+        EndDate: today2HoursLater,
+        DateDeadline: tomorrow,
+        Capacity: 50,
+        BookedSeats: 50,
+        Course_Ref: "C0123"
+    },
 ]
 
 const tourCourses = [
