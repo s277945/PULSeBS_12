@@ -130,7 +130,9 @@ function saveUserSession(user) {
     localStorage.setItem("userName", user.userName);// set session storage data (user name, user type)
     localStorage.setItem("userType", user.userType);
     localStorage.setItem("tutorial", user.tutorial);
-    localStorage.setItem("willingNewTutorial", false)
+    localStorage.setItem("willingNewTutorialTL", false)
+    localStorage.setItem("willingNewTutorialTSL", false)
+    localStorage.setItem("willingNewTutorialTHD", false)
     localStorage.setItem("willingNewTutorialSL", false)    
     localStorage.setItem("willingNewTutorialSC", false)
 }

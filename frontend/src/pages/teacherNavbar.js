@@ -60,15 +60,15 @@ class TeacherNavbar extends Component {
         switch (this.props.show) {
             case 0:
                 return <TeacherLecTourContext.Consumer>
-                    {tour => <Button data-testid={"tour"} variant="dark" onClick={() => {tour.setIsTourOpen(true); localStorage.setItem("willingNewTutorial", true)}}>Help</Button>}
+                    {tour => <Button data-testid={"tour"} variant="dark" onClick={() => {tour.setIsTourOpen(true);}}>Help</Button>}
                 </TeacherLecTourContext.Consumer>
             case 1:
                 return <TeacherSLTourContext.Consumer>
-                    {tour => <Button data-testid={"tour"} variant="dark" onClick={() => {tour.setIsTourOpen(true); localStorage.setItem("willingNewTutorial", true)}}>Help</Button>}
+                    {tour => <Button data-testid={"tour"} variant="dark" onClick={() => {tour.setIsTourOpen(true); localStorage.setItem("willingNewTutorialTSL", false)}}>Help</Button>}
                 </TeacherSLTourContext.Consumer>
             case 2:
                 return <TeacherHistTourContext.Consumer>
-                    {tour => <Button data-testid={"tour"} variant="dark" onClick={() => {tour.setIsTourOpen(true); localStorage.setItem("willingNewTutorial", true)}}>Help</Button>}
+                    {tour => <Button data-testid={"tour"} variant="dark" onClick={() => {tour.setIsTourOpen(true); localStorage.setItem("willingNewTutorialTHD", false)}}>Help</Button>}
                 </TeacherHistTourContext.Consumer>
             default:
             // code block
@@ -84,13 +84,13 @@ class TeacherNavbar extends Component {
                     <Navbar.Brand data-testid={"homeRedirect"} href="#" onClick={this.redirHome}>PULSeBS</Navbar.Brand>
                     <Nav tour-selec="TeachNavBar" className="mr-auto">   
                         <TeacherLecTourContext.Consumer>
-                            {tour => <Nav.Link data-testid={"lecturesPage"} href="#lectures" active={this.state.lectureslink} onSelect={()=>{this.showLectures(); tour.setIsTourOpen(true)}}>Lectures</Nav.Link>}
+                            {tour => <Nav.Link data-testid={"lecturesPage"} href="#lectures" active={this.state.lectureslink} onSelect={()=>{this.showLectures();}}>Lectures</Nav.Link>}
                         </TeacherLecTourContext.Consumer>
                         <TeacherSLTourContext.Consumer>
-                            {tour => <Nav.Link data-testid="teacherStudent" href="#studentList" active={this.state.studentslink} onSelect={()=>{this.showStudentList(); tour.setIsTourOpen(true)}}>Student List</Nav.Link>}
+                            {tour => <Nav.Link data-testid="teacherStudent" href="#studentList" active={this.state.studentslink} onSelect={()=>{this.showStudentList(); if(localStorage.getItem("tutorial")==0) tour.setIsTourOpen(true);}}>Student List</Nav.Link>}
                         </TeacherSLTourContext.Consumer>
                         <TeacherHistTourContext.Consumer>
-                            {tour => <Nav.Link data-testid="history" href="#history" active={this.state.historylink} onSelect={()=>{this.showHistory(); tour.setIsTourOpen(true)}}>Historical Data</Nav.Link>}
+                            {tour => <Nav.Link data-testid="history" href="#history" active={this.state.historylink} onSelect={()=>{this.showHistory(); if(localStorage.getItem("tutorial")==0) tour.setIsTourOpen(true);}}>Historical Data</Nav.Link>}
                          </TeacherHistTourContext.Consumer>
                             
                     </Nav>

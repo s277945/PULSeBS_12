@@ -17,27 +17,17 @@ beforeYesterday.setDate(today.getDate() + -2)
 export const TeacherLecTourContext = createContext();
 
 export function TeacherLecTour(props) {
-    const [isTourOpen, setIsTourOpen] = useState(window.performance&&performance.navigation.type !== 1);
-    const [first, setFirst] = useState(window.performance&&performance.navigation.type !== 1);
+    const [isTourOpen, setIsTourOpen] = useState(false);
+    const [first, setFirst] = useState(false);
     let steps=lectureSteps1;
-    if(!first) steps=lectureSteps2
 
-    {
-        if (localStorage.getItem("tutorial") == 1 &&
-            localStorage.getItem("willingNewTutorial") == "false" &&
-            isTourOpen === true) {
-                setIsTourOpen(false); 
-                setFirst(false);
-            }
-        else if (localStorage.getItem("tutorial") == 0 && localStorage.getItem("tutorialLec") == "true" && isTourOpen === true)
-            if (localStorage.getItem("willingNewTutorial") == "false") setIsTourOpen(false)
-            else if (localStorage.getItem("tutorial") == 1 &&
-                localStorage.getItem("willingNewTutorial") == "false" &&
-                isTourOpen === true) {
-                    setIsTourOpen(false);
-                    setFirst(false);    
-                }
-    }
+    
+    if (localStorage.getItem("tutorial") == 0 && localStorage.getItem("willingNewTutorialTL") == "false" && isTourOpen === false) {
+            setIsTourOpen(true); 
+            setFirst(true);
+        }
+    
+    if(!first) steps=lectureSteps2
 
 
     const tableData = [{
@@ -90,8 +80,7 @@ export function TeacherLecTour(props) {
                     setIsTourOpen(false)
                     setTutorial()
                     setFirst(false);
-                    localStorage.setItem("willingNewTutorial", false)
-                    localStorage.setItem("tutorialLec", true)
+                    if(localStorage.getItem("tutorial")==0) localStorage.setItem("willingNewTutorialTL", true)
                 }}
                 onAfterOpen={disableBody}
                 onBeforeClose={enableBody}
@@ -145,16 +134,8 @@ export const TeacherSLTourContext = createContext();
 export function TeacherSLTour(props) {
     const [isTourOpen, setIsTourOpen] = useState(false);
 
-    {
-        if (localStorage.getItem("tutorial") == 1 &&
-            localStorage.getItem("willingNewTutorial") == "false" &&
-            isTourOpen === true) setIsTourOpen(false)
-        else if (localStorage.getItem("tutorial") == 0 && localStorage.getItem("tutorialSL") == "true" && isTourOpen === true)
-            if (localStorage.getItem("willingNewTutorial") == "false") setIsTourOpen(false)
-            else if (localStorage.getItem("tutorial") == 1 &&
-                localStorage.getItem("willingNewTutorial") == "false" &&
-                isTourOpen === true)
-                setIsTourOpen(false)
+    if (localStorage.getItem("willingNewTutorialTSL") == "true"  && isTourOpen) {
+        setIsTourOpen(false); 
     }
 
     const steps_2 = [
@@ -250,10 +231,8 @@ export function TeacherSLTour(props) {
                 onRequestClose={() => {
                     setIsTourOpen(false)
                     setTutorial()
-                    localStorage.setItem("willingNewTutorial", false)
-                    localStorage.setItem("tutorialSL", true)
                 }}
-                onAfterOpen={disableBody}
+                onAfterOpen={e=>{disableBody(e); if(localStorage.getItem("tutorial")==0) localStorage.setItem("willingNewTutorialTSL", true)}}
                 onBeforeClose={enableBody}
                 badgeContent={(curr, tot) => `${curr} of ${tot}`}
                 rounded={5}
@@ -271,18 +250,11 @@ export const TeacherHistTourContext = createContext();
 export function TeacherHistTour(props) {
     const [isTourOpen, setIsTourOpen] = useState(false);
 
-    {
-        if (localStorage.getItem("tutorial") == 1 &&
-            localStorage.getItem("willingNewTutorial") == "false" &&
-            isTourOpen === true)
-            setIsTourOpen(false)
-        else if (localStorage.getItem("tutorial") == 0 && localStorage.getItem("tutorialHT") == "true" && isTourOpen === true)
-            if (localStorage.getItem("willingNewTutorial") == "false") setIsTourOpen(false)
-            else if (localStorage.getItem("tutorial") == 1 &&
-                localStorage.getItem("willingNewTutorial") == "false" &&
-                isTourOpen === true)
-                setIsTourOpen(false)
+
+    if ( localStorage.getItem("willingNewTutorialTHD") == "true"  && isTourOpen) {
+        setIsTourOpen(false); 
     }
+
 
     const tour = {
         isTourOpen: isTourOpen,
@@ -323,11 +295,9 @@ export function TeacherHistTour(props) {
                 disableInteraction={true}
                 onRequestClose={() => {
                     setIsTourOpen(false)
-                    setTutorial()
-                    localStorage.setItem("willingNewTutorial", false)
-                    localStorage.setItem("tutorialHT", true)
+                    setTutorial()                    
                 }}
-                onAfterOpen={disableBody}
+                onAfterOpen={e=>{disableBody(e); if(localStorage.getItem("tutorial")==0) localStorage.setItem("willingNewTutorialTHD", true)}}
                 onBeforeClose={enableBody}
                 badgeContent={(curr, tot) => `${curr} of ${tot}`}
                 rounded={5}
