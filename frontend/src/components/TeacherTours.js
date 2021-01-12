@@ -104,11 +104,11 @@ const lectureSteps1 = [
     },
     {
         selector: '[tour-selec="LecTable"]',
-        content: 'In this table you can find courses and their upcoming lessons.',
+        content: 'In this table you can find courses and their upcoming lectures',
     },
     {
         selector: '[tour-selec="LecButton"]',
-        content: 'Use this button to modify a lecture and turn it into a distance lecture or cancel it.',
+        content: 'You can use this button to modify a lecture and turn it into a distance lecture or cancel it',
     },
 ]
 
@@ -119,11 +119,11 @@ const lectureSteps2 = [
     },
     {
         selector: '[tour-selec="LecTable"]',
-        content: 'In this table you can find courses and their upcoming lessons.',
+        content: 'In this table you can find courses and their upcoming lectures',
     },
     {
         selector: '[tour-selec="LecButton"]',
-        content: 'Use this button to modify a lecture and turn it into a distance lecture or cancel it.',
+        content: 'You can use this button to modify a lecture and turn it into a distance lecture or cancel it',
     },
 ]
 
