@@ -46,11 +46,11 @@ export default function Calendar({lectures,courses}){
         //generate a color based on hash
         let course=courses.filter(course1=>course1.CourseID===lecture.Course_Ref)[0];
 
-        let color=stringToColour(course.Name);
+        let color=course&&course.Name?stringToColour(course.Name):null;
         return{
             extendedProps:{
                 lectureName: lecture.Name,
-                courseName:course.Name,
+                courseName:course&&course.Name?course.Name:null,
                 lectureType:lecture.Type
             },
             html:true,
