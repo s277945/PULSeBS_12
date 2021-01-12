@@ -17,22 +17,26 @@ beforeYesterday.setDate(today.getDate() + -2)
 export const TeacherLecTourContext = createContext();
 
 export function TeacherLecTour(props) {
-    const [isTourOpen, setIsTourOpen] = useState(true);
-    const [first, setFirst] = useState(true);
+    const [isTourOpen, setIsTourOpen] = useState(window.performance&&performance.navigation.type !== 1);
+    const [first, setFirst] = useState(window.performance&&performance.navigation.type !== 1);
     let steps=lectureSteps1;
     if(!first) steps=lectureSteps2
 
     {
         if (localStorage.getItem("tutorial") == 1 &&
             localStorage.getItem("willingNewTutorial") == "false" &&
-            isTourOpen === true)
-            setIsTourOpen(false)
+            isTourOpen === true) {
+                setIsTourOpen(false); 
+                setFirst(false);
+            }
         else if (localStorage.getItem("tutorial") == 0 && localStorage.getItem("tutorialLec") == "true" && isTourOpen === true)
             if (localStorage.getItem("willingNewTutorial") == "false") setIsTourOpen(false)
             else if (localStorage.getItem("tutorial") == 1 &&
                 localStorage.getItem("willingNewTutorial") == "false" &&
-                isTourOpen === true)
-                setIsTourOpen(false)
+                isTourOpen === true) {
+                    setIsTourOpen(false);
+                    setFirst(false);    
+                }
     }
 
 
@@ -103,7 +107,7 @@ export function TeacherLecTour(props) {
 const lectureSteps1 = [
     {
         selector: '',
-        content: "Welcome, user! This is the teacher page tutorial. Click on the arrow to follow to the next step or the cross on the top right to close it",
+        content: "Welcome! This is the teacher page tutorial. Click on the arrow to follow to the next step or the cross on the top right to close it",
     },
     {
         selector: '[tour-selec="TeachNavBar"]',
