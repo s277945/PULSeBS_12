@@ -39,27 +39,10 @@ app.use(express.json());
 // Enable cors
 app.use(cors({ origin: true, credentials: true }));
 
-/**
- * FAKE ENDPOINT TO CHECK DEADLINE DAO
- *
- */
-
- app.get('/api/checkEmails', (req, res) => {
-   let date = moment().format('YYYY-MM-DD HH:mm:ss');
-   dao.checkDeadline(date)
-    .then((list) => {
-      res.status(200).json(list);
-    })
-    .catch(/* istanbul ignore next */(err) => {
-      res.status(500).json({"errors": err});
-    })
- })
-
 //login route
 app.post('/api/login', (req, res) => {
   userDao.checkUserPwd(req.body.userName, req.body.password)
       .then((response) => {
-        console.log(response.userID);
           const token = jsonwebtoken.sign({ user: response.userID, userType: response.userType }, jwtSecret, { expiresIn: expireTime });
           res.cookie('token', token, { httpOnly: true, sameSite: true, maxAge: 3000 * expireTime });
           res.status(200).json(response).end();
@@ -96,7 +79,8 @@ app.use(
 
 //unauthorized access management
 app.use((err, req, res, next) => {
-  if (err.name === 'UnauthorizedError') {
+    /* istanbul ignore else */
+    if (err.name === 'UnauthorizedError') {
       res.status(401).json(authErrorObj);
   }
     /* istanbul ignore else */
@@ -112,7 +96,6 @@ app.use((err, req, res, next) => {
 
  app.get('/api/lectures', (req, res) => {
   const user = req.user && req.user.user;
-  console.log("User: " + user);
     studentDao.getLecturesByStudentId(user)
       .then((lectures) => {
         res.status(200).json(lectures);
@@ -132,7 +115,6 @@ app.use((err, req, res, next) => {
 
 app.get('/api/teacherLectures', (req, res) => {
   const user = req.user && req.user.user;
-  console.log("User: " + user);
     teacherDao.getLecturesByTeacherId(user)
       .then((lectures) => {
         res.status(200).json(lectures);
@@ -202,6 +184,7 @@ app.get('/api/teacherCourses', (req, res) => {
           studentDao.getStudentEmail(user)
             .then((email) => {
                 let mailOptions;
+                /* istanbul ignore else */
                 if(response === "booked"){
                     mailOptions = {
                         from: mailer.email,
@@ -216,7 +199,9 @@ app.get('/api/teacherCourses', (req, res) => {
                         subject: 'Lecture waiting list',
                         text: `Dear ${user}, you have been inserted in a waiting list for a seat of Course ${req.body.lectureId} for lecture on ${date}`
                     };
-                } else {
+                }
+                /* istanbul ignore else */
+                else {
                     return;
                 }
 
@@ -274,44 +259,30 @@ app.get('/api/teacherCourses', (req, res) => {
  });
 
 /**
- * GET /api/lectures/next
- *
- */
-
- /*app.get('/api/lectures/next', (req, res) => {
-    const user = req.user && req.user.user;
-    dao.getNextLectureNumber(user)
-      .then((response) => {
-        res.status(201).json(response);
-      })
-      .catch( istanbul ignore next (err) => res.status(500).json({ errors: [{ 'param': 'Server', 'msg': err.message }] }));
- });*/
-
-
-/**
  * GET /lectures/listStudents?courseRef=...&date=2020-....
  *
+ * Return the list of students that attended a specific lecture
+ * 
  * query parameters: lectureId
  */
 
  app.get('/api/lectures/listStudents', (req, res) => {
 
     const course_ref = req.query.courseRef;
-
     const date = moment(req.query.date).format('YYYY-MM-DD HH:mm:ss');
-     console.log('course_ref '+course_ref+" date: "+date);
+
     teacherDao.getStudentList(course_ref, date)
       .then((list) => {
         res.status(201).json(list);
       })
       .catch(/* istanbul ignore next */(err) => res.status(500).json({ errors: [{ 'param': 'Server', 'msg': err.message }] }));
-
  });
-
 
 /**
  * GET /lectures/booked
  *
+ * Return the lectures booked by the student logged in
+ * 
  * query parameters: userId => retrieved from cookie
  */
 
@@ -322,12 +293,13 @@ app.get('/api/lectures/booked', (req, res) => {
       res.status(201).json(list);
     })
     .catch(/* istanbul ignore next */(err) => res.status(500).json({ errors: [{ 'param': 'Server', 'msg': err.message }] }));
-
 });
 
 /**
  * GET /lectures/waiting
  *
+ * Return the list of lectures in which the student in waiting
+ * 
  * query parameters: userId => retrieved from cookie
  */
 
@@ -344,6 +316,8 @@ app.get('/api/lectures/waiting', (req, res) => {
 /**
  * DELETE /api/courseLectures/:courseId?date=...
  *
+ * Delete a lecture and notify all the students booked
+ * 
  * parameters: courseId, date
  */
 
@@ -359,7 +333,6 @@ app.get('/api/lectures/waiting', (req, res) => {
 
     teacherDao.deleteLecture(courseId, date)
       .then((emails) => {
-          console.log('Email da cancellare: '+emails);
         for(let email of emails){
           var mailOptions = {
             from: mailer.email,
@@ -387,6 +360,8 @@ app.get('/api/lectures/waiting', (req, res) => {
 /**
  * PUT /api/lectures
  *
+ * Change a lecture from "presence" to "distance"
+ * 
  * body parameters: {"courseId": C4567, "date": "2020-12-22 09:00:00"}
  * */
 
@@ -411,6 +386,7 @@ app.put('/api/lectures', (req, res) => {
 
 /**
  * GET /api/courseStats/:courseId
+ * 
  * Retrieves overall stats for every course for a given teacher
  *
  * body response: overall courses stats (to be defined)
@@ -430,6 +406,7 @@ app.get('/api/courseStats/:courseId', (req, res) => {
 
 /**
  * GET /api/historicalStats/:courseId
+ * 
  * Retrieves stats of the courses of a given teacher grouped by week (and course)
  *
  *  body response: stats grouped by week. Format to be defined
@@ -437,7 +414,6 @@ app.get('/api/courseStats/:courseId', (req, res) => {
 
 app.get('/api/monthStats/:courseId', (req, res) => {
     const courseId = req.params.courseId;
-    console.log('Month stat courseId: '+courseId);
     teacherDao.getMonthStats(courseId)
         .then((response) => {
             res.status(200).json(response);
@@ -449,6 +425,7 @@ app.get('/api/monthStats/:courseId', (req, res) => {
 
 /**
  * GET /api/historicalStats/:courseId
+ * 
  * Retrieves stats of the courses of a given teacher grouped by week (and course)
  *
  *  body response: stats grouped by week. Format to be defined
@@ -456,7 +433,6 @@ app.get('/api/monthStats/:courseId', (req, res) => {
 
 app.get('/api/weekStats/:courseId', (req, res) => {
     const courseId = req.params.courseId;
-    console.log('Week stat courseId: '+courseId);
     teacherDao.getWeekStats(courseId)
         .then((response) => {
             res.status(200).json(response);
@@ -494,7 +470,6 @@ app.get('/api/courses/all', (req, res) => {
  * Retrieves stats of a given course of the University
  *
  * Request param: courseId
- *
  */
 
 app.get('/api/managerCourses/:courseId', (req, res) => {
@@ -514,7 +489,6 @@ app.get('/api/managerCourses/:courseId', (req, res) => {
  * Retrieves stats of all courses of the University, grouped by courses
  *
  * Request params: courseId
- *
  */
 
 app.get('/api/managerCoursesTotal/:courseId', (req, res) => {
@@ -527,7 +501,6 @@ app.get('/api/managerCoursesTotal/:courseId', (req, res) => {
             res.status(500).json(err);
         })
 })
-
 
 /**
  * POST api/uploadStudents
@@ -547,7 +520,6 @@ app.post('/api/uploadStudents', (req, res) => {
         .catch(/* istanbul ignore next */(err) => {
             res.status(500).json(err);
         })
-
 });
 
 /**
@@ -568,9 +540,7 @@ app.post('/api/uploadTeachers', (req, res) => {
         .catch(/* istanbul ignore next */(err) => {
             res.status(500).json(err);
         })
-
 });
-
 
 /**
  * POST api/uploadCourses
@@ -589,7 +559,6 @@ app.post('/api/uploadCourses', (req, res) => {
         .catch(/* istanbul ignore next */(err) => {
             res.status(500).json(err);
         })
-
 });
 
 /**
@@ -609,9 +578,7 @@ app.post('/api/uploadEnrollment', (req, res) => {
         .catch(/* istanbul ignore next */(err) => {
             res.status(500).json(err);
         })
-
 });
-
 
 /**
  * POST api/uploadSchedule
@@ -630,7 +597,6 @@ app.post('/api/uploadSchedule', (req, res) => {
         .catch(/* istanbul ignore next */(err) => {
             res.status(500).json(err);
         })
-
 });
 
 /**
@@ -639,7 +605,6 @@ app.post('/api/uploadSchedule', (req, res) => {
  * Retrieves stats of all courses of the University, grouped by courses
  *
  * Request params: courseId
- *
  */
 
 app.get('/api/fileData', (req, res) => {
@@ -659,7 +624,7 @@ app.get('/api/fileData', (req, res) => {
  *
  * body request: [{"courseId": "XY1211","room": 1, "day": "Mon", "seats": 120, "time": "8:30-11:30"}, ...]
  */
-
+/* istanbul ignore next */
 app.post('/api/fileData', (req, res) => {
 
   supportOfficerDao.updateFileData(req.body)
@@ -669,7 +634,6 @@ app.post('/api/fileData', (req, res) => {
       .catch(/* istanbul ignore next */(err) => {
           res.status(500).json(err);
       })
-
 });
 
 ////////////////////////
@@ -677,21 +641,19 @@ app.post('/api/fileData', (req, res) => {
 ////////////////////////
 
 /**
- * GET /api/students/:studentSsn
+ * GET /api/users/:userSsn
  *
- * Retrieves list of positive students or a single
+ * Retrieves list of positive users or a single
  *
- * Request params: student
+ * Request params: user
  *
- * IMPORTANT: pass "positiveStudents" as parameter if you need list of positive students otherwise insert SSN of student
+ * IMPORTANT: pass "positiveusers" as parameter if you need list of positive users otherwise insert SSN of user
  */
 
-app.get('/api/students/:studentSsn', (req, res) => {
-    const param = req.params.studentSsn
-    console.log(param)
-
-    if(param === "positiveStudents"){
-        bookingManagerDao.getPositiveStudents()
+app.get('/api/users/:userSsn', (req, res) => {
+    const param = req.params.userSsn
+    if(param === "positiveUsers"){
+        bookingManagerDao.getPositiveUsers()
             .then((list) => {
                 res.status(201).json(list)
             })
@@ -699,9 +661,9 @@ app.get('/api/students/:studentSsn', (req, res) => {
                 res.status(500).json(err)
             })
     } else {
-        bookingManagerDao.searchStudentBySsn(param)
-            .then((student) => {
-                res.status(201).json(student)
+        bookingManagerDao.searchUserBySsn(param)
+            .then((user) => {
+                res.status(201).json(user)
             })
             .catch(/* istanbul ignore next */(err) => {
                 res.status(500).json(err)
@@ -709,40 +671,38 @@ app.get('/api/students/:studentSsn', (req, res) => {
     }
 })
 
-
 /**
- * POST api/students/:studentSsn
+ * POST api/users/:userSsn
  *
- * Sets a student as positive to covid
+ * Sets a user as positive to covid
  *
  * body request: nothing
  */
 
-app.post('/api/students/:studentSsn', (req, res) => {
-    const ssn = req.params.studentSsn
+app.post('/api/users/:userSsn', (req, res) => {
+    const ssn = req.params.userSsn
 
-    bookingManagerDao.setPositiveStudent(ssn)
+    bookingManagerDao.setPositiveUser(ssn)
         .then((response)=>{
             res.status(200).json({"setAsPositive": response})
         })
-        .catch((err) => {
+        .catch(/* istanbul ignore next */(err) => {
             res.status(500).json(err)
         })
 });
 
 /**
- * GET /api/reports/:studentSsn
+ * GET /api/reports/:userSsn
  *
- * Retrieves list of students that participated to the same lectures of a positive student
+ * Retrieves list of users that participated to the same lectures of a positive user
  *
  * Needed to create a report
  *
- * Request params: studentSsn
- *
+ * Request params: userSsn
  */
 
-app.get('/api/reports/:studentSsn', (req, res) => {
-    const param = req.params.studentSsn
+app.get('/api/reports/:userSsn', (req, res) => {
+    const param = req.params.userSsn
 
     bookingManagerDao.generateReport(param)
         .then((list) => {
@@ -789,7 +749,101 @@ app.post('/api/lecturesBookable', (req, res) => {
       .catch(/* istanbul ignore next */(err) => {
           res.status(500).json(err);
       })
+});
 
+/**
+ * POST api/:courseId/:date/attendees
+ *
+ * Set the attendance of the students to a lecture
+ *
+ * body request: [{"studentId": "s267348"}, ...]
+ */
+
+app.post('/api/:courseId/:date/attendees', (req, res) => {
+  const today = moment();
+  const date = req.params.date;
+  if(today.diff(moment(date), "day")<=1){
+    teacherDao.setPresentStudents(req.params.courseId, date, req.body) 
+        .then((response) => {
+            res.status(200).json({"modified": response});
+        })
+        .catch(/* istanbul ignore next */(err) => {
+          console.log(err);
+            res.status(500).json(err);
+        })
+  }else res.status(500).json("Lecture date is out of modification range");
+});
+
+/**
+ * GET api/teacherPastLectures
+ *
+ * Returns list of past lectures for a given teacher
+ *
+ * userId => userId
+ */
+
+app.get('/api/teacherPastLectures', (req, res) => {
+  const user = req.user && req.user.user;
+    teacherDao.getPastLecturesByTeacherId(user)
+      .then((lectures) => {
+        res.status(200).json(lectures);
+      })
+      .catch(/* istanbul ignore next */(err) => {
+        console.log(err);
+        res.status(500).json({errors: [{'msg': err}]});
+      });
+ });
+
+/**
+ * GET api/schedules
+ *
+ * Returns list of the schedules
+ */
+
+app.get('/api/schedules', (req, res) => {
+    supportOfficerDao.getSchedule()
+        .then((list) =>{
+            res.status(200).json(list)
+        })
+        .catch(/* istanbul ignore next*/(err) => {
+            res.status(500).json({errors: [{'msg': err}]});
+        })
+});
+
+/**
+ * PUT api/schedules
+ *
+ * Updates a schedule and associated lectures
+ */
+
+app.put('/api/schedules', (req, res) => {
+    supportOfficerDao.updateSchedules(req.body)
+        .then((response) =>{
+            res.status(200).json(response)
+        })
+        .catch(/* istanbul ignore next*/(err) => {
+            res.status(500).json({errors: [{'msg': err}]});
+        })
+});
+
+
+/**
+ * PUT api/user/tutorial
+ *
+ * Body request: {"userId": "s269422"}
+ * Body response: {"response": true}
+ * Updates tutorial field of a user
+ * */
+
+app.put('/api/user/tutorial', (req, res) => {
+    const user = req.user && req.user.user;
+    userDao.setTutorial(user)
+        .then((value) =>{
+            res.status(200).json({response: value})
+        })
+        .catch(/* istanbul ignore next*/(err) => {
+            res.status(500).json({errors: [{'msg': err}]});
+        })
 });
 
 //activate server

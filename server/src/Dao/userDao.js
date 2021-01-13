@@ -3,7 +3,9 @@ const db = require('../db');
 const bcrypt = require('bcrypt');
 
 /**
- * Check user data for login
+ * Input: userID, Password
+ * Output: userID, Type, Tutorial
+ * Description: Check user data for login
  * */
 
 exports.checkUserPwd = function (username, password) {
@@ -11,7 +13,7 @@ exports.checkUserPwd = function (username, password) {
         var sql = 'SELECT userID, Password FROM User WHERE userID = ?'; // sql query to select user entry from database
 
         db.get(sql, [username], (err, row) => {
-            /* istanbul ignore if */
+            /* istanbul ignore if *//* istanbul ignore else */
             if (err) reject(err); // error handling
             else if (typeof row === 'undefined') reject(new Error('User does not exist')); // no entry found
             else if (typeof row !== 'undefined') { // username found
@@ -22,7 +24,7 @@ exports.checkUserPwd = function (username, password) {
                     else {
                         this.getRole(row.userID)
                             .then(row2 => {
-                                resolve({userID: row.userID, userType: row2.UserType});
+                                resolve({userID: row.userID, userType: row2.UserType, tutorial: row2.Tutorial});
                             })
                             .catch(/* istanbul ignore next */err3 => {
                                 reject(err3);
@@ -31,12 +33,13 @@ exports.checkUserPwd = function (username, password) {
                     }
                 })
             }
+            /* istanbul ignore else */
 
         });
     });
 };
 
-/*
+/**
 * Input: userID
 * Output: UserType of the user
 * Description: Retrieve the role of a specific user
@@ -44,7 +47,7 @@ exports.checkUserPwd = function (username, password) {
 
 exports.getRole=function(userId){
     return new Promise((resolve, reject) => {
-        const sql='SELECT UserType FROM User WHERE userID=?'
+        const sql='SELECT UserType, Tutorial FROM User WHERE userID=?'
         db.get(sql, [userId], (err, row)=>{
             /* istanbul ignore if */
             if(err)
@@ -57,3 +60,25 @@ exports.getRole=function(userId){
         })
     })
 }
+
+
+/**
+ * Input: userId
+ * Output: True or False
+ * Description: set Tutorial field to 1 if user finishes or skip the tutorial
+ * */
+
+exports.setTutorial = function(userId){
+    return new Promise((resolve, reject) => {
+        const sql = 'UPDATE User SET Tutorial = 1 WHERE userID = ?'
+        db.run(sql, [userId], (err)=>{
+            /* istanbul ignore if */
+            if(err)
+                reject(err)
+            else
+                resolve(true)
+        })
+    })
+}
+
+

@@ -4,23 +4,19 @@ const moment = require('moment');
 
 /**
 * Input: userID
-* Output: List of courses of the teacher
+* Output: List of courses of the teacher (CourseID, Name, Restriction)
 * Description: Retrieve the list of courses in which the teacher is enrolled
 */
 
 exports.getCoursesByTeacherId=function(userId){
-    console.log(userId)
     return new Promise((resolve, reject) => {
         const sql='SELECT CourseID, Name, Restriction FROM Course WHERE Teacher_Ref = ?';
         db.all(sql, [userId], (err,rows)=>{
             /* istanbul ignore if */
-            if(err){
+            if(err)
                 reject(err);
-            }
-            else{
-                console.log("riga: " + rows)
+            else 
                 resolve(rows);
-            }
         });
     });
 }
@@ -38,11 +34,9 @@ exports.getLecturesByTeacherId=function(userId){
             'SELECT CourseID FROM Course WHERE Teacher_Ref=?)';
         db.all(sql, [date, userId], (err,rows)=>{
             /* istanbul ignore if */
-            if(err){
+            if(err)
                 reject(err);
-            }
             else{
-                console.log("lectures: " + rows + " userId " + userId);
                 resolve(rows);
             }
         });
@@ -51,24 +45,23 @@ exports.getLecturesByTeacherId=function(userId){
 
 /**
 * Input: Course_Ref, Date
-* Output: List of Student_Ref
+* Output: List of Student_Ref, Name, Surname, Attendance
 * Description: Retrieve the list of students booked to the selected lecture
 */
 
 exports.getStudentList=function(courseId, date){
     let list=[];
     return new Promise((resolve, reject) => {
-        const sql='SELECT userID, Name, Surname FROM User WHERE userID IN ('+
-            'SELECT Student_Ref FROM Booking WHERE Course_Ref=? AND Date_Ref=?)';
+        const sql='SELECT User.userID, User.Name, User.Surname, Booking.Attendance FROM User, Booking '+
+            'WHERE Course_Ref=? AND Date_Ref=? AND User.userID==Booking.Student_Ref';            
         db.all(sql,[courseId,date],(err,rows)=>{
             /* istanbul ignore if */
-            if(err){
+            if(err)
                 reject(err);
-            }
             else{
 
                 rows.forEach((row)=>{
-                    list.push({"userId":row.userID, "name":row.Name, "surname": row.Surname})
+                    list.push({"userId":row.userID, "name":row.Name, "surname": row.Surname, "attendance": row.Attendance});
                 });
                 resolve(list);
 
@@ -90,21 +83,16 @@ exports.checkDeadline=function(dateD){
         const sql='SELECT Course_Ref, Name, Date FROM Lecture WHERE dateDeadline <=? AND emailSent=0';
         db.all(sql, [dateD], async (err,rows)=>{
             /* istanbul ignore if */
-            if(err){
+            if(err) 
                 reject(err);
-            }
             else{
                 for(let row of rows){
-
                     await countStudent(row.Course_Ref, row.Date).then(async(n) => {
-
                         await getTeacherEmail(row.Course_Ref).then((email) => {
-
                             list.push({"email":email, "nBooked": n, "nameLecture": row.Name, "dateLecture": row.Date, "Course_Ref": row.Course_Ref})
                         }).catch(/* istanbul ignore next */err2 => reject(err2));
                     }).catch(/* istanbul ignore next */err3 => reject(err3));
                 }
-
                 resolve(list);
             }
         });
@@ -121,18 +109,18 @@ exports.deleteLecture=function(courseId, date){
     return new Promise((resolve, reject) => {
         getStudentEmails(courseId, date).then(emails =>{
             deleteBookings(courseId, date).then(n =>{
+                /* istanbul ignore else */
                 if(n){
                     const sql='DELETE FROM Lecture WHERE Course_Ref=? AND Date=?';
                     db.run(sql, [courseId, date], (err) => {
-
                         /* istanbul ignore if */
-                        if(err)
+                        if(err) 
                             reject(err);
-                        else{
-
-                            resolve(emails);}
+                        else 
+                            resolve(emails);
                     });
                 }
+                /* istanbul ignore else */
             });
         });
     });
@@ -140,7 +128,9 @@ exports.deleteLecture=function(courseId, date){
 
 
 /**
- * Function to update Lecture table in order to not sent too many emails
+ * Input: Course_Ref, Date
+ * Output: True or False
+ * Description: Function to update Lecture table in order to not sent too many emails
  */
 
 exports.emailSentUpdate = function(courseId, date){
@@ -163,7 +153,6 @@ exports.emailSentUpdate = function(courseId, date){
  */
 
 exports.changeTypeOfLecture = function(courseId, date){
-
     return new Promise((resolve, reject)=>{
         const sql = 'UPDATE Lecture SET Type="d" WHERE Course_Ref=? AND Date=?';
         db.run(sql, [courseId, date], function (err) {
@@ -215,7 +204,8 @@ function deleteBookings(courseId, date){
             /* istanbul ignore if */
             if(err)
                 reject(err);
-            else resolve(true);
+            else 
+                resolve(true);
         })
     });
 }
@@ -249,7 +239,9 @@ function getTeacherEmail(courseId){
             if(err)
                 reject(err);
             else {
-                resolve(row.Email);
+                /* istanbul ignore else */
+                if(row) 
+                    resolve(row.Email);
             }
         });
     })
@@ -265,20 +257,21 @@ function getTeacherEmail(courseId){
 
 /**
  * Input: Course_Ref
- * Output: List of lectures associated to the course selected
+ * Output: List of lectures associated to the course selected (lectureName, Date, BookedSeats, Attendees)
  * Descrtiption: Retrieve the data for the lectures of the course selected and the number of bookings
  */
 
 exports.getCourseStats = function (courseId){
     let list = [];
     return new Promise((resolve, reject) => {
-        const sql='SELECT Name, Date, BookedSeats FROM Lecture WHERE Course_Ref=? AND Type="p"';
+        const sql='SELECT Name, Date, BookedSeats, Attendees FROM Lecture WHERE Lecture.Course_Ref=? AND Lecture.Type="p" '
         db.all(sql,[courseId], (err,rows)=>{
             /* istanbul ignore if */
-            if(err) reject(err);
+            if(err) 
+                reject(err);
             else{
                 rows.forEach((row)=>{
-                    list.push({"lectureName":row.Name, "date":row.Date, "nBooked": row.BookedSeats})
+                    list.push({"lectureName":row.Name, "date":row.Date, "nBooked": row.BookedSeats, "nAttendance": row.Attendees})
                 });
                 resolve(list);
             }
@@ -313,7 +306,7 @@ exports.getWeekStats = function(courseId){
 
 /**
  * Input: First monday of the first month of the semester, Last monday of the last month of the semester
- * Output: List of weeks of the semester
+ * Output: List of weeks of the semester (startDate, endDate)
  * Descrtiption: Retrieve a list of weeks for the selected semester
  */
 
@@ -342,12 +335,13 @@ function retrieveWeekStats(courseId, semester){
     let thisDate = moment();
     let currentYear;
     let i = 0;
-
+    /* istanbul ignore else */
     if(thisDate.isAfter(moment(6, 'M')))
-        currentYear = moment().year();
-    /* istanbul ignore next */
-    else
+        /* istanbul ignore next */currentYear = moment().year();
+    /* istanbul ignore else */
+    else{
         currentYear =  moment().year() - 1;
+    }
 
     switch(semester){
         case 1:
@@ -366,7 +360,7 @@ function retrieveWeekStats(courseId, semester){
     let weeks = computeWeeks(startWeek, endWeek);
     let n = weeks.length;
 
-    const sql = 'SELECT AVG(BookedSeats) AS average FROM Lecture WHERE Course_Ref=? AND Date>=? AND Date<=?';
+    const sql = 'SELECT AVG(BookedSeats) AS average, AVG(Attendees) AS averageAtt FROM Lecture WHERE Course_Ref=? AND Date>=? AND Date<=?';
     return new Promise((resolve, reject) => {
         for(let week of weeks) {
             let startDate = moment(week["startDate"]).format('YYYY-MM-DD HH:mm:ss');
@@ -376,7 +370,7 @@ function retrieveWeekStats(courseId, semester){
                 if(err) reject(err);
                 else {
                     let weekName = moment(startDate).format('MM/DD') + "-" + moment(endDate).format('MM/DD');
-                    list.push({"weekName": weekName, "startDate": moment(startDate).format('YYYY/MM/DD'), "endDate": moment(endDate).format('YYYY/MM/DD'), "average": row.average});
+                    list.push({"weekName": weekName, "startDate": moment(startDate).format('YYYY/MM/DD'), "endDate": moment(endDate).format('YYYY/MM/DD'), "average": row.average, "averageAtt": row.averageAtt});
                     i++;
                 }
                 if (i===n) resolve(list);
@@ -384,9 +378,6 @@ function retrieveWeekStats(courseId, semester){
         }
 
     })
-
-
-
 }
 
 /**
@@ -421,17 +412,17 @@ exports.getMonthStats = function (courseId){
  */
 
 function retrieveMonthStats(courseId, semester){
-    console.log(courseId, semester);
     let list = [];
     let months;
     let thisDate = moment();
     let currentYear;
+    /* istanbul ignore else */
     if(thisDate.isAfter(moment(6, 'M')))
-        currentYear = moment().year();
-    /* istanbul ignore next */
-    else
+        /* istanbul ignore next */  currentYear = moment().year();
+    /* istanbul ignore else */
+    else{
         currentYear =  moment().year() - 1;
-
+    }
     switch(semester){
         case 1:
             months = [9, 10, 11, 0];
@@ -446,7 +437,7 @@ function retrieveMonthStats(courseId, semester){
             break;
     }
     let i = 0;
-    const sql = 'SELECT AVG(BookedSeats) AS average FROM Lecture WHERE Course_Ref=? AND Date>=? AND Date<=? ORDER BY Date';
+    const sql = 'SELECT AVG(BookedSeats) AS average, AVG(Attendees) AS averageAtt FROM Lecture WHERE Course_Ref=? AND Date>=? AND Date<=? ORDER BY Date';
     return new Promise((resolve, reject) => {
         for(let month of months) {
             let monthYear;
@@ -461,8 +452,7 @@ function retrieveMonthStats(courseId, semester){
                 if(err) reject(err);
                 else {
                     let monthName = startDate.format('MMMM');
-                    console.log(monthName+" "+monthYear);
-                    list.push({"month": monthName, "year": monthYear, "average": row.average});
+                    list.push({"month": monthName, "year": monthYear, "average": row.average, "averageAtt": row.averageAtt});
                     i++;
                 }
                 if (i===4) resolve(list);
@@ -470,7 +460,57 @@ function retrieveMonthStats(courseId, semester){
         }
 
     })
+}
 
+/**
+ * Input: List of studentID, courseID, date
+ * Output: True or false
+ * Description: Set the attendance for all the student present to a lecture
+ */
 
+exports.setPresentStudents = function (courseId, date, list){
+    let i = 0;
+    return new Promise((resolve, reject) => {
+        const sql = 'UPDATE Lecture SET Attendees=Attendees+? WHERE Course_Ref=? AND Date=?';
+        db.run(sql, [list.length, courseId, date], (err) => {
+            /* istanbul ignore if */
+            if(err) reject(err);
+            else{
+                const sql2='UPDATE Booking SET Attendance=? WHERE Course_Ref=? AND Date_Ref=? AND Student_Ref=?'
+                    for(let el of list){
+                        db.run(sql2, [1, courseId, date, el.studentId], (err2) => {
+                            /* istanbul ignore if */
+                            if(err2) reject(err2);
+                            else{
+                                i++;
+                                if(i===list.length) resolve(true);
+                            }
+                        })
+                    }
+            }
+        })
+    })
+}
 
+/**
+ * Input: userID
+ * Output: List of lectures (Course_ref, Name, Date)
+ * Description: Retrieve the list of lectures from the courses in which the teacher is enrolled in
+ */
+
+exports.getPastLecturesByTeacherId=function(userId){
+    return new Promise((resolve, reject) => {
+        const date=moment().format('YYYY-MM-DD HH:mm:ss');
+        const sql='SELECT Course_Ref, Name, Date, DateDeadline, EndDate, BookedSeats, Capacity, Type, Attendees FROM  Lecture  WHERE Date <= ? AND Course_Ref IN (' +
+            'SELECT CourseID FROM Course WHERE Teacher_Ref=?)';
+        db.all(sql, [date, userId], (err,rows)=>{
+            /* istanbul ignore if */
+            if(err){
+                reject(err);
+            }
+            else{
+                resolve(rows);
+            }
+        });
+    });
 }

@@ -1,5 +1,5 @@
 import React, { useContext, createContext, useState } from "react";
-import {login, logout, useResponseInterceptor} from '../api/api';
+import {login, logout, useResponseInterceptor, setTutorial} from '../api/api';
 
 import {
   Route,
@@ -70,11 +70,20 @@ function useProvideAuth() {
     return logout()
   };
 
+  const doneTutorial = () => {
+    return setTutorial().then(() => {
+      localStorage.setItem("tutorial", 1);
+      setUser({userName : user.userName, userType : user.userType, tutorial : 1});
+      return true;
+  })
+  };
+
 
   return {
     user,
     signin,
     signout,
+    doneTutorial,
     clearSession
   };
 }
@@ -109,7 +118,8 @@ export function PrivateRoute({ children, userType, ...rest }) {
 function getUserSession() {
     const user = {
         userName: localStorage.getItem("userName"),
-        userType: localStorage.getItem("userType")
+        userType: localStorage.getItem("userType"),
+        tutorial: localStorage.getItem("tutorial")
     }
     if(!user.userName || !user.userType) return null;
 
@@ -119,5 +129,10 @@ function getUserSession() {
 function saveUserSession(user) {
     localStorage.setItem("userName", user.userName);// set session storage data (user name, user type)
     localStorage.setItem("userType", user.userType);
-
+    localStorage.setItem("tutorial", user.tutorial);
+    localStorage.setItem("willingNewTutorialTL", false)
+    localStorage.setItem("willingNewTutorialTSL", false)
+    localStorage.setItem("willingNewTutorialTHD", false)
+    localStorage.setItem("willingNewTutorialSL", false)    
+    localStorage.setItem("willingNewTutorialSC", false)
 }

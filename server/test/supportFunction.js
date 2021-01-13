@@ -2,6 +2,8 @@ const db = require('../src/db');
 const csv=require('csvtojson')
 const fs = require('fs');
 const dao = require("../src/Dao/supportOfficerDao");
+const moment = require('moment');
+
 exports.getCourseCapacity= function(id,date){
     return new Promise((resolve, reject) => {
         const sql='SELECT Capacity FROM Lecture WHERE Course_Ref=? AND Date=?';
@@ -13,10 +15,10 @@ exports.getCourseCapacity= function(id,date){
         })
     });
 }
-exports.updateCourseCapacity= function (id,date,capacity){
+exports.updateCourseCapacity= function (id,date,capacity,seats){
     return new Promise((resolve, reject) => {
-        const sql='UPDATE Lecture SET Capacity=? WHERE Course_Ref=? AND Date=?';
-        db.run(sql,[capacity,id,date],function (err){
+        const sql='UPDATE Lecture SET Capacity=? AND BookedSeats=? WHERE Course_Ref=? AND Date=?';
+        db.run(sql,[capacity,seats,id,date],function (err){
             if(err)
                 reject(err);
             else
@@ -214,4 +216,40 @@ exports.setNotPositive=function(userId){
             }
         })
     })
+}
+
+exports.addWaitingList=function (userId, courseId, date, endDate){
+    return new Promise((resolve, reject) => {
+        let bookingDate = moment().format('YYYY-MM-DD HH:mm:ss');
+        console.log(bookingDate);
+        const sql='INSERT INTO WaitingList VALUES (?,?,?,?,?)';
+        db.run(sql,[courseId, date, userId, endDate, bookingDate],(err) => {
+            /* istanbul ignore if */
+            if(err)
+                reject(err);
+            else resolve(true);
+        })
+    });
+}
+exports.updateDateLecture=function(courseId,courseName,type){
+    return new Promise(((resolve, reject) => {
+        let startDate,endDate,deadline;
+        if(type===0){
+            startDate=moment().subtract('days',1).add('hours',1).format('YYYY-MM-DD HH:mm:ss');
+            deadline=moment().subtract('days',2).format('YYYY-MM-DD HH:mm:ss');
+            endDate=moment().subtract('days',1).add('hours',4).format('YYYY-MM-DD HH:mm:ss');
+        }
+        else{
+            startDate=moment().add('days',5).add('hours',1).format('YYYY-MM-DD HH:mm:ss');
+            deadline=moment().add('days',4).format('YYYY-MM-DD HH:mm:ss');
+            endDate=moment().add('days',5).add('hours',4).format('YYYY-MM-DD HH:mm:ss');
+        }
+        const sql='UPDATE Lecture SET Date=?,EndDate=?,DateDeadline=? WHERE Course_Ref=? AND Name=?';
+        db.run(sql,[startDate,endDate,deadline,courseId,courseName],(err)=>{
+            if(err)
+                reject(err);
+            else
+                resolve(startDate);
+        })
+    }))
 }

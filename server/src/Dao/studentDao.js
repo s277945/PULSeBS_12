@@ -3,9 +3,13 @@
 const db = require('../db');
 const moment = require('moment');
 
+//////////////////////////////////////////////////
+//////////////////////STORY1//////////////////////
+//////////////////////////////////////////////////
+
 /**
 * Input: userID
-* Output: List of courses of the user
+* Output: List of courses (CourseID, Name)
 * Description: Retrieve the list of courses in which the user is enrolled
 */
 
@@ -60,15 +64,15 @@ exports.addSeat=function(userId, courseId, date, endDate){
             if(res){
                 controlCapacity(courseId, date).then((check)=>{
                     if(check){
-                        const sql='INSERT INTO Booking VALUES(?,?,?,?)';
+                        const sql='INSERT INTO Booking VALUES(?,?,?,?,0)';
                         db.run(sql, [courseId, date, userId, endDate], function(err){
-                            if(err) reject(err);
+                            /* istanbul ignore if */if(err) reject(err);
                             else{
                                 const sql2 ='UPDATE Lecture SET BookedSeats=BookedSeats+1 WHERE Course_Ref=? AND Date=?'
                                 db.run(sql2, [courseId, date], function(err2){
                                     /* istanbul ignore if */
                                     if(err2) reject(err2);
-                                    else resolve("booked");
+                                    /* istanbul ignore else */ else resolve("booked");
                                 });
                             }
 
@@ -76,8 +80,8 @@ exports.addSeat=function(userId, courseId, date, endDate){
                     }
                     else{
                         addWaitingList(userId, courseId, date, endDate).then((check2)=>{
-                            if(check2) resolve("waiting");
-                            else reject(err);
+                            /* istanbul ignore else */if(check2) resolve("waiting");
+                            /* istanbul ignore else */else reject(err);
                         }).catch(/* istanbul ignore next */err=>reject(err));
                     }
                 }).catch(/* istanbul ignore next */err=>reject(err));
@@ -128,30 +132,36 @@ function controlCapacity(courseID,date){
     });
 }
 
-/**
-* Input: Course_Ref, Date_Ref
-* Output: True or False
-* Description: Add the student to the waiting list for that lecture
-*/
+//////////////////////////////////////////////////
+//////////////////////STORY4//////////////////////
+//////////////////////////////////////////////////
 
-function addWaitingList(userId, courseId, date, endDate){
+/**
+ * Retrieve email of a given student
+ * @param {} userId
+ */
+
+exports.getStudentEmail = function(userId){
     return new Promise((resolve, reject) => {
-        let bookingDate = moment().format('YYYY-MM-DD HH:mm:ss');
-        console.log(bookingDate);
-        const sql='INSERT INTO WaitingList VALUES (?,?,?,?,?)';
-        db.run(sql,[courseId, date, userId, endDate, bookingDate],(err) => {
+        const sql = 'SELECT Email FROM User WHERE userID=?';
+        db.get(sql, [userId], (err, row)=> {
             /* istanbul ignore if */
             if(err)
                 reject(err);
-            else resolve(true);
-        })
-    });
+            else
+                resolve(row.Email);
+        });
+    })
 }
+
+//////////////////////////////////////////////////
+//////////////////////STORY5//////////////////////
+//////////////////////////////////////////////////
 
 /**
 * Input: Course_Ref, Date_Ref
 * Output: True or False
-* Description: Delete the booking from a lecture and update the avaiable seats of the lecture or pick the most recent student from 
+* Description: Delete the booking from a lecture and update the avaiable seats of the lecture OR pick the most recent student from 
 * the waiting list and keep the BookedSeats number the same
 */
 
@@ -181,6 +191,79 @@ exports.deleteSeat=function(userId, courseId, date){
         })
     });
 }
+
+//////////////////////////////////////////////////
+//////////////////////STORY6//////////////////////
+//////////////////////////////////////////////////
+
+/*
+* Input: userID
+* Output: List of lectures booked (Course_Ref, Date_Ref, EndDate)
+* Description: Retrieve the list of lectures already booked from a student
+*/
+
+exports.getLecturesBookedByUserId=function(userId){
+    return new Promise((resolve, reject) => {
+        const sql='SELECT Course_Ref, Date_Ref, EndDate FROM Booking WHERE Student_ref = ?';
+        db.all(sql, [userId], (err,rows)=>{
+            /* istanbul ignore if */
+            if(err){
+                reject(err);
+            }
+            else{
+                resolve(rows);
+            }
+        });
+    });
+}
+
+//////////////////////////////////////////////////
+//////////////////////STORY13/////////////////////
+//////////////////////////////////////////////////
+
+/**
+* Input: Course_Ref, Date_Ref
+* Output: True or False
+* Description: Add the student to the waiting list for that lecture
+*/
+
+function addWaitingList(userId, courseId, date, endDate){
+    return new Promise((resolve, reject) => {
+        let bookingDate = moment().format('YYYY-MM-DD HH:mm:ss');
+        const sql='INSERT INTO WaitingList VALUES (?,?,?,?,?)';
+        db.run(sql,[courseId, date, userId, endDate, bookingDate],(err) => {
+            /* istanbul ignore if */
+            if(err)
+                reject(err);
+            else resolve(true);
+        })
+    });
+}
+
+/**
+* Input: StudentID
+* Output: List of lectures (Course_Ref, Date_Ref, EndDate_Ref)
+* Description: Pick the list of lectures in which the student is waiting
+*/
+
+exports.getLecturesWaitingByUserId=function(userId){
+    return new Promise((resolve, reject) => {
+        const sql='SELECT Course_Ref, Date_Ref, EndDate_Ref FROM WaitingList WHERE Student_ref = ?';
+        db.all(sql, [userId], (err,rows)=>{
+            /* istanbul ignore if */
+            if(err){
+                reject(err);
+            }
+            else{
+                resolve(rows);
+            }
+        });
+    });
+}
+
+//////////////////////////////////////////////////
+//////////////////////STORY14/////////////////////
+//////////////////////////////////////////////////
 
 /**
 * Input: Course_Ref, Date_Ref
@@ -217,8 +300,7 @@ function addFromWaitingList(courseId, date){
             if(err)
                 reject(err);
             else {
-                console.log("Student_Ref "+row.Student_Ref);
-                const sql2='INSERT INTO Booking VALUES (?,?,?,?)';
+                const sql2='INSERT INTO Booking VALUES (?,?,?,?,0)';
                 db.run(sql2, [courseId, date, row.Student_Ref, row.EndDate_Ref], (err2) => {
                     /* istanbul ignore if */
                     if(err2) reject(err2);
@@ -234,58 +316,4 @@ function addFromWaitingList(courseId, date){
             }
         })
     });
-}
-
-/*
-* Input: userID
-* Output: List of lectures booked
-* Description: Retrieve the list of lectures already booked from a student
-*/
-
-exports.getLecturesBookedByUserId=function(userId){
-    return new Promise((resolve, reject) => {
-        const sql='SELECT Course_Ref, Date_Ref, EndDate FROM Booking WHERE Student_ref = ?';
-        db.all(sql, [userId], (err,rows)=>{
-            /* istanbul ignore if */
-            if(err){
-                reject(err);
-            }
-            else{
-                resolve(rows);
-            }
-        });
-    });
-}
-
-exports.getLecturesWaitingByUserId=function(userId){
-    return new Promise((resolve, reject) => {
-        const sql='SELECT Course_Ref, Date_Ref, EndDate_Ref FROM WaitingList WHERE Student_ref = ?';
-        db.all(sql, [userId], (err,rows)=>{
-            /* istanbul ignore if */
-            if(err){
-                reject(err);
-            }
-            else{
-                resolve(rows);
-            }
-        });
-    });
-}
-
-/**
- * Retrieve email of a given student
- * @param {} userId
- */
-
-exports.getStudentEmail = function(userId){
-    return new Promise((resolve, reject) => {
-        const sql = 'SELECT Email FROM User WHERE userID=?';
-        db.get(sql, [userId], (err, row)=> {
-            /* istanbul ignore if */
-            if(err)
-                reject(err);
-            else
-                resolve(row.Email);
-        });
-    })
 }

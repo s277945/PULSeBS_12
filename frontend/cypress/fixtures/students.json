@@ -3,21 +3,23 @@
     "url": "/api/lectures/booked",
     "method": "GET",
     "data": [
-      {"Course_Ref":"C0123","Date_Ref":"2020-12-19 19:30:00","EndDate":"2020-12-19 21:00:00"}
+      {"Course_Ref":"C0123","Date_Ref":"2021-03-27 19:30:00","EndDate":"2021-03-27 21:00:00"}
     ]
   },
   {
     "url": "/api/lectures/waiting",
     "method": "GET",
-    "data": []
+    "data": [
+      {"Course_Ref":"C8901","Date_Ref":"2021-03-02 15:00:00","EndDate":"2021-03-02 18:00:00"}
+    ]
   },
   {
     "url": "/api/lectures",
     "method": "GET",
     "data": [
-          {"Course_Ref":"C0123","Name":"SE2 Les:4","Date":"2020-12-19 19:30:00","DateDeadline":"2020-12-18 23:00:00","EndDate":"2020-10-19 21:00:00","BookedSeats":20,"Capacity":100,"Type":"p"},
-          {"Course_Ref":"C4567","Name":"DS Les:5","Date":"2020-12-22 09:00:00","DateDeadline":"2020-12-21 23:00:00","EndDate":"2020-12-22 10:30:00","BookedSeats":70,"Capacity":70,"Type":"p"},
-          {"Course_Ref":"C4567","Name":"DS Les:6","Date":"2020-12-25 09:00:00","DateDeadline":"2020-12-24 23:00:00","EndDate":"2020-12-25 12:00:00","BookedSeats":2,"Capacity":70,"Type":"p"},
+          {"Course_Ref":"C0123","Name":"SE2 Les:4","Date":"2021-03-27 19:30:00","DateDeadline":"2021-03-26 23:00:00","EndDate":"2021-03-27 21:00:00","BookedSeats":20,"Capacity":100,"Type":"p"},
+          {"Course_Ref":"C4567","Name":"DS Les:5","Date":"2021-03-28 09:00:00","DateDeadline":"2021-03-27 23:00:00","EndDate":"2021-03-28 10:30:00","BookedSeats":70,"Capacity":70,"Type":"p"},
+          {"Course_Ref":"C4567","Name":"DS Les:6","Date":"2021-03-25 09:00:00","DateDeadline":"2021-03-24 23:00:00","EndDate":"2021-03-25 12:00:00","BookedSeats":2,"Capacity":70,"Type":"p"},
           {"Course_Ref":"C8901","Name":"HCI Les:1","Date":"2021-03-02 15:00:00","DateDeadline":"2021-03-01 23:00:00","EndDate":"2021-03-02 18:00:00","BookedSeats":2,"Capacity":100,"Type":"p"},
           {"Course_Ref":"C8901","Name":"HCI Les:2","Date":"2021-03-04 09:00:00","DateDeadline":"2021-03-03 23:00:00","EndDate":"2021-03-04 10:30:00","BookedSeats":80,"Capacity":80,"Type":"p"}
         ]

@@ -11,12 +11,12 @@ export function useResponseInterceptor(auth) { // function to set up response in
     axiosInst.interceptors.response.use(// create response interceptor
         (response) => { return response },
         async function (error) {
-
+            /* istanbul ignore next */
             if (error.response.status === 404) {
                 // redirecti to 404 page
                 // history.replace("/404")
             }
-
+                /* istanbul ignore else */
             if (error.response.status === 403 || error.response.status === 401) {// in case of expired jwt token
                 auth.clearSession(); // clear session data from useProvideAuth() instance method
             }
@@ -42,6 +42,16 @@ export function getLectures(){
 export function getTeacherLectures(){
     // get list of lectures for student from server
     return axiosInst.get(`http://localhost:3001/api/teacherLectures`, { withCredentials: true });
+}
+
+export function getTeacherPastLectures(){
+    // get list of lectures for student from server
+    return axiosInst.get(`http://localhost:3001/api/teacherPastLectures`, { withCredentials: true });
+}
+
+export function setPresentStudents(cid, date, body){
+    // get list of lectures for student from server
+    return axiosInst.post(`http://localhost:3001/api/${cid}/${date}/attendees`, body, { withCredentials: true });
 }
 
 export function getCourses(){
@@ -116,20 +126,20 @@ export function getLecturesStatsByCourseID(courseID){
     return axiosInst.get(`http://localhost:3001/api/managerCourses/${courseID}`, { withCredentials: true });
 }
 
-export function getAllPosStudents(){
-    return axiosInst.get(`http://localhost:3001/api/students/positiveStudents`, { withCredentials: true });
+export function getAllPosUsers(){
+    return axiosInst.get(`http://localhost:3001/api/users/positiveUsers`, { withCredentials: true });
 }
 
-export function getStudentBySSN(ssn){
-    return axiosInst.get(`http://localhost:3001/api/students/${ssn}`, { withCredentials: true });
+export function getUserBySSN(ssn){
+    return axiosInst.get(`http://localhost:3001/api/users/${ssn}`, { withCredentials: true });
 }
 
 // Be aware that when sending a post request with an empty body you must specify the empty body with {}
-export function postMarkStudent(ssn){
-    return axiosInst.post(`http://localhost:3001/api/students/${ssn}`,{}, { withCredentials: true, credentials: 'include' });
+export function postMarkUser(ssn){
+    return axiosInst.post(`http://localhost:3001/api/users/${ssn}`,{}, { withCredentials: true, credentials: 'include' });
 }
 
-export function getStudentReport(ssn){
+export function getUserReport(ssn){
     return axiosInst.get(`http://localhost:3001/api/reports/${ssn}`, { withCredentials: true });
 }
 
@@ -168,12 +178,28 @@ export function getFileData(){
     return axiosInst.get(`http://localhost:3001/api/fileData`, { withCredentials: true });
 }
 
+export function getAllSchedule(){
+    //get all schedules of SupportOfficer page from server
+    return axiosInst.get('http://localhost:3001/api/schedules',{withCredentials:true});
+}
+
+export function setNewSchedule(body){
+    //update schedule and send the new schedule of a given course to the server, one element at time
+    return axiosInst.put('http://localhost:3001/api/schedules',body,{withCredentials:true});
+}
+
+export function setTutorial(){
+    //update tutorial value for user
+    return axiosInst.put('http://localhost:3001/api/user/tutorial',{},{withCredentials:true});
+}
+
 export async function login (userName, password){
     return axios.post(`http://localhost:3001/api/login`, { userName: userName, password: password}, {withCredentials: true})
         .then(result => {
             return {
                 userName : result.data.userID,
-                userType: result.data.userType
+                userType: result.data.userType,
+                tutorial: result.data.tutorial
             }
         })
 }

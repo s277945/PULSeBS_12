@@ -3,29 +3,20 @@ import { getCourseStats, getWeekStats, getMonthStats } from '../api/api'
 import { ResponsiveBar } from "@nivo/bar";
 import Table from 'react-bootstrap/Table'
 import moment from 'moment'
-
+import { Checkbox } from 'pretty-checkbox-react';
 
 
 export class StatisticsTab extends Component {
 
     //GB Lectures as first option
-    state = { selected: [], lectures: [], week: [], month: [], groupBy: "Lectures" }
-     substring=(array)=>{
-         let tmp = array.map(lecture=>{
-            let el;
-            //lectureName
-            let name;      
-            if(lecture.lectureName!=undefined){
-                el=lecture.lectureName.indexOf('Les');
-                name=lecture.lectureName.substr(el);
-                return {date: lecture.date, lectureName: name, nBooked: lecture.nBooked};
-            }
-            else return lecture;
-        });
-        return tmp; 
+    constructor() {
+        super();
+        this.state = { selected: [], lectures: [], week: [], month: [], groupBy: "Lectures", labels: true, width: window.innerWidth}
+        this.handleResize = this.handleResize.bind(this);
     }
+    
     componentDidMount() {
-
+        window.addEventListener("resize", this.handleResize);
         getCourseStats(this.props.course.CourseID)
             .then(res => {
                 //We update selected data as CourseStats (Lectures) is the first option
@@ -37,13 +28,15 @@ export class StatisticsTab extends Component {
         getWeekStats(this.props.course.CourseID)
             .then(res => {
                 let neweek = [];
+                /* istanbul ignore else */
                 if (res.data) neweek = res.data.sort((w1,w2)=>{
                     let a = moment(w1.startDate, "YYYY/MM/DD");
                     let b = moment(w2.startDate, "YYYY/MM/DD");
                     return a.diff(b, 'days');
                 }).map((w)=>{
-                    if(w.average) return { average: w.average.toFixed(2), weekName: w.weekName, startDate: w.startDate, endDate: w.endDate};// truncate floating point to second digit
-                    else return w;
+                    return { average: w.average?(Math.floor(w.average)===w.average?Math.floor(w.average):w.average.toFixed(2)):w.average,
+                             averageAtt: w.averageAtt?(Math.floor(w.averageAtt)===w.averageAtt?Math.floor(w.averageAtt):w.averageAtt.toFixed(2)):w.averageAtt, 
+                             weekName: w.weekName, startDate: w.startDate, endDate: w.endDate };// truncate floating point to second digit
                 });
                 this.setState({ week: neweek });
             }).catch(/* istanbul ignore next */err => {
@@ -53,13 +46,15 @@ export class StatisticsTab extends Component {
         getMonthStats(this.props.course.CourseID)
             .then(res => {
                 let newmonth = [];
+                /* istanbul ignore else */
                 if (res.data) newmonth=res.data.sort((m1,m2)=>{
                     let a = moment(m1.month+"/"+m1.year, "MMMM/YYYY");
                     let b = moment(m2.month+"/"+m2.year, "MMMM/YYYY");
                     return a.diff(b, 'days');
                 }).map((m)=>{
-                    if(m.average) return { average: m.average.toFixed(2), month: m.month, year: m.year};// truncate floating point to second digit
-                    else return m;
+                    return { average: m.average?(Math.floor(m.average)===m.average?Math.floor(m.average):m.average.toFixed(2)):m.average,
+                        averageAtt: m.averageAtt?(Math.floor(m.averageAtt)===m.averageAtt?Math.floor(m.averageAtt):m.averageAtt.toFixed(2)):m.averageAtt, 
+                        month: m.month, year: m.year };// truncate floating point to second digit
                 });
                 this.setState({ month: newmonth });
             }).catch(/* istanbul ignore next */err => {
@@ -68,25 +63,30 @@ export class StatisticsTab extends Component {
 
     }
 
+    componentWillUnmount() {
+        window.addEventListener("resize", null);
+    }
+    
+    handleResize(WindowSize, event) {
+        console.log(window.innerWidth);
+        this.setState({width: window.innerWidth})
+    }
+
     updateSelected = () => {
         switch (this.state.groupBy) {
 
             case "Week":
-                console.log("case Week")
                 this.setState({ selected: this.state.week })
                 break
 
             case "Lectures":
-                console.log("case Lectures")
-                console.log(this.state.lectures)
                 this.setState({ selected: this.state.lectures })
                 break
 
             case "Month":
-                console.log("case Month")
                 this.setState({ selected: this.state.month })
                 break
-
+            /* istanbul ignore next */
             default:
                 break
         }
@@ -118,10 +118,10 @@ export class StatisticsTab extends Component {
                                     {lectures.map((lecture)=>{ return (    // map lecture to table row                        
                                         <tr>
                                             <td></td>
-                                            <td>{lecture.lectureName}</td>
+                                            <td>{lecture.lectureName.substr(lecture.lectureName.indexOf('Les'))}</td>
                                             <td>{moment(lecture.date).format("DD/MM/YYYY HH:mm")}</td>
                                             <td>{lecture.nBooked}</td>
-                                            <td>/</td>
+                                            <td>{lecture.nAttendance}</td>
                                         </tr>                                
                                     )})}
                                     <tr>
@@ -129,7 +129,7 @@ export class StatisticsTab extends Component {
                                             <td></td>
                                             <th>Average</th>
                                             <td>{w.average}</td>
-                                            <td>/</td>
+                                            <td>{w.averageAtt}</td>
                                         </tr>    
                                 </tbody>
                             </Table>
@@ -153,10 +153,10 @@ export class StatisticsTab extends Component {
                         <tbody>
                         {this.state.lectures.map((lecture)=>{ return (    // map lecture to table row                               
                             <tr>
-                                <td>{lecture.lectureName}</td>
+                                <td>{lecture.lectureName.substr(lecture.lectureName.indexOf('Les'))}</td>
                                 <td>{moment(lecture.date).format("DD/MM/YYYY HH:mm")}</td>
                                 <td>{lecture.nBooked}</td>
-                                <td>/</td>
+                                <td>{lecture.nAttendance}</td>
                             </tr>                                
                         )})}
                         </tbody>
@@ -184,10 +184,10 @@ export class StatisticsTab extends Component {
                                 {lectures.map((lecture)=>{ return (    // map lecture to table row                        
                                     <tr>
                                         <td></td>
-                                        <td>{lecture.lectureName}</td>
+                                        <td>{lecture.lectureName.substr(lecture.lectureName.indexOf('Les'))}</td>
                                         <td>{moment(lecture.date).format("DD/MM/YYYY HH:mm")}</td>
                                         <td>{lecture.nBooked}</td>
-                                        <td>/</td>
+                                        <td>{lecture.nAttendance}</td>
                                     </tr>                                
                                 )})}
                                 <tr>
@@ -195,7 +195,7 @@ export class StatisticsTab extends Component {
                                     <td></td>
                                     <th>Average</th>
                                     <td>{m.average}</td>
-                                    <td>/</td>
+                                    <td>{m.averageAtt}</td>
                                 </tr>
                             </tbody>
                         </Table>
@@ -204,6 +204,7 @@ export class StatisticsTab extends Component {
                     })}
                 </div>
             );
+            /* istanbul ignore next */
             default:
                 return (<div></div>);
         }
@@ -222,27 +223,27 @@ export class StatisticsTab extends Component {
         switch (this.state.groupBy) {
 
             case "Week":
-                keys = "average"
+                keys = ["Average booked seats", "Average attendees"]
                 indexBy = "weekName"
                 break
 
             case "Lectures":
-                keys = "nBooked"
+                keys = ["Booked seats", "Attendees"]
                 indexBy = "lectureName"
                 break
 
             case "Month":
-                keys = "average"
+                keys = ["Average booked seats", "Average attendees"]
                 indexBy = "month"
                 break
-
+            /* istanbul ignore next */
             default:
                 break;
         }
 
 
         return (
-            <div>
+            <div ref={this.myInput}>
                 <div style={{display: "flex", wrap: "nowrap", justifyContent: "space-between"}}>
 
                     <div data-testid={"courseStat"} style={{display: "flex", wrap: "nowrap", marginLeft: "10px"}}>
@@ -253,16 +254,15 @@ export class StatisticsTab extends Component {
                         <p style={{fontSize: "21px", minWidth: "110px", marginRight: "10px"}}>Detail level: </p>
                     
 
-                        <select className="browser-default custom-select "
+                        <select tour-selec="detailLevel" className="browser-default custom-select "
                             //On change we update the selected groupBy and call updateSelected as a callback
                             onChange={(e) => { this.setState({ groupBy: e.target.value }, this.updateSelected); }}>
                             {gbOptions.map((groupBy) => <option value={groupBy}>{groupBy}</option>)}
                         </select>
                     </div>
                 </div>
-                
                 <div >
-                    <div style={{ height: "400px" }}>
+                    <div tour-selec="graph" style={{ height: "400px"}}>
                         <ResponsiveBar
                             // margin needed to show axis labels
                             margin={{
@@ -273,17 +273,90 @@ export class StatisticsTab extends Component {
                             }}
 
                             //set colors
-                            colorBy="index"
+                            animate={true}
+                            axisBottom={this.state.groupBy==="Week"?this.state.width>=(80*this.state.selected.length):this.state.width>=(50*this.state.selected.length)}
+                            colorBy={d=>{
+                                if(d.id==="Booked seats") return d.indexValue;
+                                if(d.id==="Average attendees") return d.index;
+                                return d.value;
+                            }}
                             colors={{ scheme: "nivo" }}
+                            groupMode="grouped"
+                            label={d =>{
+                                let c=14/Math.ceil(Math.log(d.value + 1) / Math.LN10);
+                                /* istanbul ignore else */
+                                if((d.id==="Booked seats"||d.id==="Attendees")){
+                                    /* istanbul ignore else */
+                                    if (d.value!==0) 
+                                        return  <tspan>
+                                                    <tspan>{d.value}</tspan>
+                                                    <tspan text-anchor="middle" y={ -5 } dx={-19+c}>{ this.state.labels&&this.state.width>=970?d.id.toLowerCase():"" }</tspan>
+                                                </tspan>;
+                                    else return;
+                                }
+                                else if((d.id==="Average booked seats"||d.id==="Average attendees")){
+                                    let substr=d.id.split(" ");
+                                    if (d.value!==0&&Math.floor(Number(d.value))!==d.value) {
+                                        if(d.value>4) return(<tspan>
+                                                                <tspan>{d.value}</tspan><tspan text-anchor="middle" y={ -15 } dx={-34+c}>{ this.state.labels&&this.state.width>=970?substr[0].toLowerCase():"" }</tspan>
+                                                                <tspan text-anchor="middle" y={ -5 } dx={substr[2]?(-46+c):(-54+c)}>{this.state.labels&&this.state.width>=970?(substr[2]?substr[1]+" "+substr[2]:substr[1]):""}</tspan>
+                                                            </tspan>);
+                                        else if(d.value<1) return(<tspan>
+                                                                <tspan>{d.value}</tspan><tspan text-anchor="middle" y={ -17-1/(2*d.value) } dx={-22+1/c}>{ this.state.labels&&this.state.width>=970?substr[0].toLowerCase():"" }</tspan>
+                                                                <tspan text-anchor="middle" y={ -7-1/(2*d.value) } dx={substr[2]?(-46+1/c):(-41+1/c)}>{this.state.labels&&this.state.width>=970?(substr[2]?substr[1]+" "+substr[2]:substr[1]):""}</tspan>
+                                                            </tspan>);
+                                        else            return(<tspan>
+                                                                    <tspan>{d.value}</tspan><tspan text-anchor="middle" y={ -17 } dx={-22+1/c}>{ this.state.labels&&this.state.width>=970?substr[0].toLowerCase():"" }</tspan>
+                                                                    <tspan text-anchor="middle" y={ -7 } dx={substr[2]?(-46+3*d.value+1/c):(-43+2*d.value+1/c)}>{this.state.labels&&this.state.width>=970?(substr[2]?substr[1]+" "+substr[2]:substr[1]):""}</tspan>
+                                                                </tspan>);   
+                                    }                 
+                                    else if(d.value!==0&&Math.floor(d.value)===d.value) {
+                                        if(d.value>4) return(<tspan>
+                                                                <tspan>{d.value}</tspan><tspan text-anchor="middle" y={ -15 } dx={-19+c}>{ this.state.labels&&this.state.width>=970?substr[0].toLowerCase():"" }</tspan>
+                                                                <tspan text-anchor="middle" y={ -5 } dx={substr[2]?(-46+c):(-54+c)}>{this.state.labels&&this.state.width>=970?(substr[2]?substr[1]+" "+substr[2]:substr[1]):""}</tspan>
+                                                             </tspan>);
+                                        else if(d.value===1) return(<tspan>
+                                                        <tspan>{d.value}</tspan><tspan text-anchor="middle" y={ -15 } dx={-19+c}>{ this.state.labels&&this.state.width>=970?substr[0].toLowerCase():"" }</tspan>
+                                                        <tspan text-anchor="middle" y={ -5 } dx={substr[2]?(-46+1/c):(-41+1/c)}>{this.state.labels&&this.state.width>=970?(substr[2]?substr[1]+" "+substr[2]:substr[1]):""}</tspan>
+                                                    </tspan>);
+                                         else            return(<tspan>
+                                            <tspan>{d.value}</tspan><tspan text-anchor="middle" y={ -15 } dx={-21+c}>{ this.state.labels&&this.state.width>=970?substr[0].toLowerCase():"" }</tspan>
+                                            <tspan text-anchor="middle" y={ -5 } dx={substr[2]?(-46+2*d.value+1/c):(-45+2*d.value+1/c)}>{this.state.labels&&this.state.width>=970?(substr[2]?substr[1]+" "+substr[2]:substr[1]):""}</tspan>
+                                        </tspan>);
+                                    }
+                                    else return;
 
+                                }
+                                else return d.value;
+                            }}
+                            labelSkipWidth={85}
                             // Chart options
-                            data={this.substring(this.state.selected)}
-                            keys={[keys]}
+                            data={this.state.selected.map(e=>{
+                                /* istanbul ignore else */
+                                if(typeof e.month !=="undefined") return {"Average booked seats": e.average, "Average attendees": e.averageAtt, "month": e.month};
+                                else if(typeof e.endDate !=="undefined") return {"Average booked seats": e.average, "Average attendees": e.averageAtt, "weekName": e.weekName};
+                                else if(typeof e.date !=="undefined"){return {"date": e.date, "lectureName": e.lectureName.substr(e.lectureName.indexOf('Les')), "Booked seats": e.nBooked, "Attendees": e.nAttendance};}
+                                else return e;
+                            })}
+                            margin={{bottom: 35, left: 60, right: 60, top: 50}}
+                            keys={keys}
                             indexBy={indexBy}
 
                         />
                     </div>
-                    <div style={{margin: "10px", marginLeft: "35px", marginRight: "37px"}}>
+                    {((this.state.groupBy==="Week"||this.state.width>=(970*this.state.selected.length/4.3))&&this.state.width>=970)?(this.state.groupBy!=="Week"?
+                        <div style={{display:"flex", justifyContent:"flex-end", marginBottom: "20px", color: "#222222"}}>
+                            <Checkbox style={{marginRight: "5px", marginBottom:"1px"}} id={`label-checkbox`} checked={this.state.labels} onClick={()=>{this.setState({labels: !this.state.labels})}}/>
+                            <div style={{fontSize:"14px", marginRight: "63px"}}>enable labels</div>
+                        </div>
+                        :
+                        <div style={{display:"flex", justifyContent:"flex-end", marginBottom: "20px", color: "#a2a2a2"}}>
+                            <Checkbox disabled style={{marginRight: "5px", marginBottom:"1px"}} id={`label-checkbox`} checked={this.state.labels} onClick={()=>{this.setState({labels: !this.state.labels})}}/>
+                            <div style={{fontSize:"14px", marginRight: "63px"}}>enable labels</div>
+                        </div>)
+                        :<div style={{marginBottom: "10px"}}/>
+                    }
+                    <div tour-selec="histTables" style={{margin: "10px", marginLeft: "35px", marginRight: "37px"}}>
                         {this.renderTable()}
                     </div>
                 </div>
