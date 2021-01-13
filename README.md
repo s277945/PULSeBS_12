@@ -37,13 +37,13 @@
     cd PULSeBS_12
   download prebuilt images:
   
-    sudo docker pull alebottisio/pulsebs_12:stable
+    sudo docker pull alebottisio/pulsebs_12:final
   or build local images:
   
-    sudo docker build -t alebottisio/pulsebs_12:stable .
+    sudo docker build -t alebottisio/pulsebs_12:final .
   then run the docker container:
   
-    sudo docker run -i -p 3000:3000 -p 3001:3001 -p 3002:3002 alebottisio/pulsebs_12:stable
+    sudo docker run -i -p 3000:3000 -p 3001:3001 -p 3002:3002 alebottisio/pulsebs_12:final
 
   then open the page at "http://localhost:3000/"
   
@@ -55,13 +55,13 @@
     cd PULSeBS_12
   download prebuilt images:
   
-    docker pull alebottisio/pulsebs_12:stable
+    docker pull alebottisio/pulsebs_12:final
   or build local images:
   
-    docker build -t alebottisio/pulsebs_12:stable .
+    docker build -t alebottisio/pulsebs_12:final .
   then run the docker container:
   
-    docker run -i -p 3000:3000 -p 3001:3001 -p 3002:3002 alebottisio/pulsebs_12:stable
+    docker run -i -p 3000:3000 -p 3001:3001 -p 3002:3002 alebottisio/pulsebs_12:final
 
   then open the page at "http://localhost:3000/"
   
