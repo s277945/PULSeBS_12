@@ -67,7 +67,7 @@ Sprint 4 retrospective (team 12)
 ## ASSESSMENT
 
 - What caused your errors in estimation (if any)?
-    - unxpected long code implementation for tasks with teacher/student tutorials  
+    - unexpected long code implementation for tasks with teacher/student tutorials  
 
 - What lessons did you learn (both positive and negative) in this sprint?
     - by setting final deadlines for ready demo version at least 1 scrum meeting before oficial demo presentation - we were able to check the whole project, improve some parts and achieve our goal with clear and improved code 
