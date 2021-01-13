@@ -345,7 +345,9 @@ describe('TUTORIAL TEST', function () {
     it('should render correctly tutorial page', function () {
         cy.get('.sc-bdVaJa.cYQqRL.sc-bxivhb.eTpeTG.reactour__close').parent()
             .should('be.visible')
-            .and('contains.text','You can change between lectures/calendar view in the nav bar')
+            .and('contains.text','Welcome! This is the student page tutorial.' +
+                ' Click on the arrows to go to the previous/next step or on the' +
+                ' cross on the top right to close the tutorial')
             .within(()=>{
                 cy.get('[data-tour-elem="right-arrow"]')
                     .should('be.enabled')
@@ -367,13 +369,6 @@ describe('TUTORIAL TEST', function () {
             .click()
         cy.get('.sc-bdVaJa.cYQqRL.sc-bxivhb.eTpeTG.reactour__close').parent()
             .should('be.visible')
-    });
-    it('should refresh page', function () {
-        cy.get('.sc-bdVaJa.cYQqRL.sc-bxivhb.eTpeTG.reactour__close')
-            .click()
-        cy.reload()
-        cy.wait(100)
-        cy.get('.sc-bdVaJa.cYQqRL.sc-bxivhb.eTpeTG.reactour__close').parent().should('be.visible')
     });
     it('should logout', function () {
         cy.server()
