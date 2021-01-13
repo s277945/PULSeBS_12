@@ -748,14 +748,13 @@ describe('TEST BEHAVIOUR OF CANCEL OR TURN INTO DISTANCE A LECTURE WITHIN 30-60M
         cy.get('[data-testid="tour"]').click()
             .should(()=>{
                 expect(localStorage.getItem('tutorial')).to.eq('1')
-                expect(localStorage.getItem('willingNewTutorial')).to.eq('true')
+                expect(localStorage.getItem('willingNewTutorialTL')).to.eq('false')
             })
         //test when close button is pressed in tutorial
         cy.get('.sc-bdVaJa.cYQqRL.sc-bxivhb.eTpeTG.reactour__close')
             .click()
             .should(()=>{
-                expect(localStorage.getItem('willingNewTutorial')).to.eq('false')
-                expect(localStorage.getItem('tutorialLec')).to.eq('true')
+                expect(localStorage.getItem('willingNewTutorialTL')).to.eq('false')
             })
     });
     it('should click on tutorial button from studentList page and click on close', function () {
@@ -764,13 +763,12 @@ describe('TEST BEHAVIOUR OF CANCEL OR TURN INTO DISTANCE A LECTURE WITHIN 30-60M
         cy.get('[data-testid="tour"]').click()
             .should(()=>{
                 expect(localStorage.getItem('tutorial')).to.eq('1')
-                expect(localStorage.getItem('willingNewTutorial')).to.eq('true')
+                expect(localStorage.getItem('willingNewTutorialTSL')).to.eq('false')
             })
         cy.get('.sc-bdVaJa.cYQqRL.sc-bxivhb.eTpeTG.reactour__close')
             .click()
             .should(()=>{
-                expect(localStorage.getItem('willingNewTutorial')).to.eq('false')
-                expect(localStorage.getItem('tutorialSL')).to.eq('true')
+                expect(localStorage.getItem('willingNewTutorialTSL')).to.eq('false')
             })
     });
     it('should click on tutorial button from history page and click on close', function () {
@@ -779,13 +777,12 @@ describe('TEST BEHAVIOUR OF CANCEL OR TURN INTO DISTANCE A LECTURE WITHIN 30-60M
         cy.get('[data-testid="tour"]').click()
             .should(()=>{
                 expect(localStorage.getItem('tutorial')).to.eq('1')
-                expect(localStorage.getItem('willingNewTutorial')).to.eq('true')
+                expect(localStorage.getItem('willingNewTutorialTHD')).to.eq('false')
             })
         cy.get('.sc-bdVaJa.cYQqRL.sc-bxivhb.eTpeTG.reactour__close')
             .click()
             .should(()=>{
-                expect(localStorage.getItem('willingNewTutorial')).to.eq('false')
-                expect(localStorage.getItem('tutorialHT')).to.eq('true')
+                expect(localStorage.getItem('willingNewTutorialTHD')).to.eq('false')
             })
     });
 });
@@ -807,9 +804,7 @@ describe('TUTORIAL TESTING', function () {
         expect(localStorage.getItem('tutorial')).to.eq('0')
         cy.get('.sc-bdVaJa.cYQqRL.sc-bxivhb.eTpeTG.reactour__close')
             .click().should(()=>{
-            expect(localStorage.getItem('willingNewTutorial')).to.eq('false')
-            expect(localStorage.getItem('tutorialLec')).to.eq('true')
-            //expect(localStorage.getItem('tutorial')).to.eq('1')
+            expect(localStorage.getItem('willingNewTutorialTL')).to.eq('true')
         })
         cy.wait('@tutorial')
     });
@@ -822,11 +817,7 @@ describe('TUTORIAL TESTING', function () {
             .click()
         cy.get('.sc-bdVaJa.cYQqRL.sc-bxivhb.eTpeTG.reactour__close')
             .click().should(()=>{
-            expect(localStorage.getItem('willingNewTutorial')).to.eq('false')
-            expect(localStorage.getItem('tutorialLec')).to.eq('true')
-            expect(localStorage.getItem('tutorialSL')).to.eq('true')
-            //expect(localStorage.getItem('tutorial')).to.eq('1')
-
+            expect(localStorage.getItem('willingNewTutorialTSL')).to.eq('true')
         })
         cy.wait('@tutorial')
     });
