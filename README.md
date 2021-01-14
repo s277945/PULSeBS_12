@@ -103,6 +103,21 @@
   ```
   which will automatically use the preconfigured **sonar-project.properties** file
 
+## CREDENTIALS FOR LOG-IN
+**Password for every user (valid also for users inserted with csv files):**
+- scimmia
+
+**Usernames:**
+- Student:
+  - s269422
+- Teacher:
+  - t123456
+- Booking Manager
+  - b123456
+- Support Officer
+  - so123456
+  
+
 ## ENDPOINTS
 
 **base path: /api** 
