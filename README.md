@@ -89,6 +89,21 @@
   docker pull alebottisio/pulsebs_12:server_stable
   docker-compose up
   ```
+  ## CREDENTIALS FOR LOG-IN
+**Password for every user (valid also for users inserted with csv files):**
+- scimmia
+
+**Usernames:**
+- Student:
+  - s269422
+  - s267348
+- Teacher:
+  - t123456
+  - t987654
+- Booking Manager
+  - b123456
+- Support Officer
+  - so123456
   
 ## SONARSCANNER INSTRUCTIONS
   Just run the following command from the project's root folder
@@ -103,20 +118,6 @@
   ```
   which will automatically use the preconfigured **sonar-project.properties** file
 
-## CREDENTIALS FOR LOG-IN
-**Password for every user (valid also for users inserted with csv files):**
-- scimmia
-
-**Usernames:**
-- Student:
-  - s269422
-- Teacher:
-  - t123456
-- Booking Manager
-  - b123456
-- Support Officer
-  - so123456
-  
 
 ## ENDPOINTS
 
