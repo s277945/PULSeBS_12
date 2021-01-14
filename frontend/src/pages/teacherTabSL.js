@@ -267,29 +267,34 @@
                 <br />
                 <Accordion activeKey={expand} tour-selec="programedLectures" key="programmed-lectures" style={{width: "99%", margin: "auto", marginTop: "17px"}}>
                     <Card>
-                        <Accordion.Toggle as={Card.Header} eventKey="0">
-                            <h4 style={{margin: "10px", marginLeft: "2.7vw", marginBottom: "17px", marginTop: "17px"}}>Programmed lectures info</h4>
-                        </Accordion.Toggle>
+                        <a href={"#"} style={{color: "black", textDecoration: "none"}}>
+                            <Accordion.Toggle href={"#"} as={Card.Header} eventKey="0">
+                                <h4 style={{margin: "10px", marginLeft: "2.7vw", marginBottom: "17px", marginTop: "17px"}}>Programmed lectures info</h4>
+                            </Accordion.Toggle>
+                        </a>
                         <Accordion.Collapse eventKey="0">
                             <Card.Body style={{backgroundColor: "rgba(0,0,0,.03)"}}>
                                 {this.renderFutureLectures()}  
                             </Card.Body>
                         </Accordion.Collapse>
                     </Card>
-                </Accordion> 
-                <div style={{marginBottom: "34px"}}/>
-                <Accordion activeKey={expand} tour-selec="pastLectures" key="programmed-lectures" style={{width: "99%", margin: "auto"}}>
-                    <Card>
-                        <Accordion.Toggle as={Card.Header} eventKey="0">
-                            <h4 style={{margin: "10px", marginLeft: "2.7vw", marginBottom: "17px", marginTop: "17px"}}>Past and current lectures attendance</h4>
-                        </Accordion.Toggle>
-                        <Accordion.Collapse eventKey="0">
-                            <Card.Body style={{backgroundColor: "rgba(0,0,0,.03)"}}>
-                                {this.renderPastLectures()} 
-                            </Card.Body>
-                        </Accordion.Collapse>
-                    </Card>
-                </Accordion> 
+                </Accordion>                
+                <div style={{marginBottom: "34px"}}/>  
+                    <Accordion activeKey={expand} tour-selec="pastLectures" key="programmed-lectures" style={{width: "99%", margin: "auto"}}>
+                        <Card>
+                            <a href={"#"} style={{color: "black", textDecoration: "none"}}>
+                                <Accordion.Toggle as={Card.Header} eventKey="0">
+                                    <h4 style={{margin: "10px", marginLeft: "2.7vw", marginBottom: "17px", marginTop: "17px"}}>Past and current lectures attendance</h4>
+                                </Accordion.Toggle>
+                            </a>
+                            <Accordion.Collapse eventKey="0">
+                                <Card.Body style={{backgroundColor: "rgba(0,0,0,.03)"}}>
+                                    {this.renderPastLectures()} 
+                                </Card.Body>
+                            </Accordion.Collapse>
+                        </Card>
+                    </Accordion>
+                
             </div>
          );
      }
