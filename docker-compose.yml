@@ -4,20 +4,20 @@ services:
   server:
     build:
       context: ./server
-    image : alebottisio/pulsebs_12:server_latest
+    image : alebottisio/pulsebs_12:server_stable
     ports: 
     - 3001:3001
   mail:
     build:
       context: ./server
       dockerfile: ./mail_module/Dockerfile
-    image : alebottisio/pulsebs_12:mail_latest
+    image : alebottisio/pulsebs_12:mail_stable
     ports: 
     - 3002:3002
   frontend:
     build:
       context: ./frontend      
-    image : alebottisio/pulsebs_12:frontend_latest
+    image : alebottisio/pulsebs_12:frontend_stable
     ports:
     - 3000:3000
     links:
