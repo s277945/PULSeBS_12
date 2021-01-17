@@ -35,17 +35,24 @@
   
     git clone https://github.com/s277945/PULSeBS_12.git
     cd PULSeBS_12
+
   download prebuilt images:
   
     sudo docker pull alebottisio/pulsebs_12:final
+
   or build local images:
   
     sudo docker build -t alebottisio/pulsebs_12:final .
+
+  if you prefer, you can build a slim image based on unofficial alpine-node:12 image:
+
+    sudo docker build -f Dockerfile_slim -t alebottisio/pulsebs_12:final .
+
   then run the docker container:
   
     sudo docker run -i -p 3000:3000 -p 3001:3001 -p 3002:3002 alebottisio/pulsebs_12:final
 
-  then open the page at "http://localhost:3000/"
+  finally open the page at "http://localhost:3000/"
   
   **Windows:**
 
@@ -53,17 +60,24 @@
   
     git clone https://github.com/s277945/PULSeBS_12.git
     cd PULSeBS_12
+
   download prebuilt images:
   
     docker pull alebottisio/pulsebs_12:final
+
   or build local images:
   
     docker build -t alebottisio/pulsebs_12:final .
+
+  if you prefer, you can build a slim image based on unofficial alpine-node:12 image:
+
+    docker build -f Dockerfile_slim -t alebottisio/pulsebs_12:final .
+
   then run the docker container:
   
     docker run -i -p 3000:3000 -p 3001:3001 -p 3002:3002 alebottisio/pulsebs_12:final
 
-  then open the page at "http://localhost:3000/"
+  finally open the page at "http://localhost:3000/"
   
   ## INSTALL AND START DEMO 2 WITH DOCKER
   

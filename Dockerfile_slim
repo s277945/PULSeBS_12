@@ -1,0 +1,7 @@
+FROM mhart/alpine-node:12
+RUN apk update
+RUN apk add --no-cash --upgrade bash
+COPY . /pulsebs_12
+WORKDIR /pulsebs_12
+RUN bash -C "./install_script.sh"
+CMD bash -C "./start_script.sh"
